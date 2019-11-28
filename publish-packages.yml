@@ -1,0 +1,21 @@
+trigger:
+  - master
+  - develop
+  - release/*  
+    
+pool:
+  name: Azure Pipelines
+  demands: npm
+
+steps:
+- task: Npm@1
+  displayName: 'npm publish fiftyone.pipeline.devicedetection'
+  inputs:
+    command: publish
+    workingDir: fiftyone.pipeline.devicedetection
+    verbose: false
+    publishRegistry: useFeed
+    publishFeed: 'd2431f86-c1e6-4d8b-8d27-311cf3614847'
+  continueOnError: true
+  condition: succeededOrFailed()
+

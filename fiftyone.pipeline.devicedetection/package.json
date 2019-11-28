@@ -1,0 +1,23 @@
+{
+  "name": "fiftyone.pipeline.devicedetection",
+  "version": "1.0.21",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "",
+  "dependencies": {
+    "fiftyone.pipeline.core": "^1.0.0",
+    "fiftyone.pipeline.engines": "^1.0.0",
+    "fiftyone.pipeline.engines.fiftyone": "^1.0.0",
+    "fiftyone.pipeline.javascriptbundler": "^1.0.0",
+    "fiftyone.pipeline.cloudrequestengine": "^1.0.0"
+  },
+  "devDependencies": {
+    "jest": "^24.9.0"
+  }
+}
