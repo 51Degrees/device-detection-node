@@ -6,7 +6,7 @@ let pipeline = new deviceDetectionPipelineBuilder(
     {
         resourceKey: "AQS5HKcy0uPi3zrv1kg",
         cacheSize: 100,
-        //dataFile: __dirname + "/../datafile/51Degrees-LiteV3.2.dat",
+        //dataFile: __dirname + "../device-detection-data/51Degrees-LiteV3.2.dat",
         licenceKeys: "YOUR_LICENSE_KEY"
     }
 ).build();

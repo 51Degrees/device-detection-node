@@ -15,14 +15,14 @@ const fs = require("fs");
 // Not supplying a dataFile will default the implementation to use our Cloud service. 
 let pipeline = new ddPipelineBuilder({    
     performanceProfile: "MaxPerformance",
-    dataFile: "../datafile/51Degrees-LiteV3.2.dat",
+    dataFile: "../device-detection-data/51Degrees-LiteV3.2.dat",
     autoUpdate: false
 }).build();
 
 pipeline.on("error", console.error);
 
 // Read from a list of 20000 User Agents.
-let userAgents = fs.readFileSync("20000_User_Agents.csv", "utf8");
+let userAgents = fs.readFileSync("../device-detection-data/20000_User_Agents.csv", "utf8");
 
 userAgents = userAgents.split("\n");
 

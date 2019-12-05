@@ -16,7 +16,7 @@ const fs = require("fs");
 // Alternatively, use the cloud example for an immediate result.
 let pipeline = new ddPipelineBuilder({    
     performanceProfile: "MaxPerformance",
-    dataFile: "../../datafile/51Degrees-LiteV3.2.dat",
+    dataFile: "../../device-detection-data/51Degrees-LiteV3.2.dat",
     autoUpdate: false
 }).build();
 

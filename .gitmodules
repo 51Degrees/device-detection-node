@@ -1,3 +1,6 @@
 [submodule "fiftyone.pipeline.devicedetection/device-detection-cxx"]
 	path = fiftyone.pipeline.devicedetection/device-detection-cxx
 	url = https://51degrees.visualstudio.com/defaultcollection/pipeline/_git/device-detection-cxx
+[submodule "fiftyone.pipeline.devicedetection/device-detection-data"]
+	path = fiftyone.pipeline.devicedetection/device-detection-data
+	url = https://51degrees.visualstudio.com/DefaultCollection/Pipeline/_git/device-detection-data
