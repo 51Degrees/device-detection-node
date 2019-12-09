@@ -24,18 +24,19 @@ if(fs.existsSync(datafile) == false) {
 let pipeline = new ddPipelineBuilder({    
     performanceProfile: "MaxPerformance",
     dataFile: datafile,
-    autoUpdate: false,    
+    autoUpdate: false
 }).build();
 
 pipeline.on("error", console.error);
 
-let desktopUA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36';
 let iPhoneUA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_2 like Mac OS X) AppleWebKit/604.4.7 (KHTML, like Gecko) Mobile/15C114';
+let modifiediPhoneUA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 99_2 like Mac OS X) AppleWebKit/604.4.7 (KHTML, like Gecko) Mobile/15C114';
+let corruptedUA = 'This is not a User-Agent';
 
-// Create a flow data element and process the desktop User-Agent.
+// Create a flow data element and process the iPhone User-Agent.
 let flowData = pipeline.createFlowData();
 // Add the User-Agent as evidence
-flowData.evidence.add("header.user-agent", desktopUA);
+flowData.evidence.add("header.user-agent", iPhoneUA);
 // Process the flow data
 flowData.process().then(function () {
     // Get the 'ismobile' property 
@@ -44,8 +45,8 @@ flowData.process().then(function () {
     let isMobileString = (ismobile.hasValue ? ismobile.value : ("NO MATCH - " + ismobile.noValueMessage));
     let message = 
         "------------------------------------------------------------\n" +
-        "This User-Agent is from a desktop computer. It should match correctly and not be identified as a mobile device:\n" +
-        "\tUser-Agent = " + desktopUA + "\n" +
+        "This User-Agent is from an iPhone. It should match correctly and be identified as a mobile device:\n" +
+        "\tUser-Agent = " + iPhoneUA + "\n" +
         "\tIsMobile = " + isMobileString;
     console.info(message);
 });
@@ -53,7 +54,7 @@ flowData.process().then(function () {
 // Create a flow data element and process the iPhone User-Agent.
 let flowData2 = pipeline.createFlowData();
 // Add the User-Agent as evidence
-flowData2.evidence.add("header.user-agent", iPhoneUA);
+flowData2.evidence.add("header.user-agent", modifiediPhoneUA);
 // Process the flow data
 flowData2.process().then(function () {
     // Get the 'ismobile' property 
@@ -62,8 +63,29 @@ flowData2.process().then(function () {
     let isMobileString = (ismobile.hasValue ? ismobile.value : ("NO MATCH - " + ismobile.noValueMessage));
     let message = 
         "------------------------------------------------------------\n" +
-        "This User-Agent is from an iPhone. It should match correctly and be identified as a mobile device:\n" +
-        "\tUser-Agent = " + iPhoneUA + "\n" +
+        "This User-Agent is from an iPhone but has been modified so it doesn't match exactly.\n" + 
+        "By default the API will not match this but can be configured to do so by changing the 'difference' parameter when building the engine.\n" +
+        "\tUser-Agent = " + modifiediPhoneUA + "\n" +
+        "\tIsMobile = " + isMobileString;
+    console.info(message);
+});
+
+// Create a flow data element and process the corrupted User-Agent.
+let flowData3 = pipeline.createFlowData();
+// Add the User-Agent as evidence
+flowData3.evidence.add("header.user-agent", corruptedUA);
+// Process the flow data
+flowData3.process().then(function () {
+    // Get the 'ismobile' property 
+    let ismobile = flowData3.device.ismobile;
+    // Format a message and write it to console
+    let isMobileString = (ismobile.hasValue ? ismobile.value : ("NO MATCH - " + ismobile.noValueMessage));
+    let message = 
+        "------------------------------------------------------------\n" +
+        "This User-Agent is fake and will not be matched.\n" + 
+        "If you still want a match returned in this case then you can set the 'unmatched' parameter flag when building the engine.\n" +
+        "This will cause the 'default' profiles to be returned.\n" +
+        "\tUser-Agent = " + corruptedUA + "\n" +
         "\tIsMobile = " + isMobileString;
     console.info(message);
 });

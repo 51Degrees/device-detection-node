@@ -7,6 +7,7 @@ let require51 = (requestedPackage) => {
 }
 
 const aspectData = require51("fiftyone.pipeline.engines").aspectData;
+const aspectPropertyValue = require51("fiftyone.pipeline.engines/aspectPropertyValue");
 const dataFileMissingPropertyService = require("./dataFileMissingPropertyService");
 
 class swigData extends aspectData {

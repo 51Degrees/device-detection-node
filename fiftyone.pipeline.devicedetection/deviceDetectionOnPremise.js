@@ -23,7 +23,7 @@ let nodeVersion = Number(process.version.match(/^v(\d+\.)/)[1]);
 
 class deviceDetectionOnPremise extends engine {
 
-    constructor({ dataFile, cache, dataFileUpdateBaseUrl = "https://distributor.51degrees.com/api/v2/download", restrictedProperties, licenceKeys, download, performanceProfile = "LowMemory", reuseTempFile = false, updateMatchedUserAgent = false, maxMatchedUserAgentLength, drift, difference, concurrency = os.cpus().length, closestSignatures, userAgentCacheCapacity }) {
+    constructor({ dataFile, autoUpdate, cache, dataFileUpdateBaseUrl = "https://distributor.51degrees.com/api/v2/download", restrictedProperties, licenceKeys, download, performanceProfile = "LowMemory", reuseTempFile = false, updateMatchedUserAgent = false, maxMatchedUserAgentLength, drift, difference, concurrency = os.cpus().length, closestSignatures, userAgentCacheCapacity, allowUnmatched, fileSystemWatcher, createTempDataCopy }) {
 
         let swigWrapper;
         let swigWrapperType;
@@ -98,11 +98,12 @@ class deviceDetectionOnPremise extends engine {
                 throw "The performance profile '" + performanceProfile + "' is not valid";
         }
 
-        // Use temp file - TODO: Check other options
-        config.setUseTempFile(true);
+        // If auto update is enabled then we must use a temporary copy of the file
+        config.setUseTempFile(autoUpdate || createTempDataCopy);
 
         config.setReuseTempFile(reuseTempFile);
         config.setUpdateMatchedUserAgent(updateMatchedUserAgent);
+        config.setAllowUnmatched(allowUnmatched);
 
         if (maxMatchedUserAgentLength) {
             config.setMaxMatchedUserAgentLength(maxMatchedUserAgentLength);
@@ -160,7 +161,7 @@ class deviceDetectionOnPremise extends engine {
 
         // Construct datafile
 
-        let dataFileSettings = { flowElement: this, verifyMD5: true, autoUpdate: true, decompress: true, path: dataFile, download: download, fileSystemWatcher: true }
+        let dataFileSettings = { flowElement: this, verifyMD5: true, autoUpdate: autoUpdate, decompress: true, path: dataFile, download: download, fileSystemWatcher: fileSystemWatcher }
 
         dataFileSettings.getDatePublished = function () {
 

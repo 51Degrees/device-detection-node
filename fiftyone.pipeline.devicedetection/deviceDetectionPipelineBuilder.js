@@ -27,9 +27,13 @@ class deviceDetectionPipelineBuilder extends pipelineBuilder {
      * @param {String} options.resourceKey // resourceKey for cloud
      * @param {Number} options.cacheSize // size of the default cache (includes cache if set)
      * @param {String} options.performanceProfile // used to control the tradeoff between performance and system memory usage (Only applies to on-premise, not cloud)
+     * @param {String} options.allowUnmatched // This setting only affects on-premise engines, not cloud. 
+     * If set to false, a non-matching User-Agent will result in properties without set values. 
+     * If set to true, a non-matching User-Agent will cause the 'default profiles' to be returned. 
+     * This means that properties will always have values (i.e. no need to check .HasValue) but some may be inaccurate. By default, this is false.
      * 
     */
-    constructor({ licenceKeys = null, dataFile = null, autoUpdate = true, shareUsage = true, resourceKey = null, cacheSize = null, performanceProfile = "LowMemory" }) {
+    constructor({ licenceKeys = null, dataFile = null, autoUpdate = true, shareUsage = true, resourceKey = null, cacheSize = null, performanceProfile = "LowMemory", allowUnmatched = false }) {
 
         // if dataFile is set, check the file extension to work out which type of datafile it is
 
@@ -53,7 +57,7 @@ class deviceDetectionPipelineBuilder extends pipelineBuilder {
 
         if (dataFile) {
 
-            this.flowElements.push(new deviceDetectionOnPremise({ dataFile, autoUpdate, licenceKeys, cache, performanceProfile }));
+            this.flowElements.push(new deviceDetectionOnPremise({ dataFile, autoUpdate, licenceKeys, cache, performanceProfile, allowUnmatched }));
 
         } else {
 
