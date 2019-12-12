@@ -1,3 +1,20 @@
+/* ********************************************************************
+ * Copyright (C) 2019  51Degrees Mobile Experts Limited.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * ******************************************************************** */
+
 // Checks if the package required is available locally and if unsuccessful 
 // return as a module reference.
 let require51 = (requestedPackage) => {
@@ -15,14 +32,14 @@ const fs = require("fs");
 // Not supplying a dataFile will default the implementation to use our Cloud service. 
 let pipeline = new ddPipelineBuilder({    
     performanceProfile: "MaxPerformance",
-    dataFile: "../datafile/51Degrees-LiteV3.2.dat",
+    dataFile: "../device-detection-cxx/device-detection-data/51Degrees-LiteV3.2.dat",
     autoUpdate: false
 }).build();
 
 pipeline.on("error", console.error);
 
 // Read from a list of 20000 User Agents.
-let userAgents = fs.readFileSync("../datafile/20000 User Agents.csv", "utf8");
+let userAgents = fs.readFileSync("../device-detection-cxx/device-detection-data/20000 User Agents.csv", "utf8");
 
 userAgents = userAgents.split("\n");
 

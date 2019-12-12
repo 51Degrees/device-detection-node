@@ -1,3 +1,20 @@
+/* ********************************************************************
+ * Copyright (C) 2019  51Degrees Mobile Experts Limited.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * ******************************************************************** */
+
 /*
 @example hash/gettingStarted.js
 Getting started example of using the 51Degrees device detection 'Hash' algorithm to determine whether a given User-Agent corresponds to a mobile device or not.
@@ -5,13 +22,13 @@ Getting started example of using the 51Degrees device detection 'Hash' algorithm
 The example shows how to:
 1. Specify name of the data file the engine should be initialized with.
 
-       let  datafile  =  "../../datafile/51Degrees-LiteV3.4.trie";
+       let  datafile  =  "../../device-detection-cxx/device-detection-data/51Degrees-LiteV3.4.trie";
 
 2. Create a new Pipeline using the deviceDetectionPipelineBuilder.
 
        let  pipeline  =  new  ddPipelineBuilder({
            performanceProfile:  "MaxPerformance",
-           dataFile:  "../../datafile/51Degrees-LiteV3.4.trie",
+           dataFile:  "../../device-detection-cxx/device-detection-data/51Degrees-LiteV3.4.trie",
            autoUpdate:  false
        }).build();
        
@@ -44,7 +61,7 @@ let require51 = (requestedPackage) => {
 const ddPipelineBuilder = require51("deviceDetectionPipelineBuilder");
 const fs = require("fs");
 
-let datafile = "../../datafile/51Degrees-LiteV3.4.trie";
+let datafile = "../../device-detection-cxx/device-detection-data/51Degrees-LiteV3.4.trie";
 
 if(fs.existsSync(datafile) == false) {
     console.error("The datafile required by this example is not present. Please ensure that the 'device-detection-data' submodule has been fetched.");
@@ -56,7 +73,7 @@ if(fs.existsSync(datafile) == false) {
 // Alternatively, use the cloud example for an immediate result.
 let pipeline = new ddPipelineBuilder({    
     performanceProfile: "MaxPerformance",
-    dataFile: "../../datafile/51Degrees-LiteV3.4.trie",
+    dataFile: "../../device-detection-cxx/device-detection-data/51Degrees-LiteV3.4.trie",
     autoUpdate: false
 }).build();
 

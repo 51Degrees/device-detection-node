@@ -5,7 +5,7 @@
             "elementName": "fiftyone.pipeline.devicedetection/deviceDetectionOnPremise",  
             "elementParameters": {
                 "performanceProfile": "MaxPerformance",
-                "dataFile": "../../datafile/51Degrees-LiteV3.2.dat",
+                "dataFile": "../../device-detection-cxx/device-detection-data/51Degrees-LiteV3.2.dat",
                 "autoUpdate": false
             }
         }

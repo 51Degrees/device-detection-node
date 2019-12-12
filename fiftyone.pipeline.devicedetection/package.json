@@ -13,7 +13,7 @@
     "Filip Hnízdo <filip@octophin.com> (https://octophindigital.com/)",
 	"Steve Ballantine <stephen@51degrees.com> (https://51degrees.com)",
 	"Ben Shilito <ben@51degrees.com> (https://51degrees.com)",
-	"Joseph Dix <joseph@51degrees.com> (https://51degrees.com)",
+	"Joseph Dix <joseph@51degrees.com> (https://51degrees.com)"
   ],
   "dependencies": {
     "fiftyone.pipeline.core": "^1.0.0",
@@ -24,6 +24,6 @@
   },
   "devDependencies": {
     "jest": "^24.9.0"
-  }
+  },
   "license": "AGPL-3.0-or-later"
 }
