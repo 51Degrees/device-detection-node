@@ -8,12 +8,19 @@ pr:
 pool:
   vmImage: 'ubuntu-latest'
   
+variables: 
+  - group: PackageFeedAccessToken
+    
 strategy:
   matrix:
+    node_6_x:
+      node_version: 6.x
     node_8_x:
       node_version: 8.x
     node_10_x:
       node_version: 10.x
+    node_12_x:
+      node_version: 12.x
       
 steps:
 - task: NodeTool@0
@@ -23,18 +30,17 @@ steps:
 
 - script: |
     content='{ 
-      "name": "pipeline-node", 
+      "name": "device-detection-node-tests", 
       "version": "1.0.0", 
       "description": "Temporary package to allow all tests to run using the local code as dependencies", 
       "main": "index.js", 
       "scripts": { 
-        "test": "jest --ci --reporters=jest-junit --reporters=default --coverage --coverageReporters=cobertura" 
+        "test": "jest --ci --reporters=jest-junit --reporters=default --coverage --coverageReporters=cobertura --passWithNoTests" 
         }, 
       "repository": { 
         "type": "git", "url": "https://github.com/51Degrees/pipeline-node" 
         }, 
-      "author": "51Degrees", 
-      "license": "MPL-2.0", 
+      "author": "51Degrees",
       "dependencies": { 
         "jest": "^24.9.0",
         "jest-junit": "^9.0.0"
@@ -46,6 +52,17 @@ steps:
     echo $content
     echo $content > package.json
   displayName: 'Create package.json for tests'
+
+- script: |
+    content='//51degrees.pkgs.visualstudio.com/_packaging/pipeline-insider/npm/registry/:username=51degrees
+    //51degrees.pkgs.visualstudio.com/_packaging/pipeline-insider/npm/registry/:_password=$(Base64EncodedPAT)
+    //51degrees.pkgs.visualstudio.com/_packaging/pipeline-insider/npm/registry/:email=ciuser@51degrees.com
+    //51degrees.pkgs.visualstudio.com/_packaging/pipeline-insider/npm/:username=51degrees
+    //51degrees.pkgs.visualstudio.com/_packaging/pipeline-insider/npm/:_password=$(Base64EncodedPAT)
+    //51degrees.pkgs.visualstudio.com/_packaging/pipeline-insider/npm/:email=ciuser@51degrees.com'
+    echo $content
+    echo $content > .npmrc
+  displayName: 'Create .npmrc file with credentials to access internal NPM feed'
 
 - script: |
     npm install jest

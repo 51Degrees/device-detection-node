@@ -1,0 +1,12 @@
+{
+    "PipelineOptions": {
+        "Elements": [
+        {
+            "elementName": "../../deviceDetectionOnPremise",
+            "elementParameters": {
+                "resourceKey": "AQS5HKcyHJbECm6E10g"
+            }
+        }
+        ]
+    }
+}
