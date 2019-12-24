@@ -1,27 +1,37 @@
-![51Degrees](https://51degrees.com/DesktopModules/FiftyOne/Distributor/Logo.ashx?utm_source=github&utm_medium=repository&utm_content=readme_main&utm_campaign=node-open-source "THE Fastest and Most Accurate Device Detection") **v4 Node Pipeline**
+![51Degrees](https://51degrees.com/DesktopModules/FiftyOne/Distributor/Logo.ashx?utm_source=github&utm_medium=repository&utm_content=readme_main&utm_campaign=node-open-source "THE Fastest and Most Accurate Device Detection") **v4 Device Detection**
 
-[Developer Documentation](https://docs.51degrees.com?utm_source=github&utm_medium=repository&utm_content=documentation&utm_campaign=node-open-source "advanced developer documentation") | [Available Properties](https://51degrees.com/resources/property-dictionary?utm_source=github&utm_medium=repository&utm_content=property_dictionary&utm_campaign=node-open-source "View all available properties and values")
+[Pipeline Documentation](https://docs.51degrees.com?utm_source=github&utm_medium=repository&utm_content=documentation&utm_campaign=node-open-source "advanced developer documentation") | [Available Properties](https://51degrees.com/resources/property-dictionary?utm_source=github&utm_medium=repository&utm_content=property_dictionary&utm_campaign=node-open-source "View all available properties and values")
 
 ## Introduction
-This project is an early access repository for the 51Degrees Device Detection engines that can be used with the Pipeline API.
+This project contains 51Degrees Device Detection engines that can be used with the [Pipeline API](https://github.com/51Degrees/pipeline-node).
 
 The Pipeline is a generic web request intelligence and data processing solution with the ability to add a range of 51Degrees and/or custom plug ins (Engines) 
 
-### Device detection
+## Device detection
 
 Device detection can be performed 'on-premise' using a local data file or via the 51Degrees cloud service. 
 
+These options all use the same evidence and property names so can be swapped out as needed.
+
+### On-Premise
 When running on-premise, two detection methods are supported.
 
-**Pattern:**  Searches for device signatures in a User-Agent returning metrics about the validity of the results. Does NOT use regular expressions.
+[**Pattern**](https://docs.51degrees.com/documentation/4.1/_device_detection__pattern.html): Searches for device signatures in a User-Agent returning metrics about the validity of the results. Does NOT use regular expressions.
 
-**Hash:** A large binary file populated with User-Agent signatures allowing very fast detection speeds.
+[**Hash**](https://docs.51degrees.com/documentation/4.1/_device_detection__hash.html): A large binary file populated with User-Agent signatures allowing very fast detection speeds.
 
-All methods use an external data file which can easily be updated.
+In both cases, a local data file is required.
+51Degrees provides [multiple options](https://51degrees.com/Licencing-Pricing/On-Premise), some of which support automatic updates through the Pipeline API.
 
-Usage examples are available in both ``fiftyone.pipeline.devicedetection`` and ``fiftyone.pipeline.core``
+### Cloud
 
-### Native code updates
+The device detection cloud engine makes use of the 51Degrees cloud API. As such there is no data file to maintain, processing will always be performed using the latest data available.
+
+### Examples
+
+Usage examples are available for cloud, hash and pattern in ``fiftyone.devicedetection/examples``
+
+## Native code updates
 
 Process for rebuilding SWIG interfaces following an update to the device detection cxx code (This is only intended to be run by 51Degrees developers internally):
 
