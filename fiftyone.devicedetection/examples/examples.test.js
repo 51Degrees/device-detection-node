@@ -53,60 +53,11 @@ let testExample = function ({ file, portNumber }) {
 
 }
 
-
-test('cloud getting started', (done) => {
-
-    setTimeout(done, 1000);
-
-    testExample({ file: (__dirname) + "/cloud/gettingStarted.js" });
-
-});
-
-test('cloud failure to match', (done) => {
-
-    setTimeout(done, 1000);
-
-    testExample({ file: (__dirname) + "/cloud/failureToMatch.js" });
-
-});
-
-test('cloud metadata', (done) => {
-
-    setTimeout(done, 1000);
-
-    testExample({ file: (__dirname) + "/cloud/metaData.js" });
-
-});
-
 test('cloud web integration', (done) => {
 
     setTimeout(done, 1000);
 
     testExample({ file: (__dirname) + "/cloud/webIntegration.js" });
-
-});
-
-test('hash getting started', (done) => {
-
-    setTimeout(done, 1000);
-
-    testExample({ file: (__dirname) + "/hash/gettingStarted.js" });
-
-});
-
-test('hash failure to match', (done) => {
-
-    setTimeout(done, 1000);
-
-    testExample({ file: (__dirname) + "/hash/failureToMatch.js" });
-
-});
-
-test('hash metadata', (done) => {
-
-    setTimeout(done, 1000);
-
-    testExample({ file: (__dirname) + "/hash/metaData.js" });
 
 });
 
@@ -118,30 +69,6 @@ test('hash web integration', (done) => {
 
 });
 
-test('pattern getting started', (done) => {
-
-    setTimeout(done, 1000);
-
-    testExample({ file: (__dirname) + "/pattern/gettingStarted.js" });
-
-});
-
-test('pattern failure to match', (done) => {
-
-    setTimeout(done, 1000);
-
-    testExample({ file: (__dirname) + "/pattern/failureToMatch.js" });
-
-});
-
-test('pattern metadata', (done) => {
-
-    setTimeout(done, 1000);
-
-    testExample({ file: (__dirname) + "/pattern/metaData.js" });
-
-});
-
 test('pattern web integration', (done) => {
 
     setTimeout(done, 1000);
@@ -149,3 +76,87 @@ test('pattern web integration', (done) => {
     testExample({ file: (__dirname) + "/pattern/webIntegration.js" });
 
 });
+
+// Skip the rest of the examples when async is not available
+let isAsync = true;
+
+try {
+    eval('async () => {}');
+} catch (e) {
+    isAsync = false;
+}
+
+if(isAsync) {
+
+    test('cloud getting started', (done) => {
+
+        setTimeout(done, 1000);
+
+        testExample({ file: (__dirname) + "/cloud/gettingStarted.js" });
+
+    });
+
+    test('cloud failure to match', (done) => {
+
+        setTimeout(done, 1000);
+
+        testExample({ file: (__dirname) + "/cloud/failureToMatch.js" });
+
+    });
+
+    test('cloud metadata', (done) => {
+
+        setTimeout(done, 1000);
+
+        testExample({ file: (__dirname) + "/cloud/metaData.js" });
+
+    });
+
+    test('hash getting started', (done) => {
+
+        setTimeout(done, 1000);
+
+        testExample({ file: (__dirname) + "/hash/gettingStarted.js" });
+
+    });
+
+    test('hash failure to match', (done) => {
+
+        setTimeout(done, 1000);
+
+        testExample({ file: (__dirname) + "/hash/failureToMatch.js" });
+
+    });
+
+    test('hash metadata', (done) => {
+
+        setTimeout(done, 1000);
+
+        testExample({ file: (__dirname) + "/hash/metaData.js" });
+
+    });
+
+    test('pattern getting started', (done) => {
+
+        setTimeout(done, 1000);
+
+        testExample({ file: (__dirname) + "/pattern/gettingStarted.js" });
+
+    });
+
+    test('pattern failure to match', (done) => {
+
+        setTimeout(done, 1000);
+
+        testExample({ file: (__dirname) + "/pattern/failureToMatch.js" });
+
+    });
+
+    test('pattern metadata', (done) => {
+
+        setTimeout(done, 1000);
+
+        testExample({ file: (__dirname) + "/pattern/metaData.js" });
+
+    });
+}

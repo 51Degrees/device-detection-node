@@ -20,8 +20,8 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
-/*
-@example pattern/metadata.js
+/**
+@example cloud/metadata.js
 
 This example shows how to get properties from a pipeline's processed flowData based on their metadata, the getProperties() method and also additional meta data properties on device detection data.
 

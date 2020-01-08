@@ -13,6 +13,8 @@ variables:
     
 strategy:
   matrix:
+    node_6_x:
+      node_version: 6.x
     node_8_x:
       node_version: 8.x
     node_10_x:
@@ -46,11 +48,11 @@ steps:
       "dependencies": { 
         "jest": "^24.9.0",
         "jest-junit": "^9.0.0",
-        "fiftyone.pipeline.core": "^4.1.0-beta.7",
-        "fiftyone.pipeline.engines": "^4.1.0-beta.7",
-        "fiftyone.pipeline.engines.fiftyone": "^4.1.0-beta.7",
-        "fiftyone.pipeline.javascriptbundler": "^4.1.0-beta.7",
-        "fiftyone.pipeline.cloudrequestengine": "^4.1.0-beta.7"
+        "fiftyone.pipeline.core": "^4.1.0-beta",
+        "fiftyone.pipeline.engines": "^4.1.0-beta",
+        "fiftyone.pipeline.engines.fiftyone": "^4.1.0-beta",
+        "fiftyone.pipeline.javascriptbundler": "^4.1.0-beta",
+        "fiftyone.pipeline.cloudrequestengine": "^4.1.0-beta"
         },
       "jest-junit": {
           "outputName": "'"$NODE_VERSION"'.xml"    
@@ -76,13 +78,7 @@ steps:
     contents: '.npmrc'
 
 - script: |
-    npm install jest
-    npm install jest-junit
-    npm install fiftyone.pipeline.core
-    npm install fiftyone.pipeline.engines
-    npm install fiftyone.pipeline.engines.fiftyone
-    npm install fiftyone.pipeline.cloudrequestengine
-    npm install fiftyone.pipeline.javascriptbundler
+    npm install
     npm test
   displayName: 'Build and Test'
 

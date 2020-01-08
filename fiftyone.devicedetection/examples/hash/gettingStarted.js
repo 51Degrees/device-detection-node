@@ -20,14 +20,14 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
-/*
-@example trie/gettingStarted.js
+/**
+@example hash/gettingStarted.js
 
 Getting started example of using the 51Degrees device detection 'Hash' algorithm to determine whether a given User-Agent corresponds to a mobile device or not.
 
 Firstly require the fiftyone.pipeline.devicedetection modules which contain all of the pipeline specific classes we will be using in this example.
 
-```{js}
+```
 
 const FiftyOneDegreesDeviceDetection = require('fiftyone.pipeline.devicedetection')
 
@@ -35,7 +35,7 @@ const FiftyOneDegreesDeviceDetection = require('fiftyone.pipeline.devicedetectio
 
 We then load in a datafile (ending in .trie for the Hash algorithm). Free data files can be acquired by pulling the submodule under datafile in this example
 
-```{js}
+```
 
 let datafile = (process.env.directory || __dirname) + "/../../device-detection-cxx/device-detection-data/51Degrees-LiteV3.4.trie";
 
@@ -43,7 +43,7 @@ let datafile = (process.env.directory || __dirname) + "/../../device-detection-c
 
 Build the device detection pipeline using the builder that comes with the fiftyone.pipeline.devicedetection module and pass in the desired settings. Additional flowElements / engines can be added before the build() method is called if needed.
 
-```{js}
+```
 
 let pipeline = new FiftyOneDegreesDeviceDetection.deviceDetectionPipelineBuilder({
     performanceProfile: "MaxPerformance",
@@ -55,7 +55,7 @@ let pipeline = new FiftyOneDegreesDeviceDetection.deviceDetectionPipelineBuilder
 
 Each pipeline has an event emitter attached you can listen to to catch messages. Valid log types are info, debug, warn and error.
 
-```{js}
+```
 
 pipeline.on("error", console.error);
 
@@ -65,7 +65,7 @@ A pipeline can create a flowData element which is where evidence is added (for e
 
 Here is an example of a function that checks if a user agent is a mobile device. In some cases the isMobile value is not meaningful so instead of returning a default, a .hasValue() check can be made. Please see the failureToMatch example for more information.
 
-```{js}
+```
 
 let checkIfMobile = async function (userAgent) {
 

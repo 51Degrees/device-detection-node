@@ -20,8 +20,8 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
-/*
-@example pattern/failureToMatch.js
+/**
+@example hash/failureToMatch.js
 
 This examples shows how the hasValue function can help make sure that meaningful values are returned when checking properties returned from the device detection engine. It also illustrates how the "allowUnmatched" parameters can be used to alter these results.
 

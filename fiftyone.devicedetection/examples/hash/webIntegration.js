@@ -20,8 +20,8 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
-/*
-@example pattern/webIntegration.js
+/**
+@example hash/webIntegration.js
 
 This example demonstrates the evidence.addFromRequest() method and client side JavaScript overrides by creating a web server, serving JavaScript created by the device detection engine and bundled together by a special JavaScript bundler engine.. This JavaScript is then used on the client side to save a cookie so that when the device detection engine next processes the request (using the addFromRequest() method) it has a more accurate reading for properties set on the clientside.
 

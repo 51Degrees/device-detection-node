@@ -20,14 +20,14 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
-/*
-@example pattern/configureFromFile.js
+/**
+@example hash/configureFromFile.js
 
 This examples shows how to configure a pipeline from a configuration file using the pipelinebuilder's buildFromConfigurationFile method.
 
 The configuration file used here is:
 
-```{json}
+```
 
 {
     "PipelineOptions": {
