@@ -1,0 +1,15 @@
+{
+    "PipelineOptions": {
+        "Elements": [
+        {
+            "elementName": "fiftyone.pipeline.cloudrequestengine",
+            "elementParameters": {
+                "resourceKey": "AQS5HKcyHJbECm6E10g"
+            }
+        },
+        {
+            "elementName": "../../deviceDetectionCloud"
+        }
+        ]
+    }
+}

@@ -1,0 +1,100 @@
+trigger: none
+
+pr:
+  - master
+  - develop
+  - release/*  
+
+pool:
+  vmImage: 'ubuntu-latest'
+  
+variables: 
+  - group: PackageFeedAccessToken
+    
+strategy:
+  matrix:
+    node_8_x:
+      node_version: 8.x
+    node_10_x:
+      node_version: 10.x
+    node_12_x:
+      node_version: 12.x
+      
+steps:
+- checkout: self
+  lfs: true
+  submodules: recursive
+
+- task: NodeTool@0
+  inputs:
+    versionSpec: $(node_version)
+  displayName: 'Install Node.js'
+
+- script: |
+    content='{ 
+      "name": "device-detection-node-tests", 
+      "version": "1.0.0", 
+      "description": "Temporary package to allow all tests to run using the local code as dependencies", 
+      "main": "index.js", 
+      "scripts": { 
+        "test": "jest --ci --reporters=jest-junit --reporters=default --coverage --coverageReporters=cobertura --passWithNoTests" 
+        }, 
+      "repository": { 
+        "type": "git", "url": "https://github.com/51Degrees/pipeline-node" 
+        }, 
+      "author": "51Degrees",
+      "dependencies": { 
+        "jest": "^24.9.0",
+        "jest-junit": "^9.0.0",
+        "fiftyone.pipeline.core": "^4.1.0-beta.7",
+        "fiftyone.pipeline.engines": "^4.1.0-beta.7",
+        "fiftyone.pipeline.engines.fiftyone": "^4.1.0-beta.7",
+        "fiftyone.pipeline.javascriptbundler": "^4.1.0-beta.7",
+        "fiftyone.pipeline.cloudrequestengine": "^4.1.0-beta.7"
+        },
+      "jest-junit": {
+          "outputName": "'"$NODE_VERSION"'.xml"    
+        } 
+      }'
+    echo $content
+    echo $content > package.json
+  displayName: 'Create package.json for tests'
+  
+# The secure file to download will be stored in the 
+# Pipelines/Library/SecureFiles section in Azure DevOps.
+- task: DownloadSecureFile@1
+  displayName: 'Download .npmrc'
+  name: npmrc
+  inputs:
+    secureFile: '.npmrc'
+
+- task: CopyFiles@2
+  displayName: 'Copy .npmrc to working directory'
+  inputs:
+    sourceFolder: '$(Agent.TempDirectory)'
+    targetFolder: '$(System.DefaultWorkingDirectory)'
+    contents: '.npmrc'
+
+- script: |
+    npm install jest
+    npm install jest-junit
+    npm install fiftyone.pipeline.core
+    npm install fiftyone.pipeline.engines
+    npm install fiftyone.pipeline.engines.fiftyone
+    npm install fiftyone.pipeline.cloudrequestengine
+    npm install fiftyone.pipeline.javascriptbundler
+    npm test
+  displayName: 'Build and Test'
+
+- task: PublishTestResults@2
+  condition: succeededOrFailed()
+  inputs:
+    testRunner: JUnit
+    testResultsFiles: '**/$(node_version).xml'
+
+- task: PublishCodeCoverageResults@1
+  inputs: 
+    codeCoverageTool: Cobertura
+    summaryFileLocation: '$(System.DefaultWorkingDirectory)/**/*coverage.xml'
+    reportDirectory: '$(System.DefaultWorkingDirectory)/**/coverage'
+

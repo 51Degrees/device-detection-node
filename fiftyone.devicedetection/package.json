@@ -1,0 +1,36 @@
+{
+  "name": "fiftyone.devicedetection",
+  "version": "1.0.21",
+  "description": "Device detection services for the 51Degrees Pipeline API",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "contributors": [
+    "Filip Hnízdo <filip@octophin.com> (https://octophindigital.com/)",
+    "Steve Ballantine <stephen@51degrees.com> (https://51degrees.com)",
+    "Ben Shilito <ben@51degrees.com> (https://51degrees.com)",
+    "Joseph Dix <joseph@51degrees.com> (https://51degrees.com)"
+  ],
+  "dependencies": {
+    "fiftyone.pipeline.core": "^4.1.0-beta.7",
+    "fiftyone.pipeline.engines": "^4.1.0-beta.7",
+    "fiftyone.pipeline.engines.fiftyone": "^4.1.0-beta.7",
+    "fiftyone.pipeline.javascriptbundler": "^4.1.0-beta.7",
+    "fiftyone.pipeline.cloudrequestengine": "^4.1.0-beta.7"
+  },
+  "devDependencies": {
+    "jest": "^24.9.0"
+  },
+  "license": "EUPL-1.2",
+  "bugs": { 
+    "url" : "https://github.com/51Degrees/device-detection-node/issues"
+  },
+  "files": [
+    "build",
+    "*.js"
+  ]
+}

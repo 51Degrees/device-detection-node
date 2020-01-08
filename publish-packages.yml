@@ -1,0 +1,89 @@
+trigger:
+  - master
+  - develop
+  - release/*  
+    
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables: 
+  - group: PackageFeedAccessToken
+    # Access token for the git repository. Used by the git tag task.
+  - name: system_accesstoken
+    value: $(System.AccessToken)
+
+steps:
+# The lines below are needed to allow the pipeline access to the
+# OAuth access token that controls write access to the git repository. 
+# (Required for GitTag task)
+- checkout: self
+  lfs: true
+  submodules: recursive
+  persistCredentials: true
+
+- task: gittools.gitversion.gitversion-task.GitVersion@5
+  displayName: 'Determine Version Number'
+  # Give this task a name so we can use the variables it sets later. 
+  name: GitVersion
+  inputs:
+    preferBundledVersion: false
+
+# Set version number.
+- task: Npm@1
+  displayName: 'npm version fiftyone.devicedetection'
+  inputs:
+    command: custom
+    workingDir: fiftyone.devicedetection
+    verbose: true
+    customCommand: version $(GitVersion.SemVer)    
+  continueOnError: true
+  condition: succeededOrFailed()
+
+# Create packages
+- script: |
+    cd fiftyone.devicedetection
+    npm pack
+  displayName: 'Create npm package for later release'
+  condition: succeededOrFailed()
+
+# Copy artifacts contents.
+- task: CopyFiles@2
+  inputs:
+    sourceFolder: '$(Build.SourcesDirectory)'
+    contents: '**/*.tgz' 
+    targetFolder: $(Build.ArtifactStagingDirectory)/npm
+  displayName: 'Copy tgz files'
+  condition: succeededOrFailed()
+
+- task: CopyFiles@2
+  inputs:
+    sourceFolder: '$(Build.SourcesDirectory)'
+    contents: '**/package.json' 
+    targetFolder: $(Build.ArtifactStagingDirectory)/npm
+  displayName: 'Copy package.json files'
+  condition: succeededOrFailed()
+
+- script: |
+    ls $(Build.ArtifactStagingDirectory)/**/*
+  displayName: 'List artifact staging contents'
+  condition: succeededOrFailed()
+
+# Add a tag to the git repository with the version number of
+# the package that has just been published
+- task: ATP.ATP-GitTag.GitTag.GitTag@5
+  displayName: 'Tag Repo With Version Number'
+  inputs:
+    tagUser: 'Azure DevOps'
+    tagEmail: 'CIUser@51Degrees.com'
+    tag: 'v$(GitVersion.NuGetVersion)'
+# Only create the tag if we also published a package as defined in 
+# the previous task.
+  condition: succeeded()
+
+# Publish artifacts to DevOps
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)/npm'
+    artifactName: npm
+  displayName: 'Publish npm artifact'
+  condition: succeeded()

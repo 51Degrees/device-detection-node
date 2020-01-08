@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<tagfile>
+  <compound kind="class">
+    <name>deviceDetectionCloud</name>
+    <filename>classdevice_detection_cloud.html</filename>
+    <member kind="function">
+      <type></type>
+      <name>processInternal</name>
+      <anchorfile>classdevice_detection_cloud.html</anchorfile>
+      <anchor>acdae29e42222027c7df6cd24564668af</anchor>
+      <arglist>(flowData)</arglist>
+    </member>
+  </compound>
+  <compound kind="class">
+    <name>deviceDetectionDataFile</name>
+    <filename>classdevice_detection_data_file.html</filename>
+  </compound>
+  <compound kind="class">
+    <name>deviceDetectionMissingPropertyService</name>
+    <filename>classdevice_detection_missing_property_service.html</filename>
+    <member kind="function">
+      <type></type>
+      <name>check</name>
+      <anchorfile>classdevice_detection_missing_property_service.html</anchorfile>
+      <anchor>adb0d6be6fd3fd4d335a6529965ccb320</anchor>
+      <arglist>(key, flowElement)</arglist>
+    </member>
+  </compound>
+  <compound kind="class">
+    <name>deviceDetectionOnPremise</name>
+    <filename>classdevice_detection_on_premise.html</filename>
+  </compound>
+  <compound kind="class">
+    <name>deviceDetectionPipelineBuilder</name>
+    <filename>classdevice_detection_pipeline_builder.html</filename>
+    <member kind="function">
+      <type></type>
+      <name>constructor</name>
+      <anchorfile>classdevice_detection_pipeline_builder.html</anchorfile>
+      <anchor>aa7c72836719e71c3b153cddc2090035f</anchor>
+      <arglist>({ licenceKeys=null, dataFile=null, autoUpdate=true, shareUsage=true, resourceKey=null, cacheSize=null, performanceProfile=&quot;LowMemory&quot;, allowUnmatched=false, updateOnStart=false })</arglist>
+    </member>
+  </compound>
+  <compound kind="class">
+    <name>swigData</name>
+    <filename>classswig_data.html</filename>
+    <member kind="function">
+      <type></type>
+      <name>constructor</name>
+      <anchorfile>classswig_data.html</anchorfile>
+      <anchor>a1afa48aaa767507cc70e383251122d04</anchor>
+      <arglist>({ flowElement, swigResults })</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>getInternal</name>
+      <anchorfile>classswig_data.html</anchorfile>
+      <anchor>a39ce8cd5d44d145003b19f29797934c7</anchor>
+      <arglist>(key)</arglist>
+    </member>
+  </compound>
+  <compound kind="page">
+    <name>md_C:_Dev_Pipeline_device-detection-node_readme</name>
+    <title>readme</title>
+    <filename>md__c_1__dev__pipeline_device-detection-node_readme</filename>
+  </compound>
+</tagfile>
