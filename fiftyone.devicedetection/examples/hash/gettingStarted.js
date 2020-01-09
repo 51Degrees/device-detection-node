@@ -25,15 +25,24 @@
 
 Getting started example of using the 51Degrees device detection 'Hash' algorithm to determine whether a given User-Agent corresponds to a mobile device or not.
 
-Firstly require the fiftyone.pipeline.devicedetection modules which contain all of the pipeline specific classes we will be using in this example.
+This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/release/v4.1.0/fiftyone.devicedetection/examples/hash/gettingStarted.js). 
+(During the beta period, this repository will be private. 
+[Contact us](mailto:support.51degrees.com) to request access)
+
+This example requires a local data file. Free data files can be acquired by 
+pulling the submodules under this repository or from the 
+[device-detection-data](https://github.com/51Degrees/device-detection-data) 
+GitHub repository.
+
+Firstly require the fiftyone.devicedetection modules which contain all of the pipeline specific classes we will be using in this example.
 
 ```
 
-const FiftyOneDegreesDeviceDetection = require('fiftyone.pipeline.devicedetection')
+const FiftyOneDegreesDeviceDetection = require('fiftyone.devicedetection')
 
 ```
 
-We then load in a datafile (ending in .trie for the Hash algorithm). Free data files can be acquired by pulling the submodule under datafile in this example
+We then load in a datafile (ending in .trie for the Hash algorithm). 
 
 ```
 

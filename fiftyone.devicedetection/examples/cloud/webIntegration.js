@@ -25,6 +25,17 @@
 
 This example demonstrates the evidence.addFromRequest() method and client side JavaScript overrides by creating a web server, serving JavaScript created by the device detection engine and bundled together by a special JavaScript bundler engine.. This JavaScript is then used on the client side to save a cookie so that when the device detection engine next processes the request (using the addFromRequest() method) it has a more accurate reading for properties set on the clientside.
 
+This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/release/v4.1.0/fiftyone.devicedetection/examples/cloud/webIntegration.js). 
+(During the beta period, this repository will be private. 
+[Contact us](mailto:support.51degrees.com) to request access) 
+
+To run this example, you will need to create a **resource key**. 
+The resource key is used as short-hand to store the particular set of 
+properties you are interested in as well as any associated license keys 
+that entitle you to increased request limits and/or paid-for properties.
+
+In this example a resource key has been provided for testing purposes but you can create your own resource key using the 51Degrees [Configurator](https://configure.51degrees.com).
+
 */
 
 const FiftyOneDegreesDeviceDetection = require((process.env.directory || __dirname) + "/../../");

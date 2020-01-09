@@ -23,7 +23,18 @@
 /**
 @example hash/webIntegration.js
 
+
+
 This example demonstrates the evidence.addFromRequest() method and client side JavaScript overrides by creating a web server, serving JavaScript created by the device detection engine and bundled together by a special JavaScript bundler engine.. This JavaScript is then used on the client side to save a cookie so that when the device detection engine next processes the request (using the addFromRequest() method) it has a more accurate reading for properties set on the clientside.
+
+This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/release/v4.1.0/fiftyone.devicedetection/examples/hash/webIntegration.js). 
+(During the beta period, this repository will be private. 
+[Contact us](mailto:support.51degrees.com) to request access)
+
+This example requires a local data file. Free data files can be acquired by 
+pulling the submodules under this repository or from the 
+[device-detection-data](https://github.com/51Degrees/device-detection-data) 
+GitHub repository.
 
 */
 

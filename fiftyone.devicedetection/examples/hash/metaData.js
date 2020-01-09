@@ -25,6 +25,15 @@
 
 This example shows how to get properties from a pipeline's processed flowData based on their metadata, the getProperties() method and also additional meta data properties on device detection data.
 
+This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/release/v4.1.0/fiftyone.devicedetection/examples/hash/metaData.js). 
+(During the beta period, this repository will be private. 
+[Contact us](mailto:support.51degrees.com) to request access)
+
+This example requires a local data file. Free data files can be acquired by 
+pulling the submodules under this repository or from the 
+[device-detection-data](https://github.com/51Degrees/device-detection-data) 
+GitHub repository.
+
 */
 
 const FiftyOneDegreesDeviceDetection = require((process.env.directory || __dirname) + "/../../");

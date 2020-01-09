@@ -23,21 +23,24 @@
 /**
 @example cloud/gettingStarted.js
 
-Getting started example of using the 51Degrees device detection 'Pattern' algorithm to determine whether a given User-Agent corresponds to a mobile device or not.
+Getting started example of using the 51Degrees Device Detection Cloud to determine whether a given User-Agent corresponds to a mobile device or not.
 
-Firstly require the fiftyone.pipeline.devicedetection modules which contain all of the pipeline specific classes we will be using in this example.
+This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/release/v4.1.0/fiftyone.devicedetection/examples/cloud/gettingStarted.js). 
+(During the beta period, this repository will be private. 
+[Contact us](mailto:support.51degrees.com) to request access) 
+
+To run this example, you will need to create a **resource key**. 
+The resource key is used as short-hand to store the particular set of 
+properties you are interested in as well as any associated license keys 
+that entitle you to increased request limits and/or paid-for properties.
+
+You can create a resource key using the 51Degrees [Configurator](https://configure.51degrees.com).
+
+Firstly require the fiftyone.devicedetection modules which contain all of the pipeline specific classes we will be using in this example.
 
 ```
 
-const FiftyOneDegreesDeviceDetection = require('fiftyone.pipeline.devicedetection')
-
-```
-
-We then load in a datafile (ending in .dat for the Pattern algorithm). Free data files can be acquired by pulling the submodule under datafile in this example
-
-```
-
-let datafile = (process.env.directory || __dirname) + "/../../device-detection-cxx/device-detection-data/51Degrees-LiteV3.2.dat";
+const FiftyOneDegreesDeviceDetection = require('fiftyone.devicedetection')
 
 ```
 
