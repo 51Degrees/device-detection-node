@@ -75,7 +75,6 @@ steps:
   inputs:
     tagUser: 'Azure DevOps'
     tagEmail: 'CIUser@51Degrees.com'
-    tag: 'v$(GitVersion.NuGetVersion)'
 # Only create the tag if we also published a package as defined in 
 # the previous task.
   condition: succeeded()

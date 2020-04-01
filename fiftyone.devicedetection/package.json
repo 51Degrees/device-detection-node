@@ -26,8 +26,8 @@
     "jest": "^24.9.0"
   },
   "license": "EUPL-1.2",
-  "bugs": { 
-    "url" : "https://github.com/51Degrees/device-detection-node/issues"
+  "bugs": {
+    "url": "https://github.com/51Degrees/device-detection-node/issues"
   },
   "files": [
     "build",

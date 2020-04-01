@@ -68,7 +68,7 @@ Then call:
 
 Process for rebuilding SWIG interfaces following an update to the device detection cxx code (This is only intended to be run by 51Degrees developers internally):
 
-1. Esnure Swig is installed.
+1. Ensure Swig is installed.
 2. Update the device-detection-cxx submodule to reference the relevant commit.
 3. From terminal, navigate to fiftyone.pipeline.devicedetection and run:
     a) swig -c++ -javascript -node hash_node.i
