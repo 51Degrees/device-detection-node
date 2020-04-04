@@ -26,13 +26,10 @@ Or to install from this repository run:
 This will build also build the native modules.
 
 ### On-Premise
-When running on-premise, two detection methods are supported.
-
-[**Pattern**](https://docs.51degrees.com/documentation/4.1/_device_detection__pattern.html): Searches for device signatures in a User-Agent returning metrics about the validity of the results. Does NOT use regular expressions.
+When running on-premise, a local Hash V4.1 data file is required.
 
 [**Hash**](https://docs.51degrees.com/documentation/4.1/_device_detection__hash.html): A large binary file populated with User-Agent signatures allowing very fast detection speeds.
 
-In both cases, a local data file is required.
 51Degrees provides [multiple options](https://51degrees.com/Licencing-Pricing/On-Premise), some of which support automatic updates through the Pipeline API.
 
 ### Cloud
@@ -41,11 +38,11 @@ The device detection cloud engine makes use of the 51Degrees cloud API. As such 
 
 ### Examples
 
-Usage examples are available for cloud, hash and pattern in ``fiftyone.devicedetection/examples``
+Usage examples are available for cloud and hash in ``fiftyone.devicedetection/examples``
 
 - **configureFromFile.js** - This example shows how to configure a pipeline from a configuration file using the pipelinebuilder's buildFromConfigurationFile method.
 - **failureToMatch.js** - This example shows how the hasValue function can help make sure that meaningful values are returned when checking properties returned from the device detection engine. It also illustrates how the "allowUnmatched" parameters can be used to alter these results.
-- **gettingStarted.js** - Getting started example of using the 51Degrees device detection 'Pattern' algorithm to determine whether a given User-Agent corresponds to a mobile device or not.
+- **gettingStarted.js** - Getting started example of using the 51Degrees device detection 'Hash' algorithm to determine whether a given User-Agent corresponds to a mobile device or not.
 - **metaData.js** - This example shows how to get properties from a pipeline's processed flowData based on their metadata, the getProperties() method and also additional meta data properties on device detection data.
 - **webIntegration.js** - This example demonstrates the evidence.addFromRequest() method and client side JavaScript overrides by creating a web server, serving JavaScript created by the device detection engine and bundled together by a special JavaScript bundler engine. This JavaScript is then used on the client side to save a cookie so that when the device detection engine next processes the request (using the addFromRequest() method) it has a more accurate reading for properties set on the clientside.
 
@@ -72,7 +69,6 @@ Process for rebuilding SWIG interfaces following an update to the device detecti
 2. Update the device-detection-cxx submodule to reference the relevant commit.
 3. From terminal, navigate to fiftyone.pipeline.devicedetection and run:
     a) swig -c++ -javascript -node hash_node.i
-    b) swig -c++ -javascript -node pattern_node.i
 4. Commit changes to repository.
 5. Run the 'Build Device Detection Binaries' Azure CI Pipeline.
 6. Copy the produced artifacts into the fiftyone.pipeline.devicedetection/build directory.

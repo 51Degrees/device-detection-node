@@ -40,7 +40,7 @@ const FiftyOneDegreesDeviceDetection = require((process.env.directory || __dirna
 
 // Load in a datafile
 
-let datafile = (process.env.directory || __dirname) + "/../../device-detection-cxx/device-detection-data/51Degrees-LiteV3.4.trie";
+let datafile = (process.env.directory || __dirname) + "/../../device-detection-cxx/device-detection-data/51Degrees-LiteV4.1.hash";
 
 // Check if datafiele exists
 

@@ -44,7 +44,7 @@ const fs = require("fs");
 
 // Load in a datafile
 
-let datafile = (process.env.directory || __dirname) + "/../../device-detection-cxx/device-detection-data/51Degrees-LiteV3.4.trie";
+let datafile = (process.env.directory || __dirname) + "/../../device-detection-cxx/device-detection-data/51Degrees-LiteV4.1.hash";
 
 if (!fs.existsSync(datafile)) {
     console.error("The datafile required by this example is not present. Please ensure that the 'device-detection-data' submodule has been fetched.");

@@ -37,7 +37,7 @@ const fs = require("fs");
 // Not supplying a dataFile will default the implementation to use our Cloud service. 
 let pipeline = new ddPipelineBuilder({    
     performanceProfile: "MaxPerformance",
-    dataFile: "../device-detection-cxx/device-detection-data/51Degrees-LiteV3.2.dat",
+    dataFile: "../device-detection-cxx/device-detection-data/51Degrees-LiteV4.1.hash",
     autoUpdate: false
 }).build();
 

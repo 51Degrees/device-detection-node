@@ -92,22 +92,6 @@ class swigData extends aspectData {
 
         }
 
-        if (key === "rank") {
-            
-            result.value = this.swigResults.getRank();
-            
-            return result;
-
-        }
-
-        if (key === "signaturesCompared") {
-            
-            result.value = this.swigResults.getSignaturesCompared();
-            
-            return result;
-
-        }
-
         if (key === "matchedNodes") {
             
             result.value = this.swigResults.getMatchedNodes();

@@ -42,7 +42,7 @@ const fs = require("fs");
 
 // Load in a datafile
 
-let datafile = (process.env.directory || __dirname) + "/../../device-detection-cxx/device-detection-data/51Degrees-LiteV3.4.trie";
+let datafile = (process.env.directory || __dirname) + "/../../device-detection-cxx/device-detection-data/51Degrees-LiteV4.1.hash";
 
 if (!fs.existsSync(datafile)) {
     console.error("The datafile required by this example is not present. Please ensure that the 'device-detection-data' submodule has been fetched.");
@@ -128,11 +128,8 @@ let getMatchMetaData = async function (userAgent) {
     flowData.device.method;
     // Provides information about the algorithm that was used to perform detection for a particular User-Agent.
 
-    flowData.device.rank;
-    // An integer value that indicates how popular the device is. The lower the rank the more popular the signature.
-
-    flowData.device.signaturesCompared;
-    // The number of device signatures that have been compared before finding a result.
+    flowData.device.matchdeNodes;
+    // The number of hash nodes that have been matched before finding a result.
 
     Object.entries(meta).forEach(([key, result]) => {
 

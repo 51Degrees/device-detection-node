@@ -45,7 +45,7 @@ let nodeVersion = Number(process.version.match(/^v(\d+\.)/)[1]);
 
 class deviceDetectionOnPremise extends engine {
 
-    constructor({ dataFile, autoUpdate, cache, dataFileUpdateBaseUrl = "https://distributor.51degrees.com/api/v2/download", restrictedProperties, licenceKeys, download, performanceProfile = "LowMemory", reuseTempFile = false, updateMatchedUserAgent = false, maxMatchedUserAgentLength, drift, difference, concurrency = os.cpus().length, closestSignatures, userAgentCacheCapacity, allowUnmatched, fileSystemWatcher, createTempDataCopy, updateOnStart = false }) {
+    constructor({ dataFile, autoUpdate, cache, dataFileUpdateBaseUrl = "https://distributor.51degrees.com/api/v2/download", restrictedProperties, licenceKeys, download, performanceProfile = "LowMemory", reuseTempFile = false, updateMatchedUserAgent = false, maxMatchedUserAgentLength, drift, difference, concurrency = os.cpus().length, allowUnmatched, fileSystemWatcher, createTempDataCopy, updateOnStart = false }) {
 
         let swigWrapper;
         let swigWrapperType;
@@ -55,23 +55,13 @@ class deviceDetectionOnPremise extends engine {
 
         let ext = path.parse(dataFile).ext;
 
-        if (ext === ".dat") {
+        if (ext === ".hash") {
 
-            // Pattern
-
-            swigWrapperType = "Pattern";
-            swigWrapper = require("./build/FiftyOneDeviceDetectionPatternV4-" + os.platform() + "-" + nodeVersion + ".node");
-            dataFileType = "BinaryV32";
-
-        }
-
-        if (ext === ".trie") {
-
-            // Trie
+            // Hash
 
             swigWrapperType = "Hash";
             swigWrapper = require("./build/FiftyOneDeviceDetectionHashV4-" + os.platform() + "-" + nodeVersion + ".node");
-            dataFileType = "HashTrieV34";
+            dataFileType = "HashV41";
 
         }
 
@@ -145,22 +135,6 @@ class deviceDetectionOnPremise extends engine {
 
             if (drift) {
                 config.setDrift(drift);
-            }
-
-        }
-
-        if (swigWrapperType === "Pattern") {
-
-            if (closestSignatures) {
-
-                config.setClosestSignatures(closestSignatures)
-
-            }
-
-            if (userAgentCacheCapacity) {
-
-                config.setUserAgentCacheCapacity(userAgentCacheCapacity)
-
             }
 
         }
@@ -246,31 +220,6 @@ class deviceDetectionOnPremise extends engine {
                     type: "int",
                     category: "Device metrics",
                     description: "Used when detection method is not Exact or None. This is an integer value and the larger the value the less confident the detector is in this result."
-                }
-
-                if (swigWrapperType === "Pattern") {
-
-                    current.properties["method"] = {
-                        name: "Method",
-                        type: "string",
-                        category: "Device metrics",
-                        description: "Provides information about the algorithm that was used to perform detection for a particular User-Agent."
-                    }
-
-                    current.properties["rank"] = {
-                        name: "Rank",
-                        type: "int",
-                        category: "Device metrics",
-                        description: "An integer value that indicates how popular the device is. The lower the rank the more popular the signature."
-                    }
-
-                    current.properties["signaturesCompared"] = {
-                        name: "SignaturesCompared",
-                        type: "int",
-                        category: "Device metrics",
-                        description: "The number of device signatures that have been compared before finding a result."
-                    }
-
                 }
 
                 if (swigWrapperType === "Hash") {

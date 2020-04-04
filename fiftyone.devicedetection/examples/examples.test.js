@@ -69,14 +69,6 @@ test('hash web integration', (done) => {
 
 });
 
-test('pattern web integration', (done) => {
-
-    setTimeout(done, 1000);
-
-    testExample({ file: (__dirname) + "/pattern/webIntegration.js" });
-
-});
-
 // Skip the rest of the examples when async is not available
 let isAsync = true;
 
@@ -133,30 +125,6 @@ if(isAsync) {
         setTimeout(done, 1000);
 
         testExample({ file: (__dirname) + "/hash/metaData.js" });
-
-    });
-
-    test('pattern getting started', (done) => {
-
-        setTimeout(done, 1000);
-
-        testExample({ file: (__dirname) + "/pattern/gettingStarted.js" });
-
-    });
-
-    test('pattern failure to match', (done) => {
-
-        setTimeout(done, 1000);
-
-        testExample({ file: (__dirname) + "/pattern/failureToMatch.js" });
-
-    });
-
-    test('pattern metadata', (done) => {
-
-        setTimeout(done, 1000);
-
-        testExample({ file: (__dirname) + "/pattern/metaData.js" });
 
     });
 }
