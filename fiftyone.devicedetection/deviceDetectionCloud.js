@@ -66,9 +66,9 @@ class deviceDetectionCloud extends engine {
 
                 result[key] = new aspectPropertyValue();
 
-                if(cloudData.nullValueReasons["device." + key]){
+                if(cloudData.device[key + "nullreason"]){
 
-                    result[key].noValueMessage = cloudData.nullValueReasons["device." + key];
+                    result[key].noValueMessage = cloudData.device[key + "nullreason"];
 
                 } else {
 
