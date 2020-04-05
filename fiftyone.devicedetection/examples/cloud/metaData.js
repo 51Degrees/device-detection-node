@@ -43,8 +43,9 @@ const FiftyOneDegreesDeviceDetection = require((process.env.directory || __dirna
 const fs = require("fs");
 
 // Create a new Device Detection pipeline and set the config.
+//  You need to create a resource key at https://configure.51degrees.com and paste it into the code.
 let pipeline = new FiftyOneDegreesDeviceDetection.deviceDetectionPipelineBuilder({
-    "resourceKey": "AQS5HKcyHJbECm6E10g"
+    "resourceKey": ""
 }).build();
 
 // Logging of errors and other messages. Valid logs types are info, debug, warn, error

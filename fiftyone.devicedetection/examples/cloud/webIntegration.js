@@ -34,8 +34,6 @@ The resource key is used as short-hand to store the particular set of
 properties you are interested in as well as any associated license keys 
 that entitle you to increased request limits and/or paid-for properties.
 
-In this example a resource key has been provided for testing purposes but you can create your own resource key using the 51Degrees [Configurator](https://configure.51degrees.com).
-
 */
 
 const FiftyOneDegreesDeviceDetection = require((process.env.directory || __dirname) + "/../../");
@@ -43,8 +41,9 @@ const FiftyOneDegreesDeviceDetection = require((process.env.directory || __dirna
 const fs = require("fs");
 
 // Create a new Device Detection pipeline and set the config.
+//  You need to create a resource key at https://configure.51degrees.com and paste it into the code.
 let pipeline = new FiftyOneDegreesDeviceDetection.deviceDetectionPipelineBuilder({
-    "resourceKey": "AQS5HKcyHJbECm6E10g"
+    "resourceKey": ""
 }).build();
 
 // Logging of errors and other messages. Valid logs types are info, debug, warn, error
@@ -61,17 +60,17 @@ const server = http.createServer((req, res) => {
 
     flowData.process().then(function () {
 
-        // A property like screenpixelswidth needs to be measured on the clientside for full accuracy
+        // To get a more acurate list of hardware names, we need to run some client side javascript code. At first this will populate a large list which will get smaller following new client side evidence.
 
-        if (flowData.device.screenpixelswidth.hasValue) {
+        if (flowData.device.hardwarename && flowData.device.hardwarename.hasValue) {
 
-            console.log(`screenpixelwidth = ${flowData.device.screenpixelswidth.value}`);
+            console.log(flowData.device.hardwarename.value);
 
         }
 
-        // Get JavaScript to put inside the page so that the second request gets extra information in cookies
+        // Get JavaScript to put inside the page to gather extra evidence
 
-        let js = `<script>${flowData.javascript.javascript}</script>`;
+        let js = `<script>${flowData.javascriptbuilder.javascript}</script>`;
 
         res.statusCode = 200;
         res.setHeader('Content-Type', 'text/html');

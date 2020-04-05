@@ -36,8 +36,8 @@ properties you are interested in as well as any associated license keys
 that entitle you to increased request limits and/or paid-for properties.
 
 You can create a resource key using the 51Degrees [Configurator](https://configure.51degrees.com).
-Make sure to include the HardwareVendor and HardwareModel properties 
-as they are used by this example.
+Make sure to include the HardwareVendor, HardwareModel and HardwareName 
+properties as they are used by this example.
 
 Create a cloud request engine. This will make the HTTP calls to the 
 51Degrees cloud service.
@@ -128,14 +128,18 @@ Which devices are associated with the native model name 'iPhone11,8'?
         Apple iPhone XR (A2106)
         Apple iPhone XR (A2107)
         Apple iPhone XR (A2108)
-        Apple iPhone XR,iPhone 11 (iPhone XR)
 ```
 
 */
 
 let pipelineCore = require("fiftyone.pipeline.core");
 let cloudRequestEngine = require("fiftyone.pipeline.cloudrequestengine");
+// Note that this example is designed to be run from within the 
+// device detection code base. If this code has been copied to run 
+// standalone then you'll need to replace the require below with the
+// commented out version below it.
 let propertyKeyedEngine = require((process.env.directory || __dirname) + "/../../propertyKeyedCloudEngine");
+// let propertyKeyedEngine = require("fiftyone.devicedetection");
 
 console.log(`This example finds the details of devices from the 'native model name'.
 The native model name can be retrieved by code running on the device (For example, a mobile app).
@@ -144,8 +148,10 @@ For iOS devices, see https://gist.github.com/soapyigu/c99e1f45553070726f14c1bb0a
 ----------------------------------------`);
 
 // Create request engine that will make requests to the cloud service.
+//  You need to create a resource key at https://configure.51degrees.com and paste it into the code.
 let requestEngineInstance = new cloudRequestEngine({    
-    "resourceKey": ""
+    "resourceKey": "AQS5HKcyxmoxU0-q10g",
+    "baseURL": "https://ts.51degrees.com/api/v4/"
 });
 
 // Create the property-keyed engine that will organise the results
@@ -176,7 +182,7 @@ let outputDetails = async function (nativemodel) {
 
     // Iterate through the matching devices, 
     // outputting vendor and model name.
-    flowData.devices.devices.forEach(device => {
+    flowData.propertyKeyed.devices.forEach(device => {
         let hardwareVendor = device.HardwareVendor;
         let hardwareName = device.HardwareName;
         let hardwareModel = device.HardwareModel;

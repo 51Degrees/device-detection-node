@@ -82,7 +82,7 @@ const server = http.createServer((req, res) => {
 
         // Get JavaScript to put inside the page so that the second request gets extra information in cookies
 
-        let js = `<script>${flowData.javascript.javascript}</script>`;
+        let js = `<script>${flowData.javascriptbuilder.javascript}</script>`;
 
         res.statusCode = 200;
         res.setHeader('Content-Type', 'text/html');

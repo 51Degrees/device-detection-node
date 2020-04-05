@@ -28,11 +28,12 @@ let require51 = (requestedPackage) => {
     }
 }
 
+
+const core = require51("fiftyone.pipeline.core");
 const deviceDetectionOnPremise = require("./deviceDetectionOnPremise");
 const deviceDetectionCloud = require("./deviceDetectionCloud");
 const cloudRequestEngine = require51("fiftyone.pipeline.cloudrequestengine");
-const javaScriptBundler = require51("fiftyone.pipeline.javascriptbundler").javascriptBundler;
-const pipelineBuilder = require51("fiftyone.pipeline.core").pipelineBuilder;
+const pipelineBuilder = core.pipelineBuilder;
 const engines = require51("fiftyone.pipeline.engines");
 const lruCache = engines.lruCache;
 const shareUsageElement = require51("fiftyone.pipeline.engines.fiftyone").shareUsage;
@@ -93,10 +94,6 @@ class deviceDetectionPipelineBuilder extends pipelineBuilder {
             this.flowElements.push(new deviceDetectionCloud());
 
         }
-
-        // Add a JavaScript Bundler flowElement
-
-        this.flowElements.push(new javaScriptBundler());
 
     }
 

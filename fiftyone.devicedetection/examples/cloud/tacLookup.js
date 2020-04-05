@@ -137,8 +137,10 @@ More background information on TACs can be found through various online sources 
 ----------------------------------------`);
 
 // Create request engine that will make requests to the cloud service.
+//  You need to create a resource key at https://configure.51degrees.com and paste it into the code.
 let requestEngineInstance = new cloudRequestEngine({
-    "resourceKey": ""
+    "resourceKey": "AQS5HKcyxmoxU0-q10g",
+    "baseURL": "https://ts.51degrees.com/api/v4/"
 });
 
 // Create the property-keyed engine that will organise the results
@@ -169,7 +171,7 @@ let outputDetails = async function (tac) {
 
     // Iterate through the matching devices, 
     // outputting vendor and model name.
-    flowData.devices.devices.forEach(device => {
+    flowData.propertyKeyed.devices.forEach(device => {
         let hardwareVendor = device.HardwareVendor;
         let hardwareName = device.HardwareName;
         let hardwareModel = device.HardwareModel;

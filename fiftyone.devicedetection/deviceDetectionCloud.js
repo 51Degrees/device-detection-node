@@ -29,9 +29,10 @@ let require51 = (requestedPackage) => {
 }
 
 const engines = require51("fiftyone.pipeline.engines");
+const core = require51("fiftyone.pipeline.core");
 const engine = engines.engine;
 const aspectDataDictionary = engines.aspectDataDictionary;
-const aspectPropertyValue = engines.aspectPropertyValue;
+const aspectPropertyValue = core.aspectPropertyValue;
 
 class deviceDetectionCloud extends engine {
 

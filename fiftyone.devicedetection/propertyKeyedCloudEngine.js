@@ -39,7 +39,7 @@ class propertyKeyedCloudEngine extends engine {
 
         super(...arguments);
 
-        this.dataKey = "devices";
+        this.dataKey = "propertyKeyed";
 
     }
 
@@ -63,7 +63,7 @@ class propertyKeyedCloudEngine extends engine {
 
             let devices = [];
 
-            Object.entries(cloudData.devices.devices).forEach(function([deviceKey,deviceValues]){
+            Object.entries(cloudData.propertyKeyed.devices).forEach(function([deviceValues]){
 
                 let device = {};
 
@@ -104,9 +104,9 @@ class propertyKeyedCloudEngine extends engine {
 
                 let cloudProperties = flowData.get("cloud").get("properties");
 
-                let devicesProperties = cloudProperties.devices;
+                let propertyKeyedProperties = cloudProperties.propertyKeyed;
 
-                engine.properties = devicesProperties;
+                engine.properties = propertyKeyedProperties;
 
                 engine.updateProperties().then(resolve);
 

@@ -29,7 +29,10 @@ let require51 = (requestedPackage) => {
 }
 
 const aspectData = require51("fiftyone.pipeline.engines").aspectData;
-const aspectPropertyValue = require51("fiftyone.pipeline.engines/aspectPropertyValue");
+const aspectPropertyValue = require51("fiftyone.pipeline.core").aspectPropertyValue;
+
+const swigHelpers = require("./swigHelpers");
+
 const dataFileMissingPropertyService = require("./dataFileMissingPropertyService");
 
 class swigData extends aspectData {
@@ -134,20 +137,23 @@ class swigData extends aspectData {
                     value = this.swigResults.getValueAsDouble(property.name);
                     break;
                 case "string[]":
-                    value = [];
-                    var list = this.swigResults.getValues(property.name);
-                    for (var j = 0; j < list.size(); j++) {
-                        value[j] = list.get(j);
-                    }
+                    value = this.swigResults.getValues(property.name);
                     break;
             }
 
             let result = new aspectPropertyValue();
 
             if (value.hasValue()) {
+
                 result.value = value.getValue();
-            }
-            else {
+
+                if(property.type === "string[]"){
+
+                    result.value = swigHelpers.vectorToArray(result.value);
+
+                }
+
+            } else {
                 result.noValueMessage = value.getNoValueMessage();
             }
 
