@@ -25,7 +25,7 @@
 
 This example shows how the hasValue function can help make sure that meaningful values are returned when checking properties returned from the device detection engine. It also illustrates how the "allowUnmatched" parameters can be used to alter these results.
 
-This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/release/v4.1.0/fiftyone.devicedetection/examples/cloud/failureToMatch.js). 
+This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection/examples/cloud/failureToMatch.js). 
 (During the beta period, this repository will be private. 
 [Contact us](mailto:support.51degrees.com) to request access) 
 
@@ -34,7 +34,7 @@ The resource key is used as short-hand to store the particular set of
 properties you are interested in as well as any associated license keys 
 that entitle you to increased request limits and/or paid-for properties.
 
-In this example a resource key has been provided for testing purposes but you can create your own resource key using the 51Degrees [Configurator](https://configure.51degrees.com).
+You can create a resource key using the 51Degrees [Configurator](https://configure.51degrees.com).
 
 */
 
@@ -42,50 +42,69 @@ const FiftyOneDegreesDeviceDetection = require((process.env.directory || __dirna
 
 // Create the device detection pipeline with the desired settings.
 
-//  You need to create a resource key at https://configure.51degrees.com and paste it into the code.
-let pipeline = new FiftyOneDegreesDeviceDetection.deviceDetectionPipelineBuilder({
-    "resourceKey": ""
-}).build();
+// You need to create a resource key at https://configure.51degrees.com and 
+// paste it into the code, replacing !!YOUR_RESOURCE_KEY!!.
+let localResourceKey = "!!YOUR_RESOURCE_KEY!!";
+// Check if there is a resource key in the global variable and use
+// it if there is one. (This is used by automated tests to pass in a key)
+try {
+    localResourceKey = resourceKey;
+} catch (e) {
+    if (e instanceof ReferenceError) {}
+}
 
-pipeline.on("error", console.error);
+if(localResourceKey.substr(0, 2) == "!!") {
+    console.log("You need to create a resource key at " +
+        "https://configure.51degrees.com and paste it into the code, " +
+        "replacing !!YOUR_RESOURCE_KEY!!.");
+    console.log("Make sure to include the ismobile property " +
+        "as it is used by this example.");
+}
+else {
+    let pipeline = new FiftyOneDegreesDeviceDetection.deviceDetectionPipelineBuilder({
+        "resourceKey": localResourceKey
+    }).build();
 
-let checkIfMobile = async function (userAgent) {
+    pipeline.on("error", console.error);
 
-    // Create a flow data element and process the desktop User-Agent.
-    let flowData = pipeline.createFlowData();
+    let checkIfMobile = async function (userAgent) {
 
-    // Add the User-Agent as evidence
-    flowData.evidence.add("header.user-agent", userAgent);
+        // Create a flow data element and process the desktop User-Agent.
+        let flowData = pipeline.createFlowData();
 
-    await flowData.process();
+        // Add the User-Agent as evidence
+        flowData.evidence.add("header.user-agent", userAgent);
 
-    let ismobile = flowData.device.ismobile;
+        await flowData.process();
 
-    console.log(`Is user agent ${userAgent} a mobile?`);
+        let ismobile = flowData.device.ismobile;
 
-    if (ismobile.hasValue) {
+        console.log(`Is user agent '${userAgent}' a mobile?`);
 
-        console.log(ismobile.value);
+        if (ismobile.hasValue) {
 
-    } else {
+            console.log(ismobile.value);
 
-        // Echo out why the value isn't meaningful
-        console.log(ismobile.noValueMessage);
+        } else {
+
+            // Echo out why the value isn't meaningful
+            console.log(ismobile.noValueMessage);
+
+        }
+
+        console.log(" ");
 
     }
 
-    console.log(" ");
+    let iPhoneUA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_2 like Mac OS X) AppleWebKit/604.4.7 (KHTML, like Gecko) Mobile/15C114';
+    checkIfMobile(iPhoneUA)
+    // This User-Agent is from an iPhone. It should match correctly and be identified as a mobile device
 
+    let modifiediPhoneUA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 99_2 like Mac OS X) AppleWebKit/604.4.7 (KHTML, like Gecko) Mobile/15C114';
+    checkIfMobile(modifiediPhoneUA)
+    //This User-Agent is from an iPhone but has been modified so it doesn't match exactly.
+
+    let corruptedUA = 'This is not a User-Agent';
+    checkIfMobile(corruptedUA);
+    //This User-Agent is fake and will not be matched.
 }
-
-let iPhoneUA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_2 like Mac OS X) AppleWebKit/604.4.7 (KHTML, like Gecko) Mobile/15C114';
-checkIfMobile(iPhoneUA)
-// This User-Agent is from an iPhone. It should match correctly and be identified as a mobile device
-
-let modifiediPhoneUA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 99_2 like Mac OS X) AppleWebKit/604.4.7 (KHTML, like Gecko) Mobile/15C114';
-checkIfMobile(modifiediPhoneUA)
-//This User-Agent is from an iPhone but has been modified so it doesn't match exactly.
-
-let corruptedUA = 'This is not a User-Agent';
-checkIfMobile(corruptedUA);
-//This User-Agent is fake and will not be matched.

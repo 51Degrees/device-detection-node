@@ -55,9 +55,10 @@ class deviceDetectionPipelineBuilder extends pipelineBuilder {
      * If set to false, a non-matching User-Agent will result in properties without set values. 
      * If set to true, a non-matching User-Agent will cause the 'default profiles' to be returned. 
      * This means that properties will always have values (i.e. no need to check .HasValue) but some may be inaccurate. By default, this is false.
+     * @param {String} options.cloudEndPoint // This setting only affects cloud engine, not on-premise. 
      * 
     */
-    constructor({ licenceKeys = null, dataFile = null, autoUpdate = true, shareUsage = true, resourceKey = null, cacheSize = null, performanceProfile = "LowMemory", allowUnmatched = false, updateOnStart = false }) {
+    constructor({ licenceKeys = null, dataFile = null, autoUpdate = true, shareUsage = true, resourceKey = null, cacheSize = null, performanceProfile = "LowMemory", allowUnmatched = false, updateOnStart = false, cloudEndPoint = "https://cloud.51degrees.com/api/v4/" }) {
 
         // if dataFile is set, check the file extension to work out which type of datafile it is
 
@@ -87,7 +88,7 @@ class deviceDetectionPipelineBuilder extends pipelineBuilder {
 
             // First we need the cloudRequestEngine
 
-            this.flowElements.push(new cloudRequestEngine({ resourceKey: resourceKey, licenseKey: licenceKeys, cache }));
+            this.flowElements.push(new cloudRequestEngine({ resourceKey: resourceKey, licenseKey: licenceKeys, baseURL: cloudEndPoint, cache }));
 
             // Then add the cloud device detection engine
 

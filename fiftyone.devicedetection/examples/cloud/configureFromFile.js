@@ -25,7 +25,7 @@
 
 This example shows how to configure a pipeline from a configuration file using the pipelinebuilder's buildFromConfigurationFile method.
 
-This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/release/v4.1.0/fiftyone.devicedetection/examples/cloud/configureFromFile.js). 
+This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection/examples/cloud/configureFromFile.js). 
 (During the beta period, this repository will be private. 
 [Contact us](mailto:support.51degrees.com) to request access) 
 
@@ -34,7 +34,7 @@ The resource key is used as short-hand to store the particular set of
 properties you are interested in as well as any associated license keys 
 that entitle you to increased request limits and/or paid-for properties.
 
-In this example a resource key has been provided for testing purposes but you can create your own resource key using the 51Degrees [Configurator](https://configure.51degrees.com).
+You can create a resource key using the 51Degrees [Configurator](https://configure.51degrees.com).
 
 The configuration file used here is:
 
@@ -46,7 +46,7 @@ The configuration file used here is:
         {
             "elementName": "../../deviceDetectionOnPremise",
             "elementParameters": {
-                "resourceKey": "AQS5HKcyHJbECm6E10g"
+                "resourceKey": ""
 
             }
         }

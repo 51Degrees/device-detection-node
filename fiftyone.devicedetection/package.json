@@ -9,6 +9,11 @@
   "scripts": {
     "test": "jest"
   },
+  "jest": {
+    "globals": {
+      "resourceKey": ""
+    }
+  },
   "contributors": [
     "Filip Hnízdo <filip@octophin.com> (https://octophindigital.com/)",
     "Steve Ballantine <stephen@51degrees.com> (https://51degrees.com)",
@@ -17,10 +22,9 @@
   ],
   "dependencies": {
     "fiftyone.pipeline.cloudrequestengine": "^4.1.0-beta",
-    "fiftyone.pipeline.core": "file:../../fiftyone.pipeline.core",
+    "fiftyone.pipeline.core": "^4.1.0-beta",
     "fiftyone.pipeline.engines": "^4.1.0-beta",
-    "fiftyone.pipeline.engines.fiftyone": "^4.1.0-beta",
-    "fiftyone.pipeline.javascriptbundler": "^4.1.0-beta"
+    "fiftyone.pipeline.engines.fiftyone": "^4.1.0-beta"
   },
   "devDependencies": {
     "jest": "^24.9.0"

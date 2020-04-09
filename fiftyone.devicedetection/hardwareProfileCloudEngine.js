@@ -33,18 +33,18 @@ const engine = engines.engine;
 const aspectDataDictionary = engines.aspectDataDictionary;
 const aspectPropertyValue = engines.aspectPropertyValue;
 
-class propertyKeyedCloudEngine extends engine {
+class hardwareProfileCloudEngine extends engine {
 
     constructor() {
 
         super(...arguments);
 
-        this.dataKey = "propertyKeyed";
+        this.dataKey = "hardware";
 
     }
 
     /**
-     * The property-keyed cloud engine requires the 51Degrees cloudRequestEngine 
+     * The hardware profile cloud engine requires the 51Degrees cloudRequestEngine 
      * to be placed in a pipeline before it. It simply takes that raw JSON 
      * response and parses it to extract the relevant data
      * @param {flowData} flowData
@@ -63,7 +63,7 @@ class propertyKeyedCloudEngine extends engine {
 
             let devices = [];
 
-            Object.entries(cloudData.propertyKeyed.devices).forEach(function([deviceValues]){
+            Object.entries(cloudData.hardware.profiles).forEach(function([i,deviceValues]){
 
                 let device = {};
 
@@ -78,7 +78,7 @@ class propertyKeyedCloudEngine extends engine {
                 devices.push(device);
             });
 
-            let result = { "devices": devices };
+            let result = { "profiles": devices };
 
             let data = new aspectDataDictionary(
                 {
@@ -104,9 +104,9 @@ class propertyKeyedCloudEngine extends engine {
 
                 let cloudProperties = flowData.get("cloud").get("properties");
 
-                let propertyKeyedProperties = cloudProperties.propertyKeyed;
+                let hardwareProfileProperties = cloudProperties.hardware;
 
-                engine.properties = propertyKeyedProperties;
+                engine.properties = hardwareProfileProperties;
 
                 engine.updateProperties().then(resolve);
 
@@ -122,4 +122,4 @@ class propertyKeyedCloudEngine extends engine {
 
 }
 
-module.exports = propertyKeyedCloudEngine;
+module.exports = hardwareProfileCloudEngine;

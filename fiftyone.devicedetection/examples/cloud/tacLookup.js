@@ -25,7 +25,7 @@
 
 Example of using the 51Degrees cloud service to lookup details of a device based on it's TAC.
 
-This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/release/v4.1.0/fiftyone.devicedetection/examples/cloud/tacLookup.js). 
+This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection/examples/cloud/tacLookup.js). 
 (During the beta period, this repository will be private. 
 [Contact us](mailto:support.51degrees.com) to request access) 
 
@@ -57,7 +57,7 @@ in a more user-friendly format.
 ```
 
 const FiftyOneDegreesDeviceDetection = require((process.env.directory || __dirname) + "/../../");
-let propertyKeyedEngine = new FiftyOneDegreesDeviceDetection.propertyKeyedCloudEngine();
+let hardwareProfileCloudEngine = new FiftyOneDegreesDeviceDetection.hardwareProfileCloudEngine();
 
 ```
 
@@ -68,7 +68,7 @@ Build a pipeline with engines that we've created
 // Create the pipeline, adding our engines.
 let pipeline = new pipelineBuilder()
     .add(cloudRequentEngine)
-    .add(propertyKeyedEngine)
+    .add(hardwareProfileCloudEngine)
     .build();
 
 ```
@@ -130,71 +130,91 @@ Which devices are associated with the TAC '35925406'?
 
 let pipelineCore = require("fiftyone.pipeline.core");
 let cloudRequestEngine = require("fiftyone.pipeline.cloudrequestengine");
-let propertyKeyedEngine = require((process.env.directory || __dirname) + "/../../propertyKeyedCloudEngine");
+let hardwareProfileCloudEngine = require((process.env.directory || __dirname) + "/../../hardwareProfileCloudEngine");
 
-console.log(`This example shows the details of devices associated with a given 'Type Allocation Code' or 'TAC'.
-More background information on TACs can be found through various online sources such as Wikipedia: https://en.wikipedia.org/wiki/Type_Allocation_Code
-----------------------------------------`);
-
-// Create request engine that will make requests to the cloud service.
-//  You need to create a resource key at https://configure.51degrees.com and paste it into the code.
-let requestEngineInstance = new cloudRequestEngine({
-    "resourceKey": "AQS5HKcyxmoxU0-q10g",
-    "baseURL": "https://ts.51degrees.com/api/v4/"
-});
-
-// Create the property-keyed engine that will organise the results
-// from the cloud request engine.
-let propertyKeyedEngineInstance = new propertyKeyedEngine();
-
-let pipelineBuilder = pipelineCore.pipelineBuilder;
-// Create the pipeline, adding our engines.
-let pipeline = new pipelineBuilder()
-    .add(requestEngineInstance)
-    .add(propertyKeyedEngineInstance)
-    .build();
-
-// Logging of errors and other messages. Valid logs types are info, debug, warn, error
-pipeline.on("error", console.error);
-
-let outputDetails = async function (tac) {
-
-    let message = `Which devices are associated with the TAC '${tac}'?`;
-
-    // Create a flow data instance.
-    let flowData = pipeline.createFlowData();
-
-    // Add the TAC as evidence
-    flowData.evidence.add("query.tac", tac);
-
-    await flowData.process();
-
-    // Iterate through the matching devices, 
-    // outputting vendor and model name.
-    flowData.propertyKeyed.devices.forEach(device => {
-        let hardwareVendor = device.HardwareVendor;
-        let hardwareName = device.HardwareName;
-        let hardwareModel = device.HardwareModel;
-
-        if (hardwareVendor.hasValue && 
-            hardwareName.hasValue && 
-            hardwareModel.hasValue) {
-
-            message += `\r\n\t${hardwareVendor.value} ${hardwareName.value.join(",")} (${hardwareModel.value})`;
-    
-        } else {
-    
-            // If we don't have an answer then output the reason for that.
-            message += `\r\n\t${hardwareVendor.noValueMessage}`;
-    
-        }
-    });
-
-    console.log(message);
+// You need to create a resource key at https://configure.51degrees.com and 
+// paste it into the code, replacing !!YOUR_RESOURCE_KEY!!.
+let localResourceKey = "!!YOUR_RESOURCE_KEY!!";
+// Check if there is a resource key in the global variable and use
+// it if there is one. (This is used by automated tests to pass in a key)
+try {
+    localResourceKey = resourceKey;
+} catch (e) {
+    if (e instanceof ReferenceError) {}
 }
 
-let tac1 = '35925406';
-let tac2 = '86386802';
+if(localResourceKey.substr(0, 2) == "!!") {
+    console.log("You need to create a resource key at " +
+        "https://configure.51degrees.com and paste it into the code, " +
+        "replacing !!YOUR_RESOURCE_KEY!!.");
+    console.log("Make sure to include the HardwareVendor, HardwareName " +
+        "and HardwareModel properties as they are used by this example.");
+}
+else {   
+    console.log(`This example shows the details of devices associated with a given 'Type Allocation Code' or 'TAC'.
+    More background information on TACs can be found through various online sources such as Wikipedia: https://en.wikipedia.org/wiki/Type_Allocation_Code
+    ----------------------------------------`);
 
-outputDetails(tac1);
-outputDetails(tac2);
+    // Create request engine that will make requests to the cloud service.
+    //  You need to create a resource key at https://configure.51degrees.com and paste it into the code.
+
+    let requestEngineInstance = new cloudRequestEngine({
+        "resourceKey": localResourceKey
+    });
+
+    // Create the property-keyed engine that will organise the results
+    // from the cloud request engine.
+    let hardwareProfileCloudEngineInstance = new hardwareProfileCloudEngine();
+
+    let pipelineBuilder = pipelineCore.pipelineBuilder;
+    // Create the pipeline, adding our engines.
+    let pipeline = new pipelineBuilder()
+        .add(requestEngineInstance)
+        .add(hardwareProfileCloudEngineInstance)
+        .build();
+
+    // Logging of errors and other messages. Valid logs types are info, debug, warn, error
+    pipeline.on("error", console.error);
+
+    let outputDetails = async function (tac) {
+
+        let message = `Which devices are associated with the TAC '${tac}'?`;
+
+        // Create a flow data instance.
+        let flowData = pipeline.createFlowData();
+
+        // Add the TAC as evidence
+        flowData.evidence.add("query.tac", tac);
+
+        await flowData.process();
+
+        // Iterate through the matching profiles, 
+        // outputting vendor and model name.
+        flowData.hardware.profiles.forEach(profile => {
+            let hardwareVendor = profile.HardwareVendor;
+            let hardwareName = profile.HardwareName;
+            let hardwareModel = profile.HardwareModel;
+
+            if (hardwareVendor.hasValue && 
+                hardwareName.hasValue && 
+                hardwareModel.hasValue) {
+
+                message += `\r\n\t${hardwareVendor.value} ${hardwareName.value.join(",")} (${hardwareModel.value})`;
+        
+            } else {
+        
+                // If we don't have an answer then output the reason for that.
+                message += `\r\n\t${hardwareVendor.noValueMessage}`;
+        
+            }
+        });
+
+        console.log(message);
+    }
+
+    let tac1 = '35925406';
+    let tac2 = '86386802';
+
+    outputDetails(tac1);
+    outputDetails(tac2);
+}

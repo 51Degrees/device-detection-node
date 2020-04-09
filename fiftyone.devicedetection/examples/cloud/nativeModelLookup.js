@@ -26,7 +26,7 @@
 Example of using the 51Degrees cloud service to lookup details of a device 
 based on it's native model name.
 
-This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/release/v4.1.0/fiftyone.devicedetection/examples/cloud/nativeModelLookup.js). 
+This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection/examples/cloud/nativeModelLookup.js). 
 (During the beta period, this repository will be private. 
 [Contact us](mailto:support.51degrees.com) to request access) 
 
@@ -58,8 +58,8 @@ in a more user-friendly format.
 
 ```
 
-let propertyKeyedEngine = require((process.env.directory || __dirname) + "/../../propertyKeyedCloudEngine");
-let propertyKeyedEngineInstance = new propertyKeyedEngine();
+let hardwareProfileCloudEngine = require((process.env.directory || __dirname) + "/../../hardwareProfileCloudEngine");
+let hardwareProfileCloudEngineInstance = new hardwareProfileCloudEngine();
 
 ```
 
@@ -70,7 +70,7 @@ Build a pipeline with engines that we've created
 // Create the pipeline, adding our engines.
 let pipeline = new pipelineBuilder()
     .add(cloudRequentEngine)
-    .add(propertyKeyedEngine)
+    .add(hardwareProfileCloudEngine)
     .build();
 
 ```
@@ -138,74 +138,95 @@ let cloudRequestEngine = require("fiftyone.pipeline.cloudrequestengine");
 // device detection code base. If this code has been copied to run 
 // standalone then you'll need to replace the require below with the
 // commented out version below it.
-let propertyKeyedEngine = require((process.env.directory || __dirname) + "/../../propertyKeyedCloudEngine");
-// let propertyKeyedEngine = require("fiftyone.devicedetection");
+let hardwareProfileCloudEngine = require((process.env.directory || __dirname) + "/../../hardwareProfileCloudEngine");
+// let hardwareProfileCloudEngine = require("fiftyone.devicedetection");
 
-console.log(`This example finds the details of devices from the 'native model name'.
-The native model name can be retrieved by code running on the device (For example, a mobile app).
-For Android devices, see https://developer.android.com/reference/android/os/Build#MODEL
-For iOS devices, see https://gist.github.com/soapyigu/c99e1f45553070726f14c1bb0a54053b#file-machinename-swift
-----------------------------------------`);
 
-// Create request engine that will make requests to the cloud service.
-//  You need to create a resource key at https://configure.51degrees.com and paste it into the code.
-let requestEngineInstance = new cloudRequestEngine({    
-    "resourceKey": "AQS5HKcyxmoxU0-q10g",
-    "baseURL": "https://ts.51degrees.com/api/v4/"
-});
-
-// Create the property-keyed engine that will organise the results
-// from the cloud request engine.
-let propertyKeyedEngineInstance = new propertyKeyedEngine();
-
-let pipelineBuilder = pipelineCore.pipelineBuilder;
-// Create the pipeline, adding our engines.
-let pipeline = new pipelineBuilder()
-    .add(requestEngineInstance)
-    .add(propertyKeyedEngineInstance)
-    .build();
-
-// Logging of errors and other messages. Valid logs types are info, debug, warn, error
-pipeline.on("error", console.error);
-
-let outputDetails = async function (nativemodel) {
-
-    let message = `Which devices are associated with the native model name '${nativemodel}'?`;
-
-    // Create a flow data instance.
-    let flowData = pipeline.createFlowData();
-
-    // Add the native model name as evidence
-    flowData.evidence.add("query.nativemodel", nativemodel);
-
-    await flowData.process();
-
-    // Iterate through the matching devices, 
-    // outputting vendor and model name.
-    flowData.propertyKeyed.devices.forEach(device => {
-        let hardwareVendor = device.HardwareVendor;
-        let hardwareName = device.HardwareName;
-        let hardwareModel = device.HardwareModel;
-
-        if (hardwareVendor.hasValue && 
-            hardwareName.hasValue && 
-            hardwareModel.hasValue) {
-
-            message += `\r\n\t${hardwareVendor.value} ${hardwareName.value.join(",")} (${hardwareModel.value})`;
-    
-        } else {
-    
-            // If we don't have an answer then output the reason for that.
-            message += `\r\n\t${hardwareVendor.noValueMessage}`;
-    
-        }
-    });
-
-    console.log(message);
+// You need to create a resource key at https://configure.51degrees.com and 
+// paste it into the code, replacing !!YOUR_RESOURCE_KEY!!.
+let localResourceKey = "!!YOUR_RESOURCE_KEY!!";
+// Check if there is a resource key in the global variable and use
+// it if there is one. (This is used by automated tests to pass in a key)
+try {
+    localResourceKey = resourceKey;
+} catch (e) {
+    if (e instanceof ReferenceError) {}
 }
 
-let nativeModeliOS = 'iPhone11,8';
-let nativeModelAndroid = 'SC-03L';
+if(localResourceKey.substr(0, 2) == "!!") {
+    console.log("You need to create a resource key at " +
+        "https://configure.51degrees.com and paste it into the code, " +
+        "replacing !!YOUR_RESOURCE_KEY!!.");
+    console.log("Make sure to include the HardwareVendor, HardwareName " +
+        "and HardwareModel properties as they are used by this example.");
+}
+else {   
+    console.log(`This example finds the details of devices from the 'native model name'.
+    The native model name can be retrieved by code running on the device (For example, a mobile app).
+    For Android devices, see https://developer.android.com/reference/android/os/Build#MODEL
+    For iOS devices, see https://gist.github.com/soapyigu/c99e1f45553070726f14c1bb0a54053b#file-machinename-swift
+    ----------------------------------------`);
 
-outputDetails(nativeModeliOS);
-outputDetails(nativeModelAndroid);
+    // Create request engine that will make requests to the cloud service.
+    //  You need to create a resource key at https://configure.51degrees.com and paste it into the code.
+
+    let requestEngineInstance = new cloudRequestEngine({    
+        "resourceKey": localResourceKey
+    });
+
+    // Create the property-keyed engine that will organise the results
+    // from the cloud request engine.
+    let hardwareProfileCloudEngineInstance = new hardwareProfileCloudEngine();
+
+    let pipelineBuilder = pipelineCore.pipelineBuilder;
+    // Create the pipeline, adding our engines.
+    let pipeline = new pipelineBuilder()
+        .add(requestEngineInstance)
+        .add(hardwareProfileCloudEngineInstance)
+        .build();
+
+    // Logging of errors and other messages. Valid logs types are info, debug, warn, error
+    pipeline.on("error", console.error);
+
+    let outputDetails = async function (nativemodel) {
+
+        let message = `Which devices are associated with the native model name '${nativemodel}'?`;
+
+        // Create a flow data instance.
+        let flowData = pipeline.createFlowData();
+
+        // Add the native model name as evidence
+        flowData.evidence.add("query.nativemodel", nativemodel);
+
+        await flowData.process();
+
+        // Iterate through the matching profiles, 
+        // outputting vendor and model name.
+        flowData.hardware.profiles.forEach(profile => {
+            let hardwareVendor = profile.HardwareVendor;
+            let hardwareName = profile.HardwareName;
+            let hardwareModel = profile.HardwareModel;
+
+            if (hardwareVendor.hasValue && 
+                hardwareName.hasValue && 
+                hardwareModel.hasValue) {
+
+                message += `\r\n\t${hardwareVendor.value} ${hardwareName.value.join(",")} (${hardwareModel.value})`;
+        
+            } else {
+        
+                // If we don't have an answer then output the reason for that.
+                message += `\r\n\t${hardwareVendor.noValueMessage}`;
+        
+            }
+        });
+
+        console.log(message);
+    }
+
+    let nativeModeliOS = 'iPhone11,8';
+    let nativeModelAndroid = 'SC-03L';
+
+    outputDetails(nativeModeliOS);
+    outputDetails(nativeModelAndroid);
+}

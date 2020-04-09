@@ -53,6 +53,16 @@ You will need to install jest to run them:
 
 `npm install jest --global`
 
+Add a 51Degrees cloud resource key in the fiftyone.devicedetection/package.json file for cloud tests. You can obtain a resource key from the [51Degrees Cloud Configurator](https://cfg.51d.es)
+
+```
+"jest": {
+  "globals": {
+    "resourceKey": "!!your_resource_key!!"
+  }
+},
+```
+
 To run the tests, navigate to the package directory:
 
 `cd fiftyone.devicedetection/`
