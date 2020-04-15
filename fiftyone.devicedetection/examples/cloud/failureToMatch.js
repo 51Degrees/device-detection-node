@@ -26,8 +26,6 @@
 This example shows how the hasValue function can help make sure that meaningful values are returned when checking properties returned from the device detection engine. It also illustrates how the "allowUnmatched" parameters can be used to alter these results.
 
 This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection/examples/cloud/failureToMatch.js). 
-(During the beta period, this repository will be private. 
-[Contact us](mailto:support.51degrees.com) to request access) 
 
 To run this example, you will need to create a **resource key**. 
 The resource key is used as short-hand to store the particular set of 

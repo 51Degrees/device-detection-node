@@ -26,8 +26,6 @@
 This example demonstrates the evidence.addFromRequest() method and client side JavaScript overrides by creating a web server, serving JavaScript created by the device detection engine and bundled together by a special JavaScript bundler engine.. This JavaScript is then used on the client side to get a more accurate reading for properties by fetching the json response using the overrides as evidence.
 
 This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection/examples/cloud/webIntegration.js). 
-(During the beta period, this repository will be private. 
-[Contact us](mailto:support.51degrees.com) to request access) 
 
 To run this example, you will need to create a **resource key**. 
 The resource key is used as short-hand to store the particular set of 

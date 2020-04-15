@@ -25,9 +25,7 @@
 
 This example shows how to configure a pipeline from a configuration file using the pipelinebuilder's buildFromConfigurationFile method.
 
-This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/release/v4.1.0/fiftyone.devicedetection/examples/hash/configureFromFile.js). 
-(During the beta period, this repository will be private. 
-[Contact us](mailto:support.51degrees.com) to request access)
+This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection/examples/hash/configureFromFile.js). 
 
 This example requires a local data file. Free data files can be acquired by 
 pulling the submodules under this repository or from the 

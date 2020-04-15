@@ -27,8 +27,6 @@ Example of using the 51Degrees cloud service to lookup details of a device
 based on it's native model name.
 
 This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection/examples/cloud/nativeModelLookup.js). 
-(During the beta period, this repository will be private. 
-[Contact us](mailto:support.51degrees.com) to request access) 
 
 To run this example, you will need to create a **resource key**. 
 The resource key is used as short-hand to store the particular set of 

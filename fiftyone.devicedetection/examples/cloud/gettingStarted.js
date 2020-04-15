@@ -26,8 +26,6 @@
 Getting started example of using the 51Degrees Device Detection Cloud to determine whether a given User-Agent corresponds to a mobile device or not.
 
 This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection/examples/cloud/gettingStarted.js). 
-(During the beta period, this repository will be private. 
-[Contact us](mailto:support.51degrees.com) to request access) 
 
 To run this example, you will need to create a **resource key**. 
 The resource key is used as short-hand to store the particular set of 
