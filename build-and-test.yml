@@ -48,11 +48,17 @@ steps:
       "dependencies": { 
         "jest": "^24.9.0",
         "jest-junit": "^9.0.0",
-        "fiftyone.pipeline.core": "^4.1.0-beta",
-        "fiftyone.pipeline.engines": "^4.1.0-beta",
-        "fiftyone.pipeline.engines.fiftyone": "^4.1.0-beta",
-        "fiftyone.pipeline.javascriptbundler": "^4.1.0-beta",
-        "fiftyone.pipeline.cloudrequestengine": "^4.1.0-beta"
+        "fiftyone.pipeline.core": "^4.1.0",
+        "fiftyone.pipeline.engines": "^4.1.0",
+        "fiftyone.pipeline.engines.fiftyone": "^4.1.0",
+        "fiftyone.pipeline.cloudrequestengine": "^4.1.0",
+        "eslint": "^6.8.0",
+        "eslint-config-standard": "^14.1.1",
+        "eslint-plugin-import": "^2.20.2",
+        "eslint-plugin-node": "^11.1.0",
+        "eslint-plugin-promise": "^4.2.1",
+        "eslint-plugin-standard": "^4.0.1",
+        "jest": "^24.9.0"
         },
       "jest-junit": {
           "outputName": "'"$NODE_VERSION"'.xml"    
@@ -86,6 +92,45 @@ steps:
     npm install
     npm test
   displayName: 'Build and Test'
+
+- script: |
+    eslint='{
+        "env": {
+            "browser": true,
+            "commonjs": true,
+            "es6": true
+        },
+        "extends": [
+            "standard"
+        ],
+        "globals": {
+            "Atomics": "readonly",
+            "SharedArrayBuffer": "readonly",
+            "test": true,
+            "jest": true,
+            "expect": true
+        },
+        "parserOptions": {
+            "ecmaVersion": 2018
+        },
+        "rules": {
+            "node/no-deprecated-api": "off",
+            "no-throw-literal": "off",
+            "no-path-concat": "off",
+            "no-prototype-builtins": "off",
+            "no-eval": "off",
+            "semi": [
+                2,
+                "always"
+            ]
+        }
+      }'
+    echo $eslint
+    echo $eslint > .eslintrc
+    npm install -g eslint
+    eslint **/*.js
+  displayName: "Set up and run eslint"
+  condition: ne(variables['node_version'], '6.x')
 
 - task: PublishTestResults@2
   condition: succeededOrFailed()

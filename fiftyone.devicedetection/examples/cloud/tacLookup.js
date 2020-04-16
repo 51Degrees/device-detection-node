@@ -127,8 +127,8 @@ Which devices are associated with the TAC '35925406'?
 */
 
 let pipelineCore = require("fiftyone.pipeline.core");
-let cloudRequestEngine = require("fiftyone.pipeline.cloudrequestengine");
-let hardwareProfileCloudEngine = require((process.env.directory || __dirname) + "/../../hardwareProfileCloudEngine");
+let CloudRequestEngine = require("fiftyone.pipeline.cloudrequestengine");
+let HardwareProfileCloudEngine = require((process.env.directory || __dirname) + "/../../hardwareProfileCloudEngine");
 
 // You need to create a resource key at https://configure.51degrees.com and 
 // paste it into the code, replacing !!YOUR_RESOURCE_KEY!!.
@@ -156,13 +156,13 @@ else {
     // Create request engine that will make requests to the cloud service.
     //  You need to create a resource key at https://configure.51degrees.com and paste it into the code.
 
-    let requestEngineInstance = new cloudRequestEngine({
+    let requestEngineInstance = new CloudRequestEngine({
         "resourceKey": localResourceKey
     });
 
     // Create the property-keyed engine that will organise the results
     // from the cloud request engine.
-    let hardwareProfileCloudEngineInstance = new hardwareProfileCloudEngine();
+    let hardwareProfileCloudEngineInstance = new HardwareProfileCloudEngine();
 
     let pipelineBuilder = pipelineCore.pipelineBuilder;
     // Create the pipeline, adding our engines.

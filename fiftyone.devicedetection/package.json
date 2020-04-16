@@ -21,12 +21,18 @@
     "Joseph Dix <joseph@51degrees.com> (https://51degrees.com)"
   ],
   "dependencies": {
-    "fiftyone.pipeline.cloudrequestengine": "^4.1.0-beta",
-    "fiftyone.pipeline.core": "^4.1.0-beta",
-    "fiftyone.pipeline.engines": "^4.1.0-beta",
-    "fiftyone.pipeline.engines.fiftyone": "^4.1.0-beta"
+    "fiftyone.pipeline.cloudrequestengine": "^4.1.0",
+    "fiftyone.pipeline.core": "^4.1.0",
+    "fiftyone.pipeline.engines": "^4.1.0",
+    "fiftyone.pipeline.engines.fiftyone": "^4.1.0"
   },
   "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
     "jest": "^24.9.0"
   },
   "license": "EUPL-1.2",

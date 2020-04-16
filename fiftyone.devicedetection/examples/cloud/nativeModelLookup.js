@@ -131,12 +131,12 @@ Which devices are associated with the native model name 'iPhone11,8'?
 */
 
 let pipelineCore = require("fiftyone.pipeline.core");
-let cloudRequestEngine = require("fiftyone.pipeline.cloudrequestengine");
+let CloudRequestEngine = require("fiftyone.pipeline.cloudrequestengine");
 // Note that this example is designed to be run from within the 
 // device detection code base. If this code has been copied to run 
 // standalone then you'll need to replace the require below with the
 // commented out version below it.
-let hardwareProfileCloudEngine = require((process.env.directory || __dirname) + "/../../hardwareProfileCloudEngine");
+let HardwareProfileCloudEngine = require((process.env.directory || __dirname) + "/../../hardwareProfileCloudEngine");
 // let hardwareProfileCloudEngine = require("fiftyone.devicedetection");
 
 
@@ -168,15 +168,15 @@ else {
     // Create request engine that will make requests to the cloud service.
     //  You need to create a resource key at https://configure.51degrees.com and paste it into the code.
 
-    let requestEngineInstance = new cloudRequestEngine({    
+    let requestEngineInstance = new CloudRequestEngine({    
         "resourceKey": localResourceKey
     });
 
     // Create the property-keyed engine that will organise the results
     // from the cloud request engine.
-    let hardwareProfileCloudEngineInstance = new hardwareProfileCloudEngine();
+    let hardwareProfileCloudEngineInstance = new HardwareProfileCloudEngine();
 
-    let pipelineBuilder = pipelineCore.pipelineBuilder;
+    let pipelineBuilder = pipelineCore.PipelineBuilder;
     // Create the pipeline, adding our engines.
     let pipeline = new pipelineBuilder()
         .add(requestEngineInstance)

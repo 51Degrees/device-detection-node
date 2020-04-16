@@ -50,7 +50,7 @@ if (!fs.existsSync(datafile)) {
 
 // Create the device detection pipeline with the desired settings. Note the commented out allowUnmatched setting which will be referenced later in the example.
 
-let pipeline = new FiftyOneDegreesDeviceDetection.deviceDetectionPipelineBuilder({
+let pipeline = new FiftyOneDegreesDeviceDetection.DeviceDetectionPipelineBuilder({
     performanceProfile: "MaxPerformance",
     dataFile: datafile,
     autoUpdate: false,

@@ -48,7 +48,7 @@ if (!fs.existsSync(datafile)) {
 }
 
 // Create a new Device Detection pipeline and set the config.
-let pipeline = new FiftyOneDegreesDeviceDetection.deviceDetectionPipelineBuilder({
+let pipeline = new FiftyOneDegreesDeviceDetection.DeviceDetectionPipelineBuilder({
     performanceProfile: "MaxPerformance",
     dataFile: datafile,
     autoUpdate: false,

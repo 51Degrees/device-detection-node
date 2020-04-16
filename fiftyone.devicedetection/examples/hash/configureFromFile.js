@@ -55,10 +55,10 @@ The configuration file used here is:
 
 */
 
-const pipelineBuilder = require("fiftyone.pipeline.core").pipelineBuilder;
+const pipelineBuilder = require("fiftyone.pipeline.core").PipelineBuilder;
 
 // Create a new pipeline from the supplied config file.
-let pipeline = new pipelineBuilder().buildFromConfigurationFile("51d.json");
+let pipeline = new PipelineBuilder().buildFromConfigurationFile("51d.json");
 
 // Logging of errors and other messages. Valid logs types are info, debug, warn, error
 pipeline.on("error", console.error);

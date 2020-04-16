@@ -120,7 +120,7 @@ if (!fs.existsSync(datafile)) {
     throw ("No data file at '" + datafile + "'");
 }
 
-let pipeline = new FiftyOneDegreesDeviceDetection.deviceDetectionPipelineBuilder({
+let pipeline = new FiftyOneDegreesDeviceDetection.DeviceDetectionPipelineBuilder({
     performanceProfile: "MaxPerformance",
     dataFile: datafile,
     licenceKeys: "4YUAAAJRNAAAABSADSCGABEAL2ASCBDWANN6TXB65WL5TQSFRB9DTZ2K9NF5VKA2TRWABVT52XAQTSUFK227X2FPA87LN",

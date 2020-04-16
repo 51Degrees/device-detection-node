@@ -3,7 +3,7 @@
  * Copyright 2019 51 Degrees Mobile Experts Limited, 5 Charlotte Close,
  * Caversham, Reading, Berkshire, United Kingdom RG4 7BY.
  *
- * This Original Work is licensed under the European Union Public Licence (EUPL) 
+ * This Original Work is licensed under the European Union Public Licence (EUPL)
  * v.1.2 and is subject to its terms as set out below.
  *
  * If a copy of the EUPL was not distributed with this file, You can obtain
@@ -13,377 +13,310 @@
  * amended by the European Commission) shall be deemed incompatible for
  * the purposes of the Work and the provisions of the compatibility
  * clause in Article 5 of the EUPL shall not apply.
- * 
- * If using the Work as, or as part of, a network application, by 
+ *
+ * If using the Work as, or as part of, a network application, by
  * including the attribution notice(s) required under Article 5 of the EUPL
- * in the end user terms of the application under an appropriate heading, 
+ * in the end user terms of the application under an appropriate heading,
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
-let require51 = (requestedPackage) => {
-    try {
-        return require(__dirname + "/../" + requestedPackage)
-    } catch (e) {
-        return require(requestedPackage);
-    }
-}
+const require51 = (requestedPackage) => {
+  try {
+    return require(__dirname + '/../' + requestedPackage);
+  } catch (e) {
+    return require(requestedPackage);
+  }
+};
 
-const core = require51("fiftyone.pipeline.core");
-const engines = require51("fiftyone.pipeline.engines");
+const core = require51('fiftyone.pipeline.core');
+const engines = require51('fiftyone.pipeline.engines');
 
-const engine = engines.engine;
-const DataFile = require("./deviceDetectionDataFile");
-const swigData = require("./swigData");
-const swigHelpers = require("./swigHelpers");
-const os = require("os");
-const path = require("path");
-const evidenceKeyFilter = core.basicListEvidenceKeyFilter;
+const Engine = engines.Engine;
+const DataFile = require('./deviceDetectionDataFile');
+const SwigData = require('./swigData');
+const swigHelpers = require('./swigHelpers');
+const os = require('os');
+const path = require('path');
+const EvidenceKeyFilter = core.BasicListEvidenceKeyFilter;
 
 // Determine if Windows or linux and which node version
 
-let nodeVersion = Number(process.version.match(/^v(\d+\.)/)[1]);
+const nodeVersion = Number(process.version.match(/^v(\d+\.)/)[1]);
 
-class deviceDetectionOnPremise extends engine {
+class DeviceDetectionOnPremise extends Engine {
+  constructor ({ dataFile, autoUpdate, cache, dataFileUpdateBaseUrl = 'https://distributor.51degrees.com/api/v2/download', restrictedProperties, licenceKeys, download, performanceProfile = 'LowMemory', reuseTempFile = false, updateMatchedUserAgent = false, maxMatchedUserAgentLength, drift, difference, concurrency = os.cpus().length, allowUnmatched, fileSystemWatcher, createTempDataCopy, updateOnStart = false }) {
+    let swigWrapper;
+    let swigWrapperType;
+    let dataFileType;
 
-    constructor({ dataFile, autoUpdate, cache, dataFileUpdateBaseUrl = "https://distributor.51degrees.com/api/v2/download", restrictedProperties, licenceKeys, download, performanceProfile = "LowMemory", reuseTempFile = false, updateMatchedUserAgent = false, maxMatchedUserAgentLength, drift, difference, concurrency = os.cpus().length, allowUnmatched, fileSystemWatcher, createTempDataCopy, updateOnStart = false }) {
+    // look at dataFile extension to detect type
 
-        let swigWrapper;
-        let swigWrapperType;
-        let dataFileType;
+    const ext = path.parse(dataFile).ext;
 
-        // look at dataFile extension to detect type
+    if (ext === '.hash') {
+      // Hash
 
-        let ext = path.parse(dataFile).ext;
+      swigWrapperType = 'Hash';
+      swigWrapper = require('./build/FiftyOneDeviceDetectionHashV4-' + os.platform() + '-' + nodeVersion + '.node');
+      dataFileType = 'HashV41';
+    }
 
-        if (ext === ".hash") {
+    if (!dataFile) {
+      throw 'Datafile is required';
+    }
 
-            // Hash
+    // Create vector for restricted properties
 
-            swigWrapperType = "Hash";
-            swigWrapper = require("./build/FiftyOneDeviceDetectionHashV4-" + os.platform() + "-" + nodeVersion + ".node");
-            dataFileType = "HashV41";
+    const propertiesList = new swigWrapper.VectorStringSwig();
 
+    if (restrictedProperties) {
+      restrictedProperties.forEach(function (property) {
+        propertiesList.add(property);
+      });
+    }
+
+    var requiredProperties = new swigWrapper.RequiredPropertiesConfigSwig(propertiesList);
+
+    var config = new swigWrapper['Config' + swigWrapperType + 'Swig']();
+
+    switch (performanceProfile) {
+      case 'LowMemory':
+        config.setLowMemory();
+        break;
+      case 'MaxPerformance':
+        config.setMaxPerformance();
+        break;
+      case 'Balanced':
+        config.setBalanced();
+        break;
+      case 'BalancedTemp':
+        config.setBalancedTemp();
+        break;
+      case 'HighPerformance':
+        config.setHighPerformance();
+        break;
+      default:
+        throw "The performance profile '" + performanceProfile + "' is not valid";
+    }
+
+    // If auto update is enabled then we must use a temporary copy of the file
+
+    if (autoUpdate === true) {
+      config.setUseTempFile(true);
+    }
+
+    if (createTempDataCopy === true) {
+      config.setUseTempFile(true);
+    }
+
+    config.setReuseTempFile(reuseTempFile);
+    config.setUpdateMatchedUserAgent(updateMatchedUserAgent);
+
+    if (typeof allowUnmatched === 'boolean') {
+      config.setAllowUnmatched(allowUnmatched);
+    };
+
+    if (maxMatchedUserAgentLength) {
+      config.setMaxMatchedUserAgentLength(maxMatchedUserAgentLength);
+    }
+
+    if (swigWrapperType === 'Hash') {
+      if (drift) {
+        config.setDrift(drift);
+      }
+    }
+
+    if (difference) {
+      config.setDifference(difference);
+    }
+
+    config.setConcurrency(concurrency);
+
+    super(...arguments);
+
+    this.dataKey = 'device';
+
+    const current = this;
+
+    // Function for initialising the engine, wrapped like this so that an engine can be initialised once the datafile is retrieved if updateOnStart is set to true
+
+    this.initEngine = function () {
+      return new Promise(function (resolve, reject) {
+        const engine = new swigWrapper['Engine' + swigWrapperType + 'Swig'](dataFile, config, requiredProperties);
+
+        // Get keys and add to evidenceKey filter
+
+        const evidenceKeys = engine.getKeys();
+
+        const evidenceKeyArray = [];
+
+        for (let i = 0; i < evidenceKeys.size(); i += 1) {
+          evidenceKeyArray.push(evidenceKeys.get(i).toLowerCase());
         }
 
-        if (!dataFile) {
+        current.evidenceKeyFilter = new EvidenceKeyFilter(evidenceKeyArray);
 
-            throw "Datafile is required";
+        current.engine = engine;
+        current.swigWrapper = swigWrapper;
+        current.swigWrapperType = swigWrapperType;
 
-        }
+        // Get properties list
 
-        // Create vector for restricted properties
+        const propertiesInternal = engine.getMetaData().getProperties();
 
-        let propertiesList = new swigWrapper.VectorStringSwig();
+        const properties = {};
 
-        if (restrictedProperties) {
-
-            restrictedProperties.forEach(function (property) {
-
-                propertiesList.add(property);
-
-            });
-
-        }
-
-        var requiredProperties = new swigWrapper.RequiredPropertiesConfigSwig(propertiesList);
-
-        var config = new swigWrapper["Config" + swigWrapperType + "Swig"]();
-
-        switch (performanceProfile) {
-
-            case "LowMemory":
-                config.setLowMemory();
-                break;
-            case "MaxPerformance":
-                config.setMaxPerformance();
-                break;
-            case "Balanced":
-                config.setBalanced();
-                break;
-            case "BalancedTemp":
-                config.setBalancedTemp();
-                break;
-            case "HighPerformance":
-                config.setHighPerformance();
-                break;
-            default:
-                throw "The performance profile '" + performanceProfile + "' is not valid";
-        }
-
-        // If auto update is enabled then we must use a temporary copy of the file
-
-        if (autoUpdate === true) {
-            config.setUseTempFile(true);
-        }
-
-        if (createTempDataCopy === true) {
-            config.setUseTempFile(true);
-        }
-
-        config.setReuseTempFile(reuseTempFile);
-        config.setUpdateMatchedUserAgent(updateMatchedUserAgent);
-
-        if (typeof allowUnmatched === "boolean") {
-            config.setAllowUnmatched(allowUnmatched)
+        for (var i = 0; i < propertiesInternal.getSize(); i++) {
+          var property = propertiesInternal.getByIndex(i);
+          if (property.getAvailable()) {
+            properties[property.getName().toLowerCase()] = {
+              name: property.getName(),
+              type: property.getType(),
+              dataFiles: swigHelpers.vectorToArray(property.getDataFilesWherePresent()),
+              category: property.getCategory(),
+              description: property.getDescription()
+            };
+          }
         };
 
-        if (maxMatchedUserAgentLength) {
-            config.setMaxMatchedUserAgentLength(maxMatchedUserAgentLength);
+        current.properties = properties;
+
+        // Special properties
+
+        current.properties.deviceID = {
+          name: 'DeviceId',
+          type: 'string',
+          category: 'Device metrics',
+          description: 'Consists of four components separated by a hyphen symbol: Hardware-Platform-Browser-IsCrawler where each Component represents an ID of the corresponding Profile.'
+        };
+
+        current.properties.userAgents = {
+          name: 'UserAgents',
+          type: 'string',
+          category: 'Device metrics',
+          description: 'The matched User-Agents.'
+        };
+
+        current.properties.difference = {
+          name: 'Difference',
+          type: 'int',
+          category: 'Device metrics',
+          description: 'Used when detection method is not Exact or None. This is an integer value and the larger the value the less confident the detector is in this result.'
+        };
+
+        if (swigWrapperType === 'Hash') {
+          current.properties.matchedNodes = {
+            name: 'MatchedNodes',
+            type: 'int',
+            category: 'Device metrics',
+            description: 'Indicates the number of hash nodes matched within the evidence.'
+          };
+
+          current.properties.drift = {
+            name: 'Drift',
+            type: 'int',
+            category: 'Device metrics',
+            description: 'Total difference in character positions where the substrings hashes were found away from where they were expected.'
+          };
         }
+      });
+    };
 
-        if (swigWrapperType === "Hash") {
+    if (!updateOnStart) {
+      // Not updating on start. Initialise the engine straight away
 
-            if (drift) {
-                config.setDrift(drift);
-            }
-
-        }
-
-        if (difference) {
-            config.setDifference(difference);
-        }
-
-        config.setConcurrency(concurrency);
-
-        super(...arguments);
-
-        this.dataKey = "device";
-
-        let current = this;
-
-        // Function for initialising the engine, wrapped like this so that an engine can be initialised once the datafile is retrieved if updateOnStart is set to true
-
-        this.initEngine = function () {
-
-            return new Promise(function (resolve, reject) {
-
-                let engine = new swigWrapper["Engine" + swigWrapperType + "Swig"](dataFile, config, requiredProperties);
-
-                // Get keys and add to evidenceKey filter
-
-                let evidenceKeys = engine.getKeys();
-
-                let evidenceKeyArray = [];
-
-                for (let i = 0; i < evidenceKeys.size(); i += 1) {
-
-                    evidenceKeyArray.push(evidenceKeys.get(i).toLowerCase());
-
-                }
-
-                current.evidenceKeyFilter = new evidenceKeyFilter(evidenceKeyArray);
-
-                current.engine = engine;
-                current.swigWrapper = swigWrapper;
-                current.swigWrapperType = swigWrapperType;
-
-                // Get properties list
-
-                let propertiesInternal = engine.getMetaData().getProperties();
-
-                let properties = {};
-
-                for (var i = 0; i < propertiesInternal.getSize(); i++) {
-                    var property = propertiesInternal.getByIndex(i);
-                    if (property.getAvailable()) {
-
-                        properties[property.getName().toLowerCase()] = {
-                            name: property.getName(),
-                            type: property.getType(),
-                            dataFiles: swigHelpers.vectorToArray(property.getDataFilesWherePresent()),
-                            category: property.getCategory(),
-                            description: property.getDescription()
-                        }
-                    }
-                };
-
-                current.properties = properties;
-
-                // Special properties
-
-                current.properties["deviceID"] = {
-                    name: "DeviceId",
-                    type: "string",
-                    category: "Device metrics",
-                    description: "Consists of four components separated by a hyphen symbol: Hardware-Platform-Browser-IsCrawler where each Component represents an ID of the corresponding Profile."
-                }
-
-                current.properties["userAgents"] = {
-                    name: "UserAgents",
-                    type: "string",
-                    category: "Device metrics",
-                    description: "The matched User-Agents."
-                }
-
-                current.properties["difference"] = {
-                    name: "Difference",
-                    type: "int",
-                    category: "Device metrics",
-                    description: "Used when detection method is not Exact or None. This is an integer value and the larger the value the less confident the detector is in this result."
-                }
-
-                if (swigWrapperType === "Hash") {
-
-                    current.properties["matchedNodes"] = {
-                        name: "MatchedNodes",
-                        type: "int",
-                        category: "Device metrics",
-                        description: "Indicates the number of hash nodes matched within the evidence."
-                    }
-
-                    current.properties["drift"] = {
-                        name: "Drift",
-                        type: "int",
-                        category: "Device metrics",
-                        description: "Total difference in character positions where the substrings hashes were found away from where they were expected."
-                    }
-
-                }
-
-            });
-
-        }
-
-        if (!updateOnStart) {
-
-            // Not updating on start. Initialise the engine straight away
-
-            this.initEngine();
-
-        }
-
-        // Construct datafile
-
-        let dataFileSettings = { flowElement: this, verifyMD5: true, autoUpdate: autoUpdate, updateOnStart: updateOnStart, decompress: true, path: dataFile, download: download, fileSystemWatcher: fileSystemWatcher }
-
-        dataFileSettings.getDatePublished = function () {
-
-            if (current.engine) {
-
-                return swigHelpers.swigDateToDate(current.engine.getPublishedTime());
-
-            } else {
-
-                return new Date();
-
-            }
-
-        }
-
-        dataFileSettings.getNextUpdate = function () {
-
-            if (current.engine) {
-
-                return swigHelpers.swigDateToDate(current.engine.getUpdateAvailableTime());
-
-            } else {
-
-                return new Date();
-
-            }
-
-
-        }
-
-        dataFileSettings.refresh = function () {
-
-            if (current.engine) {
-
-                return current.engine.refreshData();
-
-            } else {
-
-                current.initEngine().then(function () {
-
-                    current.engine.refreshData();
-
-                })
-
-            }
-
-
-        }
-
-
-        let params = {
-            Type: dataFileType + "UAT",
-            Download: "True"
-        }
-
-        if (licenceKeys) {
-
-            params.licenseKeys = licenceKeys;
-
-        }
-
-        params.baseURL = dataFileUpdateBaseUrl;
-
-        dataFileSettings.updateURLParams = params;
-
-        dataFileSettings.identifier = dataFileType;
-
-        let ddDatafile = new DataFile(dataFileSettings);
-
-        this.registerDataFile(ddDatafile);
-
+      this.initEngine();
     }
 
-    processInternal(flowData) {
+    // Construct datafile
 
-        let dd = this;
+    const dataFileSettings = { flowElement: this, verifyMD5: true, autoUpdate: autoUpdate, updateOnStart: updateOnStart, decompress: true, path: dataFile, download: download, fileSystemWatcher: fileSystemWatcher };
 
-        let process = function () {
+    dataFileSettings.getDatePublished = function () {
+      if (current.engine) {
+        return swigHelpers.swigDateToDate(current.engine.getPublishedTime());
+      } else {
+        return new Date();
+      }
+    };
 
-            // set evidence
+    dataFileSettings.getNextUpdate = function () {
+      if (current.engine) {
+        return swigHelpers.swigDateToDate(current.engine.getUpdateAvailableTime());
+      } else {
+        return new Date();
+      }
+    };
 
-            let evidence = new dd.swigWrapper.EvidenceDeviceDetectionSwig();
+    dataFileSettings.refresh = function () {
+      if (current.engine) {
+        return current.engine.refreshData();
+      } else {
+        current.initEngine().then(function () {
+          current.engine.refreshData();
+        });
+      }
+    };
 
-            Object.entries(flowData.evidence.getAll()).forEach(function ([key, value]) {
+    const params = {
+      Type: dataFileType + 'UAT',
+      Download: 'True'
+    };
 
-                evidence.set(key, value);
+    if (licenceKeys) {
+      params.licenseKeys = licenceKeys;
+    }
 
-            });
+    params.baseURL = dataFileUpdateBaseUrl;
 
-            let result = dd.engine.process(evidence);
+    dataFileSettings.updateURLParams = params;
 
-            let data = new swigData({ flowElement: dd, swigResults: result });
+    dataFileSettings.identifier = dataFileType;
 
-            flowData.setElementData(data);
+    const ddDatafile = new DataFile(dataFileSettings);
 
-        }
+    this.registerDataFile(ddDatafile);
+  }
 
-        // Check if engine is initialised already
+  processInternal (flowData) {
+    const dd = this;
 
-        if (this.engine) {
+    const process = function () {
+      // set evidence
 
+      const evidence = new dd.swigWrapper.EvidenceDeviceDetectionSwig();
+
+      Object.entries(flowData.evidence.getAll()).forEach(function ([key, value]) {
+        evidence.set(key, value);
+      });
+
+      const result = dd.engine.process(evidence);
+
+      const data = new SwigData({ flowElement: dd, swigResults: result });
+
+      flowData.setElementData(data);
+    };
+
+    // Check if engine is initialised already
+
+    if (this.engine) {
+      process();
+    } else {
+      // wait until initialised
+
+      return new Promise(function (resolve) {
+        const dataFileChecker = setInterval(function () {
+          if (dd.engine) {
             process();
 
-        } else {
+            clearInterval(dataFileChecker);
 
-            // wait until initialised
-
-            return new Promise(function (resolve) {
-
-                let dataFileChecker = setInterval(function () {
-
-                    if (dd.engine) {
-
-                        process();
-
-                        clearInterval(dataFileChecker);
-
-                        resolve();
-
-                    }
-
-                }, 500);
-
-            });
-
-        }
-
+            resolve();
+          }
+        }, 500);
+      });
     }
-
+  }
 }
 
-module.exports = deviceDetectionOnPremise;
+module.exports = DeviceDetectionOnPremise;

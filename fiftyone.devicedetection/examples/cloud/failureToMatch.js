@@ -59,7 +59,7 @@ if(localResourceKey.substr(0, 2) == "!!") {
         "as it is used by this example.");
 }
 else {
-    let pipeline = new FiftyOneDegreesDeviceDetection.deviceDetectionPipelineBuilder({
+    let pipeline = new FiftyOneDegreesDeviceDetection.DeviceDetectionPipelineBuilder({
         "resourceKey": localResourceKey
     }).build();
 

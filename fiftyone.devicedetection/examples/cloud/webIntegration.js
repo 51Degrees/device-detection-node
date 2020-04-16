@@ -64,7 +64,7 @@ if(localResourceKey.substr(0, 2) == "!!") {
 else {   
     // Create a new Device Detection pipeline and set the config.
     //  You need to create a resource key at https://configure.51degrees.com and paste it into the code.
-    let pipeline = new FiftyOneDegreesDeviceDetection.deviceDetectionPipelineBuilder({
+    let pipeline = new FiftyOneDegreesDeviceDetection.DeviceDetectionPipelineBuilder({
         "resourceKey": localResourceKey,
         "javascriptBuilderSettings":{
             _endPoint: "/json"
