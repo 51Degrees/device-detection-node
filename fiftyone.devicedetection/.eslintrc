@@ -1,0 +1,31 @@
+{
+    "env": {
+        "browser": true,
+        "commonjs": true,
+        "es6": true
+    },
+    "extends": [
+        "standard"
+    ],
+    "globals": {
+        "Atomics": "readonly",
+        "SharedArrayBuffer": "readonly",
+        "test": true,
+        "jest": true,
+        "expect": true
+    },
+    "parserOptions": {
+        "ecmaVersion": 2018
+    },
+    "rules": {
+        "node/no-deprecated-api": "off",
+        "no-throw-literal": "off",
+        "no-path-concat": "off",
+        "no-prototype-builtins": "off",
+        "no-eval": "off",
+        "semi": [
+            2,
+            "always"
+        ]
+    }
+}

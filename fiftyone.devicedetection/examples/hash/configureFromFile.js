@@ -20,14 +20,21 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
-/*
-@example pattern/configureFromFile.js
+/**
+@example hash/configureFromFile.js
 
-This examples shows how to configure a pipeline from a configuration file using the pipelinebuilder's buildFromConfigurationFile method.
+This example shows how to configure a pipeline from a configuration file using the pipelinebuilder's buildFromConfigurationFile method.
+
+This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection/examples/hash/configureFromFile.js). 
+
+This example requires a local data file. Free data files can be acquired by 
+pulling the submodules under this repository or from the 
+[device-detection-data](https://github.com/51Degrees/device-detection-data) 
+GitHub repository.
 
 The configuration file used here is:
 
-```{json}
+```
 
 {
     "PipelineOptions": {
@@ -36,7 +43,7 @@ The configuration file used here is:
             "elementName": "../../deviceDetectionOnPremise",
             "elementParameters": {
                 "performanceProfile": "MaxPerformance",
-                "dataFile": "../device-detection-cxx/device-detection-data/51Degrees-LiteV3.4.trie",
+                "dataFile": "../device-detection-cxx/device-detection-data/51Degrees-LiteV4.1.hash",
                 "autoUpdate": false
             }
         }
@@ -48,10 +55,10 @@ The configuration file used here is:
 
 */
 
-const pipelineBuilder = require("fiftyone.pipeline.core").pipelineBuilder;
+const pipelineBuilder = require("fiftyone.pipeline.core").PipelineBuilder;
 
 // Create a new pipeline from the supplied config file.
-let pipeline = new pipelineBuilder().buildFromConfigurationFile("51d.json");
+let pipeline = new PipelineBuilder().buildFromConfigurationFile("51d.json");
 
 // Logging of errors and other messages. Valid logs types are info, debug, warn, error
 pipeline.on("error", console.error);

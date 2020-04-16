@@ -13,6 +13,8 @@ variables:
     
 strategy:
   matrix:
+    node_6_x:
+      node_version: 6.x
     node_8_x:
       node_version: 8.x
     node_10_x:
@@ -37,7 +39,7 @@ steps:
       "description": "Temporary package to allow all tests to run using the local code as dependencies", 
       "main": "index.js", 
       "scripts": { 
-        "test": "jest --ci --reporters=jest-junit --reporters=default --coverage --coverageReporters=cobertura --passWithNoTests" 
+        "test": "jest --ci --reporters=jest-junit --reporters=default --coverage --coverageReporters=cobertura" 
         }, 
       "repository": { 
         "type": "git", "url": "https://github.com/51Degrees/pipeline-node" 
@@ -46,15 +48,26 @@ steps:
       "dependencies": { 
         "jest": "^24.9.0",
         "jest-junit": "^9.0.0",
-        "fiftyone.pipeline.core": "^4.1.0-beta.7",
-        "fiftyone.pipeline.engines": "^4.1.0-beta.7",
-        "fiftyone.pipeline.engines.fiftyone": "^4.1.0-beta.7",
-        "fiftyone.pipeline.javascriptbundler": "^4.1.0-beta.7",
-        "fiftyone.pipeline.cloudrequestengine": "^4.1.0-beta.7"
+        "fiftyone.pipeline.core": "^4.1.0",
+        "fiftyone.pipeline.engines": "^4.1.0",
+        "fiftyone.pipeline.engines.fiftyone": "^4.1.0",
+        "fiftyone.pipeline.cloudrequestengine": "^4.1.0",
+        "eslint": "^6.8.0",
+        "eslint-config-standard": "^14.1.1",
+        "eslint-plugin-import": "^2.20.2",
+        "eslint-plugin-node": "^11.1.0",
+        "eslint-plugin-promise": "^4.2.1",
+        "eslint-plugin-standard": "^4.0.1",
+        "jest": "^24.9.0"
         },
       "jest-junit": {
           "outputName": "'"$NODE_VERSION"'.xml"    
-        } 
+        },
+      "jest": {
+          "globals": {
+            "resourceKey": "AQS5HKcyHJbECm6E10g"
+          }
+        }
       }'
     echo $content
     echo $content > package.json
@@ -76,15 +89,48 @@ steps:
     contents: '.npmrc'
 
 - script: |
-    npm install jest
-    npm install jest-junit
-    npm install fiftyone.pipeline.core
-    npm install fiftyone.pipeline.engines
-    npm install fiftyone.pipeline.engines.fiftyone
-    npm install fiftyone.pipeline.cloudrequestengine
-    npm install fiftyone.pipeline.javascriptbundler
+    npm install
     npm test
   displayName: 'Build and Test'
+
+- script: |
+    eslint='{
+        "env": {
+            "browser": true,
+            "commonjs": true,
+            "es6": true
+        },
+        "extends": [
+            "standard"
+        ],
+        "globals": {
+            "Atomics": "readonly",
+            "SharedArrayBuffer": "readonly",
+            "test": true,
+            "jest": true,
+            "expect": true
+        },
+        "parserOptions": {
+            "ecmaVersion": 2018
+        },
+        "rules": {
+            "node/no-deprecated-api": "off",
+            "no-throw-literal": "off",
+            "no-path-concat": "off",
+            "no-prototype-builtins": "off",
+            "no-eval": "off",
+            "semi": [
+                2,
+                "always"
+            ]
+        }
+      }'
+    echo $eslint
+    echo $eslint > .eslintrc
+    npm install -g eslint
+    eslint **/*.js
+  displayName: "Set up and run eslint"
+  condition: ne(variables['node_version'], '6.x')
 
 - task: PublishTestResults@2
   condition: succeededOrFailed()

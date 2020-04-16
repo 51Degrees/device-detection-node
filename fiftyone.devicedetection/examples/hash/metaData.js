@@ -20,10 +20,17 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
-/*
-@example pattern/metadata.js
+/**
+@example hash/metadata.js
 
 This example shows how to get properties from a pipeline's processed flowData based on their metadata, the getProperties() method and also additional meta data properties on device detection data.
+
+This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection/examples/hash/metaData.js). 
+
+This example requires a local data file. Free data files can be acquired by 
+pulling the submodules under this repository or from the 
+[device-detection-data](https://github.com/51Degrees/device-detection-data) 
+GitHub repository.
 
 */
 
@@ -33,7 +40,7 @@ const fs = require("fs");
 
 // Load in a datafile
 
-let datafile = (process.env.directory || __dirname) + "/../../device-detection-cxx/device-detection-data/51Degrees-LiteV3.4.trie";
+let datafile = (process.env.directory || __dirname) + "/../../device-detection-cxx/device-detection-data/51Degrees-LiteV4.1.hash";
 
 if (!fs.existsSync(datafile)) {
     console.error("The datafile required by this example is not present. Please ensure that the 'device-detection-data' submodule has been fetched.");
@@ -41,7 +48,7 @@ if (!fs.existsSync(datafile)) {
 }
 
 // Create a new Device Detection pipeline and set the config.
-let pipeline = new FiftyOneDegreesDeviceDetection.deviceDetectionPipelineBuilder({
+let pipeline = new FiftyOneDegreesDeviceDetection.DeviceDetectionPipelineBuilder({
     performanceProfile: "MaxPerformance",
     dataFile: datafile,
     autoUpdate: false,
@@ -119,11 +126,8 @@ let getMatchMetaData = async function (userAgent) {
     flowData.device.method;
     // Provides information about the algorithm that was used to perform detection for a particular User-Agent.
 
-    flowData.device.rank;
-    // An integer value that indicates how popular the device is. The lower the rank the more popular the signature.
-
-    flowData.device.signaturesCompared;
-    // The number of device signatures that have been compared before finding a result.
+    flowData.device.matchdeNodes;
+    // The number of hash nodes that have been matched before finding a result.
 
     Object.entries(meta).forEach(([key, result]) => {
 

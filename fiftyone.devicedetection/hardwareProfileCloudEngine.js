@@ -29,20 +29,21 @@ const require51 = (requestedPackage) => {
 };
 
 const engines = require51('fiftyone.pipeline.engines');
-const core = require51('fiftyone.pipeline.core');
 const Engine = engines.Engine;
 const AspectDataDictionary = engines.AspectDataDictionary;
-const AspectPropertyValue = core.AspectPropertyValue;
+const AspectPropertyValue = engines.AspectPropertyValue;
 
-class DeviceDetectionCloud extends Engine {
+class HardwareProfileCloudEngine extends Engine {
   constructor () {
     super(...arguments);
 
-    this.dataKey = 'device';
+    this.dataKey = 'hardware';
   }
 
   /**
-     * The deviceDetction cloud engine requires the 51Degrees cloudRequestEngine to be placed in a pipeline before it. It simply takes that raw JSON response and parses it to extract the device part
+     * The hardware profile cloud engine requires the 51Degrees cloudRequestEngine
+     * to be placed in a pipeline before it. It simply takes that raw JSON
+     * response and parses it to extract the relevant data
      * @param {FlowData} flowData
     */
   processInternal (flowData) {
@@ -53,19 +54,23 @@ class DeviceDetectionCloud extends Engine {
 
       cloudData = JSON.parse(cloudData);
 
-      // Loop over cloudData.device properties to check if they have a value
+      // Loop over cloudData.devices properties to check if they have a value
 
-      const result = {};
+      const devices = [];
 
-      Object.entries(cloudData.device).forEach(function ([key, value]) {
-        result[key] = new AspectPropertyValue();
+      Object.entries(cloudData.hardware.profiles).forEach(function ([i, deviceValues]) {
+        const device = {};
 
-        if (cloudData.device[key + 'nullreason']) {
-          result[key].noValueMessage = cloudData.device[key + 'nullreason'];
-        } else {
-          result[key].value = value;
-        }
+        Object.entries(deviceValues).forEach(function ([propertyKey, propertyValue]) {
+          device[propertyKey] = new AspectPropertyValue();
+
+          device[propertyKey].value = propertyValue;
+        });
+
+        devices.push(device);
       });
+
+      const result = { profiles: devices };
 
       const data = new AspectDataDictionary(
         {
@@ -86,9 +91,9 @@ class DeviceDetectionCloud extends Engine {
       if (!Object.keys(engine.properties).length) {
         const cloudProperties = flowData.get('cloud').get('properties');
 
-        const deviceProperties = cloudProperties.device;
+        const hardwareProfileProperties = cloudProperties.hardware;
 
-        engine.properties = deviceProperties;
+        engine.properties = hardwareProfileProperties;
 
         engine.updateProperties().then(resolve);
       } else {
@@ -98,4 +103,4 @@ class DeviceDetectionCloud extends Engine {
   }
 }
 
-module.exports = DeviceDetectionCloud;
+module.exports = HardwareProfileCloudEngine;

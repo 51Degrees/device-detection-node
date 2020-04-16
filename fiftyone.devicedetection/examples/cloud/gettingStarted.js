@@ -20,40 +20,41 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
-/*
-@example pattern/gettingStarted.js
+/**
+@example cloud/gettingStarted.js
 
-Getting started example of using the 51Degrees device detection 'Pattern' algorithm to determine whether a given User-Agent corresponds to a mobile device or not.
+Getting started example of using the 51Degrees Device Detection Cloud to determine whether a given User-Agent corresponds to a mobile device or not.
 
-Firstly require the fiftyone.pipeline.devicedetection modules which contain all of the pipeline specific classes we will be using in this example.
+This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection/examples/cloud/gettingStarted.js). 
 
-```{js}
+To run this example, you will need to create a **resource key**. 
+The resource key is used as short-hand to store the particular set of 
+properties you are interested in as well as any associated license keys 
+that entitle you to increased request limits and/or paid-for properties.
 
-const FiftyOneDegreesDeviceDetection = require('fiftyone.pipeline.devicedetection')
+You can create a resource key using the 51Degrees [Configurator](https://configure.51degrees.com).
+
+Firstly require the fiftyone.devicedetection modules which contain all of the pipeline specific classes we will be using in this example.
 
 ```
 
-We then load in a datafile (ending in .dat for the Pattern algorithm). Free data files can be acquired by pulling the submodule under datafile in this example
-
-```{js}
-
-let datafile = (process.env.directory || __dirname) + "/../../device-detection-cxx/device-detection-data/51Degrees-LiteV3.2.dat";
+const FiftyOneDegreesDeviceDetection = require('fiftyone.devicedetection')
 
 ```
 
 Build the device detection pipeline using the builder that comes with the fiftyone.pipeline.devicedetection module and pass in the desired settings. Additional flowElements / engines can be added before the build() method is called if needed.
 
-```{js}
+```
 
 let pipeline = new FiftyOneDegreesDeviceDetection.deviceDetectionPipelineBuilder({
-    "resourceKey": "AQS5HKcyHJbECm6E10g"
+    "resourceKey": ""
 }).build();
 
 ```
 
 Each pipeline has an event emitter attached you can listen to to catch messages. Valid log types are info, debug, warn and error.
 
-```{js}
+```
 
 pipeline.on("error", console.error);
 
@@ -63,7 +64,7 @@ A pipeline can create a flowData element which is where evidence is added (for e
 
 Here is an example of a function that checks if a user agent is a mobile device. In some cases the isMobile value is not meaningful so instead of returning a default, a .hasValue() check can be made. Please see the failureToMatch example for more information.
 
-```{js}
+```
 
 let checkIfMobile = async function (userAgent) {
 
@@ -99,40 +100,60 @@ let iPhoneUA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_2 like Mac OS X) AppleWebK
 
 const FiftyOneDegreesDeviceDetection = require((process.env.directory || __dirname) + "/../../");
 
-let pipeline = new FiftyOneDegreesDeviceDetection.deviceDetectionPipelineBuilder({
-    "resourceKey": "AQS5HKcyHJbECm6E10g"
-}).build();
+// You need to create a resource key at https://configure.51degrees.com and 
+// paste it into the code, replacing !!YOUR_RESOURCE_KEY!!.
+let localResourceKey = "!!YOUR_RESOURCE_KEY!!";
+// Check if there is a resource key in the global variable and use
+// it if there is one. (This is used by automated tests to pass in a key)
+try {
+    localResourceKey = resourceKey;
+} catch (e) {
+    if (e instanceof ReferenceError) {}
+}
 
-// Logging of errors and other messages. Valid logs types are info, debug, warn, error
-pipeline.on("error", console.error);
+if(localResourceKey.substr(0, 2) == "!!") {
+    console.log("You need to create a resource key at " +
+        "https://configure.51degrees.com and paste it into the code, " +
+        "replacing !!YOUR_RESOURCE_KEY!!.");
+    console.log("Make sure to include the ismobile property " +
+        "as it is used by this example.");
+}
+else {    
+    let pipeline = new FiftyOneDegreesDeviceDetection.DeviceDetectionPipelineBuilder({
+        "resourceKey": localResourceKey
+    }).build();
 
-let checkIfMobile = async function (userAgent) {
+    // Logging of errors and other messages. Valid logs types are info, debug, warn, error
+    pipeline.on("error", console.error);
 
-    // Create a flow data element and process the desktop User-Agent.
-    let flowData = pipeline.createFlowData();
+    let checkIfMobile = async function (userAgent) {
 
-    // Add the User-Agent as evidence
-    flowData.evidence.add("header.user-agent", userAgent);
+        // Create a flow data element and process the desktop User-Agent.
+        let flowData = pipeline.createFlowData();
 
-    await flowData.process();
+        // Add the User-Agent as evidence
+        flowData.evidence.add("header.user-agent", userAgent);
 
-    let ismobile = flowData.device.ismobile;
+        await flowData.process();
 
-    if (ismobile.hasValue) {
+        let ismobile = flowData.device.ismobile;
 
-        console.log(`Is user agent ${userAgent} a mobile? ${ismobile.value}`);
+        if (ismobile.hasValue) {
 
-    } else {
+            console.log(`Is user agent ${userAgent} a mobile? ${ismobile.value}`);
 
-        // Echo out why the value isn't meaningful
-        console.log(ismobile.noValueMessage);
+        } else {
+
+            // Echo out why the value isn't meaningful
+            console.log(ismobile.noValueMessage);
+
+        }
 
     }
 
+    let desktopUA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36';
+    let iPhoneUA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_2 like Mac OS X) AppleWebKit/604.4.7 (KHTML, like Gecko) Mobile/15C114';
+
+    checkIfMobile(desktopUA);
+    checkIfMobile(iPhoneUA);
 }
-
-let desktopUA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36';
-let iPhoneUA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_2 like Mac OS X) AppleWebKit/604.4.7 (KHTML, like Gecko) Mobile/15C114';
-
-checkIfMobile(desktopUA);
-checkIfMobile(iPhoneUA);

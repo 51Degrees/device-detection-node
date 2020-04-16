@@ -20,14 +20,23 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
-/*
-@example pattern/configureFromFile.js
+/**
+@example cloud/configureFromFile.js
 
-This examples shows how to configure a pipeline from a configuration file using the pipelinebuilder's buildFromConfigurationFile method.
+This example shows how to configure a pipeline from a configuration file using the pipelinebuilder's buildFromConfigurationFile method.
+
+This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection/examples/cloud/configureFromFile.js). 
+
+To run this example, you will need to create a **resource key**. 
+The resource key is used as short-hand to store the particular set of 
+properties you are interested in as well as any associated license keys 
+that entitle you to increased request limits and/or paid-for properties.
+
+You can create a resource key using the 51Degrees [Configurator](https://configure.51degrees.com).
 
 The configuration file used here is:
 
-```{json}
+```
 
 {
     "PipelineOptions": {
@@ -35,7 +44,7 @@ The configuration file used here is:
         {
             "elementName": "../../deviceDetectionOnPremise",
             "elementParameters": {
-                "resourceKey": "AQS5HKcyHJbECm6E10g"
+                "resourceKey": ""
 
             }
         }
@@ -47,10 +56,10 @@ The configuration file used here is:
 
 */
 
-const pipelineBuilder = require("fiftyone.pipeline.core").pipelineBuilder;
+const PipelineBuilder = require("fiftyone.pipeline.core").PipelineBuilder;
 
 // Create a new pipeline from the supplied config file.
-let pipeline = new pipelineBuilder().buildFromConfigurationFile((process.env.directory || __dirname) + "/51d.json");
+let pipeline = new PipelineBuilder().buildFromConfigurationFile((process.env.directory || __dirname) + "/51d.json");
 
 // Logging of errors and other messages. Valid logs types are info, debug, warn, error
 pipeline.on("error", console.error);

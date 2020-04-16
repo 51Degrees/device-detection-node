@@ -20,10 +20,19 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
-/*
-@example pattern/webIntegration.js
+/**
+@example hash/webIntegration.js
+
+
 
 This example demonstrates the evidence.addFromRequest() method and client side JavaScript overrides by creating a web server, serving JavaScript created by the device detection engine and bundled together by a special JavaScript bundler engine.. This JavaScript is then used on the client side to save a cookie so that when the device detection engine next processes the request (using the addFromRequest() method) it has a more accurate reading for properties set on the clientside.
+
+This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection/examples/hash/webIntegration.js). 
+
+This example requires a local data file. Free data files can be acquired by 
+pulling the submodules under this repository or from the 
+[device-detection-data](https://github.com/51Degrees/device-detection-data) 
+GitHub repository.
 
 */
 
@@ -33,7 +42,7 @@ const fs = require("fs");
 
 // Load in a datafile
 
-let datafile = (process.env.directory || __dirname) + "/../../device-detection-cxx/device-detection-data/51Degrees-LiteV3.4.trie";
+let datafile = (process.env.directory || __dirname) + "/../../device-detection-cxx/device-detection-data/51Degrees-LiteV4.1.hash";
 
 if (!fs.existsSync(datafile)) {
     console.error("The datafile required by this example is not present. Please ensure that the 'device-detection-data' submodule has been fetched.");
@@ -41,7 +50,7 @@ if (!fs.existsSync(datafile)) {
 }
 
 // Create a new Device Detection pipeline and set the config.
-let pipeline = new FiftyOneDegreesDeviceDetection.deviceDetectionPipelineBuilder({
+let pipeline = new FiftyOneDegreesDeviceDetection.DeviceDetectionPipelineBuilder({
     performanceProfile: "MaxPerformance",
     dataFile: datafile,
     autoUpdate: false,
@@ -71,7 +80,7 @@ const server = http.createServer((req, res) => {
 
         // Get JavaScript to put inside the page so that the second request gets extra information in cookies
 
-        let js = `<script>${flowData.javascript.javascript}</script>`;
+        let js = `<script>${flowData.javascriptbuilder.javascript}</script>`;
 
         res.statusCode = 200;
         res.setHeader('Content-Type', 'text/html');

@@ -20,30 +20,37 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
-/*
-@example trie/gettingStarted.js
+/**
+@example hash/gettingStarted.js
 
 Getting started example of using the 51Degrees device detection 'Hash' algorithm to determine whether a given User-Agent corresponds to a mobile device or not.
 
-Firstly require the fiftyone.pipeline.devicedetection modules which contain all of the pipeline specific classes we will be using in this example.
+This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection/examples/hash/gettingStarted.js). 
 
-```{js}
+This example requires a local data file. Free data files can be acquired by 
+pulling the submodules under this repository or from the 
+[device-detection-data](https://github.com/51Degrees/device-detection-data) 
+GitHub repository.
 
-const FiftyOneDegreesDeviceDetection = require('fiftyone.pipeline.devicedetection')
+Firstly require the fiftyone.devicedetection modules which contain all of the pipeline specific classes we will be using in this example.
 
 ```
 
-We then load in a datafile (ending in .trie for the Hash algorithm). Free data files can be acquired by pulling the submodule under datafile in this example
+const FiftyOneDegreesDeviceDetection = require('fiftyone.devicedetection')
 
-```{js}
+```
 
-let datafile = (process.env.directory || __dirname) + "/../../device-detection-cxx/device-detection-data/51Degrees-LiteV3.4.trie";
+We then load in a datafile (ending in .hash for the Hash algorithm). 
+
+```
+
+let datafile = (process.env.directory || __dirname) + "/../../device-detection-cxx/device-detection-data/51Degrees-LiteV4.1.hash";
 
 ```
 
 Build the device detection pipeline using the builder that comes with the fiftyone.pipeline.devicedetection module and pass in the desired settings. Additional flowElements / engines can be added before the build() method is called if needed.
 
-```{js}
+```
 
 let pipeline = new FiftyOneDegreesDeviceDetection.deviceDetectionPipelineBuilder({
     performanceProfile: "MaxPerformance",
@@ -55,7 +62,7 @@ let pipeline = new FiftyOneDegreesDeviceDetection.deviceDetectionPipelineBuilder
 
 Each pipeline has an event emitter attached you can listen to to catch messages. Valid log types are info, debug, warn and error.
 
-```{js}
+```
 
 pipeline.on("error", console.error);
 
@@ -65,7 +72,7 @@ A pipeline can create a flowData element which is where evidence is added (for e
 
 Here is an example of a function that checks if a user agent is a mobile device. In some cases the isMobile value is not meaningful so instead of returning a default, a .hasValue() check can be made. Please see the failureToMatch example for more information.
 
-```{js}
+```
 
 let checkIfMobile = async function (userAgent) {
 
@@ -103,7 +110,7 @@ const FiftyOneDegreesDeviceDetection = require((process.env.directory || __dirna
 
 // Load in a datafile
 
-let datafile = (process.env.directory || __dirname) + "/../../device-detection-cxx/device-detection-data/51Degrees-LiteV3.4.trie";
+let datafile = (process.env.directory || __dirname) + "/../../device-detection-cxx/device-detection-data/51Degrees-LiteV4.1.hash";
 
 // Check if datafiele exists
 
@@ -113,7 +120,7 @@ if (!fs.existsSync(datafile)) {
     throw ("No data file at '" + datafile + "'");
 }
 
-let pipeline = new FiftyOneDegreesDeviceDetection.deviceDetectionPipelineBuilder({
+let pipeline = new FiftyOneDegreesDeviceDetection.DeviceDetectionPipelineBuilder({
     performanceProfile: "MaxPerformance",
     dataFile: datafile,
     licenceKeys: "4YUAAAJRNAAAABSADSCGABEAL2ASCBDWANN6TXB65WL5TQSFRB9DTZ2K9NF5VKA2TRWABVT52XAQTSUFK227X2FPA87LN",
