@@ -29,9 +29,10 @@ const require51 = (requestedPackage) => {
 };
 
 const engines = require51('fiftyone.pipeline.engines');
+const core = require51('fiftyone.pipeline.core');
 const Engine = engines.Engine;
 const AspectDataDictionary = engines.AspectDataDictionary;
-const AspectPropertyValue = engines.AspectPropertyValue;
+const AspectPropertyValue = core.AspectPropertyValue;
 
 class HardwareProfileCloudEngine extends Engine {
   constructor () {
