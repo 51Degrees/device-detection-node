@@ -164,7 +164,7 @@ else {
     // from the cloud request engine.
     let hardwareProfileCloudEngineInstance = new HardwareProfileCloudEngine();
 
-    let pipelineBuilder = pipelineCore.pipelineBuilder;
+    let pipelineBuilder = pipelineCore.PipelineBuilder;
     // Create the pipeline, adding our engines.
     let pipeline = new pipelineBuilder()
         .add(requestEngineInstance)

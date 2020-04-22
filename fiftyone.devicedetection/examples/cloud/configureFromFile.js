@@ -70,7 +70,7 @@ let checkIfMobile = async function (userAgent) {
     let flowData = pipeline.createFlowData();
 
     // Add the User-Agent as evidence
-    flowData.evidence.add("header.http_user-agent", userAgent);
+    flowData.evidence.add("header.user-agent", userAgent);
 
     await flowData.process();
 
