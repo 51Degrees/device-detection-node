@@ -43,7 +43,60 @@ const EvidenceKeyFilter = core.BasicListEvidenceKeyFilter;
 
 const nodeVersion = Number(process.version.match(/^v(\d+\.)/)[1]);
 
+/**
+ * On premise version of the 51Degrees Device Detection Engine
+ * Uses a data file to process evidence in FlowData and create results
+ * This datafile can automatically update when a new version is available
+ **/
 class DeviceDetectionOnPremise extends Engine {
+  /**
+   * Constructor for Device Detection On Premise engine
+   *
+   * @param {object} options options for the engine
+   * @param {string} options.dataFile path to the datafile
+   * @param {boolean} options.autoUpdate whether the datafile
+   * should be registered with the data file update service
+   * @param {Cache} options.cache an instance of the Cache class from
+   * Fiftyone.Pipeline.Engines
+   * @param {string} options.dataFileUpdateBaseUrl base url for the datafile
+   * update service
+   * @param {Array} options.restrictedProperties list of properties the engine
+   * will be restricted to
+   * @param {string} options.licenceKeys licensekey used by the
+   * data file update service
+   * @param {boolean} options.download whether to download the datafile
+   * or store it in memory
+   * @param {string} options.performanceProfile options are:
+   * LowMemory, MaxPerformance, Balanced, BalancedTemp, HighPerformance
+   * @param {boolean} options.updateOnStart whether to download / update
+   * the datafile on initialisation
+   * @param {boolean} options.fileSystemWatcher whether to monitor the datafile
+   * path for changes
+   * @param {number} options.concurrency defaults to the number of cpus
+   * in the machine
+   * @param {boolean} options.reuseTempFile Indicates that an existing temp
+   * file may be used. This should be selected if multiple instances wish to
+   * use the same file to prevent high disk usage.
+   * @param {boolean} options.updateMatchedUserAgent True if the detection
+   * should record the matched characters from the target User-Agent
+   * @param {object} options.maxMatchedUserAgentLength Number of characters to
+   * consider in the matched User-Agent. Ignored if updateMatchedUserAgent
+   * is false
+   * @param {number} options.drift Set maximum drift in hash position to
+   * allow when processing HTTP headers.
+   * @param {number} options.difference Set the maximum difference to allow
+   * when processing HTTP headers. The difference is the difference
+   * in hash value between the hash that was found, and the hash
+   * that is being searched for. By default this is 0.
+   * @param {boolean} options.allowUnmatched True if there should be at least
+   * one matched node in order for the results to be
+   * considered valid. By default, this is false
+   * @param {boolean} options.createTempDataCopy If true, the engine will
+   * create a copy of the data file in a temporary location
+   * rather than using the file provided directly. If not
+   * loading all data into memory, this is required for
+   * automatic data updates to occur.
+   */
   constructor ({ dataFile, autoUpdate, cache, dataFileUpdateBaseUrl = 'https://distributor.51degrees.com/api/v2/download', restrictedProperties, licenceKeys, download, performanceProfile = 'LowMemory', reuseTempFile = false, updateMatchedUserAgent = false, maxMatchedUserAgentLength, drift, difference, concurrency = os.cpus().length, allowUnmatched, fileSystemWatcher, createTempDataCopy, updateOnStart = false }) {
     let swigWrapper;
     let swigWrapperType;
@@ -138,7 +191,9 @@ class DeviceDetectionOnPremise extends Engine {
 
     const current = this;
 
-    // Function for initialising the engine, wrapped like this so that an engine can be initialised once the datafile is retrieved if updateOnStart is set to true
+    // Function for initialising the engine, wrapped like this so
+    // that an engine can be initialised once the datafile is
+    // retrieved if updateOnStart is set to true
 
     this.initEngine = function () {
       return new Promise(function (resolve, reject) {
@@ -278,6 +333,15 @@ class DeviceDetectionOnPremise extends Engine {
     this.registerDataFile(ddDatafile);
   }
 
+  /**
+   * Internal process method for Device Detection On Premise engine
+   * Fetches the results from the SWIG wrapper into an instance of
+   * the SwigData class which can be used to retrieve results from
+   * the FlowData.
+   *
+   * @param {FlowData} flowData FlowData to process
+   * @returns {Promise} the result of processing
+   **/
   processInternal (flowData) {
     const dd = this;
 

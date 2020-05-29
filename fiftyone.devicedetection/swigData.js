@@ -35,13 +35,19 @@ const swigHelpers = require('./swigHelpers');
 
 const DataFileMissingPropertyService = require('./dataFileMissingPropertyService');
 
+/**
+ * Extension of aspectData which stores the results created by the SWIG wrapper
+ */
 class SwigData extends AspectData {
   /**
-     * Extension of aspectData which stores the results created by the swig wrapper
-     * @param {Object} options
-     * @param {FlowElement} options.flowElement
-     * @param {FlowData} options.flowData
-    */
+   * Constructor for SwigData
+   *
+   * @param {object} options options object
+   * @param {FlowElement} options.flowElement the FlowElement the
+   * data is part of
+   * @param {ResultsHashSwig} options.swigResults the results from the
+   * swig engine
+   */
   constructor ({
     flowElement, swigResults
   }) {
@@ -51,9 +57,12 @@ class SwigData extends AspectData {
   }
 
   /**
-     * Retrieves elementData via the swigWrapper but also casts it to the correct type via a check of the engine's property list metadata
-     * @param {String} key
-    */
+   * Retrieves elementData via the swigWrapper but also casts it to the
+   * correct type via a check of the engine's property list metadata
+   *
+   * @param {string} key the property key to retrieve
+   * @returns {mixed} value property value
+   */
   getInternal (key) {
     // Start with special properties
 

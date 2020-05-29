@@ -55,6 +55,7 @@ steps:
         "eslint": "^6.8.0",
         "eslint-config-standard": "^14.1.1",
         "eslint-plugin-import": "^2.20.2",
+        "eslint-plugin-jsdoc": "^25.4.0",
         "eslint-plugin-node": "^11.1.0",
         "eslint-plugin-promise": "^4.2.1",
         "eslint-plugin-standard": "^4.0.1",
@@ -130,7 +131,7 @@ steps:
     npm install -g eslint
     eslint **/*.js
   displayName: "Set up and run eslint"
-  condition: ne(variables['node_version'], '6.x')
+  condition: and(ne(variables['node_version'], '6.x'), ne(variables['node_version'], '8.x'))
 
 - task: PublishTestResults@2
   condition: succeededOrFailed()

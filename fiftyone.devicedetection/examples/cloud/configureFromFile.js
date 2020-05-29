@@ -54,9 +54,32 @@ The configuration file used here is:
 
 ```
 
+```
+
+Expected output:
+
+Is user agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36 a mobile? false
+
+Is user agent Mozilla/5.0 (iPhone; CPU iPhone OS 11_2 like Mac OS X) AppleWebKit/604.4.7 (KHTML, like Gecko) Mobile/15C114 a mobile? true
+
 */
 
 const PipelineBuilder = require("fiftyone.pipeline.core").PipelineBuilder;
+
+const fs = require('fs');
+
+let configFile = fs.readFileSync((process.env.directory || __dirname) + "/51d.json");
+
+let config = JSON.parse(configFile);
+
+if (config.PipelineOptions.Elements[0].elementParameters.resourceKey.startsWith("!!")) {
+    console.log('You need to create a resource key at ' +
+    'https://configure.51degrees.com and paste it into the 51d.json ' +
+    'config file.');
+    console.log('Make sure to include the ismobile property ' +
+        'as it is used by this example.');
+    process.exit();
+}
 
 // Create a new pipeline from the supplied config file.
 let pipeline = new PipelineBuilder().buildFromConfigurationFile((process.env.directory || __dirname) + "/51d.json");
@@ -70,7 +93,7 @@ let checkIfMobile = async function (userAgent) {
     let flowData = pipeline.createFlowData();
 
     // Add the User-Agent as evidence
-    flowData.evidence.add("header.http_user-agent", userAgent);
+    flowData.evidence.add("header.user-agent", userAgent);
 
     await flowData.process();
 

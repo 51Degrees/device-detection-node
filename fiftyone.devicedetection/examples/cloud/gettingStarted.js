@@ -3,7 +3,7 @@
  * Copyright 2019 51 Degrees Mobile Experts Limited, 5 Charlotte Close,
  * Caversham, Reading, Berkshire, United Kingdom RG4 7BY.
  *
- * This Original Work is licensed under the European Union Public Licence (EUPL) 
+ * This Original Work is licensed under the European Union Public Licence (EUPL)
  * v.1.2 and is subject to its terms as set out below.
  *
  * If a copy of the EUPL was not distributed with this file, You can obtain
@@ -13,147 +13,103 @@
  * amended by the European Commission) shall be deemed incompatible for
  * the purposes of the Work and the provisions of the compatibility
  * clause in Article 5 of the EUPL shall not apply.
- * 
- * If using the Work as, or as part of, a network application, by 
+ *
+ * If using the Work as, or as part of, a network application, by
  * including the attribution notice(s) required under Article 5 of the EUPL
- * in the end user terms of the application under an appropriate heading, 
+ * in the end user terms of the application under an appropriate heading,
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
 /**
 @example cloud/gettingStarted.js
 
-Getting started example of using the 51Degrees Device Detection Cloud to determine whether a given User-Agent corresponds to a mobile device or not.
+This example shows how a simple device detection pipeline that checks if a user agent is a mobile device
 
-This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection/examples/cloud/gettingStarted.js). 
+This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection/examples/cloud/gettingStarted.js).
 
-To run this example, you will need to create a **resource key**. 
-The resource key is used as short-hand to store the particular set of 
-properties you are interested in as well as any associated license keys 
+To run this example, you will need to create a **resource key**.
+The resource key is used as short-hand to store the particular set of
+properties you are interested in as well as any associated license keys
 that entitle you to increased request limits and/or paid-for properties.
 
 You can create a resource key using the 51Degrees [Configurator](https://configure.51degrees.com).
 
-Firstly require the fiftyone.devicedetection modules which contain all of the pipeline specific classes we will be using in this example.
+Expected output:
 
 ```
+Is user agent 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_2 like Mac OS X) AppleWebKit/604.4.7 (KHTML, like Gecko) Mobile/15C114' a mobile?
+true
 
-const FiftyOneDegreesDeviceDetection = require('fiftyone.devicedetection')
-
+Is user agent 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36' a mobile?
+false
 ```
 
-Build the device detection pipeline using the builder that comes with the fiftyone.pipeline.devicedetection module and pass in the desired settings. Additional flowElements / engines can be added before the build() method is called if needed.
+ */
 
-```
+const FiftyOneDegreesDeviceDetection = require((process.env.directory || __dirname) + '/../../');
 
-let pipeline = new FiftyOneDegreesDeviceDetection.deviceDetectionPipelineBuilder({
-    "resourceKey": ""
+// Create the device detection pipeline with the desired settings.
+
+// You need to create a resource key at https://configure.51degrees.com
+// and paste it into the code, replacing global.resourceKey below.
+
+const myResourceKey = global.resourceKey;
+
+if (!myResourceKey) {
+  console.log('You need to create a resource key at ' +
+        'https://configure.51degrees.com and paste it into the code, ' +
+        'replacing global.resourceKey');
+  console.log('Make sure to include the ismobile property ' +
+        'as it is used by this example.');
+  process.exit();
+}
+
+// Construct the device detection pipeline using the
+// DeviceDetectionPipelineBuilder, passing in your resourceKey.
+// The build method completes the pipeline
+const pipeline = new FiftyOneDegreesDeviceDetection.DeviceDetectionPipelineBuilder({
+  resourceKey: myResourceKey
 }).build();
 
-```
+// To monitor the pipeline we can put in listeners for various log events.
+// Valid types are info, debug, warn, error
+pipeline.on('error', console.error);
 
-Each pipeline has an event emitter attached you can listen to to catch messages. Valid log types are info, debug, warn and error.
+// Here we make a function that gets a userAgent as evidence and uses the
+// Device Detection Engine to detect if it is a mobile or not
+const checkIfMobile = async function (userAgent) {
+  // Create a FlowData element
+  // This is used to add evidence and process it through the
+  // FlowElements in the Pipeline.
+  const flowData = pipeline.createFlowData();
 
-```
+  // Add the User-Agent as evidence
+  flowData.evidence.add('header.user-agent', userAgent);
 
-pipeline.on("error", console.error);
+  // Run process on the flowData (this returns a promise)
+  await flowData.process();
 
-```
+  // Check the ismobile property
+  // this returns an AspectPropertyValue wrapper
+  // letting you check if a value is set and if not why not
+  const ismobile = flowData.device.ismobile;
 
-A pipeline can create a flowData element which is where evidence is added (for example from a device web request). This evidence is then processed by the pipeline through the flowData's `process()` method (which returns a promise to work with both syncronous and asyncronous pipelines).
+  console.log(`Is user agent '${userAgent}' a mobile?`);
 
-Here is an example of a function that checks if a user agent is a mobile device. In some cases the isMobile value is not meaningful so instead of returning a default, a .hasValue() check can be made. Please see the failureToMatch example for more information.
+  // Check if the result has a meaningful value and output it
+  if (ismobile.hasValue) {
+    console.log(ismobile.value);
+  } else {
+    // Output why the value isn't meaningful
+    console.log(ismobile.noValueMessage);
+  }
 
-```
+  console.log(' ');
+};
 
-let checkIfMobile = async function (userAgent) {
+const desktopUA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36';
 
-    // Create a flow data element and process the desktop User-Agent.
-    let flowData = pipeline.createFlowData();
+const iPhoneUA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_2 like Mac OS X) AppleWebKit/604.4.7 (KHTML, like Gecko) Mobile/15C114';
 
-    // Add the User-Agent as evidence
-    flowData.evidence.add("header.user-agent", userAgent);
-
-    await flowData.process();
-
-    let ismobile = flowData.device.ismobile;
-
-    if (ismobile.hasValue) {
-
-        console.log(`Is user agent ${userAgent} a mobile? ${ismobile.value}`);
-
-    } else {
-
-        // Echo out why the value isn't meaningful
-        console.log(ismobile.noValueMessage);
-
-    }
-
-}
-
-let desktopUA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36';
-let iPhoneUA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_2 like Mac OS X) AppleWebKit/604.4.7 (KHTML, like Gecko) Mobile/15C114';
-
-```
-
-*/
-
-const FiftyOneDegreesDeviceDetection = require((process.env.directory || __dirname) + "/../../");
-
-// You need to create a resource key at https://configure.51degrees.com and 
-// paste it into the code, replacing !!YOUR_RESOURCE_KEY!!.
-let localResourceKey = "!!YOUR_RESOURCE_KEY!!";
-// Check if there is a resource key in the global variable and use
-// it if there is one. (This is used by automated tests to pass in a key)
-try {
-    localResourceKey = resourceKey;
-} catch (e) {
-    if (e instanceof ReferenceError) {}
-}
-
-if(localResourceKey.substr(0, 2) == "!!") {
-    console.log("You need to create a resource key at " +
-        "https://configure.51degrees.com and paste it into the code, " +
-        "replacing !!YOUR_RESOURCE_KEY!!.");
-    console.log("Make sure to include the ismobile property " +
-        "as it is used by this example.");
-}
-else {    
-    let pipeline = new FiftyOneDegreesDeviceDetection.DeviceDetectionPipelineBuilder({
-        "resourceKey": localResourceKey
-    }).build();
-
-    // Logging of errors and other messages. Valid logs types are info, debug, warn, error
-    pipeline.on("error", console.error);
-
-    let checkIfMobile = async function (userAgent) {
-
-        // Create a flow data element and process the desktop User-Agent.
-        let flowData = pipeline.createFlowData();
-
-        // Add the User-Agent as evidence
-        flowData.evidence.add("header.user-agent", userAgent);
-
-        await flowData.process();
-
-        let ismobile = flowData.device.ismobile;
-
-        if (ismobile.hasValue) {
-
-            console.log(`Is user agent ${userAgent} a mobile? ${ismobile.value}`);
-
-        } else {
-
-            // Echo out why the value isn't meaningful
-            console.log(ismobile.noValueMessage);
-
-        }
-
-    }
-
-    let desktopUA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36';
-    let iPhoneUA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_2 like Mac OS X) AppleWebKit/604.4.7 (KHTML, like Gecko) Mobile/15C114';
-
-    checkIfMobile(desktopUA);
-    checkIfMobile(iPhoneUA);
-}
+checkIfMobile(desktopUA);
+checkIfMobile(iPhoneUA);

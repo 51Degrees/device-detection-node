@@ -39,25 +39,44 @@ const ShareUsageElement = require51('fiftyone.pipeline.engines.fiftyone').ShareU
 
 class DeviceDetectionPipelineBuilder extends PipelineBuilder {
   /**
-     * Extension of pipelineBuilder class that allows for the quick generation of a device detection pipeline. Adds share usage, caching and toggles between on premise and cloud with simple paramater changes
-     * @param {Object} options
-     * @param {String} options.licenceKeys
-     * @param {String} options.dataFile // dataFile path
-     * @param {Boolean} options.autoUpdate // whether to autoUpdate the dataFile
-     * @param {Boolean} options.updateOnStart // whether to download / update a dataFile to the path specified in options.dataFile on start
-     * @param {Boolean} options.shareUsage // include share usage element?
-     * @param {String} options.resourceKey // resourceKey for cloud
-     * @param {Number} options.cacheSize // size of the default cache (includes cache if set)
-     * @param {String} options.performanceProfile // used to control the tradeoff between performance and system memory usage (Only applies to on-premise, not cloud)
-     * @param {String} options.allowUnmatched // This setting only affects on-premise engines, not cloud.
-     * If set to false, a non-matching User-Agent will result in properties without set values.
-     * If set to true, a non-matching User-Agent will cause the 'default profiles' to be returned.
-     * This means that properties will always have values (i.e. no need to check .HasValue) but some may be inaccurate. By default, this is false.
-     * @param {String} options.cloudEndPoint // This setting only affects cloud engine, not on-premise.
-     *
-    */
+   * Extension of pipelineBuilder class that allows for the quick
+   * generation of a device detection pipeline. Adds share usage,
+   * caching and toggles between on premise and cloud with
+   * simple paramater changes
+   *
+   * @param {object} options the options for the pipeline builder
+   * @param {string} options.licenceKeys licensekeys being used
+   * @param {string} options.resourceKey resourceKey, if using the
+   * cloud engine
+   * @param {string} options.dataFile dataFile path for the on premise engine
+   * @param {boolean} options.autoUpdate whether to autoUpdate the dataFile
+   * @param {boolean} options.updateOnStart whether to download / update a
+   * dataFile to the path specified in options.dataFile on start
+   * @param {boolean} options.shareUsage whether to include the share
+   * usage element
+   * @param {number} options.cacheSize size of the default cache
+   * (includes cache if set)
+   * @param {string} options.performanceProfile used to control the tradeoff
+   * between performance and system memory usage (Only applies to on-premise,
+   * not cloud) options are: LowMemory, MaxPerformance, Balanced,
+   * BalancedTemp, HighPerformance
+   * @param {string} options.allowUnmatched This setting only affects
+   * on-premise engines, not cloud.
+   * If set to false, a non-matching User-Agent will result in properties
+   * without set values.
+   * If set to true, a non-matching User-Agent will cause the 'default profiles'
+   * to be returned.
+   * This means that properties will always have values
+   * (i.e. no need to check .HasValue) but some may be inaccurate.
+   * By default, this is false.
+   * @param {string} options.cloudEndPoint This setting only affects
+   * cloud engine, not on-premise.
+   * Choose a non default endpoint for the cloud request engine
+   *
+   */
   constructor ({ licenceKeys = null, dataFile = null, autoUpdate = true, shareUsage = true, resourceKey = null, cacheSize = null, performanceProfile = 'LowMemory', allowUnmatched = false, updateOnStart = false, cloudEndPoint = 'https://cloud.51degrees.com/api/v4/' }) {
-    // if dataFile is set, check the file extension to work out which type of datafile it is
+    // if dataFile is set, check the file extension to work out which
+    // type of datafile it is
 
     super(...arguments);
 

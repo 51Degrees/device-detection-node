@@ -3,7 +3,7 @@
  * Copyright 2019 51 Degrees Mobile Experts Limited, 5 Charlotte Close,
  * Caversham, Reading, Berkshire, United Kingdom RG4 7BY.
  *
- * This Original Work is licensed under the European Union Public Licence (EUPL) 
+ * This Original Work is licensed under the European Union Public Licence (EUPL)
  * v.1.2 and is subject to its terms as set out below.
  *
  * If a copy of the EUPL was not distributed with this file, You can obtain
@@ -13,23 +13,24 @@
  * amended by the European Commission) shall be deemed incompatible for
  * the purposes of the Work and the provisions of the compatibility
  * clause in Article 5 of the EUPL shall not apply.
- * 
- * If using the Work as, or as part of, a network application, by 
+ *
+ * If using the Work as, or as part of, a network application, by
  * including the attribution notice(s) required under Article 5 of the EUPL
- * in the end user terms of the application under an appropriate heading, 
+ * in the end user terms of the application under an appropriate heading,
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
 /**
 @example hash/configureFromFile.js
 
-This example shows how to configure a pipeline from a configuration file using the pipelinebuilder's buildFromConfigurationFile method.
+This example shows how to configure a pipeline from a configuration
+file using the pipelinebuilder's buildFromConfigurationFile method.
 
-This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection/examples/hash/configureFromFile.js). 
+This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection/examples/hash/configureFromFile.js).
 
-This example requires a local data file. Free data files can be acquired by 
-pulling the submodules under this repository or from the 
-[device-detection-data](https://github.com/51Degrees/device-detection-data) 
+This example requires a local data file. Free data files can be acquired by
+pulling the submodules under this repository or from the
+[device-detection-data](https://github.com/51Degrees/device-detection-data)
 GitHub repository.
 
 The configuration file used here is:
@@ -43,7 +44,7 @@ The configuration file used here is:
             "elementName": "../../deviceDetectionOnPremise",
             "elementParameters": {
                 "performanceProfile": "MaxPerformance",
-                "dataFile": "../device-detection-cxx/device-detection-data/51Degrees-LiteV4.1.hash",
+                "dataFile": "../../device-detection-cxx/device-detection-data/51Degrees-LiteV4.1.hash",
                 "autoUpdate": false
             }
         }
@@ -53,43 +54,55 @@ The configuration file used here is:
 
 ```
 
-*/
+Expected output:
 
-const pipelineBuilder = require("fiftyone.pipeline.core").PipelineBuilder;
+Is user agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36 a mobile? false
+
+Is user agent Mozilla/5.0 (iPhone; CPU iPhone OS 11_2 like Mac OS X) AppleWebKit/604.4.7 (KHTML, like Gecko) Mobile/15C114 a mobile? true
+
+ */
+
+// First we require the fiftyone.pipeline.core library's
+// PipelineBuilder element. We use its buildFromConfigurationFile
+// method to build a pipeline with the Engines and parameters
+const PipelineBuilder = require('fiftyone.pipeline.core').PipelineBuilder;
 
 // Create a new pipeline from the supplied config file.
-let pipeline = new PipelineBuilder().buildFromConfigurationFile("51d.json");
+const pipeline = new PipelineBuilder().buildFromConfigurationFile('51d.json');
 
-// Logging of errors and other messages. Valid logs types are info, debug, warn, error
-pipeline.on("error", console.error);
+// To monitor the pipeline we can put in listeners for various log events.
+// Valid types are info, debug, warn, error
+pipeline.on('error', console.error);
 
-let checkIfMobile = async function (userAgent) {
+// Here we make a function that gets a userAgent as evidence
+// and uses the Device Detection Engine to detect if it is a mobile or not
+const checkIfMobile = async function (userAgent) {
+  // Create a FlowData element
+  // This is used to add evidence and process it through the
+  // FlowElements in the Pipeline.
+  const flowData = pipeline.createFlowData();
 
-    // Create a flow data element and process the desktop User-Agent.
-    let flowData = pipeline.createFlowData();
+  // Add the User-Agent as evidence
+  flowData.evidence.add('header.http_user-agent', userAgent);
 
-    // Add the User-Agent as evidence
-    flowData.evidence.add("header.http_user-agent", userAgent);
+  // Run process on the flowData (this returns a promise)
+  await flowData.process();
 
-    await flowData.process();
+  // Check the ismobile property
+  // this returns an AspectPropertyValue wrapper
+  // letting you check if a value is set and if not why not
+  const ismobile = flowData.device.ismobile;
 
-    let ismobile = flowData.device.ismobile;
+  if (ismobile.hasValue) {
+    console.log(`Is user agent ${userAgent} a mobile? ${ismobile.value}`);
+  } else {
+    // Echo out why the value isn't meaningful
+    console.log(ismobile.noValueMessage);
+  }
+};
 
-    if (ismobile.hasValue) {
-
-        console.log(`Is user agent ${userAgent} a mobile? ${ismobile.value}`);
-
-    } else {
-
-        // Echo out why the value isn't meaningful
-        console.log(ismobile.noValueMessage);
-
-    }
-
-}
-
-let desktopUA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36';
-let iPhoneUA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_2 like Mac OS X) AppleWebKit/604.4.7 (KHTML, like Gecko) Mobile/15C114';
+const desktopUA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36';
+const iPhoneUA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_2 like Mac OS X) AppleWebKit/604.4.7 (KHTML, like Gecko) Mobile/15C114';
 
 checkIfMobile(desktopUA);
 checkIfMobile(iPhoneUA);

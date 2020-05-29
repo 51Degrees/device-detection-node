@@ -4,7 +4,7 @@
         {
             "elementName": "fiftyone.pipeline.cloudrequestengine",
             "elementParameters": {
-                "resourceKey": ""
+                "resourceKey": "!!ResourceKey!!"
             }
         },
         {

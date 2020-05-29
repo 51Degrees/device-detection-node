@@ -42,11 +42,12 @@ class HardwareProfileCloudEngine extends Engine {
   }
 
   /**
-     * The hardware profile cloud engine requires the 51Degrees cloudRequestEngine
-     * to be placed in a pipeline before it. It simply takes that raw JSON
-     * response and parses it to extract the relevant data
-     * @param {FlowData} flowData
-    */
+   * The hardware profile cloud engine requires the 51Degrees cloudRequestEngine
+   * to be placed in a pipeline before it. It simply takes that raw JSON
+   * response and parses it to extract the relevant data
+   *
+   * @param {FlowData} flowData the flowData to process
+   */
   processInternal (flowData) {
     const engine = this;
 

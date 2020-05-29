@@ -22,9 +22,11 @@
 
 module.exports = {
   /**
-     * Helper to convert a swig vector into a standard JavaScript array
-     * @param {Object} vector
-    */
+   * Helper to convert a swig vector into a standard JavaScript array
+   *
+   * @param {object} vector vector object form swig
+   * @returns {Array} converted array
+   */
   vectorToArray: function (vector) {
     const output = [];
 
@@ -36,9 +38,11 @@ module.exports = {
   },
 
   /**
-     * Helper to convert a Swig date to a JavaScript one
-     * @param {Object} vector
-    */
+   * Helper to convert a Swig date to a JavaScript one
+   *
+   * @param {object} swigDate date
+   * @returns {Date} converted date object
+   */
   swigDateToDate: function (swigDate) {
     const date = new Date();
 
