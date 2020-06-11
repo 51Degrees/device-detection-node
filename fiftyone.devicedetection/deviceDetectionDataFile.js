@@ -33,7 +33,21 @@ const engines = require51('fiftyone.pipeline.engines');
 
 const DataFile = engines.DataFile;
 
+/**
+ * Instance of DataFile class for the Device Detection Engine
+ * Extends datafile by providing a formatter for the DataFileUpdateService
+ * update url which contains the product, type and licensekeys.
+ * These paramaters are passed in to the datafile constructor's
+ * updateURLParams parameter
+ **/
 class DeviceDetectionDataFile extends DataFile {
+  /**
+   * Uses the product, type and licensekey parameters the datafile
+   * was constructed with to generate a querystring used in the datafile
+   * update service.
+   *
+   * @returns {string} url
+   */
   urlFormatter () {
     const queryParams = {
       Product: this.updateURLParams.product,

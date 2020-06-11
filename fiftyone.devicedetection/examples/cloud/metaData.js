@@ -3,7 +3,7 @@
  * Copyright 2019 51 Degrees Mobile Experts Limited, 5 Charlotte Close,
  * Caversham, Reading, Berkshire, United Kingdom RG4 7BY.
  *
- * This Original Work is licensed under the European Union Public Licence (EUPL) 
+ * This Original Work is licensed under the European Union Public Licence (EUPL)
  * v.1.2 and is subject to its terms as set out below.
  *
  * If a copy of the EUPL was not distributed with this file, You can obtain
@@ -13,158 +13,111 @@
  * amended by the European Commission) shall be deemed incompatible for
  * the purposes of the Work and the provisions of the compatibility
  * clause in Article 5 of the EUPL shall not apply.
- * 
- * If using the Work as, or as part of, a network application, by 
+ *
+ * If using the Work as, or as part of, a network application, by
  * including the attribution notice(s) required under Article 5 of the EUPL
- * in the end user terms of the application under an appropriate heading, 
+ * in the end user terms of the application under an appropriate heading,
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
 /**
 @example cloud/metadata.js
 
-This example shows how to get properties from a pipeline's processed flowData based on their metadata, the getProperties() method and also additional meta data properties on device detection data.
+This example shows how to get properties from a pipeline's processed flowData based on their metadata, the getProperties() method.
 
-This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection/examples/cloud/metaData.js). 
+This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection/examples/cloud/metaData.js).
 
-To run this example, you will need to create a **resource key**. 
-The resource key is used as short-hand to store the particular set of 
-properties you are interested in as well as any associated license keys 
+To run this example, you will need to create a **resource key**.
+The resource key is used as short-hand to store the particular set of
+properties you are interested in as well as any associated license keys
 that entitle you to increased request limits and/or paid-for properties.
 
 You can create a resource key using the 51Degrees [Configurator](https://configure.51degrees.com).
 
-*/
+Expected output
 
-const FiftyOneDegreesDeviceDetection = require((process.env.directory || __dirname) + "/../../");
+```
+[List of properties with names and categories]
 
-const fs = require("fs");
+Does user agent Mozilla/5.0 (iPhone; CPU iPhone OS 11_2 like Mac OS X) AppleWebKit/604.4.7 (KHTML, like Gecko) Mobile/15C114 support svg? :
+true
+Does user agent Mozilla/5.0 (iPhone; CPU iPhone OS 11_2 like Mac OS X) AppleWebKit/604.4.7 (KHTML, like Gecko) Mobile/15C114 support video? :
+true
+Does user agent Mozilla/5.0 (iPhone; CPU iPhone OS 11_2 like Mac OS X) AppleWebKit/604.4.7 (KHTML, like Gecko) Mobile/15C114 support supportstls/ssl? :
+true
+Does user agent Mozilla/5.0 (iPhone; CPU iPhone OS 11_2 like Mac OS X) AppleWebKit/604.4.7 (KHTML, like Gecko) Mobile/15C114 support supportswebgl? :
+true
+```
 
-// You need to create a resource key at https://configure.51degrees.com and 
-// paste it into the code, replacing !!YOUR_RESOURCE_KEY!!.
-let localResourceKey = "!!YOUR_RESOURCE_KEY!!";
-// Check if there is a resource key in the global variable and use
-// it if there is one. (This is used by automated tests to pass in a key)
-try {
-    localResourceKey = resourceKey;
-} catch (e) {
-    if (e instanceof ReferenceError) {}
+ */
+
+const FiftyOneDegreesDeviceDetection = require((process.env.directory || __dirname) + '/../../');
+
+// Create the device detection pipeline with the desired settings.
+
+// You need to create a resource key at https://configure.51degrees.com and paste it into the code, replacing global.resourceKey below.
+
+const myResourceKey = global.resourceKey;
+
+if (!myResourceKey) {
+  console.log('You need to create a resource key at ' +
+        'https://configure.51degrees.com and paste it into the code, ' +
+        'replacing global.resourceKey');
+  console.log('Make sure to include the supported media properties ' +
+        'used by this example.');
+  process.exit();
 }
 
-if(localResourceKey.substr(0, 2) == "!!") {
-    console.log("You need to create a resource key at " +
-        "https://configure.51degrees.com and paste it into the code, " +
-        "replacing !!YOUR_RESOURCE_KEY!!.");
-    console.log("Make sure to include the properties in the " +
-        "'device metrics' category as they are used by this example.");
-}
-else {   
-    // Create a new Device Detection pipeline and set the config.
-    //  You need to create a resource key at https://configure.51degrees.com and paste it into the code.
-    let pipeline = new FiftyOneDegreesDeviceDetection.DeviceDetectionPipelineBuilder({
-        "resourceKey": localResourceKey
-    }).build();
+// Construct the device detection pipeline using the
+// DeviceDetectionPipelineBuilder, passing in your resourceKey.
+// The build method completes the pipeline
+const pipeline = new FiftyOneDegreesDeviceDetection.DeviceDetectionPipelineBuilder({
+  resourceKey: myResourceKey
+}).build();
 
-    // Logging of errors and other messages. Valid logs types are info, debug, warn, error
-    pipeline.on("error", console.error);
+// Logging of errors and other messages.
+// Valid logs types are info, debug, warn, error
+pipeline.on('error', console.error);
 
-    // Get list of properties for the deviceDetectionEngine (including metadata like category, description, type and which datafiles they appear in)
-    let properties = pipeline.getElement("device").getProperties();
+// The following function uses "flowData.getWhere()" to fetch all of the
+// data related to "supported media" on a device by querying the category.
+const getAllSupportedMedia = async function (userAgent) {
+  // Create a flow data element and process the desktop User-Agent.
+  const flowData = pipeline.createFlowData();
 
-    // The following function uses "flowData.getWhere()" to fetch all of the data related to "supported media" on a device by querying the category.
-    let getAllSupportedMedia = async function (userAgent) {
+  // Add the User-Agent as evidence
+  flowData.evidence.add('header.user-agent', userAgent);
 
-        // Create a flow data element and process the desktop User-Agent.
-        let flowData = pipeline.createFlowData();
+  await flowData.process();
 
-        // Add the User-Agent as evidence
-        flowData.evidence.add("header.user-agent", userAgent);
+  // Get list of properties for the deviceDetectionEngine
+  // (including metadata like category, description, type and
+  // which datafiles they appear in)
+  const properties = pipeline.getElement('device').getProperties();
 
-        await flowData.process();
+  for (let property in properties) {
+    property = properties[property];
+    console.log(`Property ${property.name} of category ${property.category}`);
+  }
 
-        // Get all supported media types (html5 video, svg...) and loop over them to get the support results
-        // The second parameter can also be a boolean function that checks the value of that meta type (category in this case)
-        let supported = flowData.getWhere("category", "Supported Media");
+  // Get all supported media types (html5 video, svg...)
+  // and loop over them to get the support results
+  // The second parameter can also be a boolean function that checks the
+  // value of that meta type (category in this case)
+  const supported = flowData.getWhere('category', 'Supported Media');
 
-        Object.entries(supported).forEach(([key, result]) => {
+  Object.entries(supported).forEach(([key, result]) => {
+    console.log(`Does user agent ${userAgent} support ${key}? : `);
 
-            console.log(`Does user agent ${userAgent} support ${key}? : `);
-
-            if (result.hasValue) {
-
-                console.log(result.value);
-
-            } else {
-
-                // Echo out why the value isn't meaningful
-                console.log(result.noValueMessage);
-
-            }
-
-        });
-
+    if (result.hasValue) {
+      console.log(result.value);
+    } else {
+      // Echo out why the value isn't meaningful
+      console.log(result.noValueMessage);
     }
+  });
+};
 
-    let iPhoneUA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_2 like Mac OS X) AppleWebKit/604.4.7 (KHTML, like Gecko) Mobile/15C114';
+const iPhoneUA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_2 like Mac OS X) AppleWebKit/604.4.7 (KHTML, like Gecko) Mobile/15C114';
 
-    getAllSupportedMedia(iPhoneUA);
-
-    // The device detection engine comes with additional metadata about each match
-
-    let getMatchMetaData = async function (userAgent) {
-
-        // Create a flow data element and process the desktop User-Agent.
-        let flowData = pipeline.createFlowData();
-
-        // Add the User-Agent as evidence
-        flowData.evidence.add("header.user-agent", userAgent);
-
-        await flowData.process();
-
-        // This is all stored under the "device metrics" category
-
-        let meta = flowData.getWhere("category", "Device Metrics");
-    
-        flowData.device.deviceID;
-        // Consists of four components separated by a hyphen symbol: Hardware-Platform-Browser-IsCrawler where each Component represents an ID of the corresponding Profile.
-
-        flowData.device.userAgents;
-        // The matched useragents
-
-        flowData.device.difference;
-        // Used when detection method is not Exact or None. This is an integer value and the larger the value the less confident the detector is in this result.
-
-        flowData.device.method;
-        // Provides information about the algorithm that was used to perform detection for a particular User-Agent.
-
-        flowData.device.rank;
-        // An integer value that indicates how popular the device is. The lower the rank the more popular the signature.
-
-        flowData.device.signaturesCompared;
-        // The number of device signatures that have been compared before finding a result.
-
-        Object.entries(meta).forEach(([key, result]) => {
-
-            // Show information about this meta property
-            console.log(key + ": ");
-            console.log(" ");
-            console.log(pipeline.getElement("device").getProperties()[key].description);
-            console.log(" ");
-
-            if (result.hasValue) {
-
-                console.log(result.value);
-
-            } else {
-
-                // Echo out why the value isn't meaningful
-                console.log(result.noValueMessage);
-
-            }
-
-        });
-
-    }
-
-    getMatchMetaData(iPhoneUA);
-}
+getAllSupportedMedia(iPhoneUA);

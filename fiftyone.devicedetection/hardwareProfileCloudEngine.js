@@ -20,87 +20,12 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
-const require51 = (requestedPackage) => {
-  try {
-    return require(__dirname + '/../' + requestedPackage);
-  } catch (e) {
-    return require(requestedPackage);
-  }
-};
+const CloudEngine = require('fiftyone.pipeline.cloudrequestengine').CloudEngine;
 
-const engines = require51('fiftyone.pipeline.engines');
-const core = require51('fiftyone.pipeline.core');
-const Engine = engines.Engine;
-const AspectDataDictionary = engines.AspectDataDictionary;
-const AspectPropertyValue = core.AspectPropertyValue;
-
-class HardwareProfileCloudEngine extends Engine {
+class HardwareProfileCloudEngine extends CloudEngine {
   constructor () {
     super(...arguments);
-
     this.dataKey = 'hardware';
-  }
-
-  /**
-     * The hardware profile cloud engine requires the 51Degrees cloudRequestEngine
-     * to be placed in a pipeline before it. It simply takes that raw JSON
-     * response and parses it to extract the relevant data
-     * @param {FlowData} flowData
-    */
-  processInternal (flowData) {
-    const engine = this;
-
-    this.checkProperties(flowData).then(function (params) {
-      let cloudData = flowData.get('cloud').get('cloud');
-
-      cloudData = JSON.parse(cloudData);
-
-      // Loop over cloudData.devices properties to check if they have a value
-
-      const devices = [];
-
-      Object.entries(cloudData.hardware.profiles).forEach(function ([i, deviceValues]) {
-        const device = {};
-
-        Object.entries(deviceValues).forEach(function ([propertyKey, propertyValue]) {
-          device[propertyKey] = new AspectPropertyValue();
-
-          device[propertyKey].value = propertyValue;
-        });
-
-        devices.push(device);
-      });
-
-      const result = { profiles: devices };
-
-      const data = new AspectDataDictionary(
-        {
-          flowElement: engine,
-          contents: result
-        });
-
-      flowData.setElementData(data);
-    });
-  }
-
-  checkProperties (flowData) {
-    const engine = this;
-
-    return new Promise(function (resolve, reject) {
-      // Check if properties set, if not set them
-
-      if (!Object.keys(engine.properties).length) {
-        const cloudProperties = flowData.get('cloud').get('properties');
-
-        const hardwareProfileProperties = cloudProperties.hardware;
-
-        engine.properties = hardwareProfileProperties;
-
-        engine.updateProperties().then(resolve);
-      } else {
-        resolve();
-      }
-    });
   }
 }
 

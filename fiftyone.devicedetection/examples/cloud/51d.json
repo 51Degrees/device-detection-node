@@ -2,9 +2,9 @@
     "PipelineOptions": {
         "Elements": [
         {
-            "elementName": "fiftyone.pipeline.cloudrequestengine",
+            "elementName": "fiftyone.pipeline.cloudrequestengine/CloudRequestEngine",
             "elementParameters": {
-                "resourceKey": ""
+                "resourceKey": "!!ResourceKey!!"
             }
         },
         {

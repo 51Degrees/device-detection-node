@@ -30,12 +30,21 @@ const require51 = (requestedPackage) => {
 
 const MissingPropertyService = require51('fiftyone.pipeline.engines').MissingPropertyService;
 
+/**
+ * Instance of the MissingPropertyService class that checks if a
+ * property is available in the current dataFile
+ */
 class DeviceDetectionMissingPropertyService extends MissingPropertyService {
   /**
-     * Missing property service extension that checks if a property is available in the current dataFile via the swig layer
-     * @param {String} key
-     * @param {FlowElement} flowElement
-    */
+   * Constructor for Missing Property Service that receives a requested property
+   * key that is missing in the data. If it is missing because the data does not
+   * exist in the data file that was chosen, it returns an error which
+   * states which data file the property can be found in.
+   *
+   * @param {string} key missing property key
+   * @param {FlowElement} flowElement the FlowElement the key was missing from
+   * @returns {void}
+   */
   check (key, flowElement) {
     if (flowElement.properties[key]) {
       const currentDataFile = flowElement.engine.getProduct();
