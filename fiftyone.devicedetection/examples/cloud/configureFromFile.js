@@ -81,6 +81,21 @@ if (config.PipelineOptions.Elements[0].elementParameters.resourceKey.startsWith(
   process.exit();
 }
 
+const fs = require('fs');
+
+let configFile = fs.readFileSync((process.env.directory || __dirname) + "/51d.json");
+
+let config = JSON.parse(configFile);
+
+if (config.PipelineOptions.Elements[0].elementParameters.resourceKey.startsWith("!!")) {
+    console.log('You need to create a resource key at ' +
+    'https://configure.51degrees.com and paste it into the 51d.json ' +
+    'config file.');
+    console.log('Make sure to include the ismobile property ' +
+        'as it is used by this example.');
+    process.exit();
+}
+
 // Create a new pipeline from the supplied config file.
 const pipeline = new PipelineBuilder().buildFromConfigurationFile((process.env.directory || __dirname) + '/51d.json');
 

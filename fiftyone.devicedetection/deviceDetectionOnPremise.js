@@ -314,7 +314,7 @@ class DeviceDetectionOnPremise extends Engine {
     };
 
     const params = {
-      Type: dataFileType + 'UAT',
+      Type: dataFileType,
       Download: 'True'
     };
 
