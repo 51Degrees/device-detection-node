@@ -25,6 +25,7 @@ module.exports = {
   DeviceDetectionCloud: require('./deviceDetectionCloud'),
   DeviceDetectionOnPremise: require('./deviceDetectionOnPremise'),
   DeviceDetectionPipelineBuilder: require('./deviceDetectionPipelineBuilder'),
+  HardwareProfileCloudEngine: require('./hardwareProfileCloudEngine'),
   SwigData: require('./swigData'),
   swigHelpers: require('./swigHelpers')
 
