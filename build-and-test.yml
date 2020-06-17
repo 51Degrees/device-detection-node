@@ -10,6 +10,7 @@ pool:
   
 variables: 
   - group: PackageFeedAccessToken
+  - group: InternalKeys
     
 strategy:
   matrix:
@@ -31,47 +32,6 @@ steps:
   inputs:
     versionSpec: $(node_version)
   displayName: 'Install Node.js'
-
-- script: |
-    content='{ 
-      "name": "device-detection-node-tests", 
-      "version": "1.0.0", 
-      "description": "Temporary package to allow all tests to run using the local code as dependencies", 
-      "main": "index.js", 
-      "scripts": { 
-        "test": "jest --ci --reporters=jest-junit --reporters=default --coverage --coverageReporters=cobertura" 
-        }, 
-      "repository": { 
-        "type": "git", "url": "https://github.com/51Degrees/pipeline-node" 
-        }, 
-      "author": "51Degrees",
-      "dependencies": { 
-        "jest": "^24.9.0",
-        "jest-junit": "^9.0.0",
-        "fiftyone.pipeline.core": "^4.1.0",
-        "fiftyone.pipeline.engines": "^4.1.0",
-        "fiftyone.pipeline.engines.fiftyone": "^4.1.0",
-        "fiftyone.pipeline.cloudrequestengine": "^4.1.0",
-        "eslint": "^6.8.0",
-        "eslint-config-standard": "^14.1.1",
-        "eslint-plugin-import": "^2.20.2",
-        "eslint-plugin-jsdoc": "^25.4.0",
-        "eslint-plugin-node": "^11.1.0",
-        "eslint-plugin-promise": "^4.2.1",
-        "eslint-plugin-standard": "^4.0.1"
-        },
-      "jest-junit": {
-          "outputName": "'"$NODE_VERSION"'.xml"    
-        },
-      "jest": {
-          "globals": {
-            "resourceKey": "AQS5HKcyHJbECm6E10g"
-          }
-        }
-      }'
-    echo $content
-    echo $content > package.json
-  displayName: 'Create package.json for tests'
   
 # The secure file to download will be stored in the 
 # Pipelines/Library/SecureFiles section in Azure DevOps.
@@ -85,20 +45,35 @@ steps:
   displayName: 'Copy .npmrc to working directory'
   inputs:
     sourceFolder: '$(Agent.TempDirectory)'
-    targetFolder: '$(System.DefaultWorkingDirectory)'
+    targetFolder: '$(System.DefaultWorkingDirectory)/fiftyone.devicedetection'
     contents: '.npmrc'
 
+# 1. Set resource key environment variable from resource key value 
+# in 'InternalKeys' group 
+# 2. Move to correct dir.
+# 3. Install dependencies.
+# 4. Run tests.
 - script: |
+    echo "Resource key for cloud testing = $(ResourceKey)"
+    export RESOURCE_KEY="$(ResourceKey)"
+    cd fiftyone.devicedetection
     npm install
     npm test
   displayName: 'Build and Test'
 
 - script: |
+    find "$(System.DefaultWorkingDirectory)" -name "*core*"
+  displayName: 'Get core dump'
+  condition: succeededOrFailed()
+
+- script: |
+    cd fiftyone.devicedetection
     eslint='{
         "env": {
             "browser": true,
             "commonjs": true,
-            "es6": true
+            "es6": true,
+            "jest": true
         },
         "extends": [
             "standard"
@@ -136,7 +111,7 @@ steps:
   condition: succeededOrFailed()
   inputs:
     testRunner: JUnit
-    testResultsFiles: '**/$(node_version).xml'
+    testResultsFiles: '**/test_results.xml'
     testRunTitle: 'Node $(node_version)'
 
 - task: PublishCodeCoverageResults@1

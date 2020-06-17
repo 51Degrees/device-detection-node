@@ -38,6 +38,7 @@ const swigHelpers = require('./swigHelpers');
 const os = require('os');
 const path = require('path');
 const EvidenceKeyFilter = core.BasicListEvidenceKeyFilter;
+const fs = require("fs");
 
 // Determine if Windows or linux and which node version
 
@@ -62,8 +63,12 @@ class DeviceDetectionOnPremise extends Engine {
    * update service
    * @param {Array} options.restrictedProperties list of properties the engine
    * will be restricted to
-   * @param {string} options.licenceKeys licensekey used by the
-   * data file update service
+   * @param {string} options.licenceKeys license key(s) used by the
+   * data file update service. A key can be obtained from the
+   * 51Degrees website: https://www.51degrees.com/pricing. 
+   * If you do not wish to use a key then you can specify 
+   * an empty string, but this will cause automatic updates to 
+   * be disabled.
    * @param {boolean} options.download whether to download the datafile
    * or store it in memory
    * @param {string} options.performanceProfile options are:
@@ -102,24 +107,82 @@ class DeviceDetectionOnPremise extends Engine {
     let swigWrapperType;
     let dataFileType;
 
+    if (typeof dataFilePath === "undefined") {
+      throw 'dataFilePath is required';
+    }
+    if (fs.existsSync(dataFilePath) === false) {
+      throw 'There is no file at \'' + dataFilePath + '\'';
+    }
     // look at dataFile extension to detect type
-
     const ext = path.parse(dataFilePath).ext;
 
     if (ext === '.hash') {
       // Hash
-
       swigWrapperType = 'Hash';
-      swigWrapper = require('./build/FiftyOneDeviceDetectionHashV4-' + os.platform() + '-' + nodeVersion + '.node');
+      const moduleDir = path.join(__dirname, 'build');
+      const moduleName = path.join(moduleDir, 'FiftyOneDeviceDetectionHashV4-' + os.platform() + '-' + nodeVersion + '.node');
+
+      // Check if the directory containing the native modules exists.
+      if (fs.existsSync(moduleDir) === false) {
+        throw 'There is no directory at \'' + moduleDir + '\'. This is ' +
+          'expected to contain the native modules for the hash engine.' +
+          ' For example, ' + moduleName;
+      } else {
+        // Try to load the native module for the current platform 
+        // and node version.
+        try {
+          swigWrapper = require(moduleName);
+        } catch (err) {
+          // Couldn't load the native module so we need to give the
+          // user some information.
+          var modules = {};
+          // Go through all the avilable modules to build a list of 
+          // supported platform/Node version combinations.
+          fs.readdirSync(moduleDir).forEach(file => {
+            const parts = file.split(/-|\./);
+            const plat = parts[1] == 'win32' ? 'windows' : parts[1];
+            if(modules.hasOwnProperty(plat)){
+              modules[plat].push(parts[2]);
+            }else {
+              modules[plat] = [parts[2]];
+            }
+          });
+
+          let availableModules = '';
+          for(var platform in modules) {
+            if(availableModules.length > 0){
+              availableModules = availableModules.concat(', ');
+            }
+            availableModules = availableModules.concat(platform + 
+              ' with Node versions: [' + modules[platform].sort().join(', ') + ']');
+          }
+          
+          // Let the user know what's gone wrong.
+          throw 'Native module \'' + moduleName + '\' not found. ' +
+            'This is probably because a module for this platform ' +
+            'and Node version has not been included with this ' +
+            'distribution. Try changing to a platform and Node ' +
+            'version from the list of available modules: ' + 
+            availableModules + '. ' +
+            'If the platform/version you want is not listed then ' +
+            'please contact us directly for assistance: ' +
+            'https://51degrees.com/contact-us';
+        }
+      }
       dataFileType = 'HashV41';
+    } else {
+      throw 'dataFilePath must point to a file with a ".hash" extension';
     }
 
-    if (!dataFilePath) {
-      throw 'Datafile is required';
+    if (typeof licenceKeys === 'undefined') {
+      throw 'license key is required. A key can be obtained from the' + 
+        '51Degrees website: https://www.51degrees.com/pricing. ' +
+        'If you do not wish to use a key then you can specify ' +
+        'an empty string, but this will cause automatic updates ' +
+        'to be disabled.';
     }
 
     // Create vector for restricted properties
-
     const propertiesList = new swigWrapper.VectorStringSwig();
 
     if (restrictedProperties) {
@@ -283,9 +346,26 @@ class DeviceDetectionOnPremise extends Engine {
       this.initEngine();
     }
 
-    // Construct datafile
+    // Disable features that require a license key if one was
+    // not supplied.
+    if(licenceKeys) {
+      autoUpdate = autoUpdate && licenceKeys.length > 0;
+      updateOnStart = updateOnStart && licenceKeys.length > 0;
+    } else {
+      autoUpdate = false;
+      updateOnStart = false;
+    }
 
-    const dataFileSettings = { flowElement: this, verifyMD5: true, autoUpdate: autoUpdate, updateOnStart: updateOnStart, decompress: true, path: dataFilePath, download: download, fileSystemWatcher: fileSystemWatcher };
+    // Construct datafile
+    const dataFileSettings = { 
+      flowElement: this, 
+      verifyMD5: true, 
+      autoUpdate: autoUpdate, 
+      updateOnStart: updateOnStart, 
+      decompress: true, 
+      path: dataFilePath, 
+      download: download, 
+      fileSystemWatcher: fileSystemWatcher };
 
     dataFileSettings.getDatePublished = function () {
       if (current.engine) {

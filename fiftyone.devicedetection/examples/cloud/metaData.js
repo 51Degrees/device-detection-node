@@ -55,69 +55,69 @@ const FiftyOneDegreesDeviceDetection = require((process.env.directory || __dirna
 
 // Create the device detection pipeline with the desired settings.
 
-// You need to create a resource key at https://configure.51degrees.com and paste it into the code, replacing global.resourceKey below.
+// You need to create a resource key at https://configure.51degrees.com and 
+// paste it into the code, replacing !!YOUR_RESOURCE_KEY!! below.
+const myResourceKey = process.env.RESOURCE_KEY || "!!YOUR_RESOURCE_KEY!!";
 
-const myResourceKey = global.resourceKey;
-
-if (!myResourceKey) {
+if (myResourceKey == "!!YOUR_RESOURCE_KEY!!") {
   console.log('You need to create a resource key at ' +
         'https://configure.51degrees.com and paste it into the code, ' +
-        'replacing global.resourceKey');
+        'replacing !!YOUR_RESOURCE_KEY!!');
   console.log('Make sure to include the supported media properties ' +
         'used by this example.');
-  process.exit();
-}
+} else {
 
-// Construct the device detection pipeline using the
-// DeviceDetectionPipelineBuilder, passing in your resourceKey.
-// The build method completes the pipeline
-const pipeline = new FiftyOneDegreesDeviceDetection.DeviceDetectionPipelineBuilder({
-  resourceKey: myResourceKey
-}).build();
+  // Construct the device detection pipeline using the
+  // DeviceDetectionPipelineBuilder, passing in your resourceKey.
+  // The build method completes the pipeline
+  const pipeline = new FiftyOneDegreesDeviceDetection.DeviceDetectionPipelineBuilder({
+    resourceKey: myResourceKey
+  }).build();
 
-// Logging of errors and other messages.
-// Valid logs types are info, debug, warn, error
-pipeline.on('error', console.error);
+  // Logging of errors and other messages.
+  // Valid logs types are info, debug, warn, error
+  pipeline.on('error', console.error);
 
-// The following function uses "flowData.getWhere()" to fetch all of the
-// data related to "supported media" on a device by querying the category.
-const getAllSupportedMedia = async function (userAgent) {
-  // Create a flow data element and process the desktop User-Agent.
-  const flowData = pipeline.createFlowData();
+  // The following function uses "flowData.getWhere()" to fetch all of the
+  // data related to "supported media" on a device by querying the category.
+  const getAllSupportedMedia = async function (userAgent) {
+    // Create a flow data element and process the desktop User-Agent.
+    const flowData = pipeline.createFlowData();
 
-  // Add the User-Agent as evidence
-  flowData.evidence.add('header.user-agent', userAgent);
+    // Add the User-Agent as evidence
+    flowData.evidence.add('header.user-agent', userAgent);
 
-  await flowData.process();
+    await flowData.process();
 
-  // Get list of properties for the deviceDetectionEngine
-  // (including metadata like category, description, type and
-  // which datafiles they appear in)
-  const properties = pipeline.getElement('device').getProperties();
+    // Get list of properties for the deviceDetectionEngine
+    // (including metadata like category, description, type and
+    // which datafiles they appear in)
+    const properties = pipeline.getElement('device').getProperties();
 
-  for (let property in properties) {
-    property = properties[property];
-    console.log(`Property ${property.name} of category ${property.category}`);
-  }
-
-  // Get all supported media types (html5 video, svg...)
-  // and loop over them to get the support results
-  // The second parameter can also be a boolean function that checks the
-  // value of that meta type (category in this case)
-  const supported = flowData.getWhere('category', 'Supported Media');
-
-  Object.entries(supported).forEach(([key, result]) => {
-    console.log(`Does user agent ${userAgent} support ${key}? : `);
-
-    if (result.hasValue) {
-      console.log(result.value);
-    } else {
-      // Echo out why the value isn't meaningful
-      console.log(result.noValueMessage);
+    for (let property in properties) {
+      property = properties[property];
+      console.log(`Property ${property.name} of category ${property.category}`);
     }
-  });
-};
 
-const iPhoneUA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_2 like Mac OS X) AppleWebKit/604.4.7 (KHTML, like Gecko) Mobile/15C114';
+    // Get all supported media types (html5 video, svg...)
+    // and loop over them to get the support results
+    // The second parameter can also be a boolean function that checks the
+    // value of that meta type (category in this case)
+    const supported = flowData.getWhere('category', 'Supported Media');
 
-getAllSupportedMedia(iPhoneUA);
+    Object.entries(supported).forEach(([key, result]) => {
+      console.log(`Does user agent ${userAgent} support ${key}? : `);
+
+      if (result.hasValue) {
+        console.log(result.value);
+      } else {
+        // Echo out why the value isn't meaningful
+        console.log(result.noValueMessage);
+      }
+    });
+  };
+
+  const iPhoneUA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_2 like Mac OS X) AppleWebKit/604.4.7 (KHTML, like Gecko) Mobile/15C114';
+
+  getAllSupportedMedia(iPhoneUA);
+}

@@ -140,83 +140,83 @@ const CloudRequestEngine = require('fiftyone.pipeline.cloudrequestengine');
 const HardwareProfileCloudEngine = require((process.env.directory || __dirname) + '/../../hardwareProfileCloudEngine');
 // let hardwareProfileCloudEngine = require("fiftyone.devicedetection");
 
-const myResourceKey = global.resourceKey;
+const myResourceKey = process.env.RESOURCE_KEY || "!!YOUR_RESOURCE_KEY!!";
 
-if (!myResourceKey) {
+if (myResourceKey == "!!YOUR_RESOURCE_KEY!!") {
   console.log('You need to create a resource key at ' +
         'https://configure.51degrees.com and paste it into the code, ' +
-        'replacing global.resourceKey');
+        'replacing !!YOUR_RESOURCE_KEY!!');
   console.log('Make sure to include the HardwareVendor, HardwareModel and HardwareName properties as they are used by this example.');
-  process.exit();
-}
+} else {
 
-console.log(`This example finds the details of devices from the 'native model name'. 
-The native model name can be retrieved by code running on the device (For example, a mobile app). 
-For Android devices, see https://developer.android.com/reference/android/os/Build#MODEL 
-For iOS devices, see https://gist.github.com/soapyigu/c99e1f45553070726f14c1bb0a54053b#file-machinename-swift
-----------------------------------------`);
+  console.log(`This example finds the details of devices from the 'native model name'. 
+  The native model name can be retrieved by code running on the device (For example, a mobile app). 
+  For Android devices, see https://developer.android.com/reference/android/os/Build#MODEL 
+  For iOS devices, see https://gist.github.com/soapyigu/c99e1f45553070726f14c1bb0a54053b#file-machinename-swift
+  ----------------------------------------`);
 
-// Create request engine that will make requests to the cloud service.
-//  You need to create a resource key at https://configure.51degrees.com
-// and paste it into the code.
+  // Create request engine that will make requests to the cloud service.
+  //  You need to create a resource key at https://configure.51degrees.com
+  // and paste it into the code.
 
-const requestEngineInstance = new CloudRequestEngine.CloudRequestEngine({
-  resourceKey: myResourceKey
-});
-
-// Create the property-keyed engine that will organise the results
-// from the cloud request engine.
-const hardwareProfileCloudEngineInstance = new HardwareProfileCloudEngine();
-
-const PipelineBuilder = pipelineCore.PipelineBuilder;
-// Create the pipeline, adding our engines.
-const pipeline = new PipelineBuilder()
-  .add(requestEngineInstance)
-  .add(hardwareProfileCloudEngineInstance)
-  .build(); // build it when complete
-
-// Logging of errors and other messages. Valid logs types are info, debug, warn, error
-pipeline.on('error', console.error);
-
-const outputDetails = async function (nativemodel) {
-  let message = `Which devices are associated with the native model name '${nativemodel}'?`;
-
-  // Create a flow data instance.
-  const flowData = pipeline.createFlowData();
-
-  // Add the native model name as evidence
-  flowData.evidence.add('query.nativemodel', nativemodel);
-
-  await flowData.process();
-
-  if (!flowData.hardware) {
-    console.log('Make sure to include the HardwareVendor, HardwareModel and HardwareName properties as they are used by this example.');
-
-    return;
-  }
-
-  // Iterate through the matching profiles,
-  // outputting vendor and model name.
-  flowData.hardware.profiles.forEach(profile => {
-    const hardwareVendor = profile.HardwareVendor;
-    const hardwareName = profile.HardwareName;
-    const hardwareModel = profile.HardwareModel;
-
-    if (hardwareVendor.hasValue &&
-            hardwareName.hasValue &&
-            hardwareModel.hasValue) {
-      message += `\r\n\t${hardwareVendor.value} ${hardwareName.value.join(',')} (${hardwareModel.value})`;
-    } else {
-      // If we don't have an answer then output the reason for that.
-      message += `\r\n\t${hardwareVendor.noValueMessage}`;
-    }
+  const requestEngineInstance = new CloudRequestEngine.CloudRequestEngine({
+    resourceKey: myResourceKey
   });
 
-  console.log(message);
-};
+  // Create the property-keyed engine that will organise the results
+  // from the cloud request engine.
+  const hardwareProfileCloudEngineInstance = new HardwareProfileCloudEngine();
 
-const nativeModeliOS = 'iPhone11,8';
-const nativeModelAndroid = 'SC-03L';
+  const PipelineBuilder = pipelineCore.PipelineBuilder;
+  // Create the pipeline, adding our engines.
+  const pipeline = new PipelineBuilder()
+    .add(requestEngineInstance)
+    .add(hardwareProfileCloudEngineInstance)
+    .build(); // build it when complete
 
-outputDetails(nativeModeliOS);
-outputDetails(nativeModelAndroid);
+  // Logging of errors and other messages. Valid logs types are info, debug, warn, error
+  pipeline.on('error', console.error);
+
+  const outputDetails = async function (nativemodel) {
+    let message = `Which devices are associated with the native model name '${nativemodel}'?`;
+
+    // Create a flow data instance.
+    const flowData = pipeline.createFlowData();
+
+    // Add the native model name as evidence
+    flowData.evidence.add('query.nativemodel', nativemodel);
+
+    await flowData.process();
+
+    if (!flowData.hardware) {
+      console.log('Make sure to include the HardwareVendor, HardwareModel and HardwareName properties as they are used by this example.');
+
+      return;
+    }
+
+    // Iterate through the matching profiles,
+    // outputting vendor and model name.
+    flowData.hardware.profiles.forEach(profile => {
+      const hardwareVendor = profile.HardwareVendor;
+      const hardwareName = profile.HardwareName;
+      const hardwareModel = profile.HardwareModel;
+
+      if (hardwareVendor.hasValue &&
+              hardwareName.hasValue &&
+              hardwareModel.hasValue) {
+        message += `\r\n\t${hardwareVendor.value} ${hardwareName.value.join(',')} (${hardwareModel.value})`;
+      } else {
+        // If we don't have an answer then output the reason for that.
+        message += `\r\n\t${hardwareVendor.noValueMessage}`;
+      }
+    });
+
+    console.log(message);
+  };
+
+  const nativeModeliOS = 'iPhone11,8';
+  const nativeModelAndroid = 'SC-03L';
+
+  outputDetails(nativeModeliOS);
+  outputDetails(nativeModelAndroid);
+}

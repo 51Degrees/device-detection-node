@@ -132,16 +132,9 @@ const HardwareProfileCloudEngine = require((process.env.directory || __dirname) 
 
 // You need to create a resource key at https://configure.51degrees.com and
 // paste it into the code, replacing !!YOUR_RESOURCE_KEY!!.
-let localResourceKey = '!!YOUR_RESOURCE_KEY!!';
-// Check if there is a resource key in the global variable and use
-// it if there is one. (This is used by automated tests to pass in a key)
-try {
-  localResourceKey = resourceKey;
-} catch (e) {
-  if (e instanceof ReferenceError) {}
-}
+let localResourceKey = process.env.RESOURCE_KEY || "!!YOUR_RESOURCE_KEY!!";
 
-if (localResourceKey.substr(0, 2) == '!!') {
+if (localResourceKey == "!!YOUR_RESOURCE_KEY!!") {
   console.log('You need to create a resource key at ' +
         'https://configure.51degrees.com and paste it into the code, ' +
         'replacing !!YOUR_RESOURCE_KEY!!.');
