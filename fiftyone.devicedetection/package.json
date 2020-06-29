@@ -24,10 +24,10 @@
     "Joseph Dix <joseph@51degrees.com> (https://51degrees.com)"
   ],
   "dependencies": {
-    "fiftyone.pipeline.cloudrequestengine": "^4.1.0",
-    "fiftyone.pipeline.core": "^4.1.0",
-    "fiftyone.pipeline.engines": "^4.1.0",
-    "fiftyone.pipeline.engines.fiftyone": "^4.1.0"
+    "fiftyone.pipeline.cloudrequestengine": "^4.1.1",
+    "fiftyone.pipeline.core": "^4.1.1",
+    "fiftyone.pipeline.engines": "^4.1.1",
+    "fiftyone.pipeline.engines.fiftyone": "^4.1.1"
   },
   "devDependencies": {
     "eslint": "^6.8.0",
