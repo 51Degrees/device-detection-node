@@ -59,7 +59,7 @@ const pipeline = new FiftyOneDegreesDeviceDetection.DeviceDetectionPipelineBuild
   dataFile: datafile,
   autoUpdate: false,
   javascriptBuilderSettings: {
-    _endPoint: '/json'
+    endPoint: '/json'
   }
 }).build();
 

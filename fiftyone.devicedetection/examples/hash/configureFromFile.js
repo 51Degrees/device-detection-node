@@ -44,7 +44,7 @@ The configuration file used here is:
             "elementName": "../../deviceDetectionOnPremise",
             "elementParameters": {
                 "performanceProfile": "MaxPerformance",
-                "dataFile": "../../device-detection-cxx/device-detection-data/51Degrees-LiteV4.1.hash",
+                "dataFilePath": "../../device-detection-cxx/device-detection-data/51Degrees-LiteV4.1.hash",
                 "autoUpdate": false
             }
         }

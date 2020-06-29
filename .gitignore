@@ -102,5 +102,7 @@ public
 
 # DynamoDB Local files
 .dynamodb/
-package-lock.json
+
+# Other
 .vscode/
+fiftyone.devicedetection/test_results.xml

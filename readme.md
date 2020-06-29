@@ -23,8 +23,6 @@ Or to install from this repository run:
 
 `npm install fiftyone.devicedetection/`
 
-This will build also build the native modules.
-
 ### On-Premise
 When running on-premise, a local Hash V4.1 data file is required.
 
@@ -69,7 +67,7 @@ To run the tests, navigate to the package directory:
 
 Then call:
 
-`jest`
+`npm test`
 
 ## Native code updates
 
@@ -80,6 +78,6 @@ Process for rebuilding SWIG interfaces following an update to the device detecti
 3. From terminal, navigate to fiftyone.pipeline.devicedetection and run:
     a) swig -c++ -javascript -node hash_node.i
 4. Commit changes to repository.
-5. Run the 'Build Device Detection Binaries' Azure CI Pipeline.
+5. Run the 'Build Device Detection Binaries for Node.js' Azure CI Pipeline.
 6. Copy the produced artifacts into the fiftyone.pipeline.devicedetection/build directory.
 7. Commit changes to repository.

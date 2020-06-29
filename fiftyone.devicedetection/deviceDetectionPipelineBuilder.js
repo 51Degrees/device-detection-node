@@ -31,7 +31,7 @@ const require51 = (requestedPackage) => {
 const core = require51('fiftyone.pipeline.core');
 const DeviceDetectionOnPremise = require('./deviceDetectionOnPremise');
 const DeviceDetectionCloud = require('./deviceDetectionCloud');
-const CloudRequestEngine = require51('fiftyone.pipeline.cloudrequestengine');
+const CloudRequestEngine = require51('fiftyone.pipeline.cloudrequestengine').CloudRequestEngine;
 const PipelineBuilder = core.PipelineBuilder;
 const engines = require51('fiftyone.pipeline.engines');
 const LruCache = engines.LruCache;
@@ -45,7 +45,14 @@ class DeviceDetectionPipelineBuilder extends PipelineBuilder {
    * simple paramater changes
    *
    * @param {object} options the options for the pipeline builder
-   * @param {string} options.licenceKeys licensekeys being used
+   * @param {string} options.licenceKeys license key(s) used by the
+   * data file update service. A key can be obtained from the
+   * 51Degrees website: https://www.51degrees.com/pricing. 
+   * This parameter MUST be set when using a data file. 
+   * If you do not wish to use a key then you can specify 
+   * an empty string, but this will cause automatic updates 
+   * to be disabled.
+   * @param {boolean} options.download whether to download the datafile
    * @param {string} options.resourceKey resourceKey, if using the
    * cloud engine
    * @param {string} options.dataFile dataFile path for the on premise engine
@@ -75,8 +82,6 @@ class DeviceDetectionPipelineBuilder extends PipelineBuilder {
    *
    */
   constructor ({ licenceKeys = null, dataFile = null, autoUpdate = true, shareUsage = true, resourceKey = null, cacheSize = null, performanceProfile = 'LowMemory', allowUnmatched = false, updateOnStart = false, cloudEndPoint = 'https://cloud.51degrees.com/api/v4/' }) {
-    // if dataFile is set, check the file extension to work out which
-    // type of datafile it is
 
     super(...arguments);
 
@@ -93,7 +98,7 @@ class DeviceDetectionPipelineBuilder extends PipelineBuilder {
     }
 
     if (dataFile) {
-      this.flowElements.push(new DeviceDetectionOnPremise({ dataFile, autoUpdate, licenceKeys, cache, performanceProfile, allowUnmatched, updateOnStart }));
+      this.flowElements.push(new DeviceDetectionOnPremise({ dataFilePath: dataFile, autoUpdate, licenceKeys, cache, performanceProfile, allowUnmatched, updateOnStart }));
     } else {
       // First we need the cloudRequestEngine
 

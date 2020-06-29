@@ -20,19 +20,7 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
-const require51 = (requestedPackage) => {
-  try {
-    return require(__dirname + '/../' + requestedPackage);
-  } catch (e) {
-    return require(requestedPackage);
-  }
-};
-
-const engines = require51('fiftyone.pipeline.engines');
-const core = require51('fiftyone.pipeline.core');
-const Engine = engines.Engine;
-const AspectDataDictionary = engines.AspectDataDictionary;
-const AspectPropertyValue = core.AspectPropertyValue;
+const CloudEngine = require('fiftyone.pipeline.cloudrequestengine').CloudEngine;
 
 /**
  * The deviceDetction cloud engine requires the 51Degrees
@@ -40,79 +28,10 @@ const AspectPropertyValue = core.AspectPropertyValue;
  * It takes that raw JSON response and parses it to extract the
  * device part. It also uses this data to generate a list of properties
  **/
-class DeviceDetectionCloud extends Engine {
+class DeviceDetectionCloud extends CloudEngine {
   constructor () {
     super(...arguments);
-
     this.dataKey = 'device';
-  }
-
-  /**
-   * Internal process method for the device detection cloud engine.
-   * Takes the raw JSON response from the Cloud Request Engine and
-   * parses it to extract the device part.
-   *
-   * @param {FlowData} flowData the FlowData to process
-   */
-  processInternal (flowData) {
-    const engine = this;
-
-    this.checkProperties(flowData).then(function (params) {
-      let cloudData = flowData.get('cloud').get('cloud');
-
-      cloudData = JSON.parse(cloudData);
-
-      // Loop over cloudData.device properties to check if they have a value
-
-      const result = {};
-
-      Object.entries(cloudData.device).forEach(function ([key, value]) {
-        result[key] = new AspectPropertyValue();
-
-        if (cloudData.device[key + 'nullreason']) {
-          result[key].noValueMessage = cloudData.device[key + 'nullreason'];
-        } else {
-          result[key].value = value;
-        }
-      });
-
-      const data = new AspectDataDictionary(
-        {
-          flowElement: engine,
-          contents: result
-        });
-
-      flowData.setElementData(data);
-    });
-  }
-
-  /**
-   * Function to update the properties list on the Engine
-   * This is populated from the CloudRequestEngine
-   *
-   * @param {FlowData} flowData FlowData to check for the
-   * Cloud Request Engine data
-   *
-   * @returns {Promise} properties have been updated
-   */
-  checkProperties (flowData) {
-    const engine = this;
-
-    return new Promise(function (resolve, reject) {
-      // Check if properties set, if not set them
-
-      if (!Object.keys(engine.properties).length) {
-        const cloudProperties = flowData.get('cloud').get('properties');
-
-        const deviceProperties = cloudProperties.device;
-
-        engine.properties = deviceProperties;
-
-        engine.updateProperties().then(resolve);
-      } else {
-        resolve();
-      }
-    });
   }
 }
 

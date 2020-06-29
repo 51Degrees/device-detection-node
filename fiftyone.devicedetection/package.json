@@ -7,13 +7,16 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest --ci --reporters=jest-junit --reporters=default --coverage --coverageReporters=cobertura"
   },
-  "jest": {
-    "globals": {
-      "resourceKey": ""
-    }
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/51Degrees/device-detection-node"
   },
+  "jest-junit": {
+    "outputName": "test_results.xml"
+  },
+  "author": "51Degrees",
   "contributors": [
     "Filip Hnízdo <filip@octophin.com> (https://octophindigital.com/)",
     "Steve Ballantine <stephen@51degrees.com> (https://51degrees.com)",
@@ -21,10 +24,10 @@
     "Joseph Dix <joseph@51degrees.com> (https://51degrees.com)"
   ],
   "dependencies": {
-    "fiftyone.pipeline.cloudrequestengine": "^4.1.0",
-    "fiftyone.pipeline.core": "^4.1.0",
-    "fiftyone.pipeline.engines": "^4.1.0",
-    "fiftyone.pipeline.engines.fiftyone": "^4.1.0"
+    "fiftyone.pipeline.cloudrequestengine": "^4.1.1",
+    "fiftyone.pipeline.core": "^4.1.1",
+    "fiftyone.pipeline.engines": "^4.1.1",
+    "fiftyone.pipeline.engines.fiftyone": "^4.1.1"
   },
   "devDependencies": {
     "eslint": "^6.8.0",
@@ -34,7 +37,9 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
-    "jest": "^24.9.0"
+    "eslint-plugin-jest": "^23.13.2",
+    "jest": "^24.9.0",
+    "jest-junit": "^9.0.0"
   },
   "license": "EUPL-1.2",
   "bugs": {

@@ -51,61 +51,22 @@ const testExample = function ({ file, portNumber }) {
   jest.fn(eval(code));
 };
 
-test('cloud web integration', (done) => {
-  setTimeout(done, 1000);
+describe('Examples', () => {
+  // Skip the rest of the examples when async is not available
+  let isAsync = true;
 
-  testExample({ file: (__dirname) + '/cloud/webIntegration.js' });
-});
-
-test('hash web integration', (done) => {
-  setTimeout(done, 1000);
-
-  testExample({ file: (__dirname) + '/hash/webIntegration.js' });
-});
-
-// Skip the rest of the examples when async is not available
-let isAsync = true;
-
-try {
-  eval('async () => {}');
-} catch (e) {
-  isAsync = false;
-}
-
-if (isAsync) {
-  test('cloud getting started', (done) => {
-    setTimeout(done, 1000);
-
-    testExample({ file: (__dirname) + '/cloud/gettingStarted.js' });
-  });
+  try {
+    eval('async () => {}');
+  } catch (e) {
+    isAsync = false;
+  }
 
   test('cloud failure to match', (done) => {
-    setTimeout(done, 1000);
-
-    testExample({ file: (__dirname) + '/cloud/failureToMatch.js' });
+    if (isAsync) {
+      setTimeout(done, 4000);
+      testExample({ file: (__dirname) + '/cloud/failureToMatch.js' });
+    } else {
+      done();
+    }
   });
-
-  test('cloud metadata', (done) => {
-    setTimeout(done, 1000);
-
-    testExample({ file: (__dirname) + '/cloud/metaData.js' });
-  });
-
-  test('hash getting started', (done) => {
-    setTimeout(done, 1000);
-
-    testExample({ file: (__dirname) + '/hash/gettingStarted.js' });
-  });
-
-  test('hash failure to match', (done) => {
-    setTimeout(done, 1000);
-
-    testExample({ file: (__dirname) + '/hash/failureToMatch.js' });
-  });
-
-  test('hash metadata', (done) => {
-    setTimeout(done, 1000);
-
-    testExample({ file: (__dirname) + '/hash/metaData.js' });
-  });
-}
+});
