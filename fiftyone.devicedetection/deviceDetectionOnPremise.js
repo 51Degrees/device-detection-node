@@ -57,6 +57,10 @@ class DeviceDetectionOnPremise extends Engine {
    * @param {string} options.dataFilePath path to the datafile
    * @param {boolean} options.autoUpdate whether the datafile
    * should be registered with the data file update service
+   * @param {number} options.pollingInterval How often to poll for
+   * updates to the datafile (minutes)
+   * @param {number} options.updateTimeMaximumRandomisation
+   * Maximum randomisation offset in seconds to polling time interval
    * @param {Cache} options.cache an instance of the Cache class from
    * Fiftyone.Pipeline.Engines
    * @param {string} options.dataFileUpdateBaseUrl base url for the datafile
@@ -102,7 +106,7 @@ class DeviceDetectionOnPremise extends Engine {
    * loading all data into memory, this is required for
    * automatic data updates to occur.
    */
-  constructor ({ dataFilePath, autoUpdate, cache, dataFileUpdateBaseUrl = 'https://distributor.51degrees.com/api/v2/download', restrictedProperties, licenceKeys, download, performanceProfile = 'LowMemory', reuseTempFile = false, updateMatchedUserAgent = false, maxMatchedUserAgentLength, drift, difference, concurrency = os.cpus().length, allowUnmatched, fileSystemWatcher, createTempDataCopy, updateOnStart = false }) {
+  constructor ({ dataFilePath, autoUpdate, cache, dataFileUpdateBaseUrl = 'https://distributor.51degrees.com/api/v2/download', restrictedProperties, licenceKeys, download, performanceProfile = 'LowMemory', reuseTempFile = false, updateMatchedUserAgent = false, maxMatchedUserAgentLength, drift, difference, concurrency = os.cpus().length, allowUnmatched, fileSystemWatcher, pollingInterval, updateTimeMaximumRandomisation, createTempDataCopy, updateOnStart = false }) {
     let swigWrapper;
     let swigWrapperType;
     let dataFileType;
@@ -365,7 +369,9 @@ class DeviceDetectionOnPremise extends Engine {
       decompress: true, 
       path: dataFilePath, 
       download: download, 
-      fileSystemWatcher: fileSystemWatcher };
+      fileSystemWatcher: fileSystemWatcher,
+      pollingInterval: pollingInterval,
+      updateTimeMaximumRandomisation: updateTimeMaximumRandomisation };
 
     dataFileSettings.getDatePublished = function () {
       if (current.engine) {

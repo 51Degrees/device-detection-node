@@ -57,6 +57,12 @@ class DeviceDetectionPipelineBuilder extends PipelineBuilder {
    * cloud engine
    * @param {string} options.dataFile dataFile path for the on premise engine
    * @param {boolean} options.autoUpdate whether to autoUpdate the dataFile
+   * @param {number} options.pollingInterval How often to poll for
+   * updates to the datafile (minutes)
+   * @param {number} options.updateTimeMaximumRandomisation
+   * Maximum randomisation offset in seconds to polling time interval
+   * @param {boolean} options.fileSystemWatcher whether to monitor the datafile
+   * path for changes
    * @param {boolean} options.updateOnStart whether to download / update a
    * dataFile to the path specified in options.dataFile on start
    * @param {boolean} options.shareUsage whether to include the share
@@ -81,7 +87,7 @@ class DeviceDetectionPipelineBuilder extends PipelineBuilder {
    * Choose a non default endpoint for the cloud request engine
    *
    */
-  constructor ({ licenceKeys = null, dataFile = null, autoUpdate = true, shareUsage = true, resourceKey = null, cacheSize = null, performanceProfile = 'LowMemory', allowUnmatched = false, updateOnStart = false, cloudEndPoint = 'https://cloud.51degrees.com/api/v4/' }) {
+  constructor ({ licenceKeys = null, dataFile = null, autoUpdate = true, fileSystemWatcher = true, pollingInterval = 30, updateTimeMaximumRandomisation = 10, shareUsage = true, resourceKey = null, cacheSize = null, performanceProfile = 'LowMemory', allowUnmatched = false, updateOnStart = false, cloudEndPoint = 'https://cloud.51degrees.com/api/v4/' }) {
 
     super(...arguments);
 
@@ -98,7 +104,7 @@ class DeviceDetectionPipelineBuilder extends PipelineBuilder {
     }
 
     if (dataFile) {
-      this.flowElements.push(new DeviceDetectionOnPremise({ dataFilePath: dataFile, autoUpdate, licenceKeys, cache, performanceProfile, allowUnmatched, updateOnStart }));
+      this.flowElements.push(new DeviceDetectionOnPremise({ dataFilePath: dataFile, autoUpdate, fileSystemWatcher, pollingInterval, updateTimeMaximumRandomisation, licenceKeys, cache, performanceProfile, allowUnmatched, updateOnStart }));
     } else {
       // First we need the cloudRequestEngine
 
