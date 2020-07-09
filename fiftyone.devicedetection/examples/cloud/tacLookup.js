@@ -23,89 +23,13 @@
 /**
 @example cloud/tacLookup.js
 
-Example of using the 51Degrees cloud service to lookup details of a device based on it's TAC.
+@include{doc} example-tac-lookup-cloud.txt
 
 This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection/examples/cloud/tacLookup.js).
 
-To run this example, you will need to create a **resource key**.
-The resource key is used as short-hand to store the particular set of
-properties you are interested in as well as any associated license keys
-that entitle you to increased request limits and/or paid-for properties.
-
-You can create a resource key using the 51Degrees [Configurator](https://configure.51degrees.com).
+@include{doc} example-require-resourcekey.txt
 Make sure to include the HardwareVendor and HardwareModel properties
 as they are used by this example.
-
-Create a cloud request engine. This will make the HTTP calls to the
-51Degrees cloud service.
-Add your resource key here.
-
-```
-
-let cloudRequestEngine = new pipelineCre.cloudRequestEngine({
-    "resourceKey": ""
-});
-
-```
-
-Create the 'property-keyed' cloud engine.
-This will expose the response from recieved by the cloud request engine
-in a more user-friendly format.
-
-```
-
-const FiftyOneDegreesDeviceDetection = require((process.env.directory || __dirname) + "/../../");
-let hardwareProfileCloudEngine = new FiftyOneDegreesDeviceDetection.hardwareProfileCloudEngine();
-
-```
-
-Build a pipeline with engines that we've created
-
-```
-
-// Create the pipeline, adding our engines.
-let pipeline = new pipelineBuilder()
-    .add(cloudRequentEngine)
-    .add(hardwareProfileCloudEngine)
-    .build();
-
-```
-
-After creating a flowdata instance, add the TAC as evidence.
-
-```
-
-flowData.evidence.add("query.tac", tac);
-
-```
-
-The result is an array containing the details of any devices that match
-the specified TAC.
-The code in this example iterates through this array, outputting the
-vendor and model name of each matching device.
-
-```
-
-flowData.devices.devices.forEach(device => {
-    let hardwareVendor = device.HardwareVendor;
-    let hardwareName = device.HardwareName;
-    let hardwareModel = device.HardwareModel;
-
-    if (hardwareVendor.hasValue &&
-        hardwareName.hasValue &&
-        hardwareModel.hasValue) {
-
-        message += `\r\n\t${hardwareVendor.value} ${hardwareName.value.join(",")} (${hardwareModel.value})`;
-
-    } else {
-
-        // If we don't have an answer then output the reason for that.
-        message += `\r\n\t${hardwareVendor.noValueMessage}`;
-
-    }
-});
-
-```
 
 Example output:
 
@@ -157,7 +81,7 @@ if (localResourceKey == "!!YOUR_RESOURCE_KEY!!") {
   const hardwareProfileCloudEngineInstance = new HardwareProfileCloudEngine();
 
   const pipelineBuilder = pipelineCore.PipelineBuilder;
-  // Create the pipeline, adding our engines.
+  // Build a pipeline with engines that we've created
   const pipeline = new pipelineBuilder()
     .add(requestEngineInstance)
     .add(hardwareProfileCloudEngineInstance)
@@ -169,16 +93,18 @@ if (localResourceKey == "!!YOUR_RESOURCE_KEY!!") {
   const outputDetails = async function (tac) {
     let message = `Which devices are associated with the TAC '${tac}'?`;
 
-    // Create a flow data instance.
+    // Create a flowdata instance.
     const flowData = pipeline.createFlowData();
 
-    // Add the TAC as evidence
+    // After creating a flowdata instance, add the TAC as evidence.
     flowData.evidence.add('query.tac', tac);
 
     await flowData.process();
 
-    // Iterate through the matching profiles,
-    // outputting vendor and model name.
+    // The result is an array containing the details of any devices that match
+    // the specified TAC.
+    // The code in this example iterates through this array, outputting the
+    // vendor and model name of each matching device.
     flowData.hardware.profiles.forEach(profile => {
       const hardwareVendor = profile.HardwareVendor;
       const hardwareName = profile.HardwareName;

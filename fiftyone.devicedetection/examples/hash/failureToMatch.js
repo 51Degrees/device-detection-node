@@ -23,14 +23,12 @@
 /**
 @example hash/failureToMatch.js
 
-This example shows how the hasValue function can help make sure that meaningful values are returned when checking properties returned from the device detection engine. It also illustrates how the "allowUnmatched" parameters can be used to alter these results.
+
+@include{doc} example-failure-to-match-hash.txt
 
 This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection/examples/hash/failureToMatch.js).
 
-This example requires a local data file. Free data files can be acquired by
-pulling the submodules under this repository or from the
-[device-detection-data](https://github.com/51Degrees/device-detection-data)
-GitHub repository.
+@include{doc} example-require-datafile.txt
 
 Expected output:
 

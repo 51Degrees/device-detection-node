@@ -23,91 +23,13 @@
 /**
 @example cloud/nativeModelLookup.js
 
-Example of using the 51Degrees cloud service to lookup details of a device
-based on its native model name.
+@include{doc} example-native-model-lookup-cloud.txt
 
 This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection/examples/cloud/nativeModelLookup.js).
 
-To run this example, you will need to create a **resource key**.
-The resource key is used as short-hand to store the particular set of
-properties you are interested in as well as any associated license keys
-that entitle you to increased request limits and/or paid-for properties.
-
-You can create a resource key using the 51Degrees [Configurator](https://configure.51degrees.com).
+@include{doc} example-require-resourcekey.txt
 Make sure to include the HardwareVendor, HardwareModel and HardwareName
 properties as they are used by this example.
-
-Create a cloud request engine. This will make the HTTP calls to the
-51Degrees cloud service.
-Add your resource key here.
-
-```
-
-let pipelineCre = require("fiftyone.pipeline.cloudrequestengine");
-let cloudRequestEngine = new pipelineCre.cloudRequestEngine({
-    "resourceKey": ""
-});
-
-```
-
-Create the 'property-keyed' cloud engine.
-This will expose the response received by the cloud request engine
-in a more user-friendly format.
-
-```
-
-let hardwareProfileCloudEngine = require((process.env.directory || __dirname) + "/../../hardwareProfileCloudEngine");
-let hardwareProfileCloudEngineInstance = new hardwareProfileCloudEngine();
-
-```
-
-Build a pipeline with engines that we've created
-
-```
-
-// Create the pipeline, adding our engines.
-let pipeline = new pipelineBuilder()
-    .add(cloudRequentEngine)
-    .add(hardwareProfileCloudEngine)
-    .build();
-
-```
-
-After creating a flowdata instance, add the native model name as evidence.
-
-```
-
-flowData.evidence.add("query.nativemodel", nativemodel);
-
-```
-
-The result is an array containing the details of any devices that match
-the specified native model name.
-The code in this example iterates through this array, outputting the
-vendor and model of each matching device.
-
-```
-
-flowData.devices.devices.forEach(device => {
-    let hardwareVendor = device.HardwareVendor;
-    let hardwareName = device.HardwareName;
-    let hardwareModel = device.HardwareModel;
-
-    if (hardwareVendor.hasValue &&
-        hardwareName.hasValue &&
-        hardwareModel.hasValue) {
-
-        message += `\r\n\t${hardwareVendor.value} ${hardwareName.value.join(",")} (${hardwareModel.value})`;
-
-    } else {
-
-        // If we don't have an answer then output the reason for that.
-        message += `\r\n\t${hardwareVendor.noValueMessage}`;
-
-    }
-});
-
-```
 
 Example output:
 
@@ -156,7 +78,7 @@ if (myResourceKey == "!!YOUR_RESOURCE_KEY!!") {
   ----------------------------------------`);
 
   // Create request engine that will make requests to the cloud service.
-  //  You need to create a resource key at https://configure.51degrees.com
+  // You need to create a resource key at https://configure.51degrees.com
   // and paste it into the code.
 
   const requestEngineInstance = new CloudRequestEngine.CloudRequestEngine({
@@ -168,7 +90,7 @@ if (myResourceKey == "!!YOUR_RESOURCE_KEY!!") {
   const hardwareProfileCloudEngineInstance = new HardwareProfileCloudEngine();
 
   const PipelineBuilder = pipelineCore.PipelineBuilder;
-  // Create the pipeline, adding our engines.
+  // Build a pipeline with engines that we've created
   const pipeline = new PipelineBuilder()
     .add(requestEngineInstance)
     .add(hardwareProfileCloudEngineInstance)
@@ -183,7 +105,7 @@ if (myResourceKey == "!!YOUR_RESOURCE_KEY!!") {
     // Create a flow data instance.
     const flowData = pipeline.createFlowData();
 
-    // Add the native model name as evidence
+    // After creating a flowdata instance, add the native model name as evidence.
     flowData.evidence.add('query.nativemodel', nativemodel);
 
     await flowData.process();
@@ -194,8 +116,10 @@ if (myResourceKey == "!!YOUR_RESOURCE_KEY!!") {
       return;
     }
 
-    // Iterate through the matching profiles,
-    // outputting vendor and model name.
+    // The result is an array containing the details of any devices that match
+    // the specified native model name.
+    // The code in this example iterates through this array, outputting the
+    // vendor and model of each matching device.
     flowData.hardware.profiles.forEach(profile => {
       const hardwareVendor = profile.HardwareVendor;
       const hardwareName = profile.HardwareName;

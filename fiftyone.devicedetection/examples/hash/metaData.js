@@ -23,14 +23,11 @@
 /**
 @example hash/metadata.js
 
-This example shows how to get properties from a pipeline's processed flowData based on their metadata, the getProperties() method and also additional meta data properties on device detection data.
+@include{doc} example-metadata-hash.txt
 
 This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection/examples/hash/metaData.js).
 
-This example requires a local data file. Free data files can be acquired by
-pulling the submodules under this repository or from the
-[device-detection-data](https://github.com/51Degrees/device-detection-data)
-GitHub repository.
+@include{doc} example-require-datafile.txt
 
 Expected output:
 
