@@ -23,16 +23,11 @@
 /**
 @example cloud/gettingStarted.js
 
-This example shows how a simple device detection pipeline that checks if a user agent is a mobile device
+@include{doc} example-getting-started-cloud.txt
 
 This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection/examples/cloud/gettingStarted.js).
 
-To run this example, you will need to create a **resource key**.
-The resource key is used as short-hand to store the particular set of
-properties you are interested in as well as any associated license keys
-that entitle you to increased request limits and/or paid-for properties.
-
-You can create a resource key using the 51Degrees [Configurator](https://configure.51degrees.com).
+@include{doc} example-require-resourcekey.txt
 
 Expected output:
 

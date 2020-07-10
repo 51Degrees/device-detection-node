@@ -23,14 +23,11 @@
 /**
 @example hash/gettingStarted.js
 
-Getting started example of using the 51Degrees device detection 'Hash' algorithm to determine whether a given User-Agent corresponds to a mobile device or not.
+@include{doc} example-getting-started-hash.txt
 
 This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection/examples/hash/gettingStarted.js).
 
-This example requires a local data file. Free data files can be acquired by
-pulling the submodules under this repository or from the
-[device-detection-data](https://github.com/51Degrees/device-detection-data)
-GitHub repository.
+@include{doc} example-require-datafile.txt
 
 Expected output:
 

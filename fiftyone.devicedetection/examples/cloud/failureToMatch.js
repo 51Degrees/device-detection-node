@@ -23,16 +23,11 @@
 /**
 @example cloud/failureToMatch.js
 
-This example shows how the hasValue function can help make sure that meaningful values are returned when checking properties returned from the device detection engine.
-
+@include{doc} example-failure-to-match-cloud.txt
+ 
 This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection/examples/cloud/failureToMatch.js).
 
-To run this example, you will need to create a **resource key**.
-The resource key is used as short-hand to store the particular set of
-properties you are interested in as well as any associated license keys
-that entitle you to increased request limits and/or paid-for properties.
-
-You can create a resource key using the 51Degrees [Configurator](https://configure.51degrees.com).
+@include{doc} example-require-resourcekey.txt
 
 Expected output:
 

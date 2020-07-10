@@ -23,36 +23,15 @@
 /**
 @example hash/configureFromFile.js
 
-This example shows how to configure a pipeline from a configuration
-file using the pipelinebuilder's buildFromConfigurationFile method.
+@include{doc} example-configure-from-file-hash.txt
 
 This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection/examples/hash/configureFromFile.js).
 
-This example requires a local data file. Free data files can be acquired by
-pulling the submodules under this repository or from the
-[device-detection-data](https://github.com/51Degrees/device-detection-data)
-GitHub repository.
+@include{doc} example-require-datafile.txt
 
 The configuration file used here is:
 
-```
-
-{
-    "PipelineOptions": {
-        "Elements": [
-        {
-            "elementName": "../../deviceDetectionOnPremise",
-            "elementParameters": {
-                "performanceProfile": "MaxPerformance",
-                "dataFilePath": "../../device-detection-cxx/device-detection-data/51Degrees-LiteV4.1.hash",
-                "autoUpdate": false
-            }
-        }
-        ]
-    }
-}
-
-```
+@include hash/51d.json
 
 Expected output:
 
