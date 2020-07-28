@@ -105,10 +105,12 @@ if (localResourceKey == "!!YOUR_RESOURCE_KEY!!") {
     // the specified TAC.
     // The code in this example iterates through this array, outputting the
     // vendor and model name of each matching device.
+
     flowData.hardware.profiles.forEach(profile => {
-      const hardwareVendor = profile.HardwareVendor;
-      const hardwareName = profile.HardwareName;
-      const hardwareModel = profile.HardwareModel;
+
+      const hardwareVendor = profile.hardwarevendor;
+      const hardwareName = profile.hardwarename;
+      const hardwareModel = profile.hardwaremodel;
 
       if (hardwareVendor.hasValue &&
                 hardwareName.hasValue &&

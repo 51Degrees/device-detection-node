@@ -22,10 +22,47 @@
 
 const CloudEngine = require('fiftyone.pipeline.cloudrequestengine').CloudEngine;
 
+const AspectPropertyValue = require('fiftyone.pipeline.core').AspectPropertyValue;
+const AspectDataDictionary = require('fiftyone.pipeline.engines').AspectDataDictionary;
+
 class HardwareProfileCloudEngine extends CloudEngine {
-  constructor () {
+  constructor() {
     super(...arguments);
     this.dataKey = 'hardware';
+  }
+  processInternal(flowData) {
+
+    const engine = this;
+
+    let cloudData = flowData.get('cloud').get('cloud');
+
+    cloudData = JSON.parse(cloudData);
+
+    // Loop over cloudData.devices properties to check if they have a value
+
+    const devices = [];
+
+    Object.entries(cloudData.hardware.profiles).forEach(function ([i, deviceValues]) {
+      const device = {};
+
+      Object.entries(deviceValues).forEach(function ([propertyKey, propertyValue]) {
+        device[propertyKey] = new AspectPropertyValue();
+
+        device[propertyKey].value = propertyValue;
+      });
+
+      devices.push(device);
+    });
+
+    const result = { profiles: devices };
+
+    const data = new AspectDataDictionary(
+      {
+        flowElement: engine,
+        contents: result
+      });
+
+    flowData.setElementData(data);
   }
 }
 
