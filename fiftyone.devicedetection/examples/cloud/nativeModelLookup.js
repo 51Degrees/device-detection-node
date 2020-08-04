@@ -121,9 +121,9 @@ if (myResourceKey == "!!YOUR_RESOURCE_KEY!!") {
     // The code in this example iterates through this array, outputting the
     // vendor and model of each matching device.
     flowData.hardware.profiles.forEach(profile => {
-      const hardwareVendor = profile.HardwareVendor;
-      const hardwareName = profile.HardwareName;
-      const hardwareModel = profile.HardwareModel;
+      const hardwareVendor = profile.hardwarevendor;
+      const hardwareName = profile.hardwarename;
+      const hardwareModel = profile.hardwaremodel;
 
       if (hardwareVendor.hasValue &&
               hardwareName.hasValue &&
