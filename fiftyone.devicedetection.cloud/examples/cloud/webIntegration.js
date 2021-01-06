@@ -46,7 +46,7 @@ const DeviceDetectionCloudPipelineBuilder =
   require((process.env.directory || __dirname) +
     '/../../deviceDetectionCloudPipelineBuilder');
 
-const myResourceKey = process.env.RESOURCE_KEY || "AQQNX4o8kbRL3Hmm2Eg";
+const myResourceKey = process.env.RESOURCE_KEY || "!!YOUR_RESOURCE_KEY!!";
 // We need 'server' to be defined here so that, when this example 
 // is executed as part of a unit test, the server can be closed 
 // once the test is complete.
