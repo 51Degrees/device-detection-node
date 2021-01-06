@@ -20,8 +20,35 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
-module.exports = {
+const DeviceDetectionCloudPipelineBuilder = require(__dirname +
+  '/../deviceDetectionCloudPipelineBuilder');
+const myResourceKey = process.env.RESOURCE_KEY || '!!YOUR_RESOURCE_KEY!!';
+const errorMessages = require('fiftyone.devicedetection.shared').errorMessages;
 
-  DeviceDetectionPipelineBuilder: require('./deviceDetectionPipelineBuilder')
+describe('deviceDetectionCloud', () => {
+  // Check that if no evidence is provided for device
+  // detection engine, accessing a valid property will
+  // return HasValue=false and a correct error message
+  //
+  // TODO: Enable when supported.
+  test.skip('No evidence error message', done => {
+    if (myResourceKey === '!!YOUR_RESOURCE_KEY!!') {
+      throw new Error('No resource key is present!');
+    } else {
+      const pipeline = new DeviceDetectionCloudPipelineBuilder({
+        resourceKey: myResourceKey
+      }).build();
+      const flowData = pipeline.createFlowData();
 
-};
+      flowData.process().then(function () {
+        const ismobile = flowData.device.ismobile;
+        expect(ismobile.hasValue).toBe(false);
+console.log(ismobile.noValueMessage);
+        expect(ismobile.noValueMessage.indexOf(
+          errorMessages.evidenceNotFound) !== -1).toBe(true);
+
+        done();
+      });
+    }
+  });
+});

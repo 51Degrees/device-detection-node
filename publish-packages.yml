@@ -21,12 +21,45 @@ steps:
   submodules: recursive
   persistCredentials: true
 
+- task: DownloadPipelineArtifact@2
+  inputs:
+    source: 'specific'
+    project: 'Pipeline'
+    pipeline: '127'
+    runId: '$(binariesRunId)'
+    path: '$(System.ArtifactsDirectory)'
+  displayName: 'Download binaries'
+  
+- script: |
+    ls $(System.ArtifactsDirectory)
+    mkdir $(Build.SourcesDirectory)/fiftyone.devicedetection.onpremise/build
+    mv $(System.ArtifactsDirectory)/**/*.node $(Build.SourcesDirectory)/fiftyone.devicedetection.onpremise/build
+    ls $(Build.SourcesDirectory)/fiftyone.devicedetection.onpremise/build
+  displayName: 'Move binaries'
+
 - task: gittools.gitversion.gitversion-task.GitVersion@5
   displayName: 'Determine Version Number'
   # Give this task a name so we can use the variables it sets later. 
   name: GitVersion
   inputs:
     preferBundledVersion: false
+
+# All modules that reference other device detection modules in this repository
+# have package.json files where the dependency is defined relative to 
+# the local file system.
+# We need to change these dependencies to 'normal' remote NPM references 
+# before creating the packages.
+- script: |
+    ls **/remote_package.json
+
+    rm -f fiftyone.devicedetection/package.json
+    rm -f fiftyone.devicedetection.cloud/package.json
+    rm -f fiftyone.devicedetection.onpremise/package.json
+
+    mv fiftyone.devicedetection/remote_package.json fiftyone.devicedetection/package.json
+    mv fiftyone.devicedetection.cloud/remote_package.json fiftyone.devicedetection.cloud/package.json
+    mv fiftyone.devicedetection.onpremise/remote_package.json fiftyone.devicedetection.onpremise/package.json
+  displayName: 'Switch to package.json that has remote dependencies'
 
 # Set version number.
 - task: Npm@1
@@ -39,11 +72,52 @@ steps:
   continueOnError: true
   condition: succeededOrFailed()
 
+- task: Npm@1
+  displayName: 'npm version fiftyone.devicedetection.cloud'
+  inputs:
+    command: custom
+    workingDir: fiftyone.devicedetection.cloud
+    verbose: true
+    customCommand: version $(GitVersion.SemVer)    
+  continueOnError: true
+  condition: succeededOrFailed()
+
+- task: Npm@1
+  displayName: 'npm version fiftyone.devicedetection.onpremise'
+  inputs:
+    command: custom
+    workingDir: fiftyone.devicedetection.onpremise
+    verbose: true
+    customCommand: version $(GitVersion.SemVer)    
+  continueOnError: true
+  condition: succeededOrFailed()
+
+- task: Npm@1
+  displayName: 'npm version fiftyone.devicedetection.shared'
+  inputs:
+    command: custom
+    workingDir: fiftyone.devicedetection.shared
+    verbose: true
+    customCommand: version $(GitVersion.SemVer)    
+  continueOnError: true
+  condition: succeededOrFailed()
+
 # Create packages
 - script: |
     cd fiftyone.devicedetection
     npm pack
+    cd ../fiftyone.devicedetection.cloud
+    npm pack
+    cd ../fiftyone.devicedetection.onpremise
+    npm pack
+    cd ../fiftyone.devicedetection.shared
+    npm pack
   displayName: 'Create npm package for later release'
+  condition: succeededOrFailed()
+
+- script: |
+    ls **/*.tgz
+  displayName: 'List tgz files'
   condition: succeededOrFailed()
 
 # Copy artifacts contents.

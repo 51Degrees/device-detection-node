@@ -1,17 +1,20 @@
 {
-  "name": "fiftyone.devicedetection",
+  "name": "device-detection-node",
   "version": "1.0.0",
-  "description": "Device detection services for the 51Degrees Pipeline API",
+  "description": "Temporary package to allow all tests to run using the local code as dependencies",
   "main": "index.js",
   "directories": {
     "test": "tests"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest --ci --reporters=jest-junit --reporters=default --coverage --coverageReporters=cobertura"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/51Degrees/device-detection-node"
+  },
+  "jest-junit": {
+    "outputName": "test_results.xml"
   },
   "author": "51Degrees",
   "contributors": [
@@ -26,9 +29,7 @@
     "fiftyone.pipeline.core": "^4.2.0",
     "fiftyone.pipeline.engines": "^4.2.0",
     "fiftyone.pipeline.engines.fiftyone": "^4.2.0",
-    "fiftyone.devicedetection.cloud": "file:../fiftyone.devicedetection.cloud",
-    "fiftyone.devicedetection.onpremise": "file:../fiftyone.devicedetection.onpremise",
-    "fiftyone.devicedetection.shared": "file:../fiftyone.devicedetection.shared"
+    "n-readlines": "^1.0.1"
   },
   "devDependencies": {
     "eslint": "^6.8.0",

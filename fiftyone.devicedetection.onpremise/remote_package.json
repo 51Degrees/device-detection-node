@@ -1,7 +1,7 @@
 {
-  "name": "fiftyone.devicedetection",
+  "name": "fiftyone.devicedetection.onpremise",
   "version": "1.0.0",
-  "description": "Device detection services for the 51Degrees Pipeline API",
+  "description": "Device detection on-premise services for the 51Degrees Pipeline API",
   "main": "index.js",
   "directories": {
     "test": "tests"
@@ -22,13 +22,11 @@
     "Tung Pham <tung@51degrees.com> (https://51degrees.com)"
   ],
   "dependencies": {
-    "fiftyone.pipeline.cloudrequestengine": "^4.2.0",
+    "fiftyone.devicedetection.shared": "^4.2.0",
     "fiftyone.pipeline.core": "^4.2.0",
     "fiftyone.pipeline.engines": "^4.2.0",
     "fiftyone.pipeline.engines.fiftyone": "^4.2.0",
-    "fiftyone.devicedetection.cloud": "file:../fiftyone.devicedetection.cloud",
-    "fiftyone.devicedetection.onpremise": "file:../fiftyone.devicedetection.onpremise",
-    "fiftyone.devicedetection.shared": "file:../fiftyone.devicedetection.shared"
+    "n-readlines": "^1.0.1"
   },
   "devDependencies": {
     "eslint": "^6.8.0",
@@ -47,6 +45,7 @@
     "url": "https://github.com/51Degrees/device-detection-node/issues"
   },
   "files": [
+    "build",
     "*.js"
   ]
 }

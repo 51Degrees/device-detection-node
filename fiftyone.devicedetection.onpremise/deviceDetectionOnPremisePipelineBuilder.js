@@ -29,16 +29,12 @@ const require51 = (requestedPackage) => {
 };
 
 const core = require51('fiftyone.pipeline.core');
-const DeviceDetectionOnPremise = require('fiftyone.devicedetection.onpremise').DeviceDetectionOnPremise;
-const DeviceDetectionCloud = require('fiftyone.devicedetection.cloud').DeviceDetectionCloud;
-const CloudRequestEngine = require51('fiftyone.pipeline.cloudrequestengine').CloudRequestEngine;
+const DeviceDetectionOnPremise = require('./deviceDetectionOnPremise');
 const PipelineBuilder = core.PipelineBuilder;
-const engines = require51('fiftyone.pipeline.engines');
-const LruCache = engines.LruCache;
 const ShareUsageElement = require51('fiftyone.pipeline.engines.fiftyone').ShareUsage;
 const errorMessages = require('fiftyone.devicedetection.shared').errorMessages;
 
-class DeviceDetectionPipelineBuilder extends PipelineBuilder {
+class DeviceDetectionOnPremisePipelineBuilder extends PipelineBuilder {
   /**
    * Extension of pipelineBuilder class that allows for the quick
    * generation of a device detection pipeline. Adds share usage,
@@ -53,64 +49,49 @@ class DeviceDetectionPipelineBuilder extends PipelineBuilder {
    * If you do not wish to use a key then you can specify
    * an empty string, but this will cause automatic updates
    * to be disabled.
-   * @param {string} options.resourceKey resourceKey, if using the
-   * cloud engine
    * @param {string} options.dataFile dataFile path for the on premise engine
    * @param {boolean} options.autoUpdate whether to autoUpdate the dataFile
    * @param {number} options.pollingInterval How often to poll for
    * updates to the datafile (minutes)
    * @param {number} options.updateTimeMaximumRandomisation
    * Maximum randomisation offset in seconds to polling time interval
+   * @param {boolean} options.shareUsage whether to include the share
+   * usage element
    * @param {boolean} options.fileSystemWatcher whether to monitor the datafile
    * path for changes
    * @param {boolean} options.updateOnStart whether to download / update a
    * dataFile to the path specified in options.dataFile on start
-   * @param {boolean} options.shareUsage whether to include the share
-   * usage element
    * @param {number} options.cacheSize size of the default cache
    * (includes cache if set). NOTE: This is not supported for on-premise
    * engine.
-   * @param {Array} options.restrictedProperties This setting only affects
-   * on-premise engines, not cloud.
-   * list of properties the engine will be restricted to
+   * @param {Array} options.restrictedProperties list of properties the engine
+   * will be restricted to
    * @param {string} options.performanceProfile used to control the tradeoff
    * between performance and system memory usage (Only applies to on-premise,
    * not cloud) options are: LowMemory, MaxPerformance, Balanced,
    * BalancedTemp, HighPerformance
-   * @param {boolean} options.updateMatchedUserAgent This setting only affects
-   * on-premise engines, not cloud.
-   * True if the detection should record the matched characters from the
-   * target User-Agent
-   * @param {number} options.maxMatchedUserAgentLength This setting only affects
-   * on-premise engines, not cloud.
-   * Number of characters to consider in the matched User-Agent. Ignored
-   * if updateMatchedUserAgent is false
-   * @param {number} options.drift This setting only affects on-premise engines,
-   * not cloud.
-   * Set maximum drift in hash position to allow when processing HTTP headers.
-   * @param {number} options.difference This setting only affects on-premise
-   * engines, not cloud.
-   * Set the maximum difference to allow when processing HTTP headers.
-   * The difference is the difference in hash value between the hash that
-   * was found, and the hash that is being searched for. By default this is 0.
-   * @param {string} options.allowUnmatched This setting only affects
-   * on-premise engines, not cloud.
-   * If set to false, a non-matching User-Agent will result in properties
-   * without set values.
+   * @param {boolean} options.updateMatchedUserAgent True if the detection
+   * should record the matched characters from the target User-Agent
+   * @param {number} options.maxMatchedUserAgentLength Number of characters to
+   * consider in the matched User-Agent. Ignored if updateMatchedUserAgent is
+   * false
+   * @param {number} options.drift Set maximum drift in hash position to allow
+   * when processing HTTP headers.
+   * @param {number} options.difference Set the maximum difference to allow
+   * when processing HTTP headers. The difference is the difference in hash
+   * value between the hash that was found, and the hash that is being searched
+   * for. By default this is 0.
+   * @param {string} options.allowUnmatched If set to false, a non-matching
+   * User-Agent will result in properties without set values.
    * If set to true, a non-matching User-Agent will cause the 'default profiles'
    * to be returned.
    * This means that properties will always have values
    * (i.e. no need to check .HasValue) but some may be inaccurate.
    * By default, this is false.
-   * @param {boolean} options.usePredictiveGraph This setting on affects
-   * on-premise engines, not cloud.
-   * True, the engine will use the predictive optimized graph to in detections.
-   * @param {boolean} options.usePerformanceGraph This setting on affects
-   * on-premise engines, not cloud.
-   * True, the engine will use the performance optimized graph to in detections.
-   * @param {string} options.cloudEndPoint This setting only affects
-   * cloud engine, not on-premise.
-   * Choose a non default endpoint for the cloud request engine
+   * @param {boolean} options.usePredictiveGraph True, the engine will use
+   * the predictive optimized graph to in detections.
+   * @param {boolean} options.usePerformanceGraph True, the engine will use
+   * the performance optimized graph to in detections.
    *
    */
   constructor (
@@ -118,11 +99,11 @@ class DeviceDetectionPipelineBuilder extends PipelineBuilder {
       licenceKeys = null,
       dataFile = null,
       autoUpdate = true,
-      fileSystemWatcher = true,
       pollingInterval = 30,
       updateTimeMaximumRandomisation = 10,
       shareUsage = true,
-      resourceKey = null,
+      fileSystemWatcher = true,
+      updateOnStart = false,
       cacheSize = null,
       restrictedProperties,
       performanceProfile = 'LowMemory',
@@ -132,9 +113,7 @@ class DeviceDetectionPipelineBuilder extends PipelineBuilder {
       difference,
       allowUnmatched = false,
       usePredictiveGraph = true,
-      usePerformanceGraph = false,
-      updateOnStart = false,
-      cloudEndPoint = 'https://cloud.51degrees.com/api/v4/'
+      usePerformanceGraph = false
     }) {
     super(...arguments);
 
@@ -144,53 +123,30 @@ class DeviceDetectionPipelineBuilder extends PipelineBuilder {
       this.flowElements.push(new ShareUsageElement());
     }
 
-    let cache;
-
     if (cacheSize) {
-      cache = new LruCache({ size: cacheSize });
+      throw errorMessages.cacheNotSupport;
     }
 
-    if (dataFile) {
-      // Cache is not supported for on-premise engine.
-      if (cacheSize) {
-        throw errorMessages.cacheNotSupport;
-      }
-
-      this.flowElements.push(new DeviceDetectionOnPremise(
-        {
-          dataFilePath: dataFile,
-          autoUpdate,
-          fileSystemWatcher,
-          pollingInterval,
-          updateTimeMaximumRandomisation,
-          licenceKeys,
-          restrictedProperties,
-          performanceProfile,
-          updateMatchedUserAgent,
-          maxMatchedUserAgentLength,
-          drift,
-          difference,
-          allowUnmatched,
-          updateOnStart,
-          usePredictiveGraph,
-          usePerformanceGraph
-        }));
-    } else {
-      // First we need the cloudRequestEngine
-
-      this.flowElements.push(new CloudRequestEngine(
-        {
-          resourceKey: resourceKey,
-          licenseKey: licenceKeys,
-          baseURL: cloudEndPoint,
-          cache
-        }));
-
-      // Then add the cloud device detection engine
-
-      this.flowElements.push(new DeviceDetectionCloud());
-    }
+    this.flowElements.push(new DeviceDetectionOnPremise(
+      {
+        dataFilePath: dataFile,
+        autoUpdate,
+        fileSystemWatcher,
+        pollingInterval,
+        updateTimeMaximumRandomisation,
+        licenceKeys,
+        restrictedProperties,
+        performanceProfile,
+        updateMatchedUserAgent,
+        maxMatchedUserAgentLength,
+        drift,
+        difference,
+        allowUnmatched,
+        updateOnStart,
+        usePredictiveGraph,
+        usePerformanceGraph
+      }));
   }
 }
 
-module.exports = DeviceDetectionPipelineBuilder;
+module.exports = DeviceDetectionOnPremisePipelineBuilder;

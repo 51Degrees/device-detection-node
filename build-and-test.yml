@@ -4,120 +4,265 @@ pr:
   - master
   - develop
   - release/*  
-
-pool:
-  vmImage: 'ubuntu-latest'
   
 variables: 
   - group: PackageFeedAccessToken
   - group: InternalKeys
-    
-strategy:
-  matrix:
-    node_6_x:
-      node_version: 6.x
-    node_8_x:
-      node_version: 8.x
-    node_10_x:
-      node_version: 10.x
-    node_12_x:
-      node_version: 12.x
-      
-steps:
-- checkout: self
-  lfs: true
-  submodules: recursive
 
-- task: NodeTool@0
-  inputs:
-    versionSpec: $(node_version)
-  displayName: 'Install Node.js'
+stages:
+
+- stage: Linux
+  jobs:
+  - job: Build_And_Test
   
-# The secure file to download will be stored in the 
-# Pipelines/Library/SecureFiles section in Azure DevOps.
-- task: DownloadSecureFile@1
-  displayName: 'Download .npmrc'
-  name: npmrc
-  inputs:
-    secureFile: '.npmrc'
+    pool:
+      vmImage: 'ubuntu-latest'
 
-- task: CopyFiles@2
-  displayName: 'Copy .npmrc to working directory'
-  inputs:
-    sourceFolder: '$(Agent.TempDirectory)'
-    targetFolder: '$(System.DefaultWorkingDirectory)/fiftyone.devicedetection'
-    contents: '.npmrc'
+    strategy:
+      matrix:
+        node_10_x:
+          node_version: 10.x
+        node_12_x:
+          node_version: 12.x
 
-# 1. Set resource key environment variable from resource key value 
-# in 'InternalKeys' group 
-# 2. Move to correct dir.
-# 3. Install dependencies.
-# 4. Run tests.
-- script: |
-    echo "Resource key for cloud testing = $(ResourceKey)"
-    export RESOURCE_KEY="$(ResourceKey)"
-    cd fiftyone.devicedetection
-    npm install
-    npm test
-  displayName: 'Build and Test'
+    steps:
+    - checkout: self
+      lfs: true
+      submodules: recursive
 
-- script: |
-    find "$(System.DefaultWorkingDirectory)" -name "*core*"
-  displayName: 'Get core dump'
-  condition: succeededOrFailed()
+    - task: DownloadPipelineArtifact@2
+      inputs:
+        source: 'specific'
+        project: 'Pipeline'
+        pipeline: 127
+        runVersion: 'specific'
+        runId: '$(binariesRunId)'
+        artifact: 'binaries-linux'
+        path: '$(System.ArtifactsDirectory)'
+      displayName: 'Download binaries'
+  
+    - script: |
+        ls $(System.ArtifactsDirectory)
+        mkdir $(Build.SourcesDirectory)/fiftyone.devicedetection.onpremise/build
+        mv $(System.ArtifactsDirectory)/*.node $(Build.SourcesDirectory)/fiftyone.devicedetection.onpremise/build
+        ls $(Build.SourcesDirectory)/fiftyone.devicedetection.onpremise/build
+      displayName: 'Move binaries'
 
-- script: |
-    cd fiftyone.devicedetection
-    eslint='{
-        "env": {
-            "browser": true,
-            "commonjs": true,
-            "es6": true,
-            "jest": true
-        },
-        "extends": [
-            "standard"
-        ],
-        "globals": {
-            "Atomics": "readonly",
-            "SharedArrayBuffer": "readonly",
-            "test": true,
-            "jest": true,
-            "expect": true
-        },
-        "parserOptions": {
-            "ecmaVersion": 2018
-        },
-        "rules": {
-            "node/no-deprecated-api": "off",
-            "no-throw-literal": "off",
-            "no-path-concat": "off",
-            "no-prototype-builtins": "off",
-            "no-eval": "off",
-            "semi": [
-                2,
-                "always"
-            ]
-        }
-      }'
-    echo $eslint
-    echo $eslint > .eslintrc
-    npm install -g eslint
-    eslint **/*.js
-  displayName: "Set up and run eslint"
-  condition: and(ne(variables['node_version'], '6.x'), ne(variables['node_version'], '8.x'))
+    - task: NodeTool@0
+      inputs:
+        versionSpec: $(node_version)
+      displayName: 'Install Node.js'
 
-- task: PublishTestResults@2
-  condition: succeededOrFailed()
-  inputs:
-    testRunner: JUnit
-    testResultsFiles: '**/test_results.xml'
-    testRunTitle: 'Node $(node_version)'
+    # The secure file to download will be stored in the 
+    # Pipelines/Library/SecureFiles section in Azure DevOps.
+    - task: DownloadSecureFile@1
+      displayName: 'Download .npmrc'
+      name: npmrc
+      inputs:
+        secureFile: '.npmrc'
 
-- task: PublishCodeCoverageResults@1
-  condition: succeededOrFailed()
-  inputs: 
-    codeCoverageTool: Cobertura
-    summaryFileLocation: '$(System.DefaultWorkingDirectory)/**/*coverage.xml'
-    reportDirectory: '$(System.DefaultWorkingDirectory)/**/coverage'
+    - task: CopyFiles@2
+      displayName: 'Copy .npmrc to working directory'
+      inputs:
+        sourceFolder: '$(Agent.TempDirectory)'
+        targetFolder: '$(System.DefaultWorkingDirectory)'
+        contents: '.npmrc'
 
+    - task: CopyFiles@2
+      displayName: 'Copy .npmrc to fiftyone.devicedetection.onpremise'
+      inputs:
+        sourceFolder: '$(Agent.TempDirectory)'
+        targetFolder: '$(System.DefaultWorkingDirectory)/fiftyone.devicedetection.onpremise'
+        contents: '.npmrc'
+
+    # 1. Set resource key environment variable from resource key value 
+    # in 'InternalKeys' group 
+    # 2. Move to correct dir.
+    # 3. Install dependencies.
+    # 4. Run tests.
+    - script: |
+        echo "Resource key for cloud testing = $(ResourceKey)"
+        export RESOURCE_KEY="$(ResourceKey)"
+        echo "npm install"
+        npm install
+        echo "npm install n-readlines"
+        npm install n-readlines
+        echo "npm test"
+        npm test
+      displayName: 'Build and Test'
+
+    - script: |
+        npm install
+      workingDirectory: 'fiftyone.devicedetection.onpremise'
+      displayName: 'Build fiftyone.devicedetection.onpremise'
+      condition: succeededOrFailed()
+
+    - script: |
+        sudo apt-get install cmake apache2-dev libapr1-dev libaprutil1-dev
+        mkdir build
+        cd build
+        cmake ..
+        cmake --build .
+      workingDirectory: 'fiftyone.devicedetection.onpremise/tests/cloud-performance-test'
+      displayName: 'Build Performance Tests'
+      condition: succeededOrFailed()
+
+    - script: |
+        cd build
+        ./runPerf.sh
+      workingDirectory: 'fiftyone.devicedetection.onpremise/tests/cloud-performance-test'
+      displayName: 'Run Performance Tests'
+      failOnStderr: true
+      condition: succeededOrFailed()
+
+    - script: |
+        find "$(System.DefaultWorkingDirectory)" -name "*core*"
+      displayName: 'Get core dump'
+      condition: succeededOrFailed()
+
+    - script: |
+        eslint='{
+            "env": {
+                "browser": true,
+                "commonjs": true,
+                "es6": true,
+                "jest": true
+            },
+            "extends": [
+                "standard"
+            ],
+            "globals": {
+                "Atomics": "readonly",
+                "SharedArrayBuffer": "readonly",
+                "test": true,
+                "jest": true,
+                "expect": true
+            },
+            "parserOptions": {
+                "ecmaVersion": 2018
+            },
+            "rules": {
+                "node/no-deprecated-api": "off",
+                "no-throw-literal": "off",
+                "no-path-concat": "off",
+                "no-prototype-builtins": "off",
+                "no-eval": "off",
+                "semi": [
+                    2,
+                    "always"
+                ]
+            }
+          }'
+        echo $eslint
+        echo $eslint > .eslintrc
+        npm install -g eslint
+        eslint **/*.js
+      displayName: "Set up and run eslint"
+      condition: and(ne(variables['node_version'], '6.x'), ne(variables['node_version'], '8.x'))
+
+    - task: PublishTestResults@2
+      condition: succeededOrFailed()
+      inputs:
+        testRunner: JUnit
+        testResultsFiles: '**/test_results.xml'
+        testRunTitle: 'Node $(node_version) Linux'
+
+    - task: PublishCodeCoverageResults@1
+      condition: succeededOrFailed()
+      inputs: 
+        codeCoverageTool: Cobertura
+        summaryFileLocation: '$(System.DefaultWorkingDirectory)/**/*coverage.xml'
+        reportDirectory: '$(System.DefaultWorkingDirectory)/**/coverage'
+
+
+- stage: MacOS
+  dependsOn: []
+  jobs:
+  - job: Build_And_Test
+
+    pool:
+      vmImage: 'macOS-10.14'
+
+    strategy:
+      matrix:
+        node_10_x:
+          node_version: 10.x
+        node_12_x:
+          node_version: 12.x
+
+    steps:
+    - checkout: self
+      lfs: true
+      submodules: recursive
+
+    - task: DownloadPipelineArtifact@2
+      inputs:
+        source: 'specific'
+        project: 'Pipeline'
+        pipeline: '127'
+        runId: '$(binariesRunId)'
+        artifact: 'binaries-darwin'
+        path: '$(System.ArtifactsDirectory)'
+      displayName: 'Download binaries'
+  
+    - script: |
+        ls $(System.ArtifactsDirectory)
+        mkdir $(Build.SourcesDirectory)/fiftyone.devicedetection.onpremise/build
+        mv $(System.ArtifactsDirectory)/*.node $(Build.SourcesDirectory)/fiftyone.devicedetection.onpremise/build
+        ls $(Build.SourcesDirectory)/fiftyone.devicedetection.onpremise/build
+      displayName: 'Move binaries'
+
+    - task: NodeTool@0
+      inputs:
+        versionSpec: $(node_version)
+      displayName: 'Install Node.js'
+
+    # The secure file to download will be stored in the 
+    # Pipelines/Library/SecureFiles section in Azure DevOps.
+    - task: DownloadSecureFile@1
+      displayName: 'Download .npmrc'
+      name: npmrc
+      inputs:
+        secureFile: '.npmrc'
+
+    - task: CopyFiles@2
+      displayName: 'Copy .npmrc to working directory'
+      inputs:
+        sourceFolder: '$(Agent.TempDirectory)'
+        targetFolder: '$(System.DefaultWorkingDirectory)'
+        contents: '.npmrc'
+
+    # 1. Set resource key environment variable from resource key value 
+    # in 'InternalKeys' group 
+    # 2. Move to correct dir.
+    # 3. Install dependencies.
+    # 4. Run tests.
+    - script: |
+        echo "Resource key for cloud testing = $(ResourceKey)"
+        export RESOURCE_KEY="$(ResourceKey)"
+        echo "npm install"
+        npm install
+        echo "npm install n-readlines"
+        npm install n-readlines
+        echo "npm test"
+        npm test
+      displayName: 'Build and Test'
+
+    - script: |
+        find "$(System.DefaultWorkingDirectory)" -name "*core*"
+      displayName: 'Get core dump'
+      condition: succeededOrFailed()
+
+    - task: PublishTestResults@2
+      condition: succeededOrFailed()
+      inputs:
+        testRunner: JUnit
+        testResultsFiles: '**/test_results.xml'
+        testRunTitle: 'Node $(node_version) Mac'
+
+    - task: PublishCodeCoverageResults@1
+      condition: succeededOrFailed()
+      inputs: 
+        codeCoverageTool: Cobertura
+        summaryFileLocation: '$(System.DefaultWorkingDirectory)/**/*coverage.xml'
+        reportDirectory: '$(System.DefaultWorkingDirectory)/**/coverage'
