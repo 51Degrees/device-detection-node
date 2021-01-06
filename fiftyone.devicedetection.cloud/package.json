@@ -1,7 +1,7 @@
 {
-  "name": "fiftyone.devicedetection",
+  "name": "fiftyone.devicedetection.cloud",
   "version": "1.0.0",
-  "description": "Device detection services for the 51Degrees Pipeline API",
+  "description": "Device detection cloud services for the 51Degrees Pipeline API",
   "main": "index.js",
   "directories": {
     "test": "tests"
@@ -26,8 +26,6 @@
     "fiftyone.pipeline.core": "^4.2.0",
     "fiftyone.pipeline.engines": "^4.2.0",
     "fiftyone.pipeline.engines.fiftyone": "^4.2.0",
-    "fiftyone.devicedetection.cloud": "file:../fiftyone.devicedetection.cloud",
-    "fiftyone.devicedetection.onpremise": "file:../fiftyone.devicedetection.onpremise",
     "fiftyone.devicedetection.shared": "file:../fiftyone.devicedetection.shared"
   },
   "devDependencies": {

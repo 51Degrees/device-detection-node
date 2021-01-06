@@ -20,8 +20,53 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
-module.exports = {
+const fs = require('fs');
+const path = require('path');
 
-  DeviceDetectionPipelineBuilder: require('./deviceDetectionPipelineBuilder')
+const testExample = function ({ file, portNumber }) {
+  if (portNumber) {
+    process.env.PORT = portNumber;
+  }
 
+  // Change the working directory of the example to be the example itself
+
+  process.env.directory = path.dirname(file);
+
+  let code = fs.readFileSync(file, 'utf8');
+
+  // Add in closer of any apps
+
+  const serverClose = `
+    
+    if(typeof server !== "undefined"){
+
+        server.close();
+
+    }
+
+    `;
+
+  code += serverClose;
+
+  jest.fn(eval(code));
 };
+
+describe('Examples', () => {
+  // Skip the rest of the examples when async is not available
+  let isAsync = true;
+
+  try {
+    eval('async () => {}');
+  } catch (e) {
+    isAsync = false;
+  }
+
+  test('hash match metrics', (done) => {
+    if (isAsync) {
+      setTimeout(done, 1000);
+      testExample({ file: (__dirname) + '/hash/matchMetrics.js' });
+    } else {
+      done();
+    }
+  });
+});

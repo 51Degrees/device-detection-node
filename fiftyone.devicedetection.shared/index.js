@@ -22,6 +22,6 @@
 
 module.exports = {
 
-  DeviceDetectionPipelineBuilder: require('./deviceDetectionPipelineBuilder')
+  errorMessages: require('./errorMessages')
 
 };

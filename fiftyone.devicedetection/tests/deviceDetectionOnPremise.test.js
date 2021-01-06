@@ -20,68 +20,24 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
-const EngineBuilder = require(
-  __dirname + '/../../fiftyone.devicedetection/deviceDetectionOnPremise'
-);
-const DataFile = (process.env.directory || __dirname) + '/../device-detection-cxx/device-detection-data/51Degrees-LiteV4.1.hash';
+const FiftyOneDegreesDeviceDetection = require(__dirname +
+  '/../../fiftyone.devicedetection');
+const DataFile = 'test.hash';
 
 describe('deviceDetectionOnPremise', () => {
-  // Check that an exception is thrown if license key is not
-  // specified when creating an on-premise engine.
-  test('License key required', () => {
-    const test = () => {
-      EngineBuilder({
-        dataFilePath: DataFile
-      });
-    };
-    expect(test).toThrow();
-  });
+  // Check that setting cache for on-premise engine builder will
+  // throw exception
+  test('No cache support for on-premise engine', done => {
+    try {
+      new FiftyOneDegreesDeviceDetection
+        .DeviceDetectionPipelineBuilder({
+          dataFile: DataFile,
+          cacheSize: 100
+        }).build();
+    } catch (err) {
+      expect(err.indexOf('cache cannot be configured') !== -1).toBe(true);
 
-  // Check that an empty license key can be specified.
-  // Also verify that this will cause auto update and
-  // update on startup to be disabled.
-  test('License key can be empty', done => {
-    const engine = new EngineBuilder({
-      dataFilePath: DataFile,
-      licenceKeys: ''
-    });
-
-    var fakePipeline = {
-      dataFileUpdateService: {
-        registerDataFile: function (dataFileConfig) {
-          // No license key so auto update and update on startup
-          // should be disabled.
-          expect(dataFileConfig.autoUpdate).toBe(false);
-          expect(dataFileConfig.updateOnStart).toBe(false);
-        }
-      }
-    };
-    engine.registrationCallbacks[0](fakePipeline);
-
-    done();
-  });
-
-  // Check that the the license key is passed through correctly
-  // if it is set.
-  test('License key set', done => {
-    const engine = new EngineBuilder({
-      dataFilePath: DataFile,
-      licenceKeys: 'ABC',
-      autoUpdate: true,
-      updateOnStart: true
-    });
-
-    var fakePipeline = {
-      dataFileUpdateService: {
-        registerDataFile: function (dataFileConfig) {
-          expect(dataFileConfig.autoUpdate).toBe(true);
-          expect(dataFileConfig.updateOnStart).toBe(true);
-          expect(dataFileConfig.updateURLParams.licenseKeys).toBe('ABC');
-        }
-      }
-    };
-    engine.registrationCallbacks[0](fakePipeline);
-
-    done();
+      done();
+    }
   });
 });
