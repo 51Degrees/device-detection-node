@@ -133,6 +133,11 @@ Then call:
 Process for rebuilding SWIG interfaces following an update to the device detection cxx code (This is only intended to be run by 51Degrees developers internally):
 
 1. Ensure Swig is installed.
+   1. At the time where this README was updated, the existing version of Swig did not support new changes in Node 12 and above.
+   2. The Swig version being used is built from the following branch.
+      1. https://github.com/yegorich/swig/tree/pr/new-node-fixes
+      2. There had been an active Pull Request created to merge the changes to the main Swig master branch.
+      3. Once the Pull Request is completed, the consequent Swig releases should be used.
 2. Update the device-detection-cxx submodule to reference the relevant commit.
 3. From terminal, navigate to fiftyone.pipeline.devicedetection and run:
     a) swig -c++ -javascript -node hash_node.i
