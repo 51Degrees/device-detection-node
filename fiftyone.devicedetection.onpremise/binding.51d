@@ -96,7 +96,19 @@
                         }\
                     string += arr[i];\
                 }\
-                console.log(string);\")"]
+                console.log(string);\")",
+                "-Wall",
+                "-Wno-unused-variable",
+                "-Wno-unused-result",
+                "-Wno-unused-but-set-variable",
+                "-Wno-unused-function",
+                "-Wno-ignored-qualifiers",
+                "-Wno-missing-braces",
+                "-Wno-strict-aliasing",
+                "-Wno-attributes",
+                "-Wno-deprecated-declarations",
+                "-Werror"
+            ]
         }
     ]
 }

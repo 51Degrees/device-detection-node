@@ -24,6 +24,8 @@ stages:
           node_version: 10.x
         node_12_x:
           node_version: 12.x
+        node_14_x:
+          node_version: 14.x
 
     steps:
     - checkout: self
@@ -189,6 +191,8 @@ stages:
           node_version: 10.x
         node_12_x:
           node_version: 12.x
+        node_14_x:
+          node_version: 14.x
 
     steps:
     - checkout: self
