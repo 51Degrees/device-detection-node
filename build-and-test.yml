@@ -100,7 +100,8 @@ stages:
       condition: succeededOrFailed()
 
     - script: |
-        sudo apt-get install cmake apache2-dev libapr1-dev libaprutil1-dev
+        sudo apt-get update -y
+        sudo apt-get install cmake apache2-dev libapr1-dev libaprutil1-dev -y
         mkdir build
         cd build
         cmake ..
