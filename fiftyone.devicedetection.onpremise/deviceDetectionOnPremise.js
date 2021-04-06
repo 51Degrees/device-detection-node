@@ -72,7 +72,7 @@ class DeviceDetectionOnPremise extends Engine {
    * will be restricted to
    * @param {string} options.licenceKeys license key(s) used by the
    * data file update service. A key can be obtained from the
-   * 51Degrees website: https://www.51degrees.com/pricing.
+   * 51Degrees website: https://51degrees.com/pricing.
    * If you do not wish to use a key then you can specify
    * an empty string, but this will cause automatic updates to
    * be disabled.

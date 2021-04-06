@@ -1,6 +1,6 @@
 ![51Degrees](https://51degrees.com/img/logo.png?utm_source=github&utm_medium=repository&utm_content=readme_main&utm_campaign=node-open-source "Data rewards the curious") **Node Device Detection**
 
-[Developer Documentation](https://51degrees.com/device-detection-node/4.2/index.html?utm_source=github&utm_medium=repository&utm_content=documentation&utm_campaign=node-open-source "developer documentation")
+[Developer Documentation](https://51degrees.com/device-detection-node/index.html?utm_source=github&utm_medium=repository&utm_content=documentation&utm_campaign=node-open-source "developer documentation")
 
 ## Introduction
 This project contains 51Degrees Device Detection engines that can be used with the [Pipeline API](https://github.com/51Degrees/pipeline-node).
@@ -42,7 +42,7 @@ To install `fiftyone.devicedetection` and `fiftyone.devicedetection.onpremise` f
 ### On-Premise
 When running on-premise, a local Hash V4.1 data file is required.
 
-[**Hash**](https://51degrees.com/documentation/4.2/_device_detection__hash.html): A large binary file populated with User-Agent signatures allowing very fast detection speeds.
+[**Hash**](https://51degrees.com/documentation/_device_detection__hash.html): A large binary file populated with User-Agent signatures allowing very fast detection speeds.
 
 51Degrees provides [multiple options](https://51degrees.com/Licencing-Pricing/On-Premise), some of which support automatic updates through the Pipeline API.
 
@@ -74,7 +74,7 @@ If you have Visual Studio Code, you'll still need to install the build tools fro
     - MacOS:
       - FiftyOneDeviceDetectionHashV4-darwin-[ Node version ].node
         - e.g. FiftyOneDeviceDetectionHashV4-darwin-10.node for Node 10.
-    - Please see [Support Version](https://51degrees.com/documentation/4.1/_info__version_support.html) for Node versions that we support.
+    - Please see [Support Version](https://51degrees.com/documentation/_info__version_support.html) for Node versions that we support.
     - At this point, other build files and folders can be removed apart from the binaries file *.node.
 
 ### Cloud
