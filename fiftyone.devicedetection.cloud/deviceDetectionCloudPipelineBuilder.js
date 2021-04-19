@@ -64,7 +64,7 @@ class DeviceDetectionCloudPipelineBuilder extends PipelineBuilder {
       shareUsage = true,
       resourceKey = null,
       cacheSize = null,
-      cloudEndPoint = 'https://cloud.51degrees.com/api/v4/'
+      cloudEndPoint = null
     }) {
     super(...arguments);
 

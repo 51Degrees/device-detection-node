@@ -347,7 +347,7 @@ class DeviceDetectionOnPremise extends Engine {
 
         current.properties.userAgents = {
           name: 'UserAgents',
-          type: 'string',
+          type: 'string[]',
           category: 'Device metrics',
           description: 'The matched User-Agents.'
         };

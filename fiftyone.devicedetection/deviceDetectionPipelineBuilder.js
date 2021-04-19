@@ -134,7 +134,7 @@ class DeviceDetectionPipelineBuilder extends PipelineBuilder {
       usePredictiveGraph = true,
       usePerformanceGraph = false,
       updateOnStart = false,
-      cloudEndPoint = 'https://cloud.51degrees.com/api/v4/'
+      cloudEndPoint = null
     }) {
     super(...arguments);
 
