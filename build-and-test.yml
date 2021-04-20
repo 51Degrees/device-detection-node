@@ -16,7 +16,7 @@ stages:
   - job: Build_And_Test
   
     pool:
-      vmImage: 'ubuntu-latest'
+      vmImage: 'ubuntu-18.04'
 
     strategy:
       matrix:
