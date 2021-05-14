@@ -1,8 +1,55 @@
 {
-    "targets": [
+    'variables': {
+        'encoding': [
+            '_UNICODE',
+            'UNICODE'
+        ],
+        'module_name': 'FiftyOneDeviceDetectionHashV4',
+        'core_lib_name': '<(module_name)Core',
+        'win_warning_level': 4,
+        'win_exception_handling': 1,
+        'win_warn_as_error': 'true',
+        'win_warning_ignore_list': [4100, 4127, 4244, 4302, 4311, 4459, 4996], # Only used for SWIG generated files
+        'win_debug_additional_ignore_list': [4701, 4702], # Only used for SWIG generated files
+        'linux_mac_c_std': '-std=gnu11',
+        'linux_mac_cpp_std': '-std=gnu++11',
+        'linux_mac_c_common_flags': [
+            "<!(node -e \"\
+            var v8Version = process.versions.v8;\
+            var string = '-DSWIG_V8_VERSION=0x';\
+            var arr = v8Version.split('.');\
+            for (var i = 0; i < 3; i++) {\
+                if (arr[i].length === 1) {\
+                    string += '0';\
+                    }\
+                string += arr[i];\
+            }\
+            console.log(string);\")",
+            "-Wall",
+            "-Werror"
+        ],
+        'linux_mac_c_core_additional_flags': [
+            "-Wno-unused-variable",
+            "-Wno-unused-result",
+            "-Wno-strict-aliasing",
+            "-Wno-ignored-qualifiers",
+            "-Wno-missing-braces",
+            "-Wno-attributes"
+        ],
+        'linux_mac_c_wrapper_additional_flags': [
+            "-Wno-ignored-qualifiers",
+            "-Wno-unused-result",
+            "-Wno-attributes",
+            "-Wno-deprecated-declarations"
+        ],
+        'linux_specific_c_core_additional_flags': [
+            "-Wno-unused-but-set-variable"
+        ]
+    },
+    'targets': [
         {
-            "target_name": "FiftyOneDeviceDetectionHashV4",
-            "sources": [
+            'target_name': '<(core_lib_name)',
+            'sources': [
                 # Common C
                 "device-detection-cxx/src/common-cxx/cache.c",
                 "device-detection-cxx/src/common-cxx/collection.c",
@@ -12,9 +59,9 @@
                 "device-detection-cxx/src/common-cxx/evidence.c",
                 "device-detection-cxx/src/common-cxx/exceptionsc.c",
                 "device-detection-cxx/src/common-cxx/file.c",
-				"device-detection-cxx/src/common-cxx/float.c",
+                "device-detection-cxx/src/common-cxx/float.c",
                 "device-detection-cxx/src/common-cxx/headers.c",
-				"device-detection-cxx/src/common-cxx/ip.c",
+                "device-detection-cxx/src/common-cxx/ip.c",
                 "device-detection-cxx/src/common-cxx/list.c",
                 "device-detection-cxx/src/common-cxx/memory.c",
                 "device-detection-cxx/src/common-cxx/overrides.c",
@@ -22,6 +69,7 @@
                 "device-detection-cxx/src/common-cxx/profile.c",
                 "device-detection-cxx/src/common-cxx/properties.c",
                 "device-detection-cxx/src/common-cxx/property.c",
+                "device-detection-cxx/src/common-cxx/pseudoheader.c",
                 "device-detection-cxx/src/common-cxx/resource.c",
                 "device-detection-cxx/src/common-cxx/results.c",
                 "device-detection-cxx/src/common-cxx/status.c",
@@ -65,7 +113,7 @@
                 "device-detection-cxx/src/hash/ProfileMetaDataCollectionHash.cpp",
                 "device-detection-cxx/src/hash/PropertyMetaDataBuilderHash.cpp",
                 "device-detection-cxx/src/hash/PropertyMetaDataCollectionForComponentHash.cpp",
-				"device-detection-cxx/src/hash/PropertyMetaDataCollectionForPropertyHash.cpp",
+                "device-detection-cxx/src/hash/PropertyMetaDataCollectionForPropertyHash.cpp",
                 "device-detection-cxx/src/hash/PropertyMetaDataCollectionHash.cpp",
                 "device-detection-cxx/src/hash/ResultsHash.cpp",
                 "device-detection-cxx/src/hash/ValueMetaDataBuilderHash.cpp",
@@ -73,42 +121,149 @@
                 "device-detection-cxx/src/hash/ValueMetaDataCollectionForProfileHash.cpp",
                 "device-detection-cxx/src/hash/ValueMetaDataCollectionForPropertyHash.cpp",
                 "device-detection-cxx/src/hash/ValueMetaDataCollectionHash.cpp",
+            ],
+            'type': 'static_library',
+            'conditions': [
+                ['OS=="win"', {
+                    'configurations': {
+                        'Debug': {
+                            'msvs_settings': {
+                                'VCCLCompilerTool': {
+                                    'WarningLevel': '<(win_warning_level)',
+                                    'ExceptionHandling': '<(win_exception_handling)',
+                                    'WarnAsError': '<(win_warn_as_error)',
+                                    'PreprocessorDefinitions': [
+                                        '<@(encoding)'
+                                    ]
+                                },
+                                'VCLinkerTool': {
+                                    'TreatLinkerWarningAsErrors': '<(win_warn_as_error)'
+                                }
+                            }
+                        },
+                        'Release': {
+                            'msvs_settings': {
+                                'VCCLCompilerTool': {
+                                    'WarningLevel': '<(win_warning_level)',
+                                    'ExceptionHandling': '<(win_exception_handling)',
+                                    'WarnAsError': '<(win_warn_as_error)',
+                                    'PreprocessorDefinitions': [
+                                        '<@(encoding)'
+                                    ]
+                                },
+                                'VCLinkerTool': {
+                                    'TreatLinkerWarningAsErrors': '<(win_warn_as_error)'
+                                }
+                            }
+                        }
+                    }
+                }],
+                ['OS=="mac"', {
+                    "xcode_settings": {
+                        "GCC_ENABLE_CPP_EXCEPTIONS": "YES",
+                        "OTHER_CFLAGS": [
+                            '<@(linux_mac_c_common_flags)',
+                            '<@(linux_mac_c_core_additional_flags)',
+                            '<(linux_mac_c_std)'],
+                        "OTHER_CPLUSPLUSFLAGS": [
+                            '<@(linux_mac_c_common_flags)',
+                            '<@(linux_mac_c_core_additional_flags)',
+                            '<(linux_mac_cpp_std)']
+                    }
+                }],
+                ['OS=="linux"', {
+                    'cflags_cc!': ["-fno-exceptions"],
+                    'cflags_cc': ['<(linux_mac_cpp_std)'],
+                    'cflags_c': ['<(linux_mac_c_std)'],
+                    'cflags': [
+                        '<@(linux_mac_c_common_flags)',
+                        '<@(linux_mac_c_core_additional_flags)',
+                        '<@(linux_specific_c_core_additional_flags)'
+                    ]
+                }]
+            ],
+        },
+        {
+            'target_name': '<(module_name)',
+            'sources': [
                 # Node Wrapper
                 "hash_node_wrap.cxx",
             ],
-            "conditions":[
-               ['OS=="mac"', {
-                   "xcode_settings": {
-                       "GCC_ENABLE_CPP_EXCEPTIONS": "YES"
-                   }
-               }]
+            'dependencies': ['<(core_lib_name)'],
+            'conditions': [
+                ['OS=="win"', {
+                    'libraries': ['<(core_lib_name).lib'],
+                    'configurations': {
+                        'Debug': {
+                            'msvs_settings': {
+                                'VCCLCompilerTool': {
+                                    'WarningLevel': '<(win_warning_level)',
+                                    'ExceptionHandling': '<(win_exception_handling)',
+                                    'DisableSpecificWarnings': [
+                                        '<@(win_warning_ignore_list)',
+                                        '<@(win_debug_additional_ignore_list)'
+                                    ],
+                                    'WarnAsError': '<(win_warn_as_error)',
+                                    'PreprocessorDefinitions': [
+                                        '<@(encoding)'
+                                    ]
+                                },
+                                'VCLinkerTool': {
+                                    'TreatLinkerWarningAsErrors': '<(win_warn_as_error)',
+                                    'AdditionalLibraryDirectories': ['<(PRODUCT_DIR)'],
+                                    'LinkIncremental': 1
+                                }
+                            }
+                        },
+                        'Release': {
+                            'msvs_settings': {
+                                'VCCLCompilerTool': {
+                                    'WarningLevel': '<(win_warning_level)',
+                                    'ExceptionHandling': '<(win_exception_handling)',
+                                    'WarnAsError': '<(win_warn_as_error)',
+                                    'DisableSpecificWarnings': [
+                                        '<@(win_warning_ignore_list)'
+                                    ],
+                                    'PreprocessorDefinitions': [
+                                        '<@(encoding)'
+                                    ]
+                                },
+                                'VCLinkerTool': {
+                                    'TreatLinkerWarningAsErrors': '<(win_warn_as_error)',
+                                    'AdditionalLibraryDirectories': ['<(PRODUCT_DIR)']
+                                }
+                            }
+                        }
+                    }
+                }],
+                ['OS!="win"', {
+                    'libraries': ['<(PRODUCT_DIR)/<(core_lib_name).a'],
+                }],
+                ['OS=="mac"', {
+                    "xcode_settings": {
+                        "GCC_ENABLE_CPP_EXCEPTIONS": "YES",
+                        "OTHER_CFLAGS": [
+                            '<@(linux_mac_c_common_flags)',
+                            '<@(linux_mac_c_wrapper_additional_flags)',
+                            '<(linux_mac_c_std)'
+                        ],
+                        "OTHER_CPLUSPLUSFLAGS": [
+                            '<@(linux_mac_c_common_flags)',
+                            '<@(linux_mac_c_wrapper_additional_flags)',
+                            '<(linux_mac_cpp_std)'
+                        ]
+                    },
+                }],
+                ['OS=="linux"', {
+                    'cflags_cc!': ['-fno-exceptions'],
+                    'cflags_cc': ['<(linux_mac_cpp_std)'],
+                    'cflags_c': ['<(linux_mac_c_std)'],
+                    'cflags': [
+                        '<@(linux_mac_c_common_flags)',
+                        '<@(linux_mac_c_wrapper_additional_flags)'
+                    ]
+                }]
             ],
-            "cflags_cc!": ["-fno-exceptions"],
-            "cflags_cc": ["-std=gnu++11"],
-            "cflags_c": ["-std=gnu11"],
-            "cflags": ["<!(node -e \"\
-                var v8Version = process.versions.v8;\
-                var string = '-DSWIG_V8_VERSION=0x';\
-                var arr = v8Version.split('.');\
-                for (var i = 0; i < 3; i++) {\
-                    if (arr[i].length === 1) {\
-                        string += '0';\
-                        }\
-                    string += arr[i];\
-                }\
-                console.log(string);\")",
-                "-Wall",
-                "-Wno-unused-variable",
-                "-Wno-unused-result",
-                "-Wno-unused-but-set-variable",
-                "-Wno-unused-function",
-                "-Wno-ignored-qualifiers",
-                "-Wno-missing-braces",
-                "-Wno-strict-aliasing",
-                "-Wno-attributes",
-                "-Wno-deprecated-declarations",
-                "-Werror"
-            ]
         }
     ]
 }

@@ -16,7 +16,7 @@ stages:
   - job: Build_And_Test
   
     pool:
-      vmImage: 'ubuntu-latest'
+      vmImage: 'ubuntu-18.04'
 
     strategy:
       matrix:
@@ -26,6 +26,7 @@ stages:
           node_version: 12.x
         node_14_x:
           node_version: 14.x
+      maxParallel: 1
 
     steps:
     - checkout: self
@@ -42,7 +43,7 @@ stages:
         artifact: 'binaries-linux'
         path: '$(System.ArtifactsDirectory)'
       displayName: 'Download binaries'
-  
+
     - script: |
         ls $(System.ArtifactsDirectory)
         mkdir $(Build.SourcesDirectory)/fiftyone.devicedetection.onpremise/build
@@ -50,6 +51,33 @@ stages:
         ls $(Build.SourcesDirectory)/fiftyone.devicedetection.onpremise/build
       displayName: 'Move binaries'
 
+    - task: Bash@3
+      displayName: 'Download TAC V4 Hash data file'
+      inputs:
+        targetType: 'inline'
+        script: 'wget "https://distributor.51degrees.com/api/v2/download?LicenseKeys=$(DeviceDetectionLicenseKey)&Type=27&Download=True&Product=23" -O "51Degrees.hash.gz"'
+    
+    - task: Bash@3
+      displayName: 'Download TAC V4 CSV data file'
+      inputs:
+        targetType: 'inline'
+        script: 'wget "https://distributor.51degrees.com/api/v2/download?LicenseKeys=$(DeviceDetectionLicenseKey)&Type=21&Download=True&Product=23" -O "$(Build.SourcesDirectory)/51Degrees-Tac.zip"'
+    
+    - task: ExtractFiles@1
+      displayName: 'Extract TAC V4 Hash data file'
+      inputs:
+        archiveFilePatterns: '**/*.hash.gz'
+        destinationFolder: '$(Build.SourcesDirectory)/fiftyone.devicedetection.onpremise/tests'
+        cleanDestinationFolder: false
+        overwriteExistingFiles: true
+    
+    - task: Bash@3
+      displayName: 'Extract TAC V4 CSV data file'
+      inputs:
+        targetType: 'inline'
+        script: 'unzip -p $(Build.SourcesDirectory)/51Degrees-Tac.zip 51Degrees-Tac-All.csv > $(Build.SourcesDirectory)/fiftyone.devicedetection.cloud/tests/51Degrees.csv'
+        workingDirectory: '$(Build.SourcesDirectory)'
+        
     - task: NodeTool@0
       inputs:
         versionSpec: $(node_version)
@@ -83,8 +111,10 @@ stages:
     # 3. Install dependencies.
     # 4. Run tests.
     - script: |
-        echo "Resource key for cloud testing = $(ResourceKey)"
-        export RESOURCE_KEY="$(ResourceKey)"
+        echo "Resource key for cloud testing = $(SuperResourceKey)"
+        export RESOURCE_KEY="$(SuperResourceKey)"
+        echo "Cloud endpoint for testing = $(FOD_CLOUD_API_URL)"
+        export FOD_CLOUD_API_URL="$(FOD_CLOUD_API_URL)"
         echo "npm install"
         npm install
         echo "npm install n-readlines"
@@ -100,7 +130,8 @@ stages:
       condition: succeededOrFailed()
 
     - script: |
-        sudo apt-get install cmake apache2-dev libapr1-dev libaprutil1-dev
+        sudo apt-get update -y
+        sudo apt-get install cmake apache2-dev libapr1-dev libaprutil1-dev -y
         mkdir build
         cd build
         cmake ..
@@ -178,7 +209,6 @@ stages:
 
 
 - stage: MacOS
-  dependsOn: []
   jobs:
   - job: Build_And_Test
 
@@ -193,6 +223,7 @@ stages:
           node_version: 12.x
         node_14_x:
           node_version: 14.x
+      maxParallel: 1
 
     steps:
     - checkout: self
@@ -215,6 +246,33 @@ stages:
         mv $(System.ArtifactsDirectory)/*.node $(Build.SourcesDirectory)/fiftyone.devicedetection.onpremise/build
         ls $(Build.SourcesDirectory)/fiftyone.devicedetection.onpremise/build
       displayName: 'Move binaries'
+
+    - task: Bash@3
+      displayName: 'Download TAC V4 Hash data file'
+      inputs:
+        targetType: 'inline'
+        script: 'wget "https://distributor.51degrees.com/api/v2/download?LicenseKeys=$(DeviceDetectionLicenseKey)&Type=27&Download=True&Product=23" -O "51Degrees.hash.gz"'
+    
+    - task: Bash@3
+      displayName: 'Download TAC V4 CSV data file'
+      inputs:
+        targetType: 'inline'
+        script: 'wget "https://distributor.51degrees.com/api/v2/download?LicenseKeys=$(DeviceDetectionLicenseKey)&Type=21&Download=True&Product=23" -O "$(Build.SourcesDirectory)/51Degrees-Tac.zip"'
+    
+    - task: ExtractFiles@1
+      displayName: 'Extract TAC V4 Hash data file'
+      inputs:
+        archiveFilePatterns: '**/*.hash.gz'
+        destinationFolder: '$(Build.SourcesDirectory)/fiftyone.devicedetection.onpremise/tests'
+        cleanDestinationFolder: false
+        overwriteExistingFiles: true
+    
+    - task: Bash@3
+      displayName: 'Extract TAC V4 CSV data file'
+      inputs:
+        targetType: 'inline'
+        script: 'unzip -p $(Build.SourcesDirectory)/51Degrees-Tac.zip 51Degrees-Tac-All.csv > $(Build.SourcesDirectory)/fiftyone.devicedetection.cloud/tests/51Degrees.csv'
+        workingDirectory: '$(Build.SourcesDirectory)'
 
     - task: NodeTool@0
       inputs:
@@ -242,8 +300,10 @@ stages:
     # 3. Install dependencies.
     # 4. Run tests.
     - script: |
-        echo "Resource key for cloud testing = $(ResourceKey)"
-        export RESOURCE_KEY="$(ResourceKey)"
+        echo "Resource key for cloud testing = $(SuperResourceKey)"
+        export RESOURCE_KEY="$(SuperResourceKey)"
+        echo "Cloud endpoint for testing = $(FOD_CLOUD_API_URL)"
+        export FOD_CLOUD_API_URL="$(FOD_CLOUD_API_URL)"
         echo "npm install"
         npm install
         echo "npm install n-readlines"

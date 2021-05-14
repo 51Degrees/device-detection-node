@@ -20,12 +20,45 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
-const DeviceDetectionCloudPipelineBuilder = require(__dirname +
-  '/../deviceDetectionCloudPipelineBuilder');
-const myResourceKey = process.env.RESOURCE_KEY || '!!YOUR_RESOURCE_KEY!!';
+const require51 = (requestedPackage) => {
+  try {
+    return require(__dirname + '/../' + requestedPackage);
+  } catch (e) {
+    return require(requestedPackage);
+  }
+};
+
+const core = require51('fiftyone.pipeline.core');
+const PipelineBuilder = core.PipelineBuilder;
+
+const cloudRequestEngine = require51('fiftyone.pipeline.cloudrequestengine');
+const RequestEngineBuilder = cloudRequestEngine.CloudRequestEngine;
+
+const EngineBuilder = require(
+  __dirname + '/../deviceDetectionCloud'
+);
+const DeviceDetectionCloudPipelineBuilder = require(
+  __dirname + '/../deviceDetectionCloudPipelineBuilder');
 const errorMessages = require('fiftyone.devicedetection.shared').errorMessages;
 
+const fs = require('fs');
+const path = require('path');
+
+const CSVDataFile = (process.env.directory || __dirname) + '/51Degrees.csv';
+const MobileUserAgent =
+  "Mozilla/5.0 (iPhone; CPU iPhone OS 7_1 like Mac OS X) " +
+  "AppleWebKit/537.51.2 (KHTML, like Gecko) Version/7.0 Mobile" +
+  "/11D167 Safari/9537.53";
+
+const myResourceKey = process.env.RESOURCE_KEY || '!!YOUR_RESOURCE_KEY!!';
+
 describe('deviceDetectionCloud', () => {
+  beforeAll(() => {
+      if (!fs.existsSync(CSVDataFile)) {
+        fail();
+      }
+  });
+  
   // Check that if no evidence is provided for device
   // detection engine, accessing a valid property will
   // return HasValue=false and a correct error message
@@ -43,7 +76,7 @@ describe('deviceDetectionCloud', () => {
       flowData.process().then(function () {
         const ismobile = flowData.device.ismobile;
         expect(ismobile.hasValue).toBe(false);
-console.log(ismobile.noValueMessage);
+        console.log(ismobile.noValueMessage);
         expect(ismobile.noValueMessage.indexOf(
           errorMessages.evidenceNotFound) !== -1).toBe(true);
 
@@ -51,4 +84,162 @@ console.log(ismobile.noValueMessage);
       });
     }
   });
+
+  // Check that for a successful detection, all properties loaded by the engine 
+  // are accessible in the results.
+  test('Available Properties', async done => {
+    var line = await readFirstLine(CSVDataFile).catch(e => {});
+
+    var properties = line
+    .replace(/["\r]/g, "")
+    .split(",");
+
+    var requestEngine = new RequestEngineBuilder({
+      resourceKey: myResourceKey
+    });
+    var engine = new EngineBuilder();
+    
+    var pipeline = new PipelineBuilder()
+      .add(requestEngine)
+      .add(engine)
+      .build();
+
+    const flowData = pipeline.createFlowData();
+
+    flowData.evidence.add('header.user-agent', MobileUserAgent);
+
+    await flowData.process();
+
+    properties.forEach(key => {
+      try {
+        var apv = flowData.device[key.toLowerCase()];
+        if (apv === undefined) {
+          done.fail(new Error(`Aspect property value for ${key}should not be undefined.`));
+        }
+        expect(apv).not.toBeNull();
+        if (apv.hasValue == true) {
+          if (apv.value == null || apv.value === undefined) {
+            done.fail(new Error(`${key}.value should not be null`));
+          }
+        } else {
+          if (apv.noValueMessage == null || apv.noValueMessage === undefined) {
+            done.fail(new Error(`${key}.noValueMessage should not be null`));
+          }
+        }
+      } catch (err) {
+        done.fail(err);
+      }
+    });
+    done();
+  });
+
+  test('Value Types', async done => {
+    var line = await readFirstLine(CSVDataFile).catch(e => {});
+
+    var properties = line
+    .replace(/["\r]/g, "")
+    .split(",");
+
+    var requestEngine = new RequestEngineBuilder({
+      resourceKey: myResourceKey
+    });
+    var engine = new EngineBuilder();
+    
+    var pipeline = new PipelineBuilder()
+      .add(requestEngine)
+      .add(engine)
+      .build();
+
+    const flowData = pipeline.createFlowData();
+
+    flowData.evidence.add('header.user-agent', MobileUserAgent);
+
+    await flowData.process();
+
+    properties.forEach(key => {
+      try {
+        var property = engine.properties[key.toLowerCase()];
+        if (property === undefined) {
+          throw new Error(`No property metadata defined for ${key.toLowerCase()}`);
+        }
+        var expectedType = property.type;
+        var apv = flowData.device[key.toLowerCase()];
+        expect(apv).not.toBe(null);
+        expect(apv).toBeDefined();
+        expect(apv.value).toBe51DType(key, expectedType);
+      } catch (err){
+        done.fail(err);
+      }
+    });
+    
+    done();
+
+  });
+});
+
+function readFirstLine(filePath) {
+  var rs = fs.createReadStream(path.resolve(filePath));
+  var line = '';
+  var pos = 0;
+  var index;
+  return new Promise ((resolve, reject) => { 
+    rs
+    .on('data', function (chunk) {
+      index = chunk.indexOf('\n');
+      line += chunk;
+      index !== -1 ? rs.close() : pos += chunk.length;
+    })
+    .on('close', function () {
+      resolve(line.slice(0, pos + index));
+    })
+    .on('error', function (err) {
+      reject(err);
+    });
+  });
+}
+
+expect.extend({
+  // Method to validate a given value has the expected type.
+  toBe51DType(received, name, fodType) {
+    var valueType = typeof received;
+    var valid = false;
+  
+    switch (fodType) {
+      case 'Boolean':
+        valid = 'boolean' == valueType;
+        break;
+      case 'String':
+        valid = 'string' == valueType;
+        break;
+      case 'JavaScript':
+        valid = 'string' == valueType;
+        break;
+      case 'Int32':
+        valid = 'number' == valueType;
+        break;
+      case 'Double':
+        valid = 'number' == valueType;
+        break;
+      case 'Array':
+        valid = 'object' == valueType && Array.isArray(received);
+        break;
+      default:
+        valid = false;
+        break;
+    }
+    
+    if (valid) {
+      return {
+        message: () => 
+          `${name}: expected node type '${valueType}' not to be equivalent to fodType '${fodType}' for value: '${received}'`,
+        pass: true
+      }
+    } else {
+      return {
+        message: () => 
+          `${name}: expected node type '${valueType}' to be equivalent to fodType '${fodType}' for value: '${received}'`,
+        pass: false
+      }
+    }
+  }
 });
