@@ -1,0 +1,20 @@
+parameters:
+- name: publishConnection
+- name: packageName
+
+steps:
+
+- task: ExtractFiles@1
+  displayName: 'Extract ${{ parameters.packageName }}'
+  inputs:
+    archiveFilePatterns: '$(PIPELINE.WORKSPACE)/build-pipeline/npm/${{ parameters.packageName }}/*.tgz'
+    destinationFolder: '$(PIPELINE.WORKSPACE)/build-pipeline/npm/${{ parameters.packageName }}/tmp'
+
+- task: Npm@1
+  displayName: 'npm publish ${{ parameters.packageName }}'
+  inputs:
+    command: publish
+    workingDir: '$(PIPELINE.WORKSPACE)/build-pipeline/npm/${{ parameters.packageName }}/tmp/package'
+    verbose: false
+    publishEndpoint: ${{ parameters.publishConnection }}
+    

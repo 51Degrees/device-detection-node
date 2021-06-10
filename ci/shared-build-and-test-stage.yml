@@ -1,0 +1,233 @@
+parameters:
+- name: stageName
+- name: imageName
+- name: osName
+- name: stageDependency
+- name: publishBinaries
+  type: boolean
+  default: false
+
+stages:
+- stage: ${{ parameters.stageName }}
+  dependsOn: ${{ parameters.stageDependency }}
+
+  jobs:
+  - job: Build_And_Test
+
+    variables: 
+      - group: PackageFeedAccessToken
+      - group: InternalKeys
+
+    pool:
+      vmImage: ${{ parameters.imageName }}
+
+    strategy:
+      matrix:
+        node_10_x:
+          node_version: 10
+        node_12_x:
+          node_version: 12
+        node_14_x:
+          node_version: 14
+      maxParallel: 1
+
+    steps:
+    - checkout: self
+      lfs: true
+      submodules: recursive
+
+    - task: DownloadBuildArtifacts@0
+      displayName: 'Download Data Files'
+      inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        artifactName: 'dataFiles'
+        downloadPath: '$(System.ArtifactsDirectory)'
+
+    - script: |
+        mv $(System.ArtifactsDirectory)/dataFiles/51Degrees.hash $(Build.SourcesDirectory)/fiftyone.devicedetection.onpremise/tests
+      displayName: 'Move Hash Data File'
+      failOnStderr: true
+
+    - script: |
+        mv $(System.ArtifactsDirectory)/dataFiles/51Degrees.csv $(Build.SourcesDirectory)/fiftyone.devicedetection.cloud/tests/51Degrees.csv
+      displayName: 'Move TAC Data File'
+      failOnStderr: true
+        
+    - task: NodeTool@0
+      inputs:
+        versionSpec: $(node_version).x
+      displayName: 'Install Node.js'
+
+    # The secure file to download will be stored in the 
+    # Pipelines/Library/SecureFiles section in Azure DevOps.
+    - task: DownloadSecureFile@1
+      displayName: 'Download .npmrc'
+      name: npmrc
+      inputs:
+        secureFile: '.npmrc'
+
+    - task: CopyFiles@2
+      displayName: 'Copy .npmrc to working directory'
+      inputs:
+        sourceFolder: '$(Agent.TempDirectory)'
+        targetFolder: '$(System.DefaultWorkingDirectory)'
+        contents: '.npmrc'
+
+    - task: CopyFiles@2
+      displayName: 'Copy .npmrc to fiftyone.devicedetection.onpremise'
+      inputs:
+        sourceFolder: '$(Agent.TempDirectory)'
+        targetFolder: '$(System.DefaultWorkingDirectory)/fiftyone.devicedetection.onpremise'
+        contents: '.npmrc'
+
+    - bash: |
+        # Create the binding.gyp
+        cd fiftyone.devicedetection.onpremise
+        mv binding.51d binding.gyp
+        if [ ! -f ../fiftyone.devicedetection.onpremise/binding.gyp ]; then
+          echo "ERROR: Failed to create binding.gyp."
+          exit 1
+        fi
+
+        # Install node-gyp
+        npm install -g node-gyp
+        if [ $? -ne 0 ]; then
+          echo "ERROR: Failed to install node-gyp."
+          exit 1
+        fi
+
+        # Build binaries
+        rm -r build
+        # This will automatically trigger node-gyp rebuild
+        # which run clean, configure and build in a row
+        npm install
+        if [ $? -ne 0]; then
+          echo "ERROR: Failed to build binaries."
+          exit 1
+        fi
+
+        # If build fails, this line will fail so no need to check error code here.
+        cd build
+        mv Release/FiftyOneDeviceDetectionHashV4.node FiftyOneDeviceDetectionHashV4-${{ parameters.osName }}-$(node_version).node
+        if [ ! -f FiftyOneDeviceDetectionHashV4-${{ parameters.osName }}-$(node_version).node ]; then
+          echo "ERROR: Failed to create FiftyOneDeviceDetectionHashV4-${{ parameters.osName }}-$(node_version).node"
+          exit 1
+        fi
+      displayName: "Build binaries"
+
+    # 1. Set resource key environment variable from resource key value 
+    # in 'InternalKeys' group 
+    # 2. Move to correct dir.
+    # 3. Install dependencies.
+    # 4. Run tests.
+    - bash: |
+        echo "Resource key for cloud testing = $(SuperResourceKey)"
+        export RESOURCE_KEY="$(SuperResourceKey)"
+        echo "Cloud endpoint for testing = $(FOD_CLOUD_API_URL)"
+        export FOD_CLOUD_API_URL="$(FOD_CLOUD_API_URL)"
+        echo "npm install"
+        npm install
+        echo "npm install n-readlines"
+        npm install n-readlines
+        echo "npm test"
+        npm test
+      displayName: 'Build and Test'
+
+    - bash: |
+        sudo apt-get update -y
+        sudo apt-get install cmake apache2-dev libapr1-dev libaprutil1-dev -y
+        mkdir build
+        if [ ! -d build ]; then
+          echo "ERROR: Failed to create build folder."
+          exit 1
+        fi
+        
+        cd build
+        cmake ..
+        cmake --build .
+      workingDirectory: 'fiftyone.devicedetection.onpremise/tests/cloud-performance-test'
+      displayName: 'Build Performance Tests'
+      condition: and(succeededOrFailed(), contains('${{ parameters.osName }}', 'linux'))
+
+    - script: |
+        cd build
+        ./runPerf.sh
+      workingDirectory: 'fiftyone.devicedetection.onpremise/tests/cloud-performance-test'
+      displayName: 'Run Performance Tests'
+      condition: and(succeededOrFailed(), contains('${{ parameters.osName }}', 'linux'))
+      failOnStderr: true
+
+    - bash: |
+        find "$(System.DefaultWorkingDirectory)" -name "*core*"
+      displayName: 'Get core dump'
+      condition: succeededOrFailed()
+
+    - bash: |
+        eslint='{
+            "env": {
+                "browser": true,
+                "commonjs": true,
+                "es6": true,
+                "jest": true
+            },
+            "extends": [
+                "standard"
+            ],
+            "globals": {
+                "Atomics": "readonly",
+                "SharedArrayBuffer": "readonly",
+                "test": true,
+                "jest": true,
+                "expect": true
+            },
+            "parserOptions": {
+                "ecmaVersion": 2018
+            },
+            "rules": {
+                "node/no-deprecated-api": "off",
+                "no-throw-literal": "off",
+                "no-path-concat": "off",
+                "no-prototype-builtins": "off",
+                "no-eval": "off",
+                "semi": [
+                    2,
+                    "always"
+                ]
+            }
+          }'
+        echo $eslint
+        echo $eslint > .eslintrc
+        npm install -g eslint
+        eslint **/*.js
+      displayName: "Set up and run eslint"
+      condition: and(ne(variables['node_version'], '6.x'), ne(variables['node_version'], '8.x'))
+      failOnStderr: true
+
+    - task: CopyFiles@2
+      inputs:
+        contents: 'fiftyone.devicedetection.onpremise/build/*.node'
+        targetFolder: $(Build.ArtifactStagingDirectory)
+        flattenFolders: true
+      condition: eq(${{ parameters.publishBinaries }}, true)
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathToPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'binaries'
+        publishLocation: 'Container'
+      condition: eq(${{ parameters.publishBinaries }}, true)
+
+    - task: PublishTestResults@2
+      condition: succeededOrFailed()
+      inputs:
+        testRunner: JUnit
+        testResultsFiles: '**/test_results.xml'
+        testRunTitle: 'Node $(node_version) ${{ parameters.osName }}'
+
+    - task: PublishCodeCoverageResults@1
+      condition: succeededOrFailed()
+      inputs: 
+        codeCoverageTool: Cobertura
+        summaryFileLocation: '$(System.DefaultWorkingDirectory)/**/*coverage.xml'
+        reportDirectory: '$(System.DefaultWorkingDirectory)/**/coverage'
