@@ -20,18 +20,14 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
-const require51 = (requestedPackage) => {
-  try {
-    return require(__dirname + '/../' + requestedPackage);
-  } catch (e) {
-    return require(requestedPackage);
-  }
-};
-
-const MissingPropertyService = require51('fiftyone.pipeline.engines').MissingPropertyService;
+const MissingPropertyService = require('fiftyone.pipeline.engines').MissingPropertyService;
 
 const errorMessages = require('fiftyone.devicedetection.shared').errorMessages;
 const util = require('util');
+
+/**
+ * @typedef {import('fiftyone.pipeline.core').FlowElement} FlowElement
+ */
 
 /**
  * Instance of the MissingPropertyService class that checks if a

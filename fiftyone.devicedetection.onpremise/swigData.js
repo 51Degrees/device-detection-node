@@ -20,20 +20,16 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
-const require51 = (requestedPackage) => {
-  try {
-    return require(__dirname + '/../' + requestedPackage);
-  } catch (e) {
-    return require(requestedPackage);
-  }
-};
-
-const AspectData = require51('fiftyone.pipeline.engines').AspectData;
-const AspectPropertyValue = require51('fiftyone.pipeline.core').AspectPropertyValue;
+const AspectData = require('fiftyone.pipeline.engines').AspectData;
+const AspectPropertyValue = require('fiftyone.pipeline.core').AspectPropertyValue;
 
 const swigHelpers = require('./swigHelpers');
 
 const DataFileMissingPropertyService = require('./dataFileMissingPropertyService');
+
+/**
+ * @typedef {import('fiftyone.pipeline.core').FlowElement} FlowElement
+ */
 
 /**
  * Extension of aspectData which stores the results created by the SWIG wrapper

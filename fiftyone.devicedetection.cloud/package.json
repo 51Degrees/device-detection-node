@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Device detection cloud services for the 51Degrees Pipeline API",
   "main": "index.js",
+  "types": "types/index.d.ts",
   "directories": {
     "test": "tests"
   },
@@ -29,6 +30,7 @@
     "fiftyone.devicedetection.shared": "file:../fiftyone.devicedetection.shared"
   },
   "devDependencies": {
+    "@types/node": "^15.12.2",
     "eslint": "^6.8.0",
     "eslint-config-standard": "^14.1.1",
     "eslint-plugin-import": "^2.20.2",
