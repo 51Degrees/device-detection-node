@@ -38,6 +38,15 @@ Pixel width: [...]
 ```
 
  */
+ 
+const require51 = (requestedPackage) => {
+  try {
+    return require('/../' + requestedPackage);
+  } catch (e) {
+    return require(requestedPackage);
+  }
+};
+const core = require51('fiftyone.pipeline.core');
 
 const DeviceDetectionOnPremisePipelineBuilder =
   require((process.env.directory || __dirname) +
@@ -55,8 +64,6 @@ if (!fs.existsSync(datafile)) {
 }
 
 // Create a new Device Detection pipeline and set the config.
-// You need to create a resource key at https://configure.51degrees.com
-// and paste it into the code.
 // The JavaScriptBuilderSettings allow you to provide an endpoint
 // which will be requested by the client side JavaScript. This should return
 // the contents of the JSONBundler element which is automatically
@@ -92,6 +99,14 @@ const server = http.createServer((req, res) => {
 
       res.end(JSON.stringify(flowData.jsonbundler.json));
     } else {
+
+      // Some browsers require that extra HTTP headers are explicitly
+      // requested. So set whatever headers are required by the browser in
+      // order to return the evidence needed by the pipeline.
+      // More info on this can be found at
+      // https://51degrees.com/blog/user-agent-client-hints
+      core.Helpers.setResponseHeaders(res, flowData);
+
       // To get a more acurate list of hardware names,
       // we need to run some client side javascript code.
       // At first this will populate a large list which will

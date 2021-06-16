@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Device detection cloud services for the 51Degrees Pipeline API",
   "main": "index.js",
+  "types": "types/index.d.ts",
   "directories": {
     "test": "tests"
   },
@@ -22,13 +23,14 @@
     "Tung Pham <tung@51degrees.com> (https://51degrees.com)"
   ],
   "dependencies": {
-    "fiftyone.pipeline.cloudrequestengine": "^4.2.2",
-    "fiftyone.pipeline.core": "^4.2.2",
-    "fiftyone.pipeline.engines": "^4.2.2",
-    "fiftyone.pipeline.engines.fiftyone": "^4.2.2",
+    "fiftyone.pipeline.cloudrequestengine": "^4.3.0",
+    "fiftyone.pipeline.core": "^4.3.0",
+    "fiftyone.pipeline.engines": "^4.3.0",
+    "fiftyone.pipeline.engines.fiftyone": "^4.3.0",
     "fiftyone.devicedetection.shared": "file:../fiftyone.devicedetection.shared"
   },
   "devDependencies": {
+    "@types/node": "^15.12.2",
     "eslint": "^6.8.0",
     "eslint-config-standard": "^14.1.1",
     "eslint-plugin-import": "^2.20.2",

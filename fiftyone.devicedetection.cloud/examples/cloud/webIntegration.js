@@ -25,7 +25,7 @@
 
 @include{doc} example-web-integration.txt
 
-This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection/examples/cloud/webIntegration.js).
+This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection.cloud/examples/cloud/webIntegration.js).
 
 @include{doc} example-require-resourcekey.txt
 
@@ -41,6 +41,15 @@ Pixel width: 1920
 ```
 
  */
+
+const require51 = (requestedPackage) => {
+  try {
+    return require('/../' + requestedPackage);
+  } catch (e) {
+    return require(requestedPackage);
+  }
+};
+const core = require51('fiftyone.pipeline.core');
 
 const DeviceDetectionCloudPipelineBuilder =
   require((process.env.directory || __dirname) +
@@ -94,6 +103,14 @@ if (myResourceKey == "!!YOUR_RESOURCE_KEY!!") {
 
         res.end(JSON.stringify(flowData.jsonbundler.json));
       } else {
+
+        // Some browsers require that extra HTTP headers are explicitly
+        // requested. So set whatever headers are required by the browser in
+        // order to return the evidence needed by the pipeline.
+        // More info on this can be found at
+        // https://51degrees.com/blog/user-agent-client-hints
+        core.Helpers.setResponseHeaders(res, flowData);
+
         // To get a more acurate list of hardware names,
         // we need to run some client side javascript code.
         // At first this will populate a large list which will get smaller

@@ -20,16 +20,8 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
-const require51 = (requestedPackage) => {
-  try {
-    return require(__dirname + '/../' + requestedPackage);
-  } catch (e) {
-    return require(requestedPackage);
-  }
-};
-
 const querystring = require('querystring');
-const engines = require51('fiftyone.pipeline.engines');
+const engines = require('fiftyone.pipeline.engines');
 
 const DataFile = engines.DataFile;
 

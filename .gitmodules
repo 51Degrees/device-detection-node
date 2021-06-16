@@ -1,3 +1,6 @@
 [submodule "fiftyone.devicedetection.onpremise/device-detection-cxx"]
 	path = fiftyone.devicedetection.onpremise/device-detection-cxx
 	url=../device-detection-cxx
+[submodule "ci/common-ci"]
+	path = ci/common-ci
+url=../common-ci

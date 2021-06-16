@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Shared functionality for implementing device detection engine for the 51Degrees Pipeline API",
   "main": "index.js",
+  "types": "types/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/51Degrees/device-detection-node"

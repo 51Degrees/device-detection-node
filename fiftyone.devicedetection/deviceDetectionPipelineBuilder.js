@@ -20,22 +20,14 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
-const require51 = (requestedPackage) => {
-  try {
-    return require(__dirname + '/../' + requestedPackage);
-  } catch (e) {
-    return require(requestedPackage);
-  }
-};
-
-const core = require51('fiftyone.pipeline.core');
+const core = require('fiftyone.pipeline.core');
 const DeviceDetectionOnPremise = require('fiftyone.devicedetection.onpremise').DeviceDetectionOnPremise;
 const DeviceDetectionCloud = require('fiftyone.devicedetection.cloud').DeviceDetectionCloud;
-const CloudRequestEngine = require51('fiftyone.pipeline.cloudrequestengine').CloudRequestEngine;
+const CloudRequestEngine = require('fiftyone.pipeline.cloudrequestengine').CloudRequestEngine;
 const PipelineBuilder = core.PipelineBuilder;
-const engines = require51('fiftyone.pipeline.engines');
+const engines = require('fiftyone.pipeline.engines');
 const LruCache = engines.LruCache;
-const ShareUsageElement = require51('fiftyone.pipeline.engines.fiftyone').ShareUsage;
+const ShareUsageElement = require('fiftyone.pipeline.engines.fiftyone').ShareUsage;
 const errorMessages = require('fiftyone.devicedetection.shared').errorMessages;
 
 class DeviceDetectionPipelineBuilder extends PipelineBuilder {

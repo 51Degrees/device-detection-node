@@ -25,7 +25,7 @@
 
 @include{doc} example-failure-to-match-cloud.txt
  
-This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection/examples/cloud/failureToMatch.js).
+This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection.cloud/examples/cloud/failureToMatch.js).
 
 @include{doc} example-require-resourcekey.txt
 

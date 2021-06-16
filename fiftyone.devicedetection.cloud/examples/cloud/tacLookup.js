@@ -25,7 +25,7 @@
 
 @include{doc} example-tac-lookup-cloud.txt
 
-This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection/examples/cloud/tacLookup.js).
+This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection.cloud/examples/cloud/tacLookup.js).
 
 @include{doc} example-require-resourcekey.txt
 

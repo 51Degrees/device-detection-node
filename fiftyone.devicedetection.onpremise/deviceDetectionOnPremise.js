@@ -20,16 +20,8 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
-const require51 = (requestedPackage) => {
-  try {
-    return require(__dirname + '/../' + requestedPackage);
-  } catch (e) {
-    return require(requestedPackage);
-  }
-};
-
-const core = require51('fiftyone.pipeline.core');
-const engines = require51('fiftyone.pipeline.engines');
+const core = require('fiftyone.pipeline.core');
+const engines = require('fiftyone.pipeline.engines');
 
 const Engine = engines.Engine;
 const DataFile = require('./deviceDetectionDataFile');
@@ -41,6 +33,10 @@ const path = require('path');
 const EvidenceKeyFilter = core.BasicListEvidenceKeyFilter;
 const fs = require('fs');
 const util = require('util');
+
+/**
+ * @typedef {import('fiftyone.pipeline.engines').DataKeyedCache} DataKeyedCache
+ */
 
 // Determine if Windows or linux and which node version
 
@@ -63,7 +59,7 @@ class DeviceDetectionOnPremise extends Engine {
    * updates to the datafile (minutes)
    * @param {number} options.updateTimeMaximumRandomisation
    * Maximum randomisation offset in seconds to polling time interval
-   * @param {Cache} options.cache an instance of the Cache class from
+   * @param {DataKeyedCache} options.cache an instance of the Cache class from
    * Fiftyone.Pipeline.Engines. NOTE: This is no longer supported for
    * on-premise engine.
    * @param {string} options.dataFileUpdateBaseUrl base url for the datafile
