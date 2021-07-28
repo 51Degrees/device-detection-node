@@ -48,7 +48,8 @@ class DeviceDetectionCloudPipelineBuilder extends PipelineBuilder {
    * (includes cache if set).
    * @param {string} options.cloudEndPoint Choose a non default endpoint
    * for the cloud request engine
-   *
+   * @param {string} options.cloudRequestOrigin The value to set the
+   * Origin header to when making requests to the cloud service
    */
   constructor (
     {
@@ -56,7 +57,8 @@ class DeviceDetectionCloudPipelineBuilder extends PipelineBuilder {
       shareUsage = true,
       resourceKey = null,
       cacheSize = null,
-      cloudEndPoint = null
+      cloudEndPoint = null,
+      cloudRequestOrigin = null
     }) {
     super(...arguments);
 
@@ -79,6 +81,7 @@ class DeviceDetectionCloudPipelineBuilder extends PipelineBuilder {
         resourceKey: resourceKey,
         licenseKey: licenceKeys,
         baseURL: cloudEndPoint,
+        cloudRequestOrigin: cloudRequestOrigin,
         cache
       }));
 

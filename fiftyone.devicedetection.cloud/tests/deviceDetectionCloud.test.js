@@ -43,6 +43,7 @@ const errorMessages = require('fiftyone.devicedetection.shared').errorMessages;
 
 const fs = require('fs');
 const path = require('path');
+const each = require('jest-each').default;
 
 const CSVDataFile = (process.env.directory || __dirname) + '/51Degrees.csv';
 const MobileUserAgent =
@@ -248,4 +249,39 @@ expect.extend({
       }
     }
   }
+});
+
+// Verify that making requests using a resource key that
+// is limited to particular origins will fail or succeed
+// in the expected scenarios. 
+// This is an integration test that uses the live cloud service
+// so any problems with that service could affect the result
+// of this test.
+describe('Origin Header', () => {
+  each([
+    ['', true],
+    ['test.com', true],
+    ['51degrees.com', false]
+  ]).test('origin header set to "%s"', (origin, expectError) => {
+    var error = false;
+    var message = '';
+
+    const pipeline = new DeviceDetectionCloudPipelineBuilder({
+      resourceKey: 'AQS5HKcyVj6B8wNG2Ug',
+      cloudRequestOrigin: origin
+    }).build();
+
+    // We want to monitor for the expected error message
+    pipeline.on('error', (err) => {
+      error = true;
+      message = err.message;
+    });
+
+    const flowData = pipeline.createFlowData();
+    flowData.process().then(() => {
+      expect(error).toBe(expectError);
+      expect(message).toContain(
+        `This resource key is not authorized for use with domain: '${origin}'`);
+    });
+  })
 });
