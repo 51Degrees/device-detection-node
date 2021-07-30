@@ -22,50 +22,12 @@ variables:
 - template: shared-variables.yml
 - name: targetBranch
   value: 'refs/heads/master'
+- group: CIAutomation
 
-stages:
-- stage: publish_internal
-  displayName: Publish Internal
-  jobs:
-  # Note - A 'deployment' job will automatically download the artifacts created by the triggering pipeline.
-  - deployment: deploy_internal
-    displayName: Deploy Internal
-    pool:
-      vmImage: $(linuxImage)
-      workspace:
-        clean: all
-    environment: packages-internal
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          #- bash: 'ls -R "$(PIPELINE.WORKSPACE)"'
-          #  displayName: 'List files and directories'
-          
-          - template: shared-extract-and-publish-packages.yml
-            parameters:
-              publishConnection: 'NPM internal'
-              packageName: 'fiftyone.devicedetection'
-              
-          - template: shared-extract-and-publish-packages.yml
-            parameters:
-              publishConnection: 'NPM internal'
-              packageName: 'fiftyone.devicedetection.cloud'
-              
-          - template: shared-extract-and-publish-packages.yml
-            parameters:
-              publishConnection: 'NPM internal'
-              packageName: 'fiftyone.devicedetection.onpremise'
-              
-          - template: shared-extract-and-publish-packages.yml
-            parameters:
-              publishConnection: 'NPM internal'
-              packageName: 'fiftyone.devicedetection.shared'
-              
+stages:       
               
 - stage: publish_npm
   displayName: Publish to NPM
-  dependsOn: []
   condition: eq(variables['build.sourceBranch'], variables['targetBranch'])
   jobs:
   - deployment: deploy_npm
@@ -80,25 +42,29 @@ stages:
         deploy:
           steps: 
           
-          - template: shared-extract-and-publish-packages.yml
+          - template: node/shared-extract-and-publish-packages.yml@ciTemplates
             parameters:
               publishConnection: 'NPM publish connection'
               packageName: 'fiftyone.devicedetection'
+              internalFeedId: $(InternalFeedId)
               
-          - template: shared-extract-and-publish-packages.yml
+          - template: node/shared-extract-and-publish-packages.yml@ciTemplates
             parameters:
               publishConnection: 'NPM publish connection'
               packageName: 'fiftyone.devicedetection.cloud'
+              internalFeedId: $(InternalFeedId)
               
-          - template: shared-extract-and-publish-packages.yml
+          - template: node/shared-extract-and-publish-packages.yml@ciTemplates
             parameters:
               publishConnection: 'NPM publish connection'
               packageName: 'fiftyone.devicedetection.onpremise'
+              internalFeedId: $(InternalFeedId)
               
-          - template: shared-extract-and-publish-packages.yml
+          - template: node/shared-extract-and-publish-packages.yml@ciTemplates
             parameters:
               publishConnection: 'NPM publish connection'
               packageName: 'fiftyone.devicedetection.shared'
+              internalFeedId: $(InternalFeedId)
 
 
 - template: shared-publish-github-stage.yml@ciTemplates

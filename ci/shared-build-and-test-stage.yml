@@ -6,6 +6,9 @@ parameters:
 - name: publishBinaries
   type: boolean
   default: false
+- name: runTests
+  type: string
+  default: 'On'
 
 stages:
 - stage: ${{ parameters.stageName }}
@@ -38,6 +41,7 @@ stages:
 
     - task: DownloadBuildArtifacts@0
       displayName: 'Download Data Files'
+      condition: ne(${{ parameters.runTests }}, 'Off')
       inputs:
         buildType: 'current'
         downloadType: 'single'
@@ -48,11 +52,13 @@ stages:
         mv $(System.ArtifactsDirectory)/dataFiles/51Degrees.hash $(Build.SourcesDirectory)/fiftyone.devicedetection.onpremise/tests
       displayName: 'Move Hash Data File'
       failOnStderr: true
+      condition: ne(${{ parameters.runTests }}, 'Off')
 
     - script: |
         mv $(System.ArtifactsDirectory)/dataFiles/51Degrees.csv $(Build.SourcesDirectory)/fiftyone.devicedetection.cloud/tests/51Degrees.csv
       displayName: 'Move TAC Data File'
       failOnStderr: true
+      condition: ne(${{ parameters.runTests }}, 'Off')
         
     - task: NodeTool@0
       inputs:
@@ -133,6 +139,7 @@ stages:
         echo "npm test"
         npm test
       displayName: 'Build and Test'
+      condition: ne(${{ parameters.runTests }}, 'Off')
 
     - bash: |
         sudo apt-get update -y
@@ -148,20 +155,20 @@ stages:
         cmake --build .
       workingDirectory: 'fiftyone.devicedetection.onpremise/tests/cloud-performance-test'
       displayName: 'Build Performance Tests'
-      condition: and(succeededOrFailed(), contains('${{ parameters.osName }}', 'linux'))
+      condition: and(succeededOrFailed(), ne(${{ parameters.runTests }}, 'Off'), contains('${{ parameters.osName }}', 'linux'))
 
     - script: |
         cd build
         ./runPerf.sh
       workingDirectory: 'fiftyone.devicedetection.onpremise/tests/cloud-performance-test'
       displayName: 'Run Performance Tests'
-      condition: and(succeededOrFailed(), contains('${{ parameters.osName }}', 'linux'))
+      condition: and(succeededOrFailed(), ne(${{ parameters.runTests }}, 'Off'), contains('${{ parameters.osName }}', 'linux'))
       failOnStderr: true
 
     - bash: |
         find "$(System.DefaultWorkingDirectory)" -name "*core*"
       displayName: 'Get core dump'
-      condition: succeededOrFailed()
+      condition: and(succeededOrFailed(), ne(${{ parameters.runTests }}, 'Off'))
 
     - bash: |
         eslint='{
@@ -201,7 +208,7 @@ stages:
         npm install -g eslint
         eslint **/*.js
       displayName: "Set up and run eslint"
-      condition: and(ne(variables['node_version'], '6.x'), ne(variables['node_version'], '8.x'))
+      condition: and(ne(${{ parameters.runTests }}, 'Off'), ne(variables['node_version'], '6.x'), ne(variables['node_version'], '8.x'))
       failOnStderr: true
 
     - task: CopyFiles@2
@@ -219,14 +226,14 @@ stages:
       condition: eq(${{ parameters.publishBinaries }}, true)
 
     - task: PublishTestResults@2
-      condition: succeededOrFailed()
+      condition: and(succeededOrFailed(),ne(${{ parameters.runTests }}, 'Off'))
       inputs:
         testRunner: JUnit
         testResultsFiles: '**/test_results.xml'
         testRunTitle: 'Node $(node_version) ${{ parameters.osName }}'
 
     - task: PublishCodeCoverageResults@1
-      condition: succeededOrFailed()
+      condition: and(succeededOrFailed(), ne(${{ parameters.runTests }}, 'Off'))
       inputs: 
         codeCoverageTool: Cobertura
         summaryFileLocation: '$(System.DefaultWorkingDirectory)/**/*coverage.xml'
