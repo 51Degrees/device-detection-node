@@ -6,17 +6,21 @@ trigger:
 # Don't trigger for a pull request
 pr: none
 
-# Schedule to run overnight
-schedules:
-- cron: "0 20 * * *"
-  displayName: Daily overnight build
-  branches:
-    include:
-    - develop
-
 # Include shared variables
 variables:
 - template: shared-variables.yml
+- group: CIAutomation
+# Access token for the git repository. Used by the git tag task.
+- name: system_accesstoken
+  value: $(System.AccessToken)
+- name: createPackageRunTests
+  value: 'Off'
+        
+resources:
+  repositories:
+    - repository: ciTemplates # Id of the repository used to reference to in this script
+      type: git
+      name: common-ci # Name of the actual repository
 
 stages:
 - template: shared-build-and-test-platforms.yml
@@ -25,22 +29,28 @@ stages:
     windowsImage: $(windowsImage)
     linuxImage: $(linuxImage)
     macImage: $(macImage)
+    runTests: variables['createPackageRunTests']
 
 - stage: Publish
   dependsOn: [Windows,Linux,MacOS]
 
-  pool:
-    vmImage: $(linuxImage)
-
-  variables: 
-    - group: PackageFeedAccessToken
-      # Access token for the git repository. Used by the git tag task.
-    - name: system_accesstoken
-      value: $(System.AccessToken)
-
   jobs:
+  - template: shared-git-version-job.yml@ciTemplates
+    parameters:
+      imageName: $(linuxImage)
+
   - job: Publish
     displayName: Publish Packages
+    dependsOn: Versioning
+    condition: and(succeeded(), ne(variables['CreatePackages'], 'Off'))
+
+    pool:
+      vmImage: $(linuxImage)
+
+    variables: 
+      - group: PackageFeedAccessToken
+      - name: GitVersionSemVer
+        value: $[ dependencies.Versioning.outputs['SetGitVersionVars.GitVersionSemVer'] ]
 
     steps:
     # The lines below are needed to allow the pipeline access to the
@@ -69,13 +79,6 @@ stages:
         mv $(System.ArtifactsDirectory)/binaries/*.node $(Build.SourcesDirectory)/fiftyone.devicedetection.onpremise/build
       displayName: 'Move binaries'
       failOnStderr: true
-
-    - task: gittools.gitversion.gitversion-task.GitVersion@5
-      displayName: 'Determine Version Number'
-      # Give this task a name so we can use the variables it sets later. 
-      name: GitVersion
-      inputs:
-        preferBundledVersion: false
 
     # All modules that reference other device detection modules in this repository
     # have package.json files where the dependency is defined relative to 
@@ -112,7 +115,7 @@ stages:
         command: custom
         workingDir: fiftyone.devicedetection
         verbose: true
-        customCommand: version $(GitVersion.SemVer)    
+        customCommand: version $(GitVersionSemVer)    
       continueOnError: true
       condition: succeededOrFailed()
 
@@ -122,7 +125,7 @@ stages:
         command: custom
         workingDir: fiftyone.devicedetection.cloud
         verbose: true
-        customCommand: version $(GitVersion.SemVer)    
+        customCommand: version $(GitVersionSemVer)    
       continueOnError: true
       condition: succeededOrFailed()
 
@@ -132,7 +135,7 @@ stages:
         command: custom
         workingDir: fiftyone.devicedetection.onpremise
         verbose: true
-        customCommand: version $(GitVersion.SemVer)    
+        customCommand: version $(GitVersionSemVer)    
       continueOnError: true
       condition: succeededOrFailed()
 
@@ -142,7 +145,7 @@ stages:
         command: custom
         workingDir: fiftyone.devicedetection.shared
         verbose: true
-        customCommand: version $(GitVersion.SemVer)    
+        customCommand: version $(GitVersionSemVer)    
       continueOnError: true
       condition: succeededOrFailed()
 
@@ -215,17 +218,6 @@ stages:
       condition: succeededOrFailed()
       failOnStderr: true
 
-    # Add a tag to the git repository with the version number of
-    # the package that has just been published
-    - task: ATP.ATP-GitTag.GitTag.GitTag@5
-      displayName: 'Tag Repo With Version Number'
-      inputs:
-        tagUser: 'Azure DevOps'
-        tagEmail: 'CIUser@51Degrees.com'
-    # Only create the tag if we also published a package as defined in 
-    # the previous task.
-      condition: succeeded()
-
     # Publish artifacts to DevOps
     - task: PublishBuildArtifacts@1
       inputs:
@@ -233,3 +225,8 @@ stages:
         artifactName: npm
       displayName: 'Publish npm artifact'
       condition: succeededOrFailed()
+
+  - template: shared-git-tag-job.yml@ciTemplates
+    parameters:
+      imageName: $(linuxImage)
+      jobDependencies: [Versioning,Publish]

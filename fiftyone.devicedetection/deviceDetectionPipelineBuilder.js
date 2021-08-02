@@ -103,6 +103,10 @@ class DeviceDetectionPipelineBuilder extends PipelineBuilder {
    * @param {string} options.cloudEndPoint This setting only affects
    * cloud engine, not on-premise.
    * Choose a non default endpoint for the cloud request engine
+   * @param {string} options.cloudRequestOrigin This setting only affects
+   * cloud engine, not on-premise.
+   * Set the value to use for the Origin header when making requests to the
+   * cloud service.
    *
    */
   constructor (
@@ -126,7 +130,8 @@ class DeviceDetectionPipelineBuilder extends PipelineBuilder {
       usePredictiveGraph = true,
       usePerformanceGraph = false,
       updateOnStart = false,
-      cloudEndPoint = null
+      cloudEndPoint = null,
+      cloudRequestOrigin = null
     }) {
     super(...arguments);
 
@@ -175,6 +180,7 @@ class DeviceDetectionPipelineBuilder extends PipelineBuilder {
           resourceKey: resourceKey,
           licenseKey: licenceKeys,
           baseURL: cloudEndPoint,
+          cloudRequestOrigin: cloudRequestOrigin,
           cache
         }));
 

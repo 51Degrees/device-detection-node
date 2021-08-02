@@ -34,7 +34,8 @@
             "-Wno-strict-aliasing",
             "-Wno-ignored-qualifiers",
             "-Wno-missing-braces",
-            "-Wno-attributes"
+            "-Wno-attributes",
+			"-Wno-atomic-alignment"
         ],
         'linux_mac_c_wrapper_additional_flags': [
             "-Wno-ignored-qualifiers",

@@ -5,12 +5,16 @@ parameters:
 - name: windowsImage
 - name: linuxImage
 - name: macImage
+- name: runTests
+  type: string
+  default: 'On'
 
 stages:
 - stage: Data
 
   jobs:
   - job: Download_Data_Files
+    condition: ne(${{ parameters.runTests }}, 'Off')
 
     variables: 
       - group: PackageFeedAccessToken
@@ -61,6 +65,7 @@ stages:
     osName: 'win32'
     stageDependency: 'Data'
     publishBinaries: ${{ parameters.publishBinaries }}
+    runTests: ${{ parameters.runTests }}
 
 - template: shared-build-and-test-stage.yml
   parameters:
@@ -69,6 +74,7 @@ stages:
     osName: 'linux'
     stageDependency: 'Data'
     publishBinaries: ${{ parameters.publishBinaries }}
+    runTests: ${{ parameters.runTests }}
 
 - template: shared-build-and-test-stage.yml
   parameters:
@@ -77,4 +83,5 @@ stages:
     osName: 'darwin'
     stageDependency: 'Data'
     publishBinaries: ${{ parameters.publishBinaries }}
+    runTests: ${{ parameters.runTests }}
 
