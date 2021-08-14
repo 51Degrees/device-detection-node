@@ -24,9 +24,9 @@
   ],
   "dependencies": {
     "fiftyone.devicedetection.shared": "file:../fiftyone.devicedetection.shared",
-    "fiftyone.pipeline.core": "^4.3.1",
-    "fiftyone.pipeline.engines": "^4.3.1",
-    "fiftyone.pipeline.engines.fiftyone": "^4.3.1",
+    "fiftyone.pipeline.core": "^4.3.2",
+    "fiftyone.pipeline.engines": "^4.3.2",
+    "fiftyone.pipeline.engines.fiftyone": "^4.3.2",
     "n-readlines": "^1.0.1"
   },
   "devDependencies": {
