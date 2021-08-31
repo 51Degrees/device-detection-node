@@ -180,7 +180,8 @@
                         '<@(linux_mac_c_common_flags)',
                         '<@(linux_mac_c_core_additional_flags)',
                         '<@(linux_specific_c_core_additional_flags)'
-                    ]
+                    ],
+                    'libraries': ["-latomic"]
                 }]
             ],
         },
@@ -262,7 +263,8 @@
                     'cflags': [
                         '<@(linux_mac_c_common_flags)',
                         '<@(linux_mac_c_wrapper_additional_flags)'
-                    ]
+                    ],
+                    'libraries': ["-latomic"]
                 }]
             ],
         }
