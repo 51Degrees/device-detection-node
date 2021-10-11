@@ -55,9 +55,7 @@ const myResourceKey = process.env.RESOURCE_KEY || '!!YOUR_RESOURCE_KEY!!';
 
 describe('deviceDetectionCloud', () => {
   beforeAll(() => {
-      if (!fs.existsSync(CSVDataFile)) {
-        fail();
-      }
+      expect(fs.existsSync(CSVDataFile)).toBe(true);
   });
   
   // Check that if no evidence is provided for device
@@ -262,11 +260,13 @@ describe('Origin Header', () => {
     ['', true],
     ['test.com', true],
     ['51degrees.com', false]
-  ]).test('origin header set to "%s"', (origin, expectError) => {
+  ]).test('origin header set to "%s"', async (origin, expectError) => {
     var error = false;
     var message = '';
+    var expectErrorMessage = `This resource key is not authorized for use with domain: '${origin}'`;
 
     const pipeline = new DeviceDetectionCloudPipelineBuilder({
+      // Resource key configured with '51degrees.com' as allowed domains.
       resourceKey: 'AQS5HKcyVj6B8wNG2Ug',
       cloudRequestOrigin: origin
     }).build();
@@ -274,14 +274,19 @@ describe('Origin Header', () => {
     // We want to monitor for the expected error message
     pipeline.on('error', (err) => {
       error = true;
-      message = err.message;
+      message = err;
     });
-
+    
     const flowData = pipeline.createFlowData();
-    flowData.process().then(() => {
-      expect(error).toBe(expectError);
-      expect(message).toContain(
-        `This resource key is not authorized for use with domain: '${origin}'`);
+    // Catch error so test does not fail on expected error.
+    await flowData.process().catch(e => { 
+      expect(e.length).toBe(1);
+      expect(e[0].message).toContain(expectErrorMessage);
     });
+    
+    expect(error).toBe(expectError);
+    if (error) {
+      expect(message).toContain(expectErrorMessage);
+    }
   })
 });
