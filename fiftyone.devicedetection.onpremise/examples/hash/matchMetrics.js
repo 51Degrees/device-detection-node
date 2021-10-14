@@ -69,13 +69,13 @@ if (!fs.existsSync(datafile)) {
 
 const pipeline =
   new DeviceDetectionOnPremisePipelineBuilder({
-  dataFile: datafile,
-  performanceProfile: 'MaxPerformance',
-  autoUpdate: false,
-  updateMatchedUserAgent: true,
-  usePredictiveGraph: true,
-  usePerformanceGraph: false
-}).build();
+    dataFile: datafile,
+    performanceProfile: 'MaxPerformance',
+    autoUpdate: false,
+    updateMatchedUserAgent: true,
+    usePredictiveGraph: true,
+    usePerformanceGraph: false
+  }).build();
 
 // To monitor the pipeline we can put in listeners for various log events.
 // Valid types are info, debug, warn, error
@@ -131,8 +131,8 @@ const displayMatchMetrics = async function (userAgent) {
   // Use the internal FlowElement's properties array to printout all
   // the available values.
   Object.keys(device.flowElement.properties).forEach(function (property) {
-      console.log(property + ': ' + device[property].value);
-  })
+    console.log(property + ': ' + device[property].value);
+  });
 };
 
 const desktopUA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36';

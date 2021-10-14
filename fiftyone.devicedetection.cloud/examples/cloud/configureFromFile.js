@@ -49,20 +49,20 @@ const PipelineBuilder = require('fiftyone.pipeline.core').PipelineBuilder;
 
 const fs = require('fs');
 
-let configFile = fs.readFileSync((process.env.directory || __dirname) + "/51d.json");
+const configFile = fs.readFileSync((process.env.directory || __dirname) + '/51d.json');
 
-let config = JSON.parse(configFile);
+const config = JSON.parse(configFile);
 let resourceKeySet = true;
 
 // Check if a resource key has been set in the config file.
-if (config.PipelineOptions.Elements[0].elementParameters.resourceKey.startsWith("!!")) {
+if (config.PipelineOptions.Elements[0].elementParameters.resourceKey.startsWith('!!')) {
   // If not, check the resource key environment variable.
   const myResourceKey = process.env.RESOURCE_KEY;
 
   if (myResourceKey) {
     // If there is a resource key in the environment variable then use it.
     config.PipelineOptions.Elements[0].elementParameters.resourceKey = myResourceKey;
-  } else {    
+  } else {
     // If not, display a message to the user and don't execute the
     // rest of the example.
     resourceKeySet = false;
@@ -74,8 +74,7 @@ if (config.PipelineOptions.Elements[0].elementParameters.resourceKey.startsWith(
   }
 }
 
-if(resourceKeySet)
-{
+if (resourceKeySet) {
   // Create a new pipeline from the supplied config file.
   const pipeline = new PipelineBuilder().buildFromConfigurationFile((process.env.directory || __dirname) + '/51d.json');
 

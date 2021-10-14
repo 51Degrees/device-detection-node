@@ -74,13 +74,13 @@ if (!fs.existsSync(datafile)) {
   throw ("No data file at '" + datafile + "'");
 }
 
-console.log(`---------------------------------------`);
+console.log('---------------------------------------');
 console.log('This example demonstrates detection using user-agent client hints.');
 console.log('The sec-ch-ua value can be used to determine the browser of the connecting device, but not other components such as the hardware.');
 console.log('We show this by first performing detection with sec-ch-ua only.');
 console.log('We then repeat with the user-agent header set as well. Note that the client hint takes priority over the user-agent.');
 console.log('Finally, we use both sec-ch-ua and user-agent. Note that sec-ch-ua takes priority over the user-agent for detection of the browser.');
-console.log(`---------------------------------------\n`);
+console.log('---------------------------------------\n');
 
 // Create the device detection pipeline with the desired settings.
 
@@ -96,11 +96,10 @@ pipeline.on('error', console.error);
 
 // Define function to analyze user-agent/client hints
 const analyzeClientHints = async function (pipeline, setUserAgent, setSecChUa) {
+  const mobileUa = 'Mozilla/5.0 (Linux; Android 9; SAMSUNG SM-G960U) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/10.1 Chrome/71.0.3578.99 Mobile Safari/537.36';
 
-  const mobileUa = "Mozilla/5.0 (Linux; Android 9; SAMSUNG SM-G960U) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/10.1 Chrome/71.0.3578.99 Mobile Safari/537.36";
-						
-  const secchuaValue = "\"Google Chrome\";v=\"89\", \"Chromium\";v=\"89\", \";Not A Brand\";v=\"99\"";	
-  
+  const secchuaValue = '"Google Chrome";v="89", "Chromium";v="89", ";Not A Brand";v="99"';
+
   // Create a FlowData element
   // This is used to add evidence and process it through the
   // FlowElements in the Pipeline.
@@ -108,53 +107,50 @@ const analyzeClientHints = async function (pipeline, setUserAgent, setSecChUa) {
 
   // Add a value for the user-agent client hints header
   // sec-ch-ua as evidence.
-  if(setSecChUa) {
-      flowData.evidence.add("query.sec-ch-ua", secchuaValue);
+  if (setSecChUa) {
+    flowData.evidence.add('query.sec-ch-ua', secchuaValue);
   }
-  // Also add a standard user-agent if requested 
+  // Also add a standard user-agent if requested
   if (setUserAgent) {
-      flowData.evidence.add("query.user-agent", mobileUa);
+    flowData.evidence.add('query.user-agent', mobileUa);
   }
-  
+
   // Run process on the flowData (this returns a promise)
   await flowData.process();
-  
+
   const device = flowData.device;
-  
+
   const browserName = device.browsername;
   const browserVersion = device.browserversion;
   const ismobile = device.ismobile;
-  
+
   // Output evidence
-  var secchua = "NOT_SET";
-  if (setSecChUa){
-        secchua = secchuaValue;
+  var secchua = 'NOT_SET';
+  if (setSecChUa) {
+    secchua = secchuaValue;
   }
   console.log(`Sec-CH-UA = ${secchua}`);
 
-  var ua = "NOT_SET";
-  if (setUserAgent){
-        ua = mobileUa;
+  var ua = 'NOT_SET';
+  if (setUserAgent) {
+    ua = mobileUa;
   }
   console.log(`User-Agent = ${ua}`);
 
   // Output the Browser
-  if (browserName.hasValue && browserVersion.hasValue){
-      console.log(`\tBrowser = ${browserName.value} ${browserVersion.value}`);
+  if (browserName.hasValue && browserVersion.hasValue) {
+    console.log(`\tBrowser = ${browserName.value} ${browserVersion.value}`);
+  } else if (browserName.hasValue) {
+    console.log(`\tBrowser = ${browserName.value} (version unknown)`);
+  } else {
+    console.log(`\tBrowser = ${browserName.noValueMessage}`);
   }
-  else if (browserName.hasValue){
-	  console.log(`\tBrowser = ${browserName.value} (version unknown)`);
-  }
-  else{
-	  console.log(`\tBrowser = ${browserName.noValueMessage}`);
-  }
-  
+
   // Output the value of the 'IsMobile' property.
-  if (ismobile.hasValue){
-        console.log(`\tIsMobile = ${ismobile.value}\n`);
-  }
-  else{
-        console.log(`\tIsMobile = ${ismobile.noValueMessage}\n`);
+  if (ismobile.hasValue) {
+    console.log(`\tIsMobile = ${ismobile.value}\n`);
+  } else {
+    console.log(`\tIsMobile = ${ismobile.noValueMessage}\n`);
   }
 };
 

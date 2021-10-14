@@ -40,16 +40,15 @@ const DeviceDetectionOnPremisePipelineBuilder =
 
 const datafile = (process.env.directory || __dirname) + '/../../../device-detection-cxx/device-detection-data/51Degrees-LiteV4.1.hash';
 
-// Set your license key, if you don't have a license key already you can 
+// Set your license key, if you don't have a license key already you can
 // obtain one by subscribing to a 51Degrees bundle: https://51degrees.com/pricing
 
-const myLicenseKey = process.env.LICENSE_KEY || "!!YOUR_LICENSE_KEY!!";
+const myLicenseKey = process.env.LICENSE_KEY || '!!YOUR_LICENSE_KEY!!';
 
-if (myLicenseKey == "!!YOUR_LICENSE_KEY!!") {
+if (myLicenseKey === '!!YOUR_LICENSE_KEY!!') {
   console.log("You need a license key to run this example, if you don't have one already " +
-  "you can obtain one by subscribing to a 51Degrees bundle: https://51degrees.com/pricing");
+  'you can obtain one by subscribing to a 51Degrees bundle: https://51degrees.com/pricing');
 } else {
-
   // Check if datafile exists
 
   const fs = require('fs');
@@ -59,7 +58,7 @@ if (myLicenseKey == "!!YOUR_LICENSE_KEY!!") {
   }
 
   // Create the device detection pipeline with the following options
-  // to configure the file system watcher. There is no console output 
+  // to configure the file system watcher. There is no console output
   // when the update is complete.
   const pipeline = new DeviceDetectionOnPremisePipelineBuilder({
     // Path to your data file
@@ -69,13 +68,12 @@ if (myLicenseKey == "!!YOUR_LICENSE_KEY!!") {
     licenceKeys: myLicenseKey,
     // Enable automatic updates.
     autoUpdate: true,
-    // Watch the data file on disk and refresh the engine 
-    // as soon as that file is updated. 
+    // Watch the data file on disk and refresh the engine
+    // as soon as that file is updated.
     dataFileSystemWatcher: true
   }).build();
 
   // To monitor the pipeline we can put in listeners for various log events.
   // Valid types are info, debug, warn, error
   pipeline.on('error', console.error);
-
 }

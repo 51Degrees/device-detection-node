@@ -47,7 +47,7 @@ Output written to [...]/batch-processing-example-results.csv
 
 const events = require('events');
 
-const lineReader = require('n-readlines');
+const LineReader = require('n-readlines');
 
 const DeviceDetectionOnPremisePipelineBuilder =
   require((process.env.directory || __dirname) +
@@ -106,10 +106,10 @@ let userAgentsProcessed = 0;
 
 // Create the device detection pipeline with the desired settings.
 const pipeline = new DeviceDetectionOnPremisePipelineBuilder({
-    performanceProfile: 'MaxPerformance',
-    dataFile: datafile,
-    autoUpdate: false
-  }).build();
+  performanceProfile: 'MaxPerformance',
+  dataFile: datafile,
+  autoUpdate: false
+}).build();
 
 // To monitor the pipeline we can put in listeners for various log events.
 // Valid types are info, debug, warn, error
@@ -150,13 +150,13 @@ const processUA = async function (userAgent) {
 };
 
 // Create lines reader for the User-Agents file
-const liner = new lineReader(uafile);
+const liner = new LineReader(uafile);
 let line;
 let linesCounter = 0;
 
 // Start reading User-Agents from file
-while((line = liner.next()) && linesCounter++ < maxUserAgents) {
-    processUA(line.toString('utf8').replace(/\r?\n|\r/g, ""));
+while ((line = liner.next()) && linesCounter++ < maxUserAgents) {
+  processUA(line.toString('utf8').replace(/\r?\n|\r/g, ''));
 }
 
 // Close the line reader

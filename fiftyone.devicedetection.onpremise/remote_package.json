@@ -23,9 +23,9 @@
   ],
   "dependencies": {
     "fiftyone.devicedetection.shared": "^4.3.2",
-    "fiftyone.pipeline.core": "^4.3.2",
-    "fiftyone.pipeline.engines": "^4.3.2",
-    "fiftyone.pipeline.engines.fiftyone": "^4.3.2",
+    "fiftyone.pipeline.core": "4.4.0-update-deprecated-packages.1",
+    "fiftyone.pipeline.engines": "4.4.0-update-deprecated-packages.1",
+    "fiftyone.pipeline.engines.fiftyone": "4.4.0-update-deprecated-packages.1",
     "n-readlines": "^1.0.1"
   },
   "devDependencies": {

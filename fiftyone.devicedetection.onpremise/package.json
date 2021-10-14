@@ -24,9 +24,9 @@
   ],
   "dependencies": {
     "fiftyone.devicedetection.shared": "file:../fiftyone.devicedetection.shared",
-    "fiftyone.pipeline.core": "^4.3.2",
-    "fiftyone.pipeline.engines": "^4.3.2",
-    "fiftyone.pipeline.engines.fiftyone": "^4.3.2",
+    "fiftyone.pipeline.core": "4.3.5-beta.2",
+    "fiftyone.pipeline.engines": "4.3.5-beta.2",
+    "fiftyone.pipeline.engines.fiftyone": "4.3.5-beta.2",
     "n-readlines": "^1.0.1"
   },
   "devDependencies": {
@@ -39,7 +39,7 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
     "eslint-plugin-jest": "^23.13.2",
-    "jest": "^24.9.0",
+    "jest": "^27.0.6",
     "jest-junit": "^9.0.0"
   },
   "license": "EUPL-1.2",

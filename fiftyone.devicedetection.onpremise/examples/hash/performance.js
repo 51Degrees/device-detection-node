@@ -54,7 +54,7 @@ ismobile = unknown : [...]
 
 const events = require('events');
 
-const lineReader = require('n-readlines');
+const LineReader = require('n-readlines');
 
 const DeviceDetectionOnPremisePipelineBuilder =
   require((process.env.directory || __dirname) +
@@ -108,42 +108,42 @@ eventEmitter.on('FinishProcessing', (calibration) => {
   if (calibration) {
     // Record the calibration time
     calibrationTime = diffTime[0] * secToNanoSec + diffTime[1];
-    
+
     // Run without calibration
     console.log('Processing');
     run(function (userAgent) {
       processUA(userAgent, false);
-    })
+    });
   } else {
     // Record the actual time
     actualTime = diffTime[0] * secToNanoSec + diffTime[1];
 
     // Display benchmarks
     console.log(
-      `Average ` +
+      'Average ' +
       `${(userAgentsCount / (actualTime - calibrationTime)) * secToNanoSec} ` +
-      `detections per second per thread.`);
+      'detections per second per thread.');
     console.log(
-      `Average ` +
+      'Average ' +
       `${((actualTime - calibrationTime) / msecToNanoSec) / userAgentsCount} ` +
-      `ms per User-Agent.`);
+      'ms per User-Agent.');
     console.log(`ismobile = true : ${isMobileTrue}`);
     console.log(`ismobile = false : ${isMobileFalse}`);
     console.log(`ismobile = unknown : ${isMobileUnknown}`);
-  }  
+  }
 });
 
 // Create the device detection pipeline with the desired settings.
 const pipeline = new DeviceDetectionOnPremisePipelineBuilder({
-    performanceProfile: 'MaxPerformance',
-    dataFile: datafile,
-    restrictedProperties: [ 'ismobile' ],
-    autoUpdate: false,
-    shareUsage: false,
-    usePredictiveGraph: false,
-    usePerformanceGraph: true,
-    addJavaScriptBuilder: false
-  }).build();
+  performanceProfile: 'MaxPerformance',
+  dataFile: datafile,
+  restrictedProperties: ['ismobile'],
+  autoUpdate: false,
+  shareUsage: false,
+  usePredictiveGraph: false,
+  usePerformanceGraph: true,
+  addJavaScriptBuilder: false
+}).build();
 
 // To monitor the pipeline we can put in listeners for various log events.
 // Valid types are info, debug, warn, error
@@ -152,10 +152,10 @@ pipeline.on('error', console.error);
 // Print out the progress report
 const progressBar = '========================================';
 const reportProgress = function (uaProcessed) {
-  let bars = Math.round((uaProcessed / userAgentsCount) * progressBar.length);
+  const bars = Math.round((uaProcessed / userAgentsCount) * progressBar.length);
   process.stdout.write(progressBar.substring(0, bars) +
     (uaProcessed === userAgentsCount ? '\n' : '\r'));
-}
+};
 
 // Here we make a function that gets a userAgent as evidence and
 // uses the Device Detection Engine to obtain the properties of the
@@ -168,16 +168,16 @@ const processUA = async function (userAgent, calibration) {
     // This is used to add evidence and process it through the
     // FlowElements in the Pipeline.
     const flowData = pipeline.createFlowData();
-  
+
     // Add the User-Agent as evidence
     flowData.evidence.add('header.user-agent', userAgent);
-  
+
     // Run process on the flowData (this returns a promise)
     await flowData.process();
-  
+
     // Construct the output line
     const ismobile = flowData.device.ismobile;
-  
+
     if (ismobile.hasValue) {
       if (ismobile.value) {
         isMobileTrue++;
@@ -200,25 +200,27 @@ const processUA = async function (userAgent, calibration) {
 // Loop through the User-Agents in the file
 // and execute callback on each User-Agent
 const run = function (callback) {
-  const liner = new lineReader(uafile);
+  const liner = new LineReader(uafile);
   let line;
-  
+
   // Reset User-Agents processed count and start time
   userAgentsProcessed = 0;
   startTime = process.hrtime();
-  while(line = liner.next()) {
-      callback(line.toString('utf8').replace(/\r?\n|\r/g, ""));
+  line = liner.next();
+  while (line) {
+    callback(line.toString('utf8').replace(/\r?\n|\r/g, ''));
+    line = liner.next();
   }
-}
+};
 
 // Get the number of User-Agents
 run(function () {
   userAgentsCount++;
-})
+});
 console.log('Processing ' + userAgentsCount + ' User-Agents from ' + uafile);
 
 // Run with calibration
 console.log('Calibrating');
 run(function (userAgent) {
   processUA(userAgent, true);
-})
+});
