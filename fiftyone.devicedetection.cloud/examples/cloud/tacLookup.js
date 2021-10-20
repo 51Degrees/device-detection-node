@@ -62,19 +62,19 @@ const HardwareProfileCloudEngine =
 
 // You need to create a resource key at https://configure.51degrees.com and
 // paste it into the code, replacing !!YOUR_RESOURCE_KEY!!.
-let localResourceKey = process.env.RESOURCE_KEY || "!!YOUR_RESOURCE_KEY!!";
+const localResourceKey = process.env.RESOURCE_KEY || '!!YOUR_RESOURCE_KEY!!';
 
 // You need a license key and paste it into the code,
 // replacing !!YOUR_LICENSE_KEY!!.
-let localLicenseKey = "!!YOUR_LICENSE_KEY!!";
+const localLicenseKey = '!!YOUR_LICENSE_KEY!!';
 
-if (localResourceKey === "!!YOUR_RESOURCE_KEY!!" ||
-  localLicenseKey === "!!YOUR_LICENSE_KEY!!") {
+if (localResourceKey === '!!YOUR_RESOURCE_KEY!!' ||
+  localLicenseKey === '!!YOUR_LICENSE_KEY!!') {
   console.log('You need to create a resource key at ' +
         'https://configure.51degrees.com and paste it into the code, ' +
         'replacing !!YOUR_RESOURCE_KEY!!.');
   console.log('You also need a subscription which can be acquired ' +
-        'from https://51degrees.com/pricing. Paste the license key into the ' + 
+        'from https://51degrees.com/pricing. Paste the license key into the ' +
         'code, replacing !!YOUR_LICENSE_KEY!!.');
   console.log('Make sure to include the Profiles, HardwareVendor, ' +
         'HardwareName and HardwareModel properties as they are used by this ' +
@@ -96,9 +96,9 @@ if (localResourceKey === "!!YOUR_RESOURCE_KEY!!" ||
   // from the cloud request engine.
   const hardwareProfileCloudEngineInstance = new HardwareProfileCloudEngine();
 
-  const pipelineBuilder = pipelineCore.PipelineBuilder;
+  const PipelineBuilder = pipelineCore.PipelineBuilder;
   // Build a pipeline with engines that we've created
-  const pipeline = new pipelineBuilder()
+  const pipeline = new PipelineBuilder()
     .add(requestEngineInstance)
     .add(hardwareProfileCloudEngineInstance)
     .build();
@@ -123,7 +123,6 @@ if (localResourceKey === "!!YOUR_RESOURCE_KEY!!" ||
     // vendor and model name of each matching device.
 
     flowData.hardware.profiles.forEach(profile => {
-
       const hardwareVendor = profile.hardwarevendor;
       const hardwareName = profile.hardwarename;
       const hardwareModel = profile.hardwaremodel;

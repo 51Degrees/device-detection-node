@@ -20,7 +20,7 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
- const require51 = (requestedPackage) => {
+const require51 = (requestedPackage) => {
   try {
     return require(__dirname + '/../' + requestedPackage);
   } catch (e) {
@@ -34,18 +34,16 @@ const EngineBuilder = require(
   __dirname + '/../deviceDetectionOnPremise'
 );
 const fs = require('fs');
-const path = require('path');
 
 const LiteDataFile = (process.env.directory || __dirname) + '/../device-detection-cxx/device-detection-data/51Degrees-LiteV4.1.hash';
 const DataFile = (process.env.directory || __dirname) + '/51Degrees.hash';
 
 const MobileUserAgent =
-  "Mozilla/5.0 (iPhone; CPU iPhone OS 7_1 like Mac OS X) " +
-  "AppleWebKit/537.51.2 (KHTML, like Gecko) Version/7.0 Mobile" +
-  "/11D167 Safari/9537.53";
+  'Mozilla/5.0 (iPhone; CPU iPhone OS 7_1 like Mac OS X) ' +
+  'AppleWebKit/537.51.2 (KHTML, like Gecko) Version/7.0 Mobile' +
+  '/11D167 Safari/9537.53';
 
 describe('deviceDetectionOnPremise', () => {
-
   beforeAll(() => {
     // Copy data file to test directory if one does not exist.
     try {
@@ -56,17 +54,17 @@ describe('deviceDetectionOnPremise', () => {
         });
       }
     } catch (err) {
-      console.error(err)
+      console.error(err);
     }
   });
 
-  // Check that for a successful detection, all properties loaded by the engine 
+  // Check that for a successful detection, all properties loaded by the engine
   // are accessible in the results.
   test('Available Properties', async done => {
     var engine = new EngineBuilder({
       dataFilePath: DataFile,
       autoUpdate: false,
-      licenceKeys: ""
+      licenceKeys: ''
     });
     var pipeline = new PipelineBuilder()
       .add(engine)
@@ -83,19 +81,17 @@ describe('deviceDetectionOnPremise', () => {
         var apv = flowData.device[key];
         expect(apv).not.toBeNull();
         expect(apv).toBeDefined();
-        if (apv.hasValue == true) {
-          if (apv.value != null && apv.value != undefined) {
-            // console.log(`${key}: ${apv.value}`)
-            _ = apv.value;
+        if (apv.hasValue === true) {
+          if (apv.value !== null && apv.value !== undefined) {
+            console.log(`${key}: ${apv.value}`);
           } else {
-            done.fail(new Error(`${key}.value should not be null`))
+            done.fail(new Error(`${key}.value should not be null`));
           }
         } else {
-          if (apv.noValueMessage != null && apv.noValueMessage != undefined) {
-            // console.log(`${key}: ${apv.noValueMessage}`)
-            _ = apv.noValueMessage;
+          if (apv.noValueMessage !== null && apv.noValueMessage !== undefined) {
+            console.log(`${key}: ${apv.noValueMessage}`);
           } else {
-            done.fail(new Error(`${key}.noValueMessage should not be null`))
+            done.fail(new Error(`${key}.noValueMessage should not be null`));
           }
         }
       } catch (err) {
@@ -105,14 +101,13 @@ describe('deviceDetectionOnPremise', () => {
     done();
   });
 
-
-  // Validate the the values for all properties returned are of the expected 
+  // Validate the the values for all properties returned are of the expected
   // type.
   test('Value Types', async done => {
     var engine = new EngineBuilder({
       dataFilePath: DataFile,
       autoUpdate: false,
-      licenceKeys: ""
+      licenceKeys: ''
     });
     var pipeline = new PipelineBuilder()
       .add(engine)
@@ -133,17 +128,17 @@ describe('deviceDetectionOnPremise', () => {
 
       expect(apv.value).toBe51DType(key, expectedType);
     });
-    
+
     done();
   });
 
   // Validate the the device id is returned for a detection and that it is not
-  // null. 
+  // null.
   test('DeviceID', async done => {
     var engine = new EngineBuilder({
       dataFilePath: DataFile,
       autoUpdate: false,
-      licenceKeys: ""
+      licenceKeys: ''
     });
     var pipeline = new PipelineBuilder()
       .add(engine)
@@ -162,19 +157,18 @@ describe('deviceDetectionOnPremise', () => {
 
     expect(deviceID.value).not.toBeNull();
     expect(deviceID.value).toBeDefined();
-    expect(deviceID.value).not.toBe("");
+    expect(deviceID.value).not.toBe('');
 
     done();
   });
-  
+
   // Validate that for a successful detection, the matched User Agents are
   // returned in the results.
   test('Matched User Agents', async done => {
-
     var engine = new EngineBuilder({
       dataFilePath: DataFile,
       autoUpdate: false,
-      licenceKeys: ""
+      licenceKeys: ''
     });
     var pipeline = new PipelineBuilder()
       .add(engine)
@@ -202,7 +196,7 @@ describe('deviceDetectionOnPremise', () => {
         expect(MobileUserAgent.includes(substring)).toBeTruthy();
         var index = matchedUa.indexOf(substring);
         var original = MobileUserAgent.substring(index, substring.length);
-        expect(substring).toEqual(original)
+        expect(substring).toEqual(original);
       });
     });
 
@@ -213,46 +207,46 @@ describe('deviceDetectionOnPremise', () => {
 // Extend expect object.
 expect.extend({
   // Method to validate a given value has the expected type.
-  toBe51DType(received, name, fodType) {
+  toBe51DType (received, name, fodType) {
     var valueType = typeof received;
     var valid = false;
-  
+
     switch (fodType) {
       case 'bool':
-        valid = 'boolean' == valueType;
+        valid = valueType === 'boolean';
         break;
       case 'string':
-        valid = 'string' == valueType;
+        valid = valueType === 'string';
         break;
       case 'javascript':
-        valid = 'string' == valueType;
+        valid = valueType === 'string';
         break;
       case 'int':
-        valid = 'number' == valueType;
+        valid = valueType === 'number';
         break;
       case 'double':
-        valid = 'number' == valueType;
+        valid = valueType === 'number';
         break;
       case 'string[]':
-        valid = 'object' == valueType && Array.isArray(received);
+        valid = valueType === 'object' && Array.isArray(received);
         break;
       default:
         valid = false;
         break;
     }
-    
+
     if (valid) {
       return {
-        message: () => 
+        message: () =>
           `${name}: expected node type '${valueType}' not to be equivalent to fodType '${fodType}' for value: '${received}'`,
         pass: true
-      }
+      };
     } else {
       return {
-        message: () => 
+        message: () =>
           `${name}: expected node type '${valueType}' to be equivalent to fodType '${fodType}' for value: '${received}'`,
         pass: false
-      }
+      };
     }
   }
 });

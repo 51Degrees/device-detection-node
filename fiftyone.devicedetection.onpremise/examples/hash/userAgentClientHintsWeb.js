@@ -42,87 +42,85 @@ Device Type: [...]
 ```
 
  */
- 
+
 const require51 = (requestedPackage) => {
-    try {
-      return require('/../' + requestedPackage);
-    } catch (e) {
-      return require(requestedPackage);
-    }
-  };
-  const core = require51('fiftyone.pipeline.core');
-  
-  const DeviceDetectionOnPremisePipelineBuilder =
+  try {
+    return require('/../' + requestedPackage);
+  } catch (e) {
+    return require(requestedPackage);
+  }
+};
+const core = require51('fiftyone.pipeline.core');
+
+const DeviceDetectionOnPremisePipelineBuilder =
     require((process.env.directory || __dirname) +
     '/../../deviceDetectionOnPremisePipelineBuilder');
-  
-  const fs = require('fs');
-  
-  // Load in a datafile
-  
-  const datafile = (process.env.directory || __dirname) + '/../../device-detection-cxx/device-detection-data/51Degrees-LiteV4.1.hash';
-  
-  if (!fs.existsSync(datafile)) {
-    console.error("The datafile required by this example is not present. Please ensure that the 'device-detection-data' submodule has been fetched.");
-    throw ("No data file at '" + datafile + "'");
+
+const fs = require('fs');
+
+// Load in a datafile
+
+const datafile = (process.env.directory || __dirname) + '/../../device-detection-cxx/device-detection-data/51Degrees-LiteV4.1.hash';
+
+if (!fs.existsSync(datafile)) {
+  console.error("The datafile required by this example is not present. Please ensure that the 'device-detection-data' submodule has been fetched.");
+  throw ("No data file at '" + datafile + "'");
+}
+
+// Helper function to read property values from flowData
+const getValueHelper = (flowData, propertyKey) => {
+  var device = flowData.device;
+  try {
+    const property = device[propertyKey];
+    if (property.hasValue && property) {
+      return property.value;
+    } else {
+      return property.noValueMessage;
+    }
+  } catch (error) {
+    return 'Not found in datafile';
   }
+};
 
-  // Helper function to read property values from flowData
-  const getValueHelper = (flowData, propertyKey) => {       
-        var device = flowData.device;
-        try {
-           property = device[propertyKey];
-           if(property.hasValue && property){
-                return property.value;
-           }
-           else{
-               return property.noValueMessage;
-           }
-        } catch (error) {
-            return "Not found in datafile";
-        }
-      };
+// Create a new Device Detection pipeline and set the config.
+const pipeline = new DeviceDetectionOnPremisePipelineBuilder({
+  performanceProfile: 'MaxPerformance',
+  dataFile: datafile,
+  autoUpdate: false
+}).build();
 
-  // Create a new Device Detection pipeline and set the config.
-  const pipeline = new DeviceDetectionOnPremisePipelineBuilder({
-    performanceProfile: 'MaxPerformance',
-    dataFile: datafile,
-    autoUpdate: false,
-  }).build();
+// Logging of errors and other messages.
+// Valid logs types are info, debug, warn, error
+pipeline.on('error', console.error);
 
-  // Logging of errors and other messages.
-  // Valid logs types are info, debug, warn, error
-  pipeline.on('error', console.error);
+const http = require('http');
 
-  const http = require('http');
-  
-  const server = http.createServer((req, res) => {
+const server = http.createServer((req, res) => {
+  const flowData = pipeline.createFlowData();
 
-    const flowData = pipeline.createFlowData();
-  
-    // Add any information from the request
-    // (headers, cookies and additional client side provided information)
-    flowData.evidence.addFromRequest(req);
-  
-    flowData.process().then(function () {
-        res.statusCode = 200;
+  // Add any information from the request
+  // (headers, cookies and additional client side provided information)
+  flowData.evidence.addFromRequest(req);
 
-        // Some browsers require that extra HTTP headers are explicitly
-        // requested. So set whatever headers are required by the browser in
-        // order to return the evidence needed by the pipeline.
-        // More info on this can be found at
-        // https://51degrees.com/blog/user-agent-client-hints
-        core.Helpers.setResponseHeaders(res, flowData);
+  flowData.process().then(function () {
+    res.statusCode = 200;
 
-        res.setHeader('Content-Type', 'text/html');
+    // Some browsers require that extra HTTP headers are explicitly
+    // requested. So set whatever headers are required by the browser in
+    // order to return the evidence needed by the pipeline.
+    // More info on this can be found at
+    // https://51degrees.com/blog/user-agent-client-hints
+    core.Helpers.setResponseHeaders(res, flowData);
 
-        let output = '';
+    res.setHeader('Content-Type', 'text/html');
 
-        // Generate the HTML
+    let output = '';
 
-        output = "<h2>User Agent Client Hints Example</h2>"
+    // Generate the HTML
 
-        output += `
+    output = '<h2>User Agent Client Hints Example</h2>';
+
+    output += `
 
         <p>
         By default, the user-agent, sec-ch-ua and sec-ch-ua-mobile HTTP headers
@@ -186,46 +184,45 @@ const require51 = (requestedPackage) => {
                   <th>Value</th>
                 </tr>
     
-        `
-        const evidences = pipeline.getElement("device").evidenceKeyFilter.filterEvidence(flowData.evidence.getAll());
+        `;
+    const evidences = pipeline.getElement('device').evidenceKeyFilter.filterEvidence(flowData.evidence.getAll());
 
-        for (const key in evidences){
-            output += "<tr>"
-            output += "<td>" + key + "</td>"
-            output += "<td>" + evidences[key] + "</td>"
-            output += "</>"
-        }
-        output += "</table>"
-        output += "</div>"
-	
-        output += "<div id=description></div>"
-        output += "<div id=\"content\">";
-        output += "<p>";
-        output += "<strong>Detection results:</strong></br></br>"    
-        output += "<b>Hardware Vendor:</b> " + getValueHelper(flowData, "hardwarevendor");
-        output += "<br />";
-        output += "<b>Hardware Name:</b> " + getValueHelper(flowData, "hardwarename");
-        output += "<br />";
-        output += "<b>Device Type:</b> " + getValueHelper(flowData, "devicetype");
-        output += "<br />";
-        output += "<b>Platform Vendor:</b> " + getValueHelper(flowData, "platformvendor");
-        output += "<br />";
-        output += "<b>Platform Name:</b> " + getValueHelper(flowData, "platformname");
-        output += "<br />";
-        output += "<b>Platform Version:</b> " + getValueHelper(flowData, "platformversion");
-        output += "<br />";
-        output += "<b>Browser Vendor:</b> " + getValueHelper(flowData, "browservendor");
-        output += "<br />";
-        output += "<b>Browser Name:</b> " + getValueHelper(flowData, "browsername");
-        output += "<br />";
-        output += "<b>Browser Version:</b> " + getValueHelper(flowData, "browserversion");
-        output += "<br /></div>";
+    for (const key in evidences) {
+      output += '<tr>';
+      output += '<td>' + key + '</td>';
+      output += '<td>' + evidences[key] + '</td>';
+      output += '</>';
+    }
+    output += '</table>';
+    output += '</div>';
 
-        res.end(output);
-    });
+    output += '<div id=description></div>';
+    output += '<div id="content">';
+    output += '<p>';
+    output += '<strong>Detection results:</strong></br></br>';
+    output += '<b>Hardware Vendor:</b> ' + getValueHelper(flowData, 'hardwarevendor');
+    output += '<br />';
+    output += '<b>Hardware Name:</b> ' + getValueHelper(flowData, 'hardwarename');
+    output += '<br />';
+    output += '<b>Device Type:</b> ' + getValueHelper(flowData, 'devicetype');
+    output += '<br />';
+    output += '<b>Platform Vendor:</b> ' + getValueHelper(flowData, 'platformvendor');
+    output += '<br />';
+    output += '<b>Platform Name:</b> ' + getValueHelper(flowData, 'platformname');
+    output += '<br />';
+    output += '<b>Platform Version:</b> ' + getValueHelper(flowData, 'platformversion');
+    output += '<br />';
+    output += '<b>Browser Vendor:</b> ' + getValueHelper(flowData, 'browservendor');
+    output += '<br />';
+    output += '<b>Browser Name:</b> ' + getValueHelper(flowData, 'browsername');
+    output += '<br />';
+    output += '<b>Browser Version:</b> ' + getValueHelper(flowData, 'browserversion');
+    output += '<br /></div>';
+
+    res.end(output);
   });
-  
-  const port = 3001;
-  server.listen(port);
-  console.log('Server listening on port: ' + port);
-  
+});
+
+const port = 3001;
+server.listen(port);
+console.log('Server listening on port: ' + port);

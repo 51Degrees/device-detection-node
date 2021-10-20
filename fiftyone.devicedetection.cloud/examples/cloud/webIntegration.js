@@ -55,18 +55,17 @@ const DeviceDetectionCloudPipelineBuilder =
   require((process.env.directory || __dirname) +
     '/../../deviceDetectionCloudPipelineBuilder');
 
-const myResourceKey = process.env.RESOURCE_KEY || "!!YOUR_RESOURCE_KEY!!";
-// We need 'server' to be defined here so that, when this example 
-// is executed as part of a unit test, the server can be closed 
+const myResourceKey = process.env.RESOURCE_KEY || '!!YOUR_RESOURCE_KEY!!';
+// We need 'server' to be defined here so that, when this example
+// is executed as part of a unit test, the server can be closed
 // once the test is complete.
 let server;
 
-if (myResourceKey == "!!YOUR_RESOURCE_KEY!!") {
+if (myResourceKey === '!!YOUR_RESOURCE_KEY!!') {
   console.log('You need to create a resource key at ' +
         'https://configure.51degrees.com and paste it into the code, ' +
         'replacing !!YOUR_RESOURCE_KEY!!');
 } else {
-
   // Create a new Device Detection pipeline and set the config.
   // You need to create a resource key at https://configure.51degrees.com
   // and paste it into the code.
@@ -103,7 +102,6 @@ if (myResourceKey == "!!YOUR_RESOURCE_KEY!!") {
 
         res.end(JSON.stringify(flowData.jsonbundler.json));
       } else {
-
         // Some browsers require that extra HTTP headers are explicitly
         // requested. So set whatever headers are required by the browser in
         // order to return the evidence needed by the pipeline.

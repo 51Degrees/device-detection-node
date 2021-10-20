@@ -47,19 +47,17 @@ const each = require('jest-each').default;
 
 const CSVDataFile = (process.env.directory || __dirname) + '/51Degrees.csv';
 const MobileUserAgent =
-  "Mozilla/5.0 (iPhone; CPU iPhone OS 7_1 like Mac OS X) " +
-  "AppleWebKit/537.51.2 (KHTML, like Gecko) Version/7.0 Mobile" +
-  "/11D167 Safari/9537.53";
+  'Mozilla/5.0 (iPhone; CPU iPhone OS 7_1 like Mac OS X) ' +
+  'AppleWebKit/537.51.2 (KHTML, like Gecko) Version/7.0 Mobile' +
+  '/11D167 Safari/9537.53';
 
 const myResourceKey = process.env.RESOURCE_KEY || '!!YOUR_RESOURCE_KEY!!';
 
 describe('deviceDetectionCloud', () => {
   beforeAll(() => {
-      if (!fs.existsSync(CSVDataFile)) {
-        fail();
-      }
+    expect(fs.existsSync(CSVDataFile)).toBe(true);
   });
-  
+
   // Check that if no evidence is provided for device
   // detection engine, accessing a valid property will
   // return HasValue=false and a correct error message
@@ -86,20 +84,20 @@ describe('deviceDetectionCloud', () => {
     }
   });
 
-  // Check that for a successful detection, all properties loaded by the engine 
+  // Check that for a successful detection, all properties loaded by the engine
   // are accessible in the results.
   test('Available Properties', async done => {
     var line = await readFirstLine(CSVDataFile).catch(e => {});
 
     var properties = line
-    .replace(/["\r]/g, "")
-    .split(",");
+      .replace(/["\r]/g, '')
+      .split(',');
 
     var requestEngine = new RequestEngineBuilder({
       resourceKey: myResourceKey
     });
     var engine = new EngineBuilder();
-    
+
     var pipeline = new PipelineBuilder()
       .add(requestEngine)
       .add(engine)
@@ -112,7 +110,7 @@ describe('deviceDetectionCloud', () => {
     await flowData.process();
 
     properties.forEach(key => {
-	  // TODO: Once 'setheader' properties are supported, remove this check.
+    // TODO: Once 'setheader' properties are supported, remove this check.
       if (!key.toLowerCase().startsWith('setheader')) {
         try {
           var apv = flowData.device[key.toLowerCase()];
@@ -120,19 +118,19 @@ describe('deviceDetectionCloud', () => {
             done.fail(new Error(`Aspect property value for ${key}should not be undefined.`));
           }
           expect(apv).not.toBeNull();
-          if (apv.hasValue == true) {
-            if (apv.value == null || apv.value === undefined) {
+          if (apv.hasValue === true) {
+            if (apv.value === null || apv.value === undefined) {
               done.fail(new Error(`${key}.value should not be null`));
             }
           } else {
-            if (apv.noValueMessage == null || apv.noValueMessage === undefined) {
+            if (apv.noValueMessage === null || apv.noValueMessage === undefined) {
               done.fail(new Error(`${key}.noValueMessage should not be null`));
             }
           }
         } catch (err) {
           done.fail(err);
         }
-	  }
+      }
     });
     done();
   });
@@ -141,14 +139,14 @@ describe('deviceDetectionCloud', () => {
     var line = await readFirstLine(CSVDataFile).catch(e => {});
 
     var properties = line
-    .replace(/["\r]/g, "")
-    .split(",");
+      .replace(/["\r]/g, '')
+      .split(',');
 
     var requestEngine = new RequestEngineBuilder({
       resourceKey: myResourceKey
     });
     var engine = new EngineBuilder();
-    
+
     var pipeline = new PipelineBuilder()
       .add(requestEngine)
       .add(engine)
@@ -161,8 +159,8 @@ describe('deviceDetectionCloud', () => {
     await flowData.process();
 
     properties.forEach(key => {
-	  // TODO: Remove this check once 'setheader' properties are supported in Cloud.
-	  if (!key.toLowerCase().startsWith('setheader')) {
+    // TODO: Remove this check once 'setheader' properties are supported in Cloud.
+      if (!key.toLowerCase().startsWith('setheader')) {
         try {
           var property = engine.properties[key.toLowerCase()];
           if (property === undefined) {
@@ -173,87 +171,86 @@ describe('deviceDetectionCloud', () => {
           expect(apv).not.toBe(null);
           expect(apv).toBeDefined();
           expect(apv.value).toBe51DType(key, expectedType);
-        } catch (err){
+        } catch (err) {
           done.fail(err);
         }
-	  }
+      }
     });
-    
-    done();
 
+    done();
   });
 });
 
-function readFirstLine(filePath) {
+function readFirstLine (filePath) {
   var rs = fs.createReadStream(path.resolve(filePath));
   var line = '';
   var pos = 0;
   var index;
-  return new Promise ((resolve, reject) => { 
+  return new Promise((resolve, reject) => {
     rs
-    .on('data', function (chunk) {
-      index = chunk.indexOf('\n');
-      line += chunk;
-      index !== -1 ? rs.close() : pos += chunk.length;
-    })
-    .on('close', function () {
-      resolve(line.slice(0, pos + index));
-    })
-    .on('error', function (err) {
-      reject(err);
-    });
+      .on('data', function (chunk) {
+        index = chunk.indexOf('\n');
+        line += chunk;
+        index !== -1 ? rs.close() : pos += chunk.length;
+      })
+      .on('close', function () {
+        resolve(line.slice(0, pos + index));
+      })
+      .on('error', function (err) {
+        reject(err);
+      });
   });
 }
 
 expect.extend({
   // Method to validate a given value has the expected type.
-  toBe51DType(received, name, fodType) {
+  toBe51DType (received, name, fodType) {
     var valueType = typeof received;
     var valid = false;
-  
+
     switch (fodType) {
       case 'Boolean':
-        valid = 'boolean' == valueType;
+        valid = valueType === 'boolean';
         break;
       case 'String':
-        valid = 'string' == valueType;
+        valid = valueType === 'string';
         break;
       case 'JavaScript':
-        valid = 'string' == valueType;
+        valid = valueType === 'string';
         break;
       case 'Int32':
-        valid = 'number' == valueType;
+        valid = valueType === 'number';
         break;
       case 'Double':
-        valid = 'number' == valueType;
+        valid = valueType === 'number';
         break;
       case 'Array':
-        valid = 'object' == valueType && Array.isArray(received);
+        valid = valueType === 'object' && Array.isArray(received);
         break;
       default:
         valid = false;
         break;
     }
-    
+
     if (valid) {
       return {
-        message: () => 
+        message: () =>
           `${name}: expected node type '${valueType}' not to be equivalent to fodType '${fodType}' for value: '${received}'`,
         pass: true
-      }
+      };
     } else {
       return {
-        message: () => 
+        message: () =>
           `${name}: expected node type '${valueType}' to be equivalent to fodType '${fodType}' for value: '${received}'`,
         pass: false
-      }
+      };
     }
   }
 });
 
 // Verify that making requests using a resource key that
 // is limited to particular origins will fail or succeed
-// in the expected scenarios. 
+// in the expected scenarios.
 // This is an integration test that uses the live cloud service
 // so any problems with that service could affect the result
 // of this test.
@@ -262,11 +259,13 @@ describe('Origin Header', () => {
     ['', true],
     ['test.com', true],
     ['51degrees.com', false]
-  ]).test('origin header set to "%s"', (origin, expectError) => {
+  ]).test('origin header set to "%s"', async (origin, expectError) => {
     var error = false;
     var message = '';
+    var expectErrorMessage = `This resource key is not authorized for use with domain: '${origin}'`;
 
     const pipeline = new DeviceDetectionCloudPipelineBuilder({
+      // Resource key configured with '51degrees.com' as allowed domains.
       resourceKey: 'AQS5HKcyVj6B8wNG2Ug',
       cloudRequestOrigin: origin
     }).build();
@@ -274,14 +273,19 @@ describe('Origin Header', () => {
     // We want to monitor for the expected error message
     pipeline.on('error', (err) => {
       error = true;
-      message = err.message;
+      message = err;
     });
 
     const flowData = pipeline.createFlowData();
-    flowData.process().then(() => {
-      expect(error).toBe(expectError);
-      expect(message).toContain(
-        `This resource key is not authorized for use with domain: '${origin}'`);
+    // Catch error so test does not fail on expected error.
+    await flowData.process().catch(e => {
+      expect(e.length).toBe(1);
+      expect(e[0].message).toContain(expectErrorMessage);
     });
-  })
+
+    expect(error).toBe(expectError);
+    if (error) {
+      expect(message).toContain(expectErrorMessage);
+    }
+  });
 });

@@ -24,7 +24,7 @@
 @example cloud/failureToMatch.js
 
 @include{doc} example-failure-to-match-cloud.txt
- 
+
 This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection.cloud/examples/cloud/failureToMatch.js).
 
 @include{doc} example-require-resourcekey.txt
@@ -52,9 +52,9 @@ const DeviceDetectionCloudPipelineBuilder =
 // You need to create a resource key at https://configure.51degrees.com
 // and paste it into the code, replacing !!YOUR_RESOURCE_KEY!! below.
 
-const myResourceKey = process.env.RESOURCE_KEY || "!!YOUR_RESOURCE_KEY!!";
+const myResourceKey = process.env.RESOURCE_KEY || '!!YOUR_RESOURCE_KEY!!';
 
-if (myResourceKey == "!!YOUR_RESOURCE_KEY!!") {
+if (myResourceKey === '!!YOUR_RESOURCE_KEY!!') {
   console.log('You need to create a resource key at ' +
         'https://configure.51degrees.com and paste it into the code, ' +
         'replacing !!YOUR_RESOURCE_KEY!!');

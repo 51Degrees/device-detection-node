@@ -32,6 +32,8 @@ stages:
           node_version: 12
         node_14_x:
           node_version: 14
+        node_16_x:
+          node_version: 16
       maxParallel: 1
 
     steps:
@@ -136,8 +138,8 @@ stages:
         npm install
         echo "npm install n-readlines"
         npm install n-readlines
-        echo "npm test"
-        npm test
+        echo "npm test -- --runInBand"
+        npm test -- --runInBand
       displayName: 'Build and Test'
       condition: ne(${{ parameters.runTests }}, 'Off')
 
@@ -201,12 +203,16 @@ stages:
                     2,
                     "always"
                 ]
-            }
+            },
+            "ignorePatterns": [
+                "**/node_modules/**",
+                "**/device-detection-cxx/**"
+            ]
           }'
         echo $eslint
         echo $eslint > .eslintrc
-        npm install -g eslint
-        eslint **/*.js
+        npm install -g eslint@6.8.0
+        eslint '**/*.js'
       displayName: "Set up and run eslint"
       condition: and(ne(${{ parameters.runTests }}, 'Off'), ne(variables['node_version'], '6.x'), ne(variables['node_version'], '8.x'))
       failOnStderr: true

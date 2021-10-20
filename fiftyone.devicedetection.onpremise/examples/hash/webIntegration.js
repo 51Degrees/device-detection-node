@@ -38,7 +38,7 @@ Pixel width: [...]
 ```
 
  */
- 
+
 const require51 = (requestedPackage) => {
   try {
     return require('/../' + requestedPackage);
@@ -99,7 +99,6 @@ const server = http.createServer((req, res) => {
 
       res.end(JSON.stringify(flowData.jsonbundler.json));
     } else {
-
       // Some browsers require that extra HTTP headers are explicitly
       // requested. So set whatever headers are required by the browser in
       // order to return the evidence needed by the pipeline.

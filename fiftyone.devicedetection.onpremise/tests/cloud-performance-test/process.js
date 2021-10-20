@@ -70,7 +70,7 @@ const server = http.createServer((req, res) => {
       // get smaller following new client side evidence.
       res.setHeader('Content-Type', 'text/html');
 
-      let output = `
+      const output = `
             <p id=ismobile></p>
             <script>
             window.onload = function(){

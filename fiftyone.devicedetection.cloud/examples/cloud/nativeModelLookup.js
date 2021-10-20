@@ -66,25 +66,24 @@ const HardwareProfileCloudEngine = require((process.env.directory || __dirname) 
   '/../../hardwareProfileCloudEngine');
 // let hardwareProfileCloudEngine = require("fiftyone.devicedetection");
 
-const myResourceKey = process.env.RESOURCE_KEY || "!!YOUR_RESOURCE_KEY!!";
+const myResourceKey = process.env.RESOURCE_KEY || '!!YOUR_RESOURCE_KEY!!';
 
 // You need a license key and paste it into the code,
 // replacing !!YOUR_LICENSE_KEY!!.
-const myLicenseKey = "!!YOUR_LICENSE_KEY!!";
+const myLicenseKey = '!!YOUR_LICENSE_KEY!!';
 
-if (myResourceKey === "!!YOUR_RESOURCE_KEY!!" ||
-  myLicenseKey === "!!YOUR_LICENSE_KEY!!") {
+if (myResourceKey === '!!YOUR_RESOURCE_KEY!!' ||
+  myLicenseKey === '!!YOUR_LICENSE_KEY!!') {
   console.log('You need to create a resource key at ' +
         'https://configure.51degrees.com and paste it into the code, ' +
         'replacing !!YOUR_RESOURCE_KEY!!');
   console.log('You also need a subscription which can be acquired ' +
-        'from https://51degrees.com/pricing. Paste the license key into the ' + 
+        'from https://51degrees.com/pricing. Paste the license key into the ' +
         'code, replacing !!YOUR_LICENSE_KEY!!.');
   console.log('Make sure to include the Profiles, HardwareVendor, ' +
     'HardwareModel and HardwareName properties as they are used by this ' +
     'example.');
 } else {
-
   console.log(`This example finds the details of devices from the 'native model name'.
   The native model name can be retrieved by code running on the device (For example, a mobile app).
   For Android devices, see https://developer.android.com/reference/android/os/Build#MODEL
@@ -116,7 +115,7 @@ if (myResourceKey === "!!YOUR_RESOURCE_KEY!!" ||
   pipeline.on('error', console.error);
 
   const outputDetails = async function (nativemodel) {
-    let message = `Which devices are associated with the native model name ` +
+    let message = 'Which devices are associated with the native model name ' +
       `'${nativemodel}'?`;
 
     // Create a flow data instance.
