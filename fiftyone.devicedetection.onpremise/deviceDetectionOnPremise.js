@@ -102,6 +102,8 @@ class DeviceDetectionOnPremise extends Engine {
    * rather than using the file provided directly. If not
    * loading all data into memory, this is required for
    * automatic data updates to occur.
+   * @param {string} options.tempDataDir The directory to use for the
+   * temporary data copy if 'createTempDataCopy' is set to true.
    * @param {boolean} options.updateOnStart whether to download / update
    * the datafile on initialisation
    * @param {boolean} options.usePredictiveGraph If true, the engine will
@@ -130,6 +132,7 @@ class DeviceDetectionOnPremise extends Engine {
       pollingInterval,
       updateTimeMaximumRandomisation,
       createTempDataCopy,
+      tempDataDir,
       updateOnStart = false,
       usePredictiveGraph = true,
       usePerformanceGraph = false
@@ -249,6 +252,12 @@ class DeviceDetectionOnPremise extends Engine {
 
     if (createTempDataCopy === true) {
       config.setUseTempFile(true);
+    }
+
+    if (typeof tempDataDir === 'string') {
+      const tempDirs = new swigWrapper.VectorStringSwig();
+      tempDirs.add(tempDataDir);
+      config.setTempDirectories(tempDirs);
     }
 
     config.setReuseTempFile(reuseTempFile);
