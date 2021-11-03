@@ -80,6 +80,13 @@ class DeviceDetectionOnPremisePipelineBuilder extends PipelineBuilder {
    * This means that properties will always have values
    * (i.e. no need to check .HasValue) but some may be inaccurate.
    * By default, this is false.
+   * @param {boolean} options.createTempDataCopy If true, the engine will
+   * create a copy of the data file in a temporary location
+   * rather than using the file provided directly. If not
+   * loading all data into memory, this is required for
+   * automatic data updates to occur.
+   * @param {string} options.tempDataDir The directory to use for the
+   * temporary data copy if 'createTempDataCopy' is set to true.
    * @param {boolean} options.usePredictiveGraph True, the engine will use
    * the predictive optimized graph to in detections.
    * @param {boolean} options.usePerformanceGraph True, the engine will use
@@ -104,6 +111,8 @@ class DeviceDetectionOnPremisePipelineBuilder extends PipelineBuilder {
       drift,
       difference,
       allowUnmatched = false,
+      createTempDataCopy,
+      tempDataDir,
       usePredictiveGraph = true,
       usePerformanceGraph = false
     }) {
@@ -135,6 +144,8 @@ class DeviceDetectionOnPremisePipelineBuilder extends PipelineBuilder {
         difference,
         allowUnmatched,
         updateOnStart,
+        createTempDataCopy,
+        tempDataDir,
         usePredictiveGraph,
         usePerformanceGraph
       }));
