@@ -31,9 +31,19 @@ This example is available in full on [GitHub](https://github.com/51Degrees/devic
 
 Expected output:
 
-Is user agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36 a mobile? false
+Evidence used:
+user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36
+Is a mobile? false
 
-Is user agent Mozilla/5.0 (iPhone; CPU iPhone OS 11_2 like Mac OS X) AppleWebKit/604.4.7 (KHTML, like Gecko) Mobile/15C114 a mobile? true
+Evidence used:
+user-agent: Mozilla/5.0 (iPhone; CPU iPhone OS 11_2 like Mac OS X) AppleWebKit/604.4.7 (KHTML, like Gecko) Mobile/15C114
+Is a mobile? true
+
+Evidence used:
+sec-ch-ua-platform: Windows
+sec-ch-ua-platform-version: 14.0.0
+PlatformName? Windows
+PlatformVersion? 11.0
 
  */
 
@@ -65,35 +75,62 @@ const pipeline = new DeviceDetectionOnPremisePipelineBuilder({
 // Valid types are info, debug, warn, error
 pipeline.on('error', console.error);
 
-// Here we make a function that gets a userAgent as evidence and
-// uses the Device Detection Engine to detect if it is a mobile or not
-const checkIfMobile = async function (userAgent) {
+const checkIfMobile = async function (evidence) {
   // Create a FlowData element
   // This is used to add evidence and process it through the
   // FlowElements in the Pipeline.
   const flowData = pipeline.createFlowData();
 
-  // Add the User-Agent as evidence
-  flowData.evidence.add('header.user-agent', userAgent);
+  // Added evidence
+  evidence.forEach((value, key, map) => {
+    flowData.evidence.add(`header.${key}`, value);
+  });
 
   // Run process on the flowData (this returns a promise)
   await flowData.process();
 
-  // Check the ismobile property
-  // this returns an AspectPropertyValue wrapper
-  // letting you check if a value is set and if not why not
-  const ismobile = flowData.device.ismobile;
+  // Print out list of evidence used.
+  console.log('\nEvidence used:');
+  evidence.forEach((value, key, map) => {
+    console.log(`${key}: ${value}`);
+  });
 
-  if (ismobile.hasValue) {
-    console.log(`Is user agent ${userAgent} a mobile? ${ismobile.value}`);
+  // Check that we use more than one evidence.
+  if (evidence.size > 1) {
+    // Check platform properties
+    const platformname = flowData.device.platformname;
+    if (platformname.hasValue) {
+      console.log(`PlatformName? ${platformname.value}`);
+    } else {
+      console.log(platformname.noValueMessage);
+    }
+
+    // Check platform version properties
+    const platformversion = flowData.device.platformversion;
+    if (platformversion.hasValue) {
+      console.log(`PlatformVersion? ${platformversion.value}`);
+    } else {
+      console.log(platformversion.noValueMessage);
+    }
   } else {
-    // Echo out why the value isn't meaningful
-    console.log(ismobile.noValueMessage);
+    // Check the ismobile property
+    // this returns an AspectPropertyValue wrapper
+    // letting you check if a value is set and if not why not
+    const ismobile = flowData.device.ismobile;
+
+    if (ismobile.hasValue) {
+      console.log(`Is a mobile? ${ismobile.value}`);
+    } else {
+      // Echo out why the value isn't meaningful
+      console.log(ismobile.noValueMessage);
+    }
   }
 };
 
-const desktopUA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36';
-const iPhoneUA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_2 like Mac OS X) AppleWebKit/604.4.7 (KHTML, like Gecko) Mobile/15C114';
+const desktopUA = new Map([['user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36']]);
+const iPhoneUA = new Map([['user-agent', 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_2 like Mac OS X) AppleWebKit/604.4.7 (KHTML, like Gecko) Mobile/15C114']]);
+const uach = new Map([['sec-ch-ua-platform', 'Windows'], ['sec-ch-ua-platform-version', '14.0.0']]);
 
 checkIfMobile(desktopUA);
 checkIfMobile(iPhoneUA);
+checkIfMobile(uach);
