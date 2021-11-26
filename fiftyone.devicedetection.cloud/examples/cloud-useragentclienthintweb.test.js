@@ -20,41 +20,136 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
-const fs = require('fs');
-const path = require('path');
+const request = require('supertest');
+// Test constants
+const tc = require('fiftyone.devicedetection.shared').testConstants;
 
-const testExample = function ({ file, portNumber }) {
-  if (portNumber) {
-    process.env.PORT = portNumber;
-  }
-
-  // Change the working directory of the example to be the example itself
-
-  process.env.directory = path.dirname(file);
-
-  let code = fs.readFileSync(file, 'utf8');
-
-  // Add in closer of any apps
-
-  const serverClose = `
-    
-    if(typeof server !== "undefined"){
-
-        server.close();
-
-    }
-
-    `;
-
-  code += serverClose;
-
-  jest.fn(eval(code));
-};
+// Load the example module
+const example = require((__dirname) + '/cloud/userAgentClientHintsWeb.js');
 
 describe('Examples', () => {
-  test('cloud user agent client hints web', (done) => {
-    setTimeout(done, 4000);
+  test.each([
+    ['All available properties',
+      {
+        resourceKeyEnvVar: tc.envVars.superResourceKeyEnvVar,
+        userAgents: [
+          tc.userAgents.chromeUA,
+          tc.userAgents.edgeUA
+        ]
+      },
+      [{
+        headerName: 'Accept-CH',
+        headerValue: ['Sec-CH-UA-Arch',
+          'Sec-CH-UA-Full-Version',
+          'Sec-CH-UA-Mobile',
+          'Sec-CH-UA-Model',
+          'Sec-CH-UA-Platform-Version',
+          'Sec-CH-UA-Platform',
+          'Sec-CH-UA']
+      }]
+    ],
+    ['SetHeaderPlatformAccept-CH',
+      {
+        resourceKeyEnvVar: tc.envVars.platformResourceKeyEnvVar,
+        userAgents: [
+          tc.userAgents.chromeUA,
+          tc.userAgents.edgeUA
+        ]
+      },
+      [{
+        headerName: 'Accept-CH',
+        headerValue: [
+          'Sec-CH-UA-Platform-Version',
+          'Sec-CH-UA-Platform']
+      }]
+    ],
+    ['SetHeaderHardwareAccept-CH',
+      {
+        resourceKeyEnvVar: tc.envVars.hardwareResourceKeyEnvVar,
+        userAgents: [
+          tc.userAgents.chromeUA,
+          tc.userAgents.edgeUA
+        ]
+      },
+      [{
+        headerName: 'Accept-CH',
+        headerValue: ['Sec-CH-UA-Arch',
+          'Sec-CH-UA-Mobile',
+          'Sec-CH-UA-Model']
+      }]
+    ],
+    ['SetHeaderBrowserAccept-CH',
+      {
+        resourceKeyEnvVar: tc.envVars.browserResourceKeyEnvVar,
+        userAgents: [
+          tc.userAgents.chromeUA,
+          tc.userAgents.edgeUA
+        ]
+      },
+      [{
+        headerName: 'Accept-CH',
+        headerValue: ['Sec-CH-UA-Full-Version',
+          'Sec-CH-UA']
+      }]
+    ],
+    ['No SetHeader properties',
+      {
+        resourceKeyEnvVar: tc.envVars.noSetHeaderResourceKeyEnvVar,
+        userAgents: [
+          tc.userAgents.chromeUA,
+          tc.userAgents.edgeUA
+        ]
+      },
+      [{
+        headerName: 'Accept-CH',
+        headerValue: null
+      }]
+    ],
+    ['No UACH supports',
+      {
+        resourceKeyEnvVar: tc.envVars.superResourceKeyEnvVar,
+        userAgents: [
+          tc.userAgents.firefoxUA,
+          tc.userAgents.safariUA,
+          tc.userAgents.curlUA
+        ]
+      },
+      [{
+        headerName: 'Accept-CH',
+        headerValue: null
+      }]
+    ]
+  ])('hash user agent client hints web - %s', async (name, testData, expectedResponses) => {
+    // Loop through the test user agents
+    for (const ua of testData.userAgents) {
+      // Make sure required resource key is defined.
+      const resourceKey = process.env[testData.resourceKeyEnvVar];
+      expect(resourceKey).toBeDefined();
 
-    testExample({ file: (__dirname) + '/cloud/userAgentClientHintsWeb.js' });
-  });
+      // Set pipeline with required resource key
+      example.setPipeline(resourceKey);
+      const response = await request(example.server)
+        .get('/')
+        .set('User-Agent', ua);
+      // Assess the returned headers
+      expectedResponses.forEach(e => {
+        // If responses do not match error out
+        const resVal = response.headers[e.headerName.toLowerCase()];
+        if (e.headerValue !== null && resVal !== undefined) {
+          // Get the list of items in the header value
+          const vals = resVal.split(',').map(function (i) {
+            return i.trim();
+          });
+
+          // Verify the header value
+          expect(vals.length).toBe(e.headerValue.length);
+          e.headerValue.forEach(v => {
+            expect(vals.find(item => item === v)).toBeDefined();
+          });
+        } else if (!(e.headerValue === null && resVal === undefined)) {
+          fail('Expected and actual values should be defined or null and undefined.');
+        }
+      });
+    };
+  }, 4000);
 });
