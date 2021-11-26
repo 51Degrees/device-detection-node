@@ -25,7 +25,7 @@
 
 @include{doc} example-web-integration-client-hints.txt
 
-This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection.hash/examples/hash/userAgentClientHintsWeb.js).
+This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection.onpremise/examples/hash/userAgentClientHintsWeb.js).
 
 @include{doc} example-require-datafile.txt
 

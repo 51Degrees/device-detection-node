@@ -25,7 +25,7 @@
 
 @include{doc} example-configure-from-file-hash.txt
 
-This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection/examples/hash/configureFromFile.js).
+This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection.onpremise/examples/hash/configureFromFile.js).
 
 @include{doc} example-require-datafile.txt
 

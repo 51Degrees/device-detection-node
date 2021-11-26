@@ -25,7 +25,7 @@
 
 @include{doc} example-automatic-updates-system-watcher-hash.txt
 
-This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection/examples/hash/gettingStarted.js).
+This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection.onpremise/examples/hash/gettingStarted.js).
 
 @include{doc} example-require-datafile.txt
 @include{doc} example-require-licensekey.txt
