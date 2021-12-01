@@ -20,41 +20,170 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
-const fs = require('fs');
-const path = require('path');
+const request = require('supertest');
+// Test constants
+const tc = require('fiftyone.devicedetection.shared').testConstants;
 
-const testExample = function ({ file, portNumber }) {
-  if (portNumber) {
-    process.env.PORT = portNumber;
-  }
-
-  // Change the working directory of the example to be the example itself
-
-  process.env.directory = path.dirname(file);
-
-  let code = fs.readFileSync(file, 'utf8');
-
-  // Add in closer of any apps
-
-  const serverClose = `
-    
-    if(typeof server !== "undefined"){
-
-        server.close();
-
-    }
-
-    `;
-
-  code += serverClose;
-
-  jest.fn(eval(code));
-};
+// Load the example module
+const example = require((__dirname) + '/hash/userAgentClientHintsWeb.js');
 
 describe('Examples', () => {
-  test('hash user agent client hints web', (done) => {
-    setTimeout(done, 4000);
+  test.each([
+    ['All available properties',
+      {
+        properties: null,
+        userAgents: [
+          tc.userAgents.chromeUA,
+          tc.userAgents.edgeUA
+        ]
+      },
+      [{
+        headerName: 'Accept-CH',
+        headerValue: ['Sec-CH-UA-Arch',
+          'Sec-CH-UA-Full-Version',
+          'Sec-CH-UA-Mobile',
+          'Sec-CH-UA-Model',
+          'Sec-CH-UA-Platform-Version',
+          'Sec-CH-UA-Platform',
+          'Sec-CH-UA']
+      }]
+    ],
+    ['SetHeaderPlatformAccept-CH',
+      {
+        properties: [
+          'hardwarevendor',
+          'hardwarename',
+          'devicetype',
+          'platformvendor',
+          'platformname',
+          'platformversion',
+          'browservendor',
+          'browsername',
+          'browserversion',
+          'setheaderplatformaccept-ch'],
+        userAgents: [
+          tc.userAgents.chromeUA,
+          tc.userAgents.edgeUA
+        ]
+      },
+      [{
+        headerName: 'Accept-CH',
+        headerValue: [
+          'Sec-CH-UA-Platform-Version',
+          'Sec-CH-UA-Platform']
+      }]
+    ],
+    ['SetHeaderHardwareAccept-CH',
+      {
+        properties: [
+          'hardwarevendor',
+          'hardwarename',
+          'devicetype',
+          'platformvendor',
+          'platformname',
+          'platformversion',
+          'browservendor',
+          'browsername',
+          'browserversion',
+          'setheaderhardwareaccept-ch'],
+        userAgents: [
+          tc.userAgents.chromeUA,
+          tc.userAgents.edgeUA
+        ]
+      },
+      [{
+        headerName: 'Accept-CH',
+        headerValue: ['Sec-CH-UA-Arch',
+          'Sec-CH-UA-Mobile',
+          'Sec-CH-UA-Model']
+      }]
+    ],
+    ['SetHeaderBrowserAccept-CH',
+      {
+        properties: [
+          'hardwarevendor',
+          'hardwarename',
+          'devicetype',
+          'platformvendor',
+          'platformname',
+          'platformversion',
+          'browservendor',
+          'browsername',
+          'browserversion',
+          'setheaderbrowseraccept-ch'],
+        userAgents: [
+          tc.userAgents.chromeUA,
+          tc.userAgents.edgeUA
+        ]
+      },
+      [{
+        headerName: 'Accept-CH',
+        headerValue: ['Sec-CH-UA-Full-Version',
+          'Sec-CH-UA']
+      }]
+    ],
+    ['No SetHeader properties',
+      {
+        properties: [
+          'hardwarevendor',
+          'hardwarename',
+          'devicetype',
+          'platformvendor',
+          'platformname',
+          'platformversion',
+          'browservendor',
+          'browsername',
+          'browserversion'],
+        userAgents: [
+          tc.userAgents.chromeUA,
+          tc.userAgents.edgeUA
+        ]
+      },
+      [{
+        headerName: 'Accept-CH',
+        headerValue: null
+      }]
+    ],
+    ['No UACH supports',
+      {
+        configFile: null,
+        userAgents: [
+          tc.userAgents.firefoxUA,
+          tc.userAgents.safariUA,
+          tc.userAgents.curlUA
+        ]
+      },
+      [{
+        headerName: 'Accept-CH',
+        headerValue: null
+      }]
+    ]
+  ])('hash user agent client hints web - %s', async (name, testData, expectedResponses) => {
+    // Loop through the test user agents
+    for (const ua of testData.userAgents) {
+      example.setPipeline(testData.properties);
+      const response = await request(example.server)
+        .get('/')
+        .set('User-Agent', ua);
+      // Assess the returned headers
+      expectedResponses.forEach(e => {
+        // If responses do not match error out
+        const resVal = response.headers[e.headerName.toLowerCase()];
+        if (e.headerValue !== null && resVal !== undefined) {
+          // Get the list of items in the header value
+          const vals = resVal.split(',').map(function (i) {
+            return i.trim();
+          });
 
-    testExample({ file: (__dirname) + '/hash/userAgentClientHintsWeb.js' });
-  });
+          // Verify the header value
+          expect(vals.length).toBe(e.headerValue.length);
+          e.headerValue.forEach(v => {
+            expect(vals.find(item => item === v)).toBeDefined();
+          });
+        } else if (!(e.headerValue === null && resVal === undefined)) {
+          fail();
+        }
+      });
+    };
+  }, 4000);
 });

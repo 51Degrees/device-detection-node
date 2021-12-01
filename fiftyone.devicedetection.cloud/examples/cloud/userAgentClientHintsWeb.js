@@ -80,22 +80,27 @@ const myResourceKey = process.env.RESOURCE_KEY || '!!YOUR_RESOURCE_KEY!!';
 // once the test is complete.
 let server;
 
-if (myResourceKey === '!!YOUR_RESOURCE_KEY!!') {
-  console.log('You need to create a resource key at ' +
-        'https://configure.51degrees.com and paste it into the code, ' +
-        'replacing !!YOUR_RESOURCE_KEY!!');
-} else {
+// Pipeline variable to be used
+var pipeline;
+const setPipeline = (resourceKey) => {
   // Create a new Device Detection pipeline and set the config.
   // You need to create a resource key at https://configure.51degrees.com
   // and paste it into the code.
-  const pipeline = new DeviceDetectionCloudPipelineBuilder({
-    resourceKey: myResourceKey
+  pipeline = new DeviceDetectionCloudPipelineBuilder({
+    resourceKey: resourceKey
   }).build();
 
   // Logging of errors and other messages.
   // Valid logs types are info, debug, warn, error
   pipeline.on('error', console.error);
+};
 
+if (myResourceKey === '!!YOUR_RESOURCE_KEY!!' &&
+  process.env.JEST_WORKER_ID === undefined) {
+  console.log('You need to create a resource key at ' +
+        'https://configure.51degrees.com and paste it into the code, ' +
+        'replacing !!YOUR_RESOURCE_KEY!!');
+} else {
   const http = require('http');
 
   server = http.createServer((req, res) => {
@@ -227,8 +232,17 @@ if (myResourceKey === '!!YOUR_RESOURCE_KEY!!') {
       res.end(output);
     });
   });
+
+  // Don't run the server if under TEST
+  if (process.env.JEST_WORKER_ID === undefined) {
+    setPipeline(myResourceKey);
+    const port = 3000;
+    server.listen(port);
+    console.log('Server listening on port: ' + port);
+  };
 }
 
-const port = 3000;
-server.listen(port);
-console.log('Server listening on port: ' + port);
+module.exports = {
+  server: server,
+  setPipeline: setPipeline
+};

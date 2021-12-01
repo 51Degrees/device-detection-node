@@ -25,7 +25,7 @@
 
 @include{doc} example-web-integration-client-hints.txt
 
-This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection.hash/examples/hash/userAgentClientHintsWeb.js).
+This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection.onpremise/examples/hash/userAgentClientHintsWeb.js).
 
 @include{doc} example-require-datafile.txt
 
@@ -82,16 +82,21 @@ const getValueHelper = (flowData, propertyKey) => {
   }
 };
 
-// Create a new Device Detection pipeline and set the config.
-const pipeline = new DeviceDetectionOnPremisePipelineBuilder({
-  performanceProfile: 'MaxPerformance',
-  dataFile: datafile,
-  autoUpdate: false
-}).build();
+// Pipeline variable to be used
+var pipeline;
 
-// Logging of errors and other messages.
-// Valid logs types are info, debug, warn, error
-pipeline.on('error', console.error);
+const setPipeline = (properties) => {
+  pipeline = new DeviceDetectionOnPremisePipelineBuilder({
+    performanceProfile: 'MaxPerformance',
+    dataFile: datafile,
+    autoUpdate: false,
+    restrictedProperties: properties
+  }).build();
+
+  // Logging of errors and other messages.
+  // Valid logs types are info, debug, warn, error
+  pipeline.on('error', console.error);
+};
 
 const http = require('http');
 
@@ -223,6 +228,16 @@ const server = http.createServer((req, res) => {
   });
 });
 
-const port = 3001;
-server.listen(port);
-console.log('Server listening on port: ' + port);
+// Don't run the server if under TEST
+if (process.env.JEST_WORKER_ID === undefined) {
+  setPipeline(null);
+  const port = 3001;
+  server.listen(port);
+  console.log('Server listening on port: ' + port);
+};
+
+// Export server object and set pipeline.
+module.exports = {
+  server: server,
+  setPipeline: setPipeline
+};

@@ -112,6 +112,13 @@ You will also need to install any required packages for the examples in the **Ex
 
 Add a 51Degrees cloud resource key in the fiftyone.devicedetection/package.json file for cloud tests. You can obtain a resource key from the [51Degrees Cloud Configurator](https://configure.51degrees.com/) and assign it to the environment variable `RESOURCE_KEY` in your test environment.
 
+There are other environment variables that you will also need to set in your test environment before running all tests:
+- `TEST_SUPER_RESOURCE_KEY`: This key contains all `SetHeader*` properties.
+- `TEST_PLATFORM_RESOURCE_KEY`: This key contains only the `SetHeaderPlatform*` property but no other `SetHeader` properties.
+- `TEST_HARDWARE_RESOURCE_KEY`: This key contains only the `SetHeaderHardware*` property but no other `SetHeader` properties.
+- `TEST_BROWSER_RESOURCE_KEY`: This key contains only the `SetHeaderBrowser*` property but no other `SetHeader` properties.
+- `TEST_NO_SETHEADER_RESOURCE_KEY`: This key contains no `SetHeader` properties.
+
 To run the tests, execute the following command in the root directory or a sub-module directory:
 
 `npm test`

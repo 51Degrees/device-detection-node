@@ -130,8 +130,12 @@ stages:
     # 3. Install dependencies.
     # 4. Run tests.
     - bash: |
-        echo "Resource key for cloud testing = $(SuperResourceKey)"
-        export RESOURCE_KEY="$(SuperResourceKey)"
+        echo "Resource key for cloud testing = $(RESOURCE_KEY)"
+        echo "Super resource key for cloud testing = $(TEST_SUPER_RESOURCE_KEY)"
+        echo "SetHeaderPlatformAccept-CH resource key for cloud testing = $(TEST_PLATFORM_RESOURCE_KEY)"
+        echo "SetHeaderHardwareAccept-CH resource key for cloud testing = $(TEST_HARDWARE_RESOURCE_KEY)"
+        echo "SetHeaderBrowserAccept-CH resource key for cloud testing = $(TEST_BROWSER_RESOURCE_KEY)"
+        echo "No SetHeader* resource key for cloud testing = $(TEST_NO_SETHEADER_RESOURCE_KEY)"
         echo "Cloud endpoint for testing = $(FOD_CLOUD_API_URL)"
         export FOD_CLOUD_API_URL="$(FOD_CLOUD_API_URL)"
         echo "npm install"
@@ -140,6 +144,13 @@ stages:
         npm install n-readlines
         echo "npm test -- --runInBand"
         npm test -- --runInBand
+      env:
+        RESOURCE_KEY: $(SuperResourceKey)
+        TEST_SUPER_RESOURCE_KEY: $(SuperResourceKey)
+        TEST_PLATFORM_RESOURCE_KEY: $(AcceptChPlatformKey)
+        TEST_HARDWARE_RESOURCE_KEY: $(AcceptChHardwareKey)
+        TEST_BROWSER_RESOURCE_KEY: $(AcceptChBrowserKey)
+        TEST_NO_SETHEADER_RESOURCE_KEY: $(AcceptChNoneKey)
       displayName: 'Build and Test'
       condition: ne(${{ parameters.runTests }}, 'Off')
 
@@ -188,7 +199,8 @@ stages:
                 "SharedArrayBuffer": "readonly",
                 "test": true,
                 "jest": true,
-                "expect": true
+                "expect": true,
+                "fail": true
             },
             "parserOptions": {
                 "ecmaVersion": 2018
