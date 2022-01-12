@@ -27,6 +27,8 @@ const swigHelpers = require('./swigHelpers');
 
 const DataFileMissingPropertyService = require('./dataFileMissingPropertyService');
 
+const constants = require('./constants');
+
 /**
  * @typedef {import('fiftyone.pipeline.core').FlowElement} FlowElement
  */
@@ -97,7 +99,21 @@ class SwigData extends AspectData {
     }
 
     if (key === 'method') {
-      result.value = this.swigResults.getMethod();
+      const method = this.swigResults.getMethod();
+      switch (method) {
+        case 1:
+          result.value = constants.performance;
+          break;
+        case 2:
+          result.value = constants.combined;
+          break;
+        case 3:
+          result.value = constants.predictive;
+          break;
+        default:
+          result.value = constants.none;
+          break;
+      }
 
       return result;
     }
