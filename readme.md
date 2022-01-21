@@ -54,16 +54,26 @@ If the module is installed directly from Git then the binaries are also required
   - Install C build tools:
     - Windows:
       - You will need either Visual Studio 2019 or the [C++ Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/) installed.
+        - Minimum platform toolset version is `v142`
+        - Minimum Windows SDK version is `10.0.18362.0`
+
 If you have Visual Studio Code, you'll still need to install the build tools from the link above.
     - Linux/MacOS:
       - You will need a C++ compiler which supports C++11. The compiler will and other build tools will be selected by CMake automatically based on your environment.
 - Build steps:
   - Navigate to fiftyone.devicedetection.onpremise.
-  - Create a folder named `build`.
   - Rename the `binding.51d` to `binding.gyp`
-  - Run `node-gyp configure`
-  - Run `node-gyp build`
-    - This will build the `FiftyOneDeviceDetectionHashV4.node` under `build/Release` folder.
+  - Run `npm install`
+    - Alternatively this step can be replaced by the followings:
+      - Create a folder named `build`.
+      - Run `node-gyp configure`
+      - Run `node-gyp build`
+    - Platform specific:
+      - Windows
+        - By default this will look for Visual Studio 2019 and a minimum Windows SDK version `10.0.18362.0`.
+        - This can be overwritten by include `--msvs_version=[VS version]` and `--msvs_target_platform_version=[Windows SDK Version]` as part of the `npm install` command.
+          - **NOTE**: This is not recommended. Also, some time the latest SDK version is selected instead, as observed in environment with multiple SDK versions installed. Thus, only install the correct Visual Studio version and the minimum required Windows SDK version as recommended.
+  - This will build the `FiftyOneDeviceDetectionHashV4.node` under `build/Release` folder.
   - Copy the `FiftyOneDeviceDetectionHashV4.node` to `build` directory (which is one level up) and rename it using the following convention.
     - Windows:
       - FiftyOneDeviceDetectionHashV4-win32-[ Node version ].node
@@ -76,6 +86,8 @@ If you have Visual Studio Code, you'll still need to install the build tools fro
         - e.g. FiftyOneDeviceDetectionHashV4-darwin-10.node for Node 10.
     - Please see [Support Version](https://51degrees.com/documentation/_info__version_support.html) for Node versions that we support.
     - At this point, other build files and folders can be removed apart from the binaries file *.node.
+
+If this module is installed as a package from `npm` and is intended to be used on Windows, make sure to install the `C++ Redistributable latest 14.2* version or above`.
 
 ### Cloud
 
