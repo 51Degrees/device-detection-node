@@ -8,16 +8,17 @@ schedules:
     include:
     - develop
 
-# Include shared variables.
-variables:
-- template: shared-variables.yml
-- group: CIAutomation
-
 resources:
   repositories:
   - repository: ciTemplates # Id of the repository used to reference to in this script
     type: git
     name: common-ci # Name of the actual repository
+
+# Include shared variables.
+variables:
+- template: shared-variables.yml@ciTemplates
+- template: c/shared-variables.yml@ciTemplates
+- group: CIAutomation
 
 stages:
 - template: shared-build-and-test-platforms.yml
@@ -25,6 +26,8 @@ stages:
     windowsImage: $(windowsImage)
     linuxImage: $(linuxImage)
     macImage: $(macImage)
+    msvsVer: ${{ variables.msvsVer }}
+    winSDKVer: ${{ variables.winSDKVer }}
     runTests: variables['RunTests']
 
 # Try to complete the corresponding pull request if

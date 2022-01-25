@@ -126,6 +126,8 @@
             'type': 'static_library',
             'conditions': [
                 ['OS=="win"', {
+				    'msvs_version':'2019',
+				    'msvs_target_platform_minversion':'10.0.18362.0',
                     'configurations': {
                         'Debug': {
                             'msvs_settings': {

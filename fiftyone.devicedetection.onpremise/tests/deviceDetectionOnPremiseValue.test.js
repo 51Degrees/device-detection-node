@@ -33,6 +33,7 @@ const PipelineBuilder = core.PipelineBuilder;
 const EngineBuilder = require(
   __dirname + '/../deviceDetectionOnPremise'
 );
+const constants = require(__dirname + '/../constants');
 const fs = require('fs');
 
 const LiteDataFile = (process.env.directory || __dirname) + '/../device-detection-cxx/device-detection-data/51Degrees-LiteV4.1.hash';
@@ -98,6 +99,41 @@ describe('deviceDetectionOnPremise', () => {
         done.fail(err);
       }
     });
+    done();
+  });
+
+  // Validate the descriptions of match metrics properties.
+  test('Match Metrics Description', async done => {
+    var engine = new EngineBuilder({
+      dataFilePath: DataFile,
+      autoUpdate: false,
+      licenceKeys: ''
+    });
+    var pipeline = new PipelineBuilder()
+      .add(engine)
+      .build();
+
+    const flowData = pipeline.createFlowData();
+
+    flowData.evidence.add('header.user-agent', MobileUserAgent);
+
+    await flowData.process();
+
+    expect(engine.properties.deviceID.description).toBeDefined();
+    expect(engine.properties.deviceID.description).toEqual(constants.deviceIdDescription);
+    expect(engine.properties.userAgents.description).toBeDefined();
+    expect(engine.properties.userAgents.description).toEqual(constants.userAgentsDescription);
+    expect(engine.properties.difference.description).toBeDefined();
+    expect(engine.properties.difference.description).toEqual(constants.differenceDescription);
+    expect(engine.properties.method.description).toBeDefined();
+    expect(engine.properties.method.description).toEqual(constants.methodDescription);
+    expect(engine.properties.matchedNodes.description).toBeDefined();
+    expect(engine.properties.matchedNodes.description).toEqual(constants.matchedNodesDescription);
+    expect(engine.properties.drift.description).toBeDefined();
+    expect(engine.properties.drift.description).toEqual(constants.driftDescription);
+    expect(engine.properties.iterations.description).toBeDefined();
+    expect(engine.properties.iterations.description).toEqual(constants.iterationsDescription);
+
     done();
   });
 

@@ -5,6 +5,8 @@ parameters:
 - name: windowsImage
 - name: linuxImage
 - name: macImage
+- name: msvsVer
+- name: winSDKVer
 - name: runTests
   type: string
   default: 'On'
@@ -63,6 +65,8 @@ stages:
     stageName: Windows
     imageName: ${{ parameters.windowsImage }}
     osName: 'win32'
+    msvsVer: ${{ parameters.msvsVer }}
+    winSDKVer: ${{ parameters.winSDKVer }}
     stageDependency: 'Data'
     publishBinaries: ${{ parameters.publishBinaries }}
     runTests: ${{ parameters.runTests }}
