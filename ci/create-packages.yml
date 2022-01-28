@@ -29,6 +29,8 @@ stages:
     windowsImage: $(windowsImage)
     linuxImage: $(linuxImage)
     macImage: $(macImage)
+    msvsVer: ${{ variables.msvsVer }}
+    winSDKVer: ${{ variables.winSDKVer }}
     runTests: variables['createPackageRunTests']
 
 - stage: Publish
