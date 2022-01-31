@@ -20,53 +20,30 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
-const fs = require('fs');
-const path = require('path');
-
-const testExample = function ({ file, portNumber }) {
-  if (portNumber) {
-    process.env.PORT = portNumber;
-  }
-
-  // Change the working directory of the example to be the example itself
-
-  process.env.directory = path.dirname(file);
-
-  let code = fs.readFileSync(file, 'utf8');
-
-  // Add in closer of any apps
-
-  const serverClose = `
-    
-    if(typeof server !== "undefined"){
-
-        server.close();
-
-    }
-
-    `;
-
-  code += serverClose;
-
-  jest.fn(eval(code));
-};
+const {
+  liteDataFileName, enterpriseDataFileName,
+  dataFileDirectories, getDataFilePath
+} = require('../tests/testHelper');
+const { runExample } = require('./hash/matchMetrics');
 
 describe('Examples', () => {
-  // Skip the rest of the examples when async is not available
-  let isAsync = true;
-
-  try {
-    eval('async () => {}');
-  } catch (e) {
-    isAsync = false;
-  }
-
-  test('hash match metrics', (done) => {
-    if (isAsync) {
-      setTimeout(done, 1000);
-      testExample({ file: (__dirname) + '/hash/matchMetrics.js' });
-    } else {
-      done();
+  test('hash match metrics with Lite data file', async () => {
+    const filePath = getDataFilePath(liteDataFileName);
+    if (filePath === undefined) {
+      throw (`No Lite data file '${liteDataFileName}' found at 
+        '${dataFileDirectories}'!`);
     }
+
+    await runExample(filePath);
+  });
+
+  test('hash match metrics with Enterprise data file', async () => {
+    const filePath = getDataFilePath(enterpriseDataFileName);
+    if (filePath === undefined) {
+      throw (`This test requires Enterprise data file 
+        '${enterpriseDataFileName}' to exist at '${dataFileDirectories}'!`);
+    }
+
+    await runExample(filePath);
   });
 });

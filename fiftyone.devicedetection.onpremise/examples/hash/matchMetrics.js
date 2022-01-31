@@ -55,21 +55,22 @@ const DeviceDetectionOnPremisePipelineBuilder =
 const datafile = (process.env.directory || __dirname) +
   '/../../device-detection-cxx/device-detection-data/51Degrees-LiteV4.1.hash';
 
-// Check if datafile exists
-
 const fs = require('fs');
-if (!fs.existsSync(datafile)) {
-  console.error('The datafile required by this example is not present. ' +
-    'Please ensure that the \'device-detection-data\' submodule has been ' +
-    'fetched.');
-  throw ("No data file at '" + datafile + "'");
-}
 
-// Create the device detection pipeline with the desired settings.
+var pipeline;
 
-const pipeline =
-  new DeviceDetectionOnPremisePipelineBuilder({
-    dataFile: datafile,
+// Check if datafile exists
+const initPipeline = (dataFilePath) => {
+  if (!fs.existsSync(dataFilePath)) {
+    console.error('The datafile required by this example is not present. ' +
+      'Please ensure that the \'device-detection-data\' submodule has been ' +
+      'fetched.');
+    throw ("No data file at '" + dataFilePath + "'");
+  }
+
+  // Create the device detection pipeline with the desired settings.
+  pipeline = new DeviceDetectionOnPremisePipelineBuilder({
+    dataFile: dataFilePath,
     performanceProfile: 'MaxPerformance',
     autoUpdate: false,
     updateMatchedUserAgent: true,
@@ -77,9 +78,10 @@ const pipeline =
     usePerformanceGraph: false
   }).build();
 
-// To monitor the pipeline we can put in listeners for various log events.
-// Valid types are info, debug, warn, error
-pipeline.on('error', console.error);
+  // To monitor the pipeline we can put in listeners for various log events.
+  // Valid types are info, debug, warn, error
+  pipeline.on('error', console.error);
+};
 
 // Here we make a function that gets a userAgent as evidence and
 // uses the Device Detection Engine to detect if it is a mobile or not
@@ -131,10 +133,28 @@ const displayMatchMetrics = async function (userAgent) {
   // Use the internal FlowElement's properties array to printout all
   // the available values.
   Object.keys(device.flowElement.properties).forEach(function (property) {
-    console.log(property + ': ' + device[property].value);
+    if (device[property].hasValue) {
+      console.log(property + ': ' + device[property].value);
+    } else {
+      console.log(property + ': ' + device[property].noValueMessage);
+    }
   });
 };
 
-const desktopUA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36';
+// Run example
+const runExample = async function (dataFilePath) {
+  const desktopUA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36';
 
-displayMatchMetrics(desktopUA);
+  initPipeline(dataFilePath);
+  await displayMatchMetrics(desktopUA);
+};
+
+// Don't run the server if under TEST
+if (process.env.JEST_WORKER_ID === undefined) {
+  runExample(datafile);
+};
+
+// Export server object and set pipeline.
+module.exports = {
+  runExample: runExample
+};

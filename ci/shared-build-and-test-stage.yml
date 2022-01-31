@@ -207,45 +207,6 @@ stages:
       condition: and(succeededOrFailed(), ne(${{ parameters.runTests }}, 'Off'))
 
     - bash: |
-        eslint='{
-            "env": {
-                "browser": true,
-                "commonjs": true,
-                "es6": true,
-                "jest": true
-            },
-            "extends": [
-                "standard"
-            ],
-            "globals": {
-                "Atomics": "readonly",
-                "SharedArrayBuffer": "readonly",
-                "test": true,
-                "jest": true,
-                "expect": true,
-                "fail": true
-            },
-            "parserOptions": {
-                "ecmaVersion": 2018
-            },
-            "rules": {
-                "node/no-deprecated-api": "off",
-                "no-throw-literal": "off",
-                "no-path-concat": "off",
-                "no-prototype-builtins": "off",
-                "no-eval": "off",
-                "semi": [
-                    2,
-                    "always"
-                ]
-            },
-            "ignorePatterns": [
-                "**/node_modules/**",
-                "**/device-detection-cxx/**"
-            ]
-          }'
-        echo $eslint
-        echo $eslint > .eslintrc
         npm install -g eslint@6.8.0
         eslint '**/*.js'
       displayName: "Set up and run eslint"
