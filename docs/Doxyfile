@@ -900,7 +900,10 @@ EXCLUDE_SYMBOLS        =
 
 EXAMPLE_PATH           = ../fiftyone.devicedetection/examples \
                          ../fiftyone.devicedetection.cloud/examples \
+                         ../fiftyone.devicedetection.cloud/examples/cloud/gettingstarted-console \
+                         ../fiftyone.devicedetection.cloud/examples/cloud/gettingstarted-web \
                          ../fiftyone.devicedetection.onpremise/examples \
+                         ../fiftyone.devicedetection.onpremise/examples/onpremise/gettingstarted-web \
                          ../../../src/snippets
 
 # If the value of the EXAMPLE_PATH tag contains directories, you can use the

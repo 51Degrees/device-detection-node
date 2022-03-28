@@ -25,7 +25,6 @@ const DeviceDetectionCloud = require('./deviceDetectionCloud');
 const CloudRequestEngine = require('fiftyone.pipeline.cloudrequestengine').CloudRequestEngine;
 const PipelineBuilder = core.PipelineBuilder;
 const LruCache = require('fiftyone.pipeline.engines').LruCache;
-const ShareUsageElement = require('fiftyone.pipeline.engines.fiftyone').ShareUsage;
 
 class DeviceDetectionCloudPipelineBuilder extends PipelineBuilder {
   /**
@@ -41,8 +40,6 @@ class DeviceDetectionCloudPipelineBuilder extends PipelineBuilder {
    * If you do not wish to use a key then you can specify
    * an empty string, but this will cause automatic updates
    * to be disabled.
-   * @param {boolean} options.shareUsage whether to include the share
-   * usage element
    * @param {string} options.resourceKey resourceKey
    * @param {number} options.cacheSize size of the default cache
    * (includes cache if set).
@@ -54,7 +51,6 @@ class DeviceDetectionCloudPipelineBuilder extends PipelineBuilder {
   constructor (
     {
       licenceKeys = null,
-      shareUsage = true,
       resourceKey = null,
       cacheSize = null,
       cloudEndPoint = null,
@@ -63,10 +59,6 @@ class DeviceDetectionCloudPipelineBuilder extends PipelineBuilder {
     super(...arguments);
 
     // Check if share usage enabled and add it to the pipeline if so
-
-    if (shareUsage) {
-      this.flowElements.push(new ShareUsageElement());
-    }
 
     let cache;
 

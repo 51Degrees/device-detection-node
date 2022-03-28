@@ -20,9 +20,24 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
-module.exports = {
-  errorMessages: require('./errorMessages'),
-  testConstants: require('./tests/testConstants'),
-  optionsExtension: require('./examples/optionsExtension'),
-  dataExtension: require('./examples/dataExtension')
-};
+const fs = require('fs');
+
+const example = require((__dirname) + '/gettingStarted.js');
+
+// Test constants
+const tc = require('fiftyone.devicedetection.shared').testConstants;
+
+const OptionsExtension =
+  require('fiftyone.devicedetection.shared').optionsExtension;
+
+describe('Examples', () => {
+  test('cloud getting started', async () => {
+    // Load the configuration from a config file to a JSON object.
+    const options = JSON.parse(fs.readFileSync((__dirname) + '/51d.json'), 'utf8');
+    OptionsExtension.updateElementPath(options, __dirname);
+    OptionsExtension.setResourceKey(
+      options, process.env[tc.envVars.superResourceKeyEnvVar]);
+    await example.run(options, process.stdout);
+    expect(true);
+  });
+});

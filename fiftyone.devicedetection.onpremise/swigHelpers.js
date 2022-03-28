@@ -47,7 +47,9 @@ module.exports = {
     const date = new Date();
 
     date.setFullYear(swigDate.getYear());
-    date.setMonth(swigDate.getMonth());
+    // Minus one as Jan starts at 0
+    const month = swigDate.getMonth();
+    date.setMonth(month > 0 ? month - 1 : month);
     date.setDate(swigDate.getDay());
 
     return date;
