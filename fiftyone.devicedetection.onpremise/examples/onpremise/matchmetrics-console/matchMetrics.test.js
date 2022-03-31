@@ -20,9 +20,30 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
-module.exports = {
-  errorMessages: require('./errorMessages'),
-  testConstants: require('./tests/testConstants'),
-  optionsExtension: require('./examples/optionsExtension'),
-  dataExtension: require('./examples/dataExtension')
-};
+const {
+  liteDataFileName, enterpriseDataFileName,
+  dataFileDirectories, getDataFilePath
+} = require('../../../tests/testHelper');
+const { runExample } = require('./matchMetrics');
+
+describe('Examples', () => {
+  test('hash match metrics with Lite data file', async () => {
+    const filePath = getDataFilePath(liteDataFileName);
+    if (filePath === undefined) {
+      throw (`No Lite data file '${liteDataFileName}' found at 
+        '${dataFileDirectories}'!`);
+    }
+
+    await runExample(filePath);
+  });
+
+  test('hash match metrics with Enterprise data file', async () => {
+    const filePath = getDataFilePath(enterpriseDataFileName);
+    if (filePath === undefined) {
+      throw (`This test requires Enterprise data file 
+        '${enterpriseDataFileName}' to exist at '${dataFileDirectories}'!`);
+    }
+
+    await runExample(filePath);
+  });
+});

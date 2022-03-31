@@ -95,23 +95,33 @@ The device detection cloud engine makes use of the 51Degrees cloud API. As such 
 
 ### Examples
 
-Some examples require 'n-readlines' to run, so you will need to install it:
-
-`npm install n-readlines`
-
 For details of how to run the examples, please refer to [run examples](run_examples.md).
 
-- **configureFromFile.js** - This example shows how to configure a pipeline from a configuration file using the pipelinebuilder's buildFromConfigurationFile method.
-- **failureToMatch.js** - This example shows how the hasValue function can help make sure that meaningful values are returned when checking properties returned from the device detection engine. It also illustrates how the "allowUnmatched" parameters can be used to alter these results.
-- **gettingStarted.js** - Getting started example of using the 51Degrees device detection 'Hash' algorithm to determine whether a given User-Agent corresponds to a mobile device or not.
-- **metaData.js** - This example shows how to get properties from a pipeline's processed flowData based on their metadata, the getProperties() method and also additional meta data properties on device detection data.
-- **webIntegration.js** - This example demonstrates the evidence.addFromRequest() method and client side JavaScript overrides by creating a web server, serving JavaScript created by the device detection engine and bundled together by a special JavaScript bundler engine. This JavaScript is then used on the client side to save a cookie so that when the device detection engine next processes the request (using the addFromRequest() method) it has a more accurate reading for properties set on the client side.
+#### Cloud
 
-On-premise specific usage examples
+| Example                                | Revamped           | Description |
+|----------------------------------------|--------------------|-------------|
+| gettingstarted-console                 | &check;            | How to use the 51Degrees Cloud service to determine details about a device based on its User-Agent and User-Agent Client Hints HTTP header values. |
+| gettingstarted-web                     | &check;            | How to use the 51Degrees Cloud service to determine details about a device as part of a simple web server. |
+| metadata-console                       |                    | How to access the meta-data that relates to the device detection algorithm. |
+| useragentclienthints-web               |                    | This is now deprecated. Kept for testing purposes. Please see **gettingstarted-web** instead.
+| taclookup-console                      |                    | How to get device details from a TAC (Type Allocation Code) using the 51Degrees cloud service. |
+| nativemodellookup-console              |                    | How to get device details from a native model name using the 51Degrees cloud service. |
 
-- **matchMetrics.js** - This example shows how to get information about the detection result such as the algorithm that was used to perform the detection.
-- **offlineProcessing.js** - This example shows how to process a CSV file containing User-Agent strings and produce an output csv containing the source User-Agent strings with IsMobile, PlatformName and PlatformVersion properties appended.
-- **performance.js** - The examples demonstrates the performance of the HighPerformance device detection configuration.
+#### On-Premise
+
+| Example                                | Revamped           | Description |
+|----------------------------------------|--------------------|-------------|
+| gettingstarted-console                 | &check;            | How to use the 51Degrees on-premise device detection API to determine details about a device based on its User-Agent and User-Agent Client Hints HTTP header values. |
+| gettingstarted-web                     | &check;            | How to use the 51Degrees Cloud service to determine details about a device as part of a simple web server. |
+| matchmetrics-console                   |                    | How to view metrics associated with the results of processing with a Device Detection engine. |
+| metadata-console                       |                    | How to access the meta-data that relates to the device detection algorithm. |
+| offlineprocessing-console              |                    | How to process data for later viewing using a Device Detection Hash data file. |
+| performance-console                    |                    | How to configure the various performance options and run a simple performance test. |
+| useragentclienthints-web               |                    | This is now deprecated. Kept for testing purposes. Please see **gettingstarted-web** instead. |
+| automaticupdates/dataFileSystemWatcher.js |                    | How to configure automatic updates using the file system watcher to monitor for changes to the data file. |
+| automaticupdates/updateOnStartUp.js    |                    | How to configure the Pipeline to automatically update the device detection data file on startup. |
+| automaticupdates/updatePollingInterval.js |                    | Ho to configure and verify the various automatic data file update settings. |
 
 ## Tests
 

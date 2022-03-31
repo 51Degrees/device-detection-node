@@ -6,7 +6,7 @@
 
 The examples can be run either with modules included in the GitHub repository or with the **Device Detection** packages from `npm` repository.
 
-Usage examples are available for Cloud and Hash in ``fiftyone.devicedetection/examples``, ``fiftyone.devicedetection.cloud/examples`` and ``fiftyone.devicedetection.onpremise/examples``.
+Usage examples are available for Cloud and OnPremise in ``fiftyone.devicedetection/examples``, ``fiftyone.devicedetection.cloud/examples`` and ``fiftyone.devicedetection.onpremise/examples``.
 
 ## Run with modules in GitHub repository
 
@@ -20,7 +20,7 @@ Install the required packages:
 npm install
 ```
 
-Navigate to the sub folder `examples\[cloud|hash]` and run the example:
+Navigate to the sub folder `examples\[cloud|onpremise]` and run the example:
 
 e.g.
 
@@ -32,7 +32,7 @@ node gettingStarted.js
 
 These examples can also be run with `npm` packages ``fiftyone.devicedetection.*`` modules.
 
-First of all, create a folder outside of the checkout directory (`npm` does not allow package to be installed under the same package name) and copy the example that you want to run to that folder. For `configureFromFile.js` example, you will also need to copy the `JSON` file `51d.json`.
+First of all, create a folder outside of the checkout directory (`npm` does not allow package to be installed under the same package name) and copy the example that you want to run to that folder. For examples where there is an associated `JSON` `51d.json`, you will also need to copy the file.
 
 Create a `package.json` file and make sure to include the package that you wish to use in the `dependencies` section. For examples:
 

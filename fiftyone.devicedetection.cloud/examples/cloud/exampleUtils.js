@@ -1,6 +1,6 @@
 /* *********************************************************************
  * This Original Work is copyright of 51 Degrees Mobile Experts Limited.
- * Copyright 2019 51 Degrees Mobile Experts Limited, 5 Charlotte Close,
+ * Copyright 2022 51 Degrees Mobile Experts Limited, 5 Charlotte Close,
  * Caversham, Reading, Berkshire, United Kingdom RG4 7BY.
  *
  * This Original Work is licensed under the European Union Public Licence (EUPL)
@@ -20,9 +20,10 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
+// The default environment variable used to get the resource key
+// to use when running examples.
+const RESOURCE_KEY_ENV_VAR = 'RESOURCE_KEY';
+
 module.exports = {
-  errorMessages: require('./errorMessages'),
-  testConstants: require('./tests/testConstants'),
-  optionsExtension: require('./examples/optionsExtension'),
-  dataExtension: require('./examples/dataExtension')
+  RESOURCE_KEY_ENV_VAR: RESOURCE_KEY_ENV_VAR
 };

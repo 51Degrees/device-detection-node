@@ -20,9 +20,34 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
-module.exports = {
-  errorMessages: require('./errorMessages'),
-  testConstants: require('./tests/testConstants'),
-  optionsExtension: require('./examples/optionsExtension'),
-  dataExtension: require('./examples/dataExtension')
-};
+const request = require('supertest');
+
+const fs = require('fs');
+
+// Load the example module
+const example = require((__dirname) + '/gettingStarted.js');
+
+const OptionsExtension =
+  require('fiftyone.devicedetection.shared').optionsExtension;
+
+describe('Examples', () => {
+  test('onpremise getting started web', async () => {
+    // Load configuration options
+    const options = JSON.parse(fs.readFileSync(__dirname + '/51d.json'));
+
+    // Update data file path
+    const dataFilePath = OptionsExtension.getDataFilePath(options);
+    if (dataFilePath.startsWith('.')) {
+      OptionsExtension.setDataFilePath(options, __dirname + '/' + dataFilePath);
+    }
+
+    // Update element path with a full path
+    OptionsExtension.updateElementPath(options, __dirname);
+
+    example.setPipeline(options);
+    const response = await request(example.server)
+      .get('/')
+      .set('User-Agent', 'abc');
+    expect(response.statusCode).toBe(200);
+  });
+});

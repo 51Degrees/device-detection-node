@@ -47,7 +47,8 @@ const getDataFilePath = function (fileName) {
       return fullPath;
     }
   }
-  return undefined;
+  throw (`No data file '${fileName}' found at 
+    '${fileDirs}'!`);
 };
 
 /**
