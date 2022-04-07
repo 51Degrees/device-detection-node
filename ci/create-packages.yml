@@ -89,9 +89,11 @@ stages:
     # before creating the packages.
     - script: |
         rm -f fiftyone.devicedetection/package.json
+        rm -f fiftyone.devicedetection.shared/package.json
         rm -f fiftyone.devicedetection.cloud/package.json
         rm -f fiftyone.devicedetection.onpremise/package.json
         if [ -f fiftyone.devicedetection/package.json ] && \
+           [ -f fiftyone.devicedetection.shared/package.json ] && \
            [ -f fiftyone.devicedetection.cloud/package.json] && \
            [ -f fiftyone.devicedetection.onpremise/package.json ]; then
           echo "ERROR: Failed to remove package.json files."
@@ -99,9 +101,11 @@ stages:
         fi
         
         mv fiftyone.devicedetection/remote_package.json fiftyone.devicedetection/package.json
+        mv fiftyone.devicedetection.shared/remote_package.json fiftyone.devicedetection.shared/package.json
         mv fiftyone.devicedetection.cloud/remote_package.json fiftyone.devicedetection.cloud/package.json
         mv fiftyone.devicedetection.onpremise/remote_package.json fiftyone.devicedetection.onpremise/package.json
         if [ ! -f fiftyone.devicedetection/package.json ] && \
+           [ ! -f fiftyone.devicedetection.shared/package.json ] && \
            [ ! -f fiftyone.devicedetection.cloud/package.json] && \
            [ ! -f fiftyone.devicedetection.onpremise/package.json ]; then
           echo "ERROR: Failed to update package.json files."

@@ -21,9 +21,12 @@
  * ********************************************************************* */
 
 /*
-This file is used for release package.
+This file is used for development package.
 */
 
 module.exports = {
-  errorMessages: require('./errorMessages')
+  errorMessages: require('./errorMessages'),
+  testConstants: require('./tests/testConstants'),
+  optionsExtension: require('./examples/optionsExtension'),
+  dataExtension: require('./examples/dataExtension')
 };
