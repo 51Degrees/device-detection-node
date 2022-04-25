@@ -41,6 +41,8 @@ const DeviceDetectionOnPremisePipelineBuilder =
 
 const ExampleUtils = require(__dirname + '/../exampleUtils').ExampleUtils;
 
+const DataExtension = require('fiftyone.devicedetection.shared').dataExtension;
+
 // In this example, by default, the 51degrees "Lite" file needs to be in the
 // fiftyone.devicedetection.onpremise/device-detection-cxx/device-detection-data,
 // or you may specify another file as a command line parameter.
@@ -81,7 +83,7 @@ const evidenceValues = [
   ])
 ];
 
-const outputValue = function (name, value, message) {
+const outputValue = function (name, value) {
   // Individual result values have a wrapper called
   // `AspectPropertyValue`. This functions similarly to
   // a null-able type.
@@ -89,9 +91,7 @@ const outputValue = function (name, value, message) {
   // `value` property will throw an exception.
   // `AspectPropertyValue` also includes the `noValueMessage`
   // property, which describes why the value has not been set.
-  return value.hasValue
-    ? `\n\t${name}: ${value.value}`
-    : `\n\t${name}: ${value.noValueMessage}`;
+  return `\n\t${name}: ${value}`;
 };
 
 const analyse = async function (evidence, pipeline, output) {
@@ -130,11 +130,11 @@ const analyse = async function (evidence, pipeline, output) {
   // device properties. See the property dictionary at
   // https://51degrees.com/developers/property-dictionary
   // for details of all available properties.
-  message += outputValue('Mobile Device', device.ismobile, message);
-  message += outputValue('Platform Name', device.platformname, message);
-  message += outputValue('Platform Version', device.platformversion, message);
-  message += outputValue('Browser Name', device.browsername, message);
-  message += outputValue('Browser Version', device.browserversion, message);
+  message += outputValue('Mobile Device', DataExtension.getValueHelper(device, 'ismobile'));
+  message += outputValue('Platform Name', DataExtension.getValueHelper(device, 'platformname'));
+  message += outputValue('Platform Version', DataExtension.getValueHelper(device, 'platformversion'));
+  message += outputValue('Browser Name', DataExtension.getValueHelper(device, 'browsername'));
+  message += outputValue('Browser Version', DataExtension.getValueHelper(device, 'browserversion'));
   message += '\n\n';
   output.write(message);
 };
@@ -143,15 +143,15 @@ const run = async function (dataFile, output) {
   // In this example, we use the DeviceDetectionOnPremisePipelineBuilder
   // and configure it in code. For more information about
   // pipelines in general see the documentation at
-  // http://51degrees.com/documentation/4.3/_concepts__configuration__builders__index.html
+  // http://51degrees.com/documentation/_concepts__configuration__builders__index.html
   const pipeline = new DeviceDetectionOnPremisePipelineBuilder({
     dataFile: dataFile,
     // We use the low memory profile as its performance is
     // sufficient for this example. See the documentation for
     // more detail on this and other configuration options:
-    // http://51degrees.com/documentation/4.3/_device_detection__features__performance_options.html
-    // http://51degrees.com/documentation/4.3/_features__automatic_datafile_updates.html
-    // http://51degrees.com/documentation/4.3/_features__usage_sharing.html
+    // http://51degrees.com/documentation/_device_detection__features__performance_options.html
+    // http://51degrees.com/documentation/_features__automatic_datafile_updates.html
+    // http://51degrees.com/documentation/_features__usage_sharing.html
     performanceProfile: 'LowMemory',
     // inhibit sharing usage for this test, usually this
     // should be set 'true'

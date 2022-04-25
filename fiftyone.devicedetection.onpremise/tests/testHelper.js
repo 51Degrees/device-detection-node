@@ -24,6 +24,7 @@ const fs = require('fs');
 
 const liteDataFileName = '51Degrees-LiteV4.1.hash';
 const enterpriseDataFileName = '51Degrees.hash';
+const evidenceFileName = '20000 Evidence Records.yml';
 
 // Data files to search for. Ordered based on priorities.
 const datafiles = [enterpriseDataFileName, liteDataFileName];
@@ -48,7 +49,7 @@ const getDataFilePath = function (fileName) {
     }
   }
   throw (`No data file '${fileName}' found at 
-    '${fileDirs}'!`);
+    '${fileDirs.join(', ')}'!`);
 };
 
 /**
@@ -72,6 +73,7 @@ const getTestDataFile = function () {
 module.exports = {
   liteDataFileName: liteDataFileName,
   enterpriseDataFileName: enterpriseDataFileName,
+  evidenceFileName: evidenceFileName,
   dataFileDirectories: fileDirs,
   getDataFilePath: getDataFilePath,
   getTestDataFile: getTestDataFile

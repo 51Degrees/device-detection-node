@@ -1,6 +1,6 @@
 /* *********************************************************************
  * This Original Work is copyright of 51 Degrees Mobile Experts Limited.
- * Copyright 2022 51 Degrees Mobile Experts Limited, 5 Charlotte Close,
+ * Copyright 2019 51 Degrees Mobile Experts Limited, 5 Charlotte Close,
  * Caversham, Reading, Berkshire, United Kingdom RG4 7BY.
  *
  * This Original Work is licensed under the European Union Public Licence (EUPL)
@@ -20,31 +20,24 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
-const {
-  liteDataFileName, enterpriseDataFileName, evidenceFileName,
-  getDataFilePath
-} = require(__dirname + '/../../../tests/testHelper');
+const fs = require('fs');
 
-const example = require(__dirname + '/offlineProcessing.js');
+const example = require((__dirname) + '/tacLookup.js');
+
+// Test constants
+const tc = require('fiftyone.devicedetection.shared').testConstants;
+
+const OptionsExtension =
+  require('fiftyone.devicedetection.shared').optionsExtension;
 
 describe('Examples', () => {
-  test('onpremise offline processing', async () => {
-    let dataFilePath;
-    try {
-      dataFilePath = getDataFilePath(enterpriseDataFileName);
-    } catch (e) {
-      dataFilePath = getDataFilePath(liteDataFileName);
-    }
-    expect(dataFilePath).not.toBe(undefined);
-
-    const evidenceFilePath = getDataFilePath(evidenceFileName);
-    expect(evidenceFilePath).not.toBe(undefined);
-
-    await example.run(
-      dataFilePath,
-      evidenceFilePath,
-      'temp-output.dat',
-      (output, content) => {});
+  test('cloud tac lookup', async () => {
+    // Load the configuration from a config file to a JSON object.
+    const options = JSON.parse(fs.readFileSync((__dirname) + '/51d.json'), 'utf8');
+    OptionsExtension.updateElementPath(options, __dirname);
+    OptionsExtension.setResourceKey(
+      options, process.env[tc.envVars.superResourceKeyEnvVar]);
+    await example.run(options, process.stdout);
     expect(true);
   });
 });

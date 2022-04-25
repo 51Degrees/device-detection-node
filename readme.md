@@ -84,7 +84,7 @@ If you have Visual Studio Code, you'll still need to install the build tools fro
     - MacOS:
       - FiftyOneDeviceDetectionHashV4-darwin-[ Node version ].node
         - e.g. FiftyOneDeviceDetectionHashV4-darwin-10.node for Node 10.
-    - Please see [Support Version](https://51degrees.com/documentation/_info__version_support.html) for Node versions that we support.
+    - Please see the [tested versions page](https://51degrees.com/documentation/_info__tested_versions.html) for Node versions that we currently test against.
     - At this point, other build files and folders can be removed apart from the binaries file *.node.
 
 If this module is installed as a package from `npm` and is intended to be used on Windows, make sure to install the `C++ Redistributable latest 14.2* version or above`.

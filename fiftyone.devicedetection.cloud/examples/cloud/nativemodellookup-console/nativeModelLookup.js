@@ -23,35 +23,23 @@
 /**
 @example cloud/nativemodellookup-console/nativeModelLookup.js
 
-@include{doc} example-native-model-lookup-cloud.txt
+This example shows how to use the 51Degrees Cloud service to lookup the details of a device
+based on a given 'native model name'. Native model name is a string of characters that are
+returned from a query to the device's OS.
+There are different mechanisms to get native model names for
+[Android devices](https://developer.android.com/reference/android/os/Build#MODEL) and
+[iOS devices](https://gist.github.com/soapyigu/c99e1f45553070726f14c1bb0a54053b#file-machinename-swift)
 
 This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection.cloud/examples/cloud/nativemodellookup-console/nativeModelLookup.js).
 
 @include{doc} example-require-resourcekey.txt
 
-@include{doc} example-require-licensekey.txt
-
-Make sure to include the Profiles, HardwareVendor, HardwareModel and HardwareName
-properties as they are used by this example.
-
-Example output:
-
-```
-This example finds the details of devices from the 'native model name'.
-The native model name can be retrieved by code running on the device (For example, a mobile app).
-For Android devices, see https://developer.android.com/reference/android/os/Build#MODEL
-For iOS devices, see https://gist.github.com/soapyigu/c99e1f45553070726f14c1bb0a54053b#file-machinename-swift
-----------------------------------------
-Which devices are associated with the native model name 'SC-03L'?
-        Samsung Galaxy S10 (SC-03L)
-Which devices are associated with the native model name 'iPhone11,8'?
-        Apple iPhone XR (iPhone XR)
-        Apple iPhone XR (A1984)
-        Apple iPhone XR (A2105)
-        Apple iPhone XR (A2106)
-        Apple iPhone XR (A2107)
-        Apple iPhone XR (A2108)
-```
+Required npm Dependencies:
+- fiftyone.pipeline.cloudrequestengine
+- fiftyone.pipeline.core
+- fiftyone.pipeline.engines
+- fiftyone.pipeline.engines.fiftyone
+- fiftyone.devicedetection.cloud
 
 */
 
@@ -64,101 +52,103 @@ const CloudRequestEngine = require('fiftyone.pipeline.cloudrequestengine');
 // commented out version below it.
 const HardwareProfileCloudEngine = require((process.env.directory || __dirname) +
   '/../../../hardwareProfileCloudEngine');
-// let hardwareProfileCloudEngine = require("fiftyone.devicedetection");
 
-const myResourceKey = process.env.RESOURCE_KEY || '!!YOUR_RESOURCE_KEY!!';
+const ExampleUtils = require(__dirname + '/../exampleUtils');
 
-// You need a license key and paste it into the code,
-// replacing !!YOUR_LICENSE_KEY!!.
-const myLicenseKey = '!!YOUR_LICENSE_KEY!!';
+const constants = require(__dirname + '/../../../constants.js');
 
-if (myResourceKey === '!!YOUR_RESOURCE_KEY!!' ||
-  myLicenseKey === '!!YOUR_LICENSE_KEY!!') {
-  console.log('You need to create a resource key at ' +
-        'https://configure.51degrees.com and paste it into the code, ' +
-        'replacing !!YOUR_RESOURCE_KEY!!');
-  console.log('You also need a subscription which can be acquired ' +
-        'from https://51degrees.com/pricing. Paste the license key into the ' +
-        'code, replacing !!YOUR_LICENSE_KEY!!.');
-  console.log('Make sure to include the Profiles, HardwareVendor, ' +
-    'HardwareModel and HardwareName properties as they are used by this ' +
-    'example.');
-} else {
-  console.log(`This example finds the details of devices from the 'native model name'.
-  The native model name can be retrieved by code running on the device (For example, a mobile app).
-  For Android devices, see https://developer.android.com/reference/android/os/Build#MODEL
-  For iOS devices, see https://gist.github.com/soapyigu/c99e1f45553070726f14c1bb0a54053b#file-machinename-swift
-  ----------------------------------------`);
+const DataExtension = require('fiftyone.devicedetection.shared').dataExtension;
 
-  // Create request engine that will make requests to the cloud service.
-  // You need to create a resource key at https://configure.51degrees.com
-  // and paste it into the code.
+const analyseNativeModel = async function (nativemodel, pipeline, output) {
+  // Create a flow data instance.
+  const flowData = pipeline.createFlowData();
 
+  // After creating a flowdata instance, add the native model name as evidence.
+  flowData.evidence.add(constants.EVIDENCE_QUERY_NATIVE_MODEL_KEY, nativemodel);
+
+  await flowData.process();
+  output.write('Which devices are associated with the native model name ' +
+  `'${nativemodel}'?\n`);
+
+  // The result is an array containing the details of any devices that match
+  // the specified native model name.
+  // The code in this example iterates through this array, outputting the
+  // vendor and model of each matching device.
+  flowData.hardware.profiles.forEach(profile => {
+    const hardwareVendor = DataExtension.getValueHelper(profile, 'hardwarevendor');
+    const hardwareName = DataExtension.getValueHelper(profile, 'hardwarename');
+    const hardwareModel = DataExtension.getValueHelper(profile, 'hardwaremodel');
+
+    output.write(`\t${hardwareVendor} ${hardwareName} (${hardwareModel})\n`);
+  });
+};
+
+const run = async function (resourceKey, output) {
+  output.write('This example finds the details of devices from the ' +
+    '\'native model name\'.\n');
+  output.write('The native model name can be retrieved by code running ' +
+    'on the device (For example, a mobile app).\n');
+  output.write('For Android devices, see ' +
+    'https://developer.android.com/reference/android/os/Build#MODEL\n');
+  output.write('For iOS devices, see ' +
+    'https://gist.github.com/soapyigu/c99e1f45553070726f14c1bb0a54053b#file-machinename-swift\n');
+  output.write('----------------------------------------\n');
+
+  // This example creates the pipeline and engines in code. For a demonstration
+  // of how to do this using a configuration file instead, see the TacLookup example.
+  // For more information about builders in general see the documentation at
+  // http://51degrees.com/documentation/_concepts__configuration__builders__index.html
   const requestEngineInstance = new CloudRequestEngine.CloudRequestEngine({
-    resourceKey: myResourceKey,
-    licenseKey: myLicenseKey
+    resourceKey: resourceKey
   });
 
-  // Create the property-keyed engine that will organise the results
-  // from the cloud request engine.
+  // Create the hardware profile engine to process the response from the
+  // request engine.
   const hardwareProfileCloudEngineInstance = new HardwareProfileCloudEngine();
 
+  // Create the pipeline using the engines.
   const PipelineBuilder = pipelineCore.PipelineBuilder;
-  // Build a pipeline with engines that we've created
   const pipeline = new PipelineBuilder()
     .add(requestEngineInstance)
     .add(hardwareProfileCloudEngineInstance)
-    .build(); // build it when complete
+    .build();
 
   // Logging of errors and other messages. Valid logs types are info, debug,
   // warn, error
   pipeline.on('error', console.error);
 
-  const outputDetails = async function (nativemodel) {
-    let message = 'Which devices are associated with the native model name ' +
-      `'${nativemodel}'?`;
-
-    // Create a flow data instance.
-    const flowData = pipeline.createFlowData();
-
-    // After creating a flowdata instance, add the native model name as evidence.
-    flowData.evidence.add('query.nativemodel', nativemodel);
-
-    await flowData.process();
-
-    if (!flowData.hardware) {
-      console.log('Make sure to include the HardwareVendor, HardwareModel ' +
-        'and HardwareName properties as they are used by this example.');
-
-      return;
-    }
-
-    // The result is an array containing the details of any devices that match
-    // the specified native model name.
-    // The code in this example iterates through this array, outputting the
-    // vendor and model of each matching device.
-    flowData.hardware.profiles.forEach(profile => {
-      const hardwareVendor = profile.hardwarevendor;
-      const hardwareName = profile.hardwarename;
-      const hardwareModel = profile.hardwaremodel;
-
-      if (hardwareVendor.hasValue &&
-              hardwareName.hasValue &&
-              hardwareModel.hasValue) {
-        message += `\r\n\t${hardwareVendor.value} ` +
-          `${hardwareName.value.join(',')} (${hardwareModel.value})`;
-      } else {
-        // If we don't have an answer then output the reason for that.
-        message += `\r\n\t${hardwareVendor.noValueMessage}`;
-      }
-    });
-
-    console.log(message);
-  };
-
-  const nativeModeliOS = 'iPhone11,8';
   const nativeModelAndroid = 'SC-03L';
+  const nativeModeliOS = 'iPhone11,8';
 
-  outputDetails(nativeModeliOS);
-  outputDetails(nativeModelAndroid);
-}
+  await analyseNativeModel(nativeModelAndroid, pipeline, output);
+  await analyseNativeModel(nativeModeliOS, pipeline, output);
+};
+
+// Don't run the server if under TEST
+if (process.env.JEST_WORKER_ID === undefined) {
+  const args = process.argv.slice(2);
+  // Use the supplied resource key or try to obtain one
+  // from the environment variable.
+  const resourceKey = args.length > 0 ? args[0] : process.env[ExampleUtils.RESOURCE_KEY_ENV_VAR];
+
+  if (resourceKey) {
+    run(resourceKey, process.stdout);
+  } else {
+    console.error('No resource key specified on the command line or in the ' +
+    `the environment variable '${ExampleUtils.RESOURCE_KEY_ENV_VAR}'. ` +
+    'The 51Degrees cloud service is accessed using a \'ResourceKey\'. ' +
+    'For more information ' +
+    'see http://51degrees.com/documentation/_info__resource_keys.html. ' +
+    'Native model lookup is not available as a free service. This means that ' +
+    'you will first need a license key, which can be purchased from our ' +
+    'pricing page: http://51degrees.com/pricing. Once this is done, a resource ' +
+    'key with the properties required by this example can be created at ' +
+    'https://configure.51degrees.com/QKyYH5XT. You can now populate the ' +
+    'environment variable mentioned at the start of this message with the ' +
+    'resource key or pass it as the first argument on the command line.');
+  }
+};
+
+module.exports = {
+  run: run
+};
