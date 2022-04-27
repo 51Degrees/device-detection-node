@@ -20,10 +20,6 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
-const fs = require('fs');
-
-const { PipelineBuilder } = require('fiftyone.pipeline.core');
-
 /**
 @example cloud/gettingstarted-console/gettingStarted.js
 @include{doc} example-getting-started-cloud.txt
@@ -40,10 +36,17 @@ Required npm Dependencies:
 ## Configuration
 @include 51d.json
 */
+
+const fs = require('fs');
+
+const { PipelineBuilder } = require('fiftyone.pipeline.core');
+
 const ExampleUtils = require(__dirname + '/../exampleUtils');
 
 const OptionsExtension =
   require('fiftyone.devicedetection.shared').optionsExtension;
+
+const DataExtension = require('fiftyone.devicedetection.shared').dataExtension;
 
 // This collection contains the various input values that will
 // be passed to the device detection algorithm.
@@ -75,7 +78,7 @@ const evidenceValues = [
   ])
 ];
 
-const outputValue = function (name, value, message) {
+const outputValue = function (name, value) {
   // Individual result values have a wrapper called
   // `AspectPropertyValue`. This functions similarly to
   // a null-able type.
@@ -83,9 +86,7 @@ const outputValue = function (name, value, message) {
   // `value` property will throw an exception.
   // `AspectPropertyValue` also includes the `noValueMessage`
   // property, which describes why the value has not been set.
-  return value.hasValue
-    ? `\n\t${name}: ${value.value}`
-    : `\n\t${name}: ${value.noValueMessage}`;
+  return `\n\t${name}: ${value}`;
 };
 
 const analyse = async function (evidence, pipeline, output) {
@@ -124,11 +125,11 @@ const analyse = async function (evidence, pipeline, output) {
   // device properties. See the property dictionary at
   // https://51degrees.com/developers/property-dictionary
   // for details of all available properties.
-  message += outputValue('Mobile Device', device.ismobile, message);
-  message += outputValue('Platform Name', device.platformname, message);
-  message += outputValue('Platform Version', device.platformversion, message);
-  message += outputValue('Browser Name', device.browsername, message);
-  message += outputValue('Browser Version', device.browserversion, message);
+  message += outputValue('Mobile Device', DataExtension.getValueHelper(device, 'ismobile'));
+  message += outputValue('Platform Name', DataExtension.getValueHelper(device, 'platformname'));
+  message += outputValue('Platform Version', DataExtension.getValueHelper(device, 'platformversion'));
+  message += outputValue('Browser Name', DataExtension.getValueHelper(device, 'browsername'));
+  message += outputValue('Browser Version', DataExtension.getValueHelper(device, 'browserversion'));
   message += '\n\n';
   output.write(message);
 };
@@ -143,7 +144,7 @@ const run = async function (options, output) {
       `'${ExampleUtils.RESOURCE_KEY_ENV_VAR}'. The 51Degrees cloud ` +
       'service is accessed using a \'ResourceKey\'. For more information ' +
       'see ' +
-      'http://51degrees.com/documentation/4.3/_info__resource_keys.html. ' +
+      'http://51degrees.com/documentation/_info__resource_keys.html. ' +
       'A resource key with the properties required by this example can be ' +
       'created for free at https://configure.51degrees.com/g3gMZdPY. ' +
       'Once complete, populate the config file or environment variable ' +

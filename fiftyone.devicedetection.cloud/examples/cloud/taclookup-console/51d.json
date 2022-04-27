@@ -1,0 +1,16 @@
+{
+    "PipelineOptions": {
+        "Elements": [
+            {
+                "elementName": "fiftyone.pipeline.cloudrequestengine/cloudRequestEngine",
+                "elementParameters": {
+                    "resourceKey": "!!YOUR_RESOURCE_KEY!!",
+                    "CloudRequestOrigin": "51Degrees.example.com"
+                }
+            },
+            {
+                "elementName": "../../../hardwareProfileCloudEngine"
+            }
+        ]
+    }
+}

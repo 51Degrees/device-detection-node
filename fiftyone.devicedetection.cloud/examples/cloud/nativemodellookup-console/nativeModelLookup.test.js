@@ -1,6 +1,6 @@
 /* *********************************************************************
  * This Original Work is copyright of 51 Degrees Mobile Experts Limited.
- * Copyright 2022 51 Degrees Mobile Experts Limited, 5 Charlotte Close,
+ * Copyright 2019 51 Degrees Mobile Experts Limited, 5 Charlotte Close,
  * Caversham, Reading, Berkshire, United Kingdom RG4 7BY.
  *
  * This Original Work is licensed under the European Union Public Licence (EUPL)
@@ -20,31 +20,14 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
-const {
-  liteDataFileName, enterpriseDataFileName, evidenceFileName,
-  getDataFilePath
-} = require(__dirname + '/../../../tests/testHelper');
+const example = require((__dirname) + '/nativeModelLookup.js');
 
-const example = require(__dirname + '/offlineProcessing.js');
+// Test constants
+const tc = require('fiftyone.devicedetection.shared').testConstants;
 
 describe('Examples', () => {
-  test('onpremise offline processing', async () => {
-    let dataFilePath;
-    try {
-      dataFilePath = getDataFilePath(enterpriseDataFileName);
-    } catch (e) {
-      dataFilePath = getDataFilePath(liteDataFileName);
-    }
-    expect(dataFilePath).not.toBe(undefined);
-
-    const evidenceFilePath = getDataFilePath(evidenceFileName);
-    expect(evidenceFilePath).not.toBe(undefined);
-
-    await example.run(
-      dataFilePath,
-      evidenceFilePath,
-      'temp-output.dat',
-      (output, content) => {});
+  test('cloud native model lookup', async () => {
+    await example.run(process.env[tc.envVars.superResourceKeyEnvVar], process.stdout);
     expect(true);
   });
 });

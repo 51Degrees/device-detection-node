@@ -56,7 +56,7 @@ var hardwareVendor = deviceData.hardwarevendor;
 ```
 
 Results can also be accessed in client-side code by using the `fod` object. See the
-[JavaScriptBuilderElement](http://51degrees.com/pipeline-node/4.3/class_java_script_builder_element.html)
+[JavaScriptBuilderElement](http://51degrees.com/pipeline-node/class_java_script_builder_element.html)
 for details on available settings such as changing the `fod` name.
 ```
 window.onload = function () {
@@ -187,17 +187,17 @@ const server = http.createServer((req, res) => {
           allEvidence: allEvidence,
           dataSourceTier: ExampleUtils.getDataTier(pipeline),
           fiftyOneJs: flowData.javascriptbuilder.javascript,
-          hardwareVendor: dataExtension.getValueHelper(flowData, 'hardwarevendor'),
-          hardwareName: dataExtension.getValueHelper(flowData, 'hardwarename'),
-          deviceType: dataExtension.getValueHelper(flowData, 'devicetype'),
-          platformVendor: dataExtension.getValueHelper(flowData, 'platformvendor'),
-          platformName: dataExtension.getValueHelper(flowData, 'platformname'),
-          platformVersion: dataExtension.getValueHelper(flowData, 'platformversion'),
-          browserVendor: dataExtension.getValueHelper(flowData, 'browservendor'),
-          browserName: dataExtension.getValueHelper(flowData, 'browsername'),
-          browserVersion: dataExtension.getValueHelper(flowData, 'browserversion'),
-          screenWidth: dataExtension.getValueHelper(flowData, 'screenpixelswidth'),
-          screenHeight: dataExtension.getValueHelper(flowData, 'screenpixelsheight')
+          hardwareVendor: dataExtension.getValueHelper(flowData.device, 'hardwarevendor'),
+          hardwareName: dataExtension.getValueHelper(flowData.device, 'hardwarename'),
+          deviceType: dataExtension.getValueHelper(flowData.device, 'devicetype'),
+          platformVendor: dataExtension.getValueHelper(flowData.device, 'platformvendor'),
+          platformName: dataExtension.getValueHelper(flowData.device, 'platformname'),
+          platformVersion: dataExtension.getValueHelper(flowData.device, 'platformversion'),
+          browserVendor: dataExtension.getValueHelper(flowData.device, 'browservendor'),
+          browserName: dataExtension.getValueHelper(flowData.device, 'browsername'),
+          browserVersion: dataExtension.getValueHelper(flowData.device, 'browserversion'),
+          screenWidth: dataExtension.getValueHelper(flowData.device, 'screenpixelswidth'),
+          screenHeight: dataExtension.getValueHelper(flowData.device, 'screenpixelsheight')
         })
       );
     });

@@ -23,125 +23,126 @@
 /**
 @example cloud/taclookup-console/tacLookup.js
 
-@include{doc} example-tac-lookup-cloud.txt
+This example shows how to use the 51Degrees Cloud service to lookup the details of a device
+based on a given 'TAC'. More background information on TACs can be found through various online
+sources such as <a href="https://en.wikipedia.org/wiki/Type_Allocation_Code">Wikipedia</a>.
 
 This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection.cloud/examples/cloud/taclookup-console/tacLookup.js).
 
 @include{doc} example-require-resourcekey.txt
+Required npm Dependencies:
+- fiftyone.pipeline.cloudrequestengine
+- fiftyone.pipeline.core
+- fiftyone.pipeline.engines
+- fiftyone.pipeline.engines.fiftyone
+- fiftyone.devicedetection.cloud
 
-@include{doc} example-require-licensekey.txt
-
-Make sure to include the Profiles, HardwareVendor and HardwareModel properties
-as they are used by this example.
-
-Example output:
-
-```
-This example shows the details of devices associated with a given 'Type Allocation Code' or 'TAC'.
-More background information on TACs can be found through various online sources such as Wikipedia: https://en.wikipedia.org/wiki/Type_Allocation_Code
-----------------------------------------
-Which devices are associated with the TAC '86386802'?
-        Coolpad 5217 (5217)
-        Coolpad 5200 (5200)
-        Coolpad 5310 (5310)
-        Coolpad 5311 (5311)
-        Coolpad 5315 (5315)
-        Coolpad CoolPad Unknown (CoolPad Unknown)
-Which devices are associated with the TAC '35925406'?
-        Apple iPhone 6 (A1586)
-```
+## Configuration
+@include 51d.json
 */
 
-const pipelineCore = require('fiftyone.pipeline.core');
-const CloudRequestEngine =
-  require('fiftyone.pipeline.cloudrequestengine').CloudRequestEngine;
-const HardwareProfileCloudEngine =
-  require((process.env.directory || __dirname) +
-    '/../../../hardwareProfileCloudEngine');
+const fs = require('fs');
 
-// You need to create a resource key at https://configure.51degrees.com and
-// paste it into the code, replacing !!YOUR_RESOURCE_KEY!!.
-const localResourceKey = process.env.RESOURCE_KEY || '!!YOUR_RESOURCE_KEY!!';
+const { PipelineBuilder } = require('fiftyone.pipeline.core');
 
-// You need a license key and paste it into the code,
-// replacing !!YOUR_LICENSE_KEY!!.
-const localLicenseKey = '!!YOUR_LICENSE_KEY!!';
+const ExampleUtils = require(__dirname + '/../exampleUtils');
 
-if (localResourceKey === '!!YOUR_RESOURCE_KEY!!' ||
-  localLicenseKey === '!!YOUR_LICENSE_KEY!!') {
-  console.log('You need to create a resource key at ' +
-        'https://configure.51degrees.com and paste it into the code, ' +
-        'replacing !!YOUR_RESOURCE_KEY!!.');
-  console.log('You also need a subscription which can be acquired ' +
-        'from https://51degrees.com/pricing. Paste the license key into the ' +
-        'code, replacing !!YOUR_LICENSE_KEY!!.');
-  console.log('Make sure to include the Profiles, HardwareVendor, ' +
-        'HardwareName and HardwareModel properties as they are used by this ' +
-        'example.');
-} else {
-  console.log(`This example shows the details of devices associated with a given 'Type Allocation Code' or 'TAC'.
-    More background information on TACs can be found through various online sources such as Wikipedia: https://en.wikipedia.org/wiki/Type_Allocation_Code
-    ----------------------------------------`);
+const OptionsExtension =
+  require('fiftyone.devicedetection.shared').optionsExtension;
 
-  // Create request engine that will make requests to the cloud service.
-  //  You need to create a resource key at https://configure.51degrees.com and paste it into the code.
+const DataExtension =
+  require('fiftyone.devicedetection.shared').dataExtension;
 
-  const requestEngineInstance = new CloudRequestEngine({
-    resourceKey: localResourceKey,
-    licenseKey: localLicenseKey
+const constants = require(__dirname + '/../../../constants.js');
+
+const analyseTac = async function (tac, pipeline, output) {
+  // Create a flowdata instance.
+  const flowData = pipeline.createFlowData();
+
+  // After creating a flowdata instance, add the TAC as evidence.
+  flowData.evidence.add(constants.EVIDENCE_QUERY_TAC_KEY, tac);
+
+  await flowData.process();
+
+  output.write(`Which devices are associated with the TAC '${tac}'?\n`);
+  // The result is an array containing the details of any devices that match
+  // the specified TAC.
+  // The code in this example iterates through this array, outputting the
+  // vendor and model name of each matching device.
+  flowData.hardware.profiles.forEach(profile => {
+    const hardwareVendor = DataExtension.getValueHelper(profile, 'hardwarevendor');
+    const hardwareName = DataExtension.getValueHelper(profile, 'hardwarename');
+    const hardwareModel = DataExtension.getValueHelper(profile, 'hardwaremodel');
+
+    output.write(`\t${hardwareVendor} ${hardwareName} (${hardwareModel})\n`);
   });
+};
 
-  // Create the property-keyed engine that will organize the results
-  // from the cloud request engine.
-  const hardwareProfileCloudEngineInstance = new HardwareProfileCloudEngine();
+const run = async function (options, output) {
+  const resourceKey = OptionsExtension.getResourceKey(options);
+  // If we don't have a resource key then log an error
+  if (!resourceKey) {
+    console.error(
+      'No resource key specified in the configuration file ' +
+      '\'51d.json\' or the environment variable ' +
+      `'${ExampleUtils.RESOURCE_KEY_ENV_VAR}'. The 51Degrees cloud ` +
+      'service is accessed using a \'ResourceKey\'. For more information ' +
+      'see ' +
+      'http://51degrees.com/documentation/_info__resource_keys.html. ' +
+      'TAC lookup is not available as a free service. This means that ' +
+      'you will first need a license key, which can be purchased from our ' +
+      'pricing page: http://51degrees.com/pricing. Once this is done, a resource ' +
+      'key with the properties required by this example can be created at ' +
+      'https://configure.51degrees.com/QKyYH5XT. You can now populate the ' +
+      'environment variable mentioned at the start of this message with the ' +
+      'resource key or pass it as the first argument on the command line.'
+    );
+    return;
+  }
 
-  const PipelineBuilder = pipelineCore.PipelineBuilder;
-  // Build a pipeline with engines that we've created
-  const pipeline = new PipelineBuilder()
-    .add(requestEngineInstance)
-    .add(hardwareProfileCloudEngineInstance)
-    .build();
+  output.write('This example shows the details of devices ' +
+    'associated with a given \'Type Allocation Code\' or \'TAC\'.\n');
+  output.write('More background information on TACs can be ' +
+    'found through various online sources such as Wikipedia: ' +
+    'https://en.wikipedia.org/wiki/Type_Allocation_Code\n');
+  output.write('----------------------------------------\n');
 
-  // Logging of errors and other messages. Valid logs types are info, debug, warn, error
+  // In this example, we use the FiftyOnePipelineBuilder and configure it from a file.
+  // For a demonstration of how to do this in code instead, see the
+  // NativeModelLookup example.
+  // For more information about builders in general see the documentation at
+  // http://51degrees.com/documentation/_concepts__configuration__builders__index.html
+  const pipeline = new PipelineBuilder().buildFromConfiguration(options);
+
+  // To monitor the pipeline we can put in listeners for various log events.
+  // Valid types are info, debug, warn, error
   pipeline.on('error', console.error);
-
-  const outputDetails = async function (tac) {
-    let message = `Which devices are associated with the TAC '${tac}'?`;
-
-    // Create a flowdata instance.
-    const flowData = pipeline.createFlowData();
-
-    // After creating a flowdata instance, add the TAC as evidence.
-    flowData.evidence.add('query.tac', tac);
-
-    await flowData.process();
-
-    // The result is an array containing the details of any devices that match
-    // the specified TAC.
-    // The code in this example iterates through this array, outputting the
-    // vendor and model name of each matching device.
-
-    flowData.hardware.profiles.forEach(profile => {
-      const hardwareVendor = profile.hardwarevendor;
-      const hardwareName = profile.hardwarename;
-      const hardwareModel = profile.hardwaremodel;
-
-      if (hardwareVendor.hasValue &&
-                hardwareName.hasValue &&
-                hardwareModel.hasValue) {
-        message += `\r\n\t${hardwareVendor.value} ${hardwareName.value.join(',')} (${hardwareModel.value})`;
-      } else {
-        // If we don't have an answer then output the reason for that.
-        message += `\r\n\t${hardwareVendor.noValueMessage}`;
-      }
-    });
-
-    console.log(message);
-  };
 
   const tac1 = '35925406';
   const tac2 = '86386802';
 
-  outputDetails(tac1);
-  outputDetails(tac2);
-}
+  analyseTac(tac1, pipeline, output);
+  analyseTac(tac2, pipeline, output);
+};
+
+// Don't run the server if under TEST
+if (process.env.JEST_WORKER_ID === undefined) {
+  const args = process.argv.slice(2);
+  // Use the supplied resource key or try to obtain one
+  // from the environment variable.
+  const resourceKey = args.length > 0 ? args[0] : process.env[ExampleUtils.RESOURCE_KEY_ENV_VAR];
+
+  // Load the configuration from a config file to a JSON object.
+  const options = JSON.parse(fs.readFileSync('51d.json'), 'utf8');
+
+  const resourceKeyFromConfig = OptionsExtension.getResourceKey(options);
+  if (!resourceKeyFromConfig || resourceKeyFromConfig.startsWith('!!')) {
+    OptionsExtension.setResourceKey(options, resourceKey);
+  }
+
+  run(options, process.stdout);
+};
+
+module.exports = {
+  run: run
+};

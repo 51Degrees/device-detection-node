@@ -108,7 +108,7 @@ const setPipeline = (options) => {
       `'${ExampleUtils.RESOURCE_KEY_ENV_VAR}'. The 51Degrees cloud ` +
       'service is accessed using a \'ResourceKey\'. For more information ' +
       'see ' +
-      'http://51degrees.com/documentation/4.3/_info__resource_keys.html. ' +
+      'http://51degrees.com/documentation/_info__resource_keys.html. ' +
       'A resource key with the properties required by this example can be ' +
       'created for free at https://configure.51degrees.com/1QWJwHxl. ' +
       'Once complete, populate the config file or environment variable ' +
@@ -168,6 +168,8 @@ const server = http.createServer((req, res) => {
         pipeline.getElement('cloud').evidenceKeyFilter.filterEvidence(
           allEvidence);
 
+      const device = flowData.device;
+
       // Compile a response
       res.end(compiledFunction(
         {
@@ -175,17 +177,17 @@ const server = http.createServer((req, res) => {
           evidenceUsed: evidences,
           allEvidence: allEvidence,
           fiftyOneJs: flowData.javascriptbuilder.javascript,
-          hardwareVendor: DataExtension.getValueHelper(flowData, 'hardwarevendor'),
-          hardwareName: DataExtension.getValueHelper(flowData, 'hardwarename'),
-          deviceType: DataExtension.getValueHelper(flowData, 'devicetype'),
-          platformVendor: DataExtension.getValueHelper(flowData, 'platformvendor'),
-          platformName: DataExtension.getValueHelper(flowData, 'platformname'),
-          platformVersion: DataExtension.getValueHelper(flowData, 'platformversion'),
-          browserVendor: DataExtension.getValueHelper(flowData, 'browservendor'),
-          browserName: DataExtension.getValueHelper(flowData, 'browsername'),
-          browserVersion: DataExtension.getValueHelper(flowData, 'browserversion'),
-          screenWidth: DataExtension.getValueHelper(flowData, 'screenpixelswidth'),
-          screenHeight: DataExtension.getValueHelper(flowData, 'screenpixelsheight')
+          hardwareVendor: DataExtension.getValueHelper(device, 'hardwarevendor'),
+          hardwareName: DataExtension.getValueHelper(device, 'hardwarename'),
+          deviceType: DataExtension.getValueHelper(device, 'devicetype'),
+          platformVendor: DataExtension.getValueHelper(device, 'platformvendor'),
+          platformName: DataExtension.getValueHelper(device, 'platformname'),
+          platformVersion: DataExtension.getValueHelper(device, 'platformversion'),
+          browserVendor: DataExtension.getValueHelper(device, 'browservendor'),
+          browserName: DataExtension.getValueHelper(device, 'browsername'),
+          browserVersion: DataExtension.getValueHelper(device, 'browserversion'),
+          screenWidth: DataExtension.getValueHelper(device, 'screenpixelswidth'),
+          screenHeight: DataExtension.getValueHelper(device, 'screenpixelsheight')
         })
       );
     });

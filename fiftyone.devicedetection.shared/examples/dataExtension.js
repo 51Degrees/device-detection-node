@@ -1,16 +1,19 @@
 class DataExtension {
   // Helper function to read property values from flowData
-  static getValueHelper (flowData, propertyKey) {
-    var device = flowData.device;
+  static getValueHelper (elementData, propertyName) {
     try {
-      const property = device[propertyKey];
-      if (property.hasValue && property) {
-        return property.value;
+      const property = elementData[propertyName];
+      if (property && property.hasValue) {
+        if (Array.isArray(property.value)) {
+          return property.value.join(', ');
+        } else {
+          return property.value;
+        }
       } else {
-        return property.noValueMessage;
+        return `Unknown (${property.noValueMessage})`;
       }
-    } catch (error) {
-      return `Unknown. ${error}`;
+    } catch (e) {
+      return `Unknown (${e})`;
     }
   };
 }
