@@ -1,6 +1,6 @@
 /* *********************************************************************
  * This Original Work is copyright of 51 Degrees Mobile Experts Limited.
- * Copyright 2022 51 Degrees Mobile Experts Limited, 5 Charlotte Close,
+ * Copyright 2019 51 Degrees Mobile Experts Limited, 5 Charlotte Close,
  * Caversham, Reading, Berkshire, United Kingdom RG4 7BY.
  *
  * This Original Work is licensed under the European Union Public Licence (EUPL)
@@ -20,15 +20,20 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
-const {
-  liteDataFileName, getDataFilePath
-} = require(__dirname + '/../../../tests/testHelper');
+class Component {
+  constructor (metadata, engineMetadata) {
+    this.metadata = metadata;
+    this.engineMetadata = engineMetadata;
+    this.name = metadata.getName();
+    this.properties = engineMetadata.getPropertiesForComponent(metadata);
+  }
 
-const example = require(__dirname + '/metaData.js');
+  * getProperties () {
+    const Property = require('./property');
+    for (let i = 0; i < this.properties.getSize(); i++) {
+      yield new Property(this.properties.getByIndex(i), this.engineMetadata);
+    }
+  }
+}
 
-describe('Examples', () => {
-  test('onpremise meta data Lite data file', async () => {
-    await example.run(getDataFilePath(liteDataFileName), process.stdout);
-    expect(true);
-  });
-});
+module.exports = Component;

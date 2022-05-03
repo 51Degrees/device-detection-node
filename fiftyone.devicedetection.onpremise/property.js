@@ -1,6 +1,6 @@
 /* *********************************************************************
  * This Original Work is copyright of 51 Degrees Mobile Experts Limited.
- * Copyright 2022 51 Degrees Mobile Experts Limited, 5 Charlotte Close,
+ * Copyright 2019 51 Degrees Mobile Experts Limited, 5 Charlotte Close,
  * Caversham, Reading, Berkshire, United Kingdom RG4 7BY.
  *
  * This Original Work is licensed under the European Union Public Licence (EUPL)
@@ -20,15 +20,35 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
-const {
-  liteDataFileName, getDataFilePath
-} = require(__dirname + '/../../../tests/testHelper');
+const swigHelpers = require('./swigHelpers');
 
-const example = require(__dirname + '/metaData.js');
+class Property {
+  constructor (
+    metadata,
+    engineMetadata) {
+    this.metadata = metadata;
+    this.engineMetadata = engineMetadata;
+    this.name = metadata.getName();
+    this.type = metadata.getType();
+    this.dataFiles = swigHelpers.vectorToArray(metadata.getDataFilesWherePresent());
+    this.category = metadata.getCategory();
+    this.description = metadata.getDescription();
 
-describe('Examples', () => {
-  test('onpremise meta data Lite data file', async () => {
-    await example.run(getDataFilePath(liteDataFileName), process.stdout);
-    expect(true);
-  });
-});
+    const Component = require('./component');
+    this.component = new Component(
+      engineMetadata.getComponentForProperty(metadata), engineMetadata);
+    this.values = engineMetadata.getValuesForProperty(metadata);
+  }
+
+  * getValues () {
+    for (let i = 0; i < this.values.getSize(); i++) {
+      yield this.values.getByIndex(i);
+    }
+  }
+
+  getNumberOfValues () {
+    return this.values.getSize();
+  }
+}
+
+module.exports = Property;

@@ -23,37 +23,40 @@
 /**
 @example onpremise/metadata-console/metaData.js
 
-@include{doc} example-metadata-hash.txt
+The device detection data file contains meta data that can provide additional information
+about the various records in the data model.
+This example shows how to access this data and display the values available.
+
+To help navigate the data, it's useful to have an understanding of the types of records that
+are present:
+- Component - A record relating to a major aspect of the entity making a web request. There are currently 4 components: Hardware, Software Platform (OS), Browser and Crawler.
+- Profile - A record containing the details for a specific instance of a component. An example of a hardware profile would be the profile for the iPhone 13. An example of a platform profile would be Android 12.1.0.
+- Property - Each property will have a specific value (or values) for each profile. An example of a hardware property is 'IsMobile'. An example of a browser property is 'BrowserName'.
+
+The example will output each component in turn, with a list of the properties associated with
+each component. Some of the possible values for each property are also displayed.
+There are too many profiles to display, so we just list the number of profiles for each
+component.
+
+Finally, the evidence keys that are accepted by device detection are listed. These are the
+keys that, when added to the evidence collection in flow data, could have some impact on the
+result returned by device detection.
 
 This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection.onpremise/examples/onpremise/metadata-console/metaData.js).
 
 @include{doc} example-require-datafile.txt
 
-Expected output:
-
-[list of properties with descriptions, categories and types]
-
-Does user agent Mozilla/5.0 (iPhone; CPU iPhone OS 11_2 like Mac OS X) AppleWebKit/604.4.7 (KHTML, like Gecko) Mobile/15C114 support svg? :
-true
-
-Does user agent Mozilla/5.0 (iPhone; CPU iPhone OS 11_2 like Mac OS X) AppleWebKit/604.4.7 (KHTML, like Gecko) Mobile/15C114 support video? :
-true
-
-Does user agent Mozilla/5.0 (iPhone; CPU iPhone OS 11_2 like Mac OS X) AppleWebKit/604.4.7 (KHTML, like Gecko) Mobile/15C114 support supportswebgl? :
-true
-
-Does user agent Mozilla/5.0 (iPhone; CPU iPhone OS 11_2 like Mac OS X) AppleWebKit/604.4.7 (KHTML, like Gecko) Mobile/15C114 support webp? :
-False
-
-[List of metrics about the match]
+Required npm Dependencies:
+- fiftyone.pipeline.core
+- fiftyone.pipeline.engines
+- fiftyone.pipeline.engines.fiftyone
+- fiftyone.devicedetection.onpremise
 
  */
 
 const DeviceDetectionOnPremisePipelineBuilder =
   require((process.env.directory || __dirname) +
   '/../../../deviceDetectionOnPremisePipelineBuilder');
-
-const fs = require('fs');
 
 const ExampleUtils = require(__dirname + '/../exampleUtils').ExampleUtils;
 
@@ -67,119 +70,146 @@ const ExampleUtils = require(__dirname + '/../exampleUtils').ExampleUtils;
 // https://51degrees.com/pricing
 const LITE_V_4_1_HASH = '51Degrees-LiteV4.1.hash';
 
-// Load in a datafile
-const sliceLen = process.env.JEST_WORKER_ID === undefined ? 2 : process.argv.length;
-const args = process.argv.slice(sliceLen);
+const truncateToNl = function (string) {
+  const lines = string.split('\n');
+  let result = '';
+  let i = 0;
+  for (; i < lines.length; i++) {
+    if (lines[i]) {
+      result = lines[i];
+      break;
+    }
+  }
 
-// Use the supplied path for the data file or find the lite
-// file that is included in the repository.
-const datafile = args.length > 0 ? args[0] : ExampleUtils.findFile(LITE_V_4_1_HASH);
+  if (i < lines.length) {
+    result += ' ...';
+  }
+  return result;
+};
 
-if (!fs.existsSync(datafile)) {
-  console.error('Failed to find a device detection ' +
+const outputProperties = function (component, output) {
+  const properties = component.getProperties();
+  for (const property of properties) {
+    output.write(`\x1b[31mProperty - ${property.name}\x1b[89m\x1b[0m\n`);
+    output.write(
+      `[Category: ${property.category}](${property.type} - ${property.description})\n`);
+
+    if (property.category.toLowerCase() !== 'device metrics') {
+      let valuesStr = 'Possible values: ';
+      const values = property.getValues();
+      let count = 0;
+      for (const value of values) {
+        // add value
+        valuesStr += truncateToNl(value.getName());
+        // add description if exists
+        const description = value.getDescription();
+        if (description) {
+          valuesStr += `(${description})`;
+        }
+        valuesStr += ',';
+        if (++count >= 20) {
+          break;
+        }
+      }
+      if (property.getNumberOfValues() > 20) {
+        valuesStr += ` + ${property.getNumberOfValues() - 20} more ...`;
+      }
+      output.write(valuesStr);
+      output.write('\n');
+    }
+  }
+};
+
+const outputComponents = function (engine, output) {
+  const components = engine.components;
+  for (const value of Object.values(components)) {
+    output.write(`\x1b[34mComponent - ${value.name}\x1b[89m\x1b[0m\n`);
+    outputProperties(value, output);
+    output.write('\n');
+  }
+};
+
+const outputProfileDetails = async function (engine, output) {
+  const groups = {};
+  let count = 0;
+
+  output.write('\n');
+  const profiles = engine.profiles();
+  for (const profile of profiles) {
+    if (!groups[profile.component.name]) {
+      groups[profile.component.name] = 1;
+    } else {
+      groups[profile.component.name]++;
+    }
+    if (++count % 1000 === 0) {
+      output.write(`Load ${count} profiles\r`);
+    }
+  }
+  output.write(`Load completed: ${count} profiles\n`);
+  output.write('Profile count:\n');
+  for (var [key, value] of Object.entries(groups)) {
+    output.write(`${key} Profiles: ${value}\n`);
+  }
+};
+
+const outputEvidenceKeyDetails = async function (engine, output) {
+  output.write('\n');
+  output.write('Accepted evidence keys:\n');
+  for (const evidence of engine.evidenceKeyFilter.list) {
+    output.write(`\t${evidence}\n`);
+  }
+};
+
+const run = async function (dataFile, output) {
+  // In this example, we use the DeviceDetectionOnPremisePipelineBuilder
+  // and configure it in code. For more information about
+  // pipelines in general see the documentation at
+  // http://51degrees.com/documentation/_concepts__configuration__builders__index.html
+  const pipeline = new DeviceDetectionOnPremisePipelineBuilder({
+    dataFile: dataFile,
+    // We use the low memory profile as its performance is
+    // sufficient for this example. See the documentation for
+    // more detail on this and other configuration options:
+    // http://51degrees.com/documentation/_device_detection__features__performance_options.html
+    // http://51degrees.com/documentation/_features__automatic_datafile_updates.html
+    // http://51degrees.com/documentation/_features__usage_sharing.html
+    performanceProfile: 'LowMemory',
+    // inhibit sharing usage for this test, usually this
+    // should be set 'true'
+    shareUsage: false,
+    // inhibit auto-update of the data file for this test
+    autoUpdate: false,
+    updateOnStart: false,
+    fileSystemWatcher: false
+  }).build();
+
+  const device = pipeline.getElement('device');
+  await outputComponents(device, output);
+  await outputProfileDetails(device, output);
+  await outputEvidenceKeyDetails(device, output);
+
+  ExampleUtils.checkDataFile(pipeline, dataFile);
+};
+
+// Don't run the server if under TEST
+if (process.env.JEST_WORKER_ID === undefined) {
+  const args = process.argv.slice(2);
+  // Use the supplied path for the data file or find the lite
+  // file that is included in the repository.
+  const dataFile = args.length > 0 ? args[0] : ExampleUtils.findFile(LITE_V_4_1_HASH);
+
+  if (dataFile !== undefined) {
+    run(dataFile, process.stdout);
+  } else {
+    console.error('Failed to find a device detection ' +
       'data file. Make sure the device-detection-data ' +
       'submodule has been updated by running ' +
-      '`git submodule update --recursive`.');
-  throw ("No data file at '" + datafile + "'");
-}
-
-// Create a new Device Detection pipeline and set the config.
-const pipeline = new DeviceDetectionOnPremisePipelineBuilder({
-  performanceProfile: 'MaxPerformance',
-  dataFile: datafile,
-  autoUpdate: false
-}).build();
-
-// Logging of errors and other messages.
-// Valid logs types are info, debug, warn, error
-pipeline.on('error', console.error);
-
-// Get list of properties for the deviceDetectionEngine
-// (including metadata like category, description, type and
-// which datafiles they appear in)
-const properties = pipeline.getElement('device').getProperties();
-
-for (let property in properties) {
-  property = properties[property];
-  console.log(`Property ${property.name}, ${property.description}, of type ${property.type}`);
-}
-
-// The following function uses "flowData.getWhere()"
-// to fetch all of the data related to "supported media"
-// on a device by querying the category.
-const getAllSupportedMedia = async function (userAgent) {
-  // Create a flow data element and process the desktop User-Agent.
-  const flowData = pipeline.createFlowData();
-
-  // Add the User-Agent as evidence
-  flowData.evidence.add('header.user-agent', userAgent);
-
-  await flowData.process();
-
-  // Get all supported media types (html5 video, svg...)
-  // and loop over them to get the support results
-  // The second parameter can also be a boolean function
-  // that checks the value of that meta type (category in this case)
-  const supported = flowData.getWhere('category', 'Supported Media');
-
-  Object.entries(supported).forEach(([key, result]) => {
-    console.log(`Does user agent ${userAgent} support ${key}? : `);
-
-    if (result.hasValue) {
-      console.log(result.value);
-    } else {
-      // Echo out why the value isn't meaningful
-      console.log(result.noValueMessage);
-    }
-  });
-};
-
-const iPhoneUA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_2 like Mac OS X) AppleWebKit/604.4.7 (KHTML, like Gecko) Mobile/15C114';
-
-getAllSupportedMedia(iPhoneUA);
-
-// The device detection engine comes with additional metadata about each match
-
-const getMatchMetaData = async function (userAgent) {
-  // Create a flow data element and process the desktop User-Agent.
-  const flowData = pipeline.createFlowData();
-
-  // Add the User-Agent as evidence
-  flowData.evidence.add('header.user-agent', userAgent);
-
-  await flowData.process();
-
-  // This is all stored under the "device metrics" category
-
-  if (flowData.device.deviceID && flowData.device.deviceID.hasValue) {
-    console.log('Device ID: ' + flowData.device.deviceID.value);
-  // Consists of four components separated by a hyphen symbol:
-  // Hardware-Platform-Browser-IsCrawler where each Component
-  // represents an ID of the corresponding Profile.
-  }
-
-  if (flowData.device.userAgents && flowData.device.userAgents.hasValue) {
-    console.log('Matched useragents' + flowData.device.userAgents.value);
-  // The matched useragents
-  }
-
-  if (flowData.device.difference && flowData.device.difference.hasValue) {
-    console.log('Difference' + flowData.device.difference.value);
-  // Used when detection method is not Exact or None.
-  // This is an integer value and the larger the value
-  // the less confident the detector is in this result.
-  }
-
-  if (flowData.device.method && flowData.device.method.hasValue) {
-    console.log('Method ' + flowData.device.method.value);
-  // Provides information about the algorithm that was used to
-  // perform detection for a particular User-Agent.
-  }
-
-  if (flowData.device.matchedNodes && flowData.device.matchedNodes.hasValue) {
-    console.log('Matched nodes' + flowData.device.matchedNodes.value);
-  // The number of hash nodes that have been matched before finding a result.
+      '`git submodule update --recursive`. By default, the \'lite\' file ' +
+      'included with this code will be used. A different file can be ' +
+      'specified by supplying the full path as a command line argument');
   }
 };
 
-getMatchMetaData(iPhoneUA);
+module.exports = {
+  run: run
+};
