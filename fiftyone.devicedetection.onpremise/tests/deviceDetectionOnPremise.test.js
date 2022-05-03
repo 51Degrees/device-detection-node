@@ -141,4 +141,58 @@ describe('deviceDetectionOnPremise', () => {
       done();
     }
   });
+
+  // Check if components are set correctly
+  test('Components for on-premise engine', done => {
+    const pipeline = new FiftyOneDegreesDeviceDetectionOnPremise
+      .DeviceDetectionOnPremisePipelineBuilder({
+        dataFile: DataFile
+      }).build();
+    const device = pipeline.getElement('device');
+    expect(Object.entries(device.components).length).toBe(5);
+    let metricsComponent = false;
+    for (const component of Object.values(device.components)) {
+      const properties = component.getProperties();
+      for (const property of properties) {
+        if (property.name.toLowerCase() !== 'deviceid') {
+          expect(property.component.name).toBe(component.name);
+        }
+      }
+
+      if (component.name.toLowerCase() === 'metrics') {
+        metricsComponent = true;
+      }
+    }
+    expect(metricsComponent).toBe(true);
+    done();
+  });
+
+  // Check if properties are set correctly
+  test('Properties for on-premise engine', done => {
+    const pipeline = new FiftyOneDegreesDeviceDetectionOnPremise
+      .DeviceDetectionOnPremisePipelineBuilder({
+        dataFile: DataFile
+      }).build();
+    const device = pipeline.getElement('device');
+    expect(Object.entries(device.properties).length).toBeGreaterThan(0);
+    done();
+  });
+
+  // Check that setting cache for on-premise engine builder will
+  // throw exception
+  test('profiles for on-premise engine', done => {
+    const pipeline = new FiftyOneDegreesDeviceDetectionOnPremise
+      .DeviceDetectionOnPremisePipelineBuilder({
+        dataFile: DataFile
+      }).build();
+    const device = pipeline.getElement('device');
+    const profiles = device.profiles();
+    let count = 0;
+    while (profiles.next() !== undefined && count < 20) {
+      count++;
+    }
+
+    expect(count).toBe(20);
+    done();
+  });
 });

@@ -34,6 +34,10 @@ const EvidenceKeyFilter = core.BasicListEvidenceKeyFilter;
 const fs = require('fs');
 const util = require('util');
 const constants = require('./constants');
+const metricCategory = 'Device metrics';
+const Component = require('./component');
+const Property = require('./property');
+const Profile = require('./profile');
 
 /**
  * @typedef {import('fiftyone.pipeline.engines').DataKeyedCache} DataKeyedCache
@@ -42,6 +46,120 @@ const constants = require('./constants');
 // Determine if Windows or linux and which node version
 
 const nodeVersion = Number(process.version.match(/^v(\d+\.)/)[1]);
+
+// Private method to init properties.
+// This should only be called by the call() method with an input for 'this'
+// object.
+const initProperties = function (metadata) {
+  const propertiesInternal = metadata.getProperties();
+  const properties = {};
+
+  for (var i = 0; i < propertiesInternal.getSize(); i++) {
+    var property = propertiesInternal.getByIndex(i);
+    if (property.getAvailable()) {
+      properties[property.getName().toLowerCase()] =
+        new Property(property, metadata);
+    }
+  };
+  this.properties = properties;
+};
+
+// Private method to init components
+// This should only be called by the call() method with an input for 'this'
+// object.
+const initComponents = function (metadata) {
+  // Get components list
+  const componentsInternal = metadata.getComponents();
+
+  const components = {};
+  for (let i = 0; i < componentsInternal.getSize(); i++) {
+    const component = componentsInternal.getByIndex(i);
+    components[component.getName().toLowerCase()] =
+      new Component(component, metadata);
+  }
+  this.components = components;
+};
+
+const initMatchMetrics = function () {
+  // Add a component for Device Metrics
+  const metricComponent = {
+    name: 'Metrics'
+  };
+  metricComponent.getProperties = function * (limit) {
+    for (const property of metricComponent.properties) {
+      yield property;
+    }
+  };
+
+  // Special properties
+  this.properties.deviceID = {
+    name: 'DeviceId',
+    type: 'string',
+    category: metricCategory,
+    description: constants.deviceIdDescription,
+    component: metricComponent
+  };
+
+  this.properties.userAgents = {
+    name: 'UserAgents',
+    type: 'string[]',
+    category: metricCategory,
+    description: constants.userAgentsDescription,
+    component: metricComponent
+  };
+
+  this.properties.difference = {
+    name: 'Difference',
+    type: 'int',
+    category: metricCategory,
+    description: constants.differenceDescription,
+    component: metricComponent
+  };
+
+  this.properties.method = {
+    name: 'Method',
+    type: 'string',
+    category: metricCategory,
+    description: constants.methodDescription,
+    component: metricComponent
+  };
+
+  this.properties.matchedNodes = {
+    name: 'MatchedNodes',
+    type: 'int',
+    category: metricCategory,
+    description: constants.matchedNodesDescription,
+    component: metricComponent
+  };
+
+  this.properties.drift = {
+    name: 'Drift',
+    type: 'int',
+    category: metricCategory,
+    description: constants.driftDescription,
+    component: metricComponent
+  };
+
+  this.properties.iterations = {
+    name: 'Iterations',
+    type: 'int',
+    category: metricCategory,
+    description: constants.iterationsDescription,
+    component: metricComponent
+  };
+
+  metricComponent.properties = [
+    this.properties.deviceID,
+    this.properties.userAgents,
+    this.properties.difference,
+    this.properties.method,
+    this.properties.matchedNodes,
+    this.properties.drift,
+    this.properties.iterations
+  ];
+
+  this.components.metrics = metricComponent;
+};
 
 /**
  * On premise version of the 51Degrees Device Detection Engine
@@ -323,77 +441,10 @@ class DeviceDetectionOnPremise extends Engine {
 
         // Get properties list
 
-        const propertiesInternal = engine.getMetaData().getProperties();
-
-        const properties = {};
-
-        for (var i = 0; i < propertiesInternal.getSize(); i++) {
-          var property = propertiesInternal.getByIndex(i);
-          if (property.getAvailable()) {
-            properties[property.getName().toLowerCase()] = {
-              name: property.getName(),
-              type: property.getType(),
-              datafiles: swigHelpers.vectorToArray(property.getDataFilesWherePresent()),
-              category: property.getCategory(),
-              description: property.getDescription()
-            };
-          }
-        };
-
-        current.properties = properties;
-
-        // Special properties
-
-        current.properties.deviceID = {
-          name: 'DeviceId',
-          type: 'string',
-          category: 'Device metrics',
-          description: constants.deviceIdDescription
-        };
-
-        current.properties.userAgents = {
-          name: 'UserAgents',
-          type: 'string[]',
-          category: 'Device metrics',
-          description: constants.userAgentsDescription
-        };
-
-        current.properties.difference = {
-          name: 'Difference',
-          type: 'int',
-          category: 'Device metrics',
-          description: constants.differenceDescription
-        };
-
-        current.properties.method = {
-          name: 'Method',
-          type: 'string',
-          category: 'Device metrics',
-          description: constants.methodDescription
-        };
-
-        if (swigWrapperType === 'Hash') {
-          current.properties.matchedNodes = {
-            name: 'MatchedNodes',
-            type: 'int',
-            category: 'Device metrics',
-            description: constants.matchedNodesDescription
-          };
-
-          current.properties.drift = {
-            name: 'Drift',
-            type: 'int',
-            category: 'Device metrics',
-            description: constants.driftDescription
-          };
-
-          current.properties.iterations = {
-            name: 'Iterations',
-            type: 'int',
-            category: 'Device metrics',
-            description: constants.iterationsDescription
-          };
-        }
+        const metadata = engine.getMetaData();
+        initProperties.call(current, metadata);
+        initComponents.call(current, metadata);
+        initMatchMetrics.call(current);
       });
     };
 
@@ -471,6 +522,14 @@ class DeviceDetectionOnPremise extends Engine {
     const ddDatafile = new DataFile(dataFileSettings);
 
     this.registerDataFile(ddDatafile);
+  }
+
+  * profiles () {
+    const engineMetadata = this.engine.getMetaData();
+    const profilesInternal = engineMetadata.getProfiles();
+    for (let i = 0; i < profilesInternal.getSize(); i++) {
+      yield new Profile(profilesInternal.getByIndex(i), engineMetadata);
+    }
   }
 
   /**
