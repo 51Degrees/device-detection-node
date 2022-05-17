@@ -24,10 +24,17 @@ Both options use the same evidence values and expose (almost all) the same prope
 ### Dependencies
 
 For runtime dependencies, see our [dependencies](http://51degrees.com/documentation/_info__dependencies.html) page.
+The [tested versions](https://51degrees.com/documentation/_info__tested_versions.html) page shows 
+the Node versions that we currently test against. The software may run fine against other 
+versions, but additional caution should be applied.
 
 #### Data file
 
-In order to perform device detection, you will need to use a 51Degrees data file. This repository includes a free, 'lite' file in the 'device-detection-data' sub-module that has a significantly reduced set of properties. To obtain a file with a more complete set of device properties see the [51Degrees website](https://51degrees.com/pricing). If you want to use the lite file, you will need to install [GitLFS](https://git-lfs.github.com/):
+In order to perform device detection on-premise, you will need to use a 51Degrees data file. 
+This repository includes a free, 'lite' file in the 'device-detection-data' sub-module that has a 
+significantly reduced set of properties. To obtain a file with a more complete set of device 
+properties see the [51Degrees website](https://51degrees.com/pricing). If you want to use the lite 
+file, you will need to install [GitLFS](https://git-lfs.github.com/):
 
 ```
 sudo apt-get install git-lfs
@@ -163,7 +170,8 @@ To run the tests, execute the following command in the root directory or a sub-m
 
 ## Native code updates
 
-Process for rebuilding SWIG interfaces following an update to the device detection cxx code (This is only intended to be run by 51Degrees developers internally):
+Process for rebuilding SWIG interfaces following an update to the device detection cxx code 
+(This is only intended to be run by 51Degrees developers internally):
 
 1. Ensure Swig is installed.
    1. At the time when this README was updated, the current stable version of Swig did not support new changes in Node 12 and above.
