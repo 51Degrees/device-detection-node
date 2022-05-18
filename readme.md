@@ -28,7 +28,18 @@ The [tested versions](https://51degrees.com/documentation/_info__tested_versions
 the Node versions that we currently test against. The software may run fine against other 
 versions, but additional caution should be applied.
 
-#### Data file
+### Data
+
+The API can either use our cloud service to get its data or it can use a local (on-premise) copy of the data.
+
+#### Cloud
+
+You will require a [resource key](https://51degrees.com/documentation/_info__resource_keys.html)
+to use the Cloud API. You can create resource keys using our 
+[configurator](https://configure.51degrees.com/), see our 
+[documentation](https://51degrees.com/documentation/_concepts__configurator.html) on how to use this.
+
+#### On-Premise
 
 In order to perform device detection on-premise, you will need to use a 51Degrees data file. 
 This repository includes a free, 'lite' file in the 'device-detection-data' sub-module that has a 
