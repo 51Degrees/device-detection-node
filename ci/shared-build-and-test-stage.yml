@@ -110,7 +110,7 @@ stages:
         fi
 
         # Build binaries
-        rm -r build
+        rm -r -f build
         # This will automatically trigger node-gyp rebuild
         # which run clean, configure and build in a row
         shopt -s nocasematch
