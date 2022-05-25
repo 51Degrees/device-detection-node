@@ -32,8 +32,6 @@ stages:
 
     strategy:
       matrix:
-        node_10_x:
-          node_version: 10
         node_12_x:
           node_version: 12
         node_14_x:
