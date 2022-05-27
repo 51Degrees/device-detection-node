@@ -54,7 +54,7 @@
     "*.js"
   ],
   "jest": {
-    "testRunner": "jest-jasmine2",
+    "testRunner": "jest-circus",
     "setupFilesAfterEnv": [
       "./setup.js"
     ]
