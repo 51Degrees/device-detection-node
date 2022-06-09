@@ -20,6 +20,7 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
+const path = require('path');
 const request = require('supertest');
 
 const fs = require('fs');
@@ -31,12 +32,12 @@ const OptionsExtension =
 const tc = require('fiftyone.devicedetection.shared').testConstants;
 
 // Load the example module
-const example = require((__dirname) + '/gettingStarted.js');
+const example = require(path.join(__dirname, '/gettingStarted.js'));
 
 describe('Examples', () => {
   test('cloud getting started web', async () => {
     // Load configuration options
-    const options = JSON.parse(fs.readFileSync(__dirname + '/51d.json'));
+    const options = JSON.parse(fs.readFileSync(path.join(__dirname, '/51d.json')));
 
     // Update element path with a full path
     OptionsExtension.updateElementPath(options, __dirname);

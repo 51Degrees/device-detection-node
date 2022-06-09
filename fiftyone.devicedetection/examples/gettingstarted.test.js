@@ -64,7 +64,7 @@ describe('Examples', () => {
   test('cloud getting started', (done) => {
     if (isAsync) {
       setTimeout(done, 4000);
-      testExample({ file: (__dirname) + '/gettingStarted.js' });
+      testExample({ file: path.join(__dirname, '/gettingStarted.js') });
     } else {
       done();
     }

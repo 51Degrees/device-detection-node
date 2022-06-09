@@ -52,7 +52,8 @@ Required npm Dependencies:
 
  */
 
-const ExampleUtils = require(__dirname + '/../exampleUtils');
+const path = require('path');
+const ExampleUtils = require(path.join(__dirname, '/../exampleUtils'));
 
 const DeviceDetectionCloudPipelineBuilder =
   require((process.env.directory || __dirname) +

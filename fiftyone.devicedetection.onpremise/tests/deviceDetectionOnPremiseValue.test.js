@@ -20,9 +20,10 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
+const path = require('path');
 const require51 = (requestedPackage) => {
   try {
-    return require(__dirname + '/../' + requestedPackage);
+    return require(path.join(__dirname, '/../', requestedPackage));
   } catch (e) {
     return require(requestedPackage);
   }
@@ -31,9 +32,9 @@ const require51 = (requestedPackage) => {
 const core = require51('fiftyone.pipeline.core');
 const PipelineBuilder = core.PipelineBuilder;
 const EngineBuilder = require(
-  __dirname + '/../deviceDetectionOnPremise'
+  path.join(__dirname, '/../deviceDetectionOnPremise')
 );
-const constants = require(__dirname + '/../constants');
+const constants = require(path.join(__dirname, '/../constants'));
 const fs = require('fs');
 
 const LiteDataFile = (process.env.directory || __dirname) + '/../device-detection-cxx/device-detection-data/51Degrees-LiteV4.1.hash';
@@ -61,7 +62,7 @@ describe('deviceDetectionOnPremise', () => {
 
   // Check that for a successful detection, all properties loaded by the engine
   // are accessible in the results.
-  test('Available Properties', async done => {
+  test('Available Properties', async () => {
     var engine = new EngineBuilder({
       dataFilePath: DataFile,
       autoUpdate: false,
@@ -78,32 +79,27 @@ describe('deviceDetectionOnPremise', () => {
     await flowData.process();
 
     Object.keys(engine.properties).forEach(key => {
-      try {
-        var apv = flowData.device[key];
-        expect(apv).not.toBeNull();
-        expect(apv).toBeDefined();
-        if (apv.hasValue === true) {
-          if (apv.value !== null && apv.value !== undefined) {
-            console.log(`${key}: ${apv.value}`);
-          } else {
-            done.fail(new Error(`${key}.value should not be null`));
-          }
+      var apv = flowData.device[key];
+      expect(apv).not.toBeNull();
+      expect(apv).toBeDefined();
+      if (apv.hasValue === true) {
+        if (apv.value !== null && apv.value !== undefined) {
+          console.log(`${key}: ${apv.value}`);
         } else {
-          if (apv.noValueMessage !== null && apv.noValueMessage !== undefined) {
-            console.log(`${key}: ${apv.noValueMessage}`);
-          } else {
-            done.fail(new Error(`${key}.noValueMessage should not be null`));
-          }
+          throw new Error(`${key}.value should not be null`);
         }
-      } catch (err) {
-        done.fail(err);
+      } else {
+        if (apv.noValueMessage !== null && apv.noValueMessage !== undefined) {
+          console.log(`${key}: ${apv.noValueMessage}`);
+        } else {
+          throw new Error(`${key}.noValueMessage should not be null`);
+        }
       }
     });
-    done();
   });
 
   // Validate the descriptions of match metrics properties.
-  test('Match Metrics Description', async done => {
+  test('Match Metrics Description', async () => {
     var engine = new EngineBuilder({
       dataFilePath: DataFile,
       autoUpdate: false,
@@ -133,13 +129,11 @@ describe('deviceDetectionOnPremise', () => {
     expect(engine.properties.drift.description).toEqual(constants.driftDescription);
     expect(engine.properties.iterations.description).toBeDefined();
     expect(engine.properties.iterations.description).toEqual(constants.iterationsDescription);
-
-    done();
   });
 
   // Validate the the values for all properties returned are of the expected
   // type.
-  test('Value Types', async done => {
+  test('Value Types', async () => {
     var engine = new EngineBuilder({
       dataFilePath: DataFile,
       autoUpdate: false,
@@ -164,13 +158,11 @@ describe('deviceDetectionOnPremise', () => {
 
       expect(apv.value).toBe51DType(key, expectedType);
     });
-
-    done();
   });
 
   // Validate the the device id is returned for a detection and that it is not
   // null.
-  test('DeviceID', async done => {
+  test('DeviceID', async () => {
     var engine = new EngineBuilder({
       dataFilePath: DataFile,
       autoUpdate: false,
@@ -194,13 +186,11 @@ describe('deviceDetectionOnPremise', () => {
     expect(deviceID.value).not.toBeNull();
     expect(deviceID.value).toBeDefined();
     expect(deviceID.value).not.toBe('');
-
-    done();
   });
 
   // Validate that for a successful detection, the matched User Agents are
   // returned in the results.
-  test('Matched User Agents', async done => {
+  test('Matched User Agents', async () => {
     var engine = new EngineBuilder({
       dataFilePath: DataFile,
       autoUpdate: false,
@@ -235,8 +225,6 @@ describe('deviceDetectionOnPremise', () => {
         expect(substring).toEqual(original);
       });
     });
-
-    done();
   });
 });
 

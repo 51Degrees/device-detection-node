@@ -85,7 +85,7 @@ const path = require('path');
 const pug = require('pug');
 
 const compiledFunction =
-  pug.compileFile(__dirname + '/index.pug');
+  pug.compileFile(path.join(__dirname, '/index.pug'));
 
 const core = require51('fiftyone.pipeline.core');
 
@@ -96,7 +96,7 @@ const dataExtension =
   require('fiftyone.devicedetection.shared').dataExtension;
 
 const { DATA_FILE_AGE_WARNING, ExampleUtils } =
-  require(__dirname + '/../exampleUtils');
+  require(path.join(__dirname, '/../exampleUtils'));
 
 // Pipeline variable to be used
 var pipeline;
@@ -207,7 +207,7 @@ const server = http.createServer((req, res) => {
 // Don't run the server if under TEST
 if (process.env.JEST_WORKER_ID === undefined) {
   // Load the configuration options from config file.
-  const options = JSON.parse(fs.readFileSync(__dirname + '/51d.json'));
+  const options = JSON.parse(fs.readFileSync(path.join(__dirname, '/51d.json')));
 
   setPipeline(options);
   const port = 3001;

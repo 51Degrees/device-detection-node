@@ -80,11 +80,12 @@ const require51 = (requestedPackage) => {
   }
 };
 
+const path = require('path');
 const fs = require('fs');
 const http = require('http');
 const pug = require('pug');
 
-const compiledFunction = pug.compileFile(__dirname + '/index.pug');
+const compiledFunction = pug.compileFile(path.join(__dirname, '/index.pug'));
 
 const core = require51('fiftyone.pipeline.core');
 
@@ -94,7 +95,7 @@ const OptionsExtension =
 const DataExtension =
   require('fiftyone.devicedetection.shared').dataExtension;
 
-const ExampleUtils = require(__dirname + '/../exampleUtils');
+const ExampleUtils = require(path.join(__dirname, '/../exampleUtils'));
 
 // Pipeline variable to be used
 var pipeline;
@@ -203,7 +204,7 @@ if (process.env.JEST_WORKER_ID === undefined) {
     args.length > 0 ? args[0] : process.env[ExampleUtils.RESOURCE_KEY_ENV_VAR];
 
   // Load the configuration options from
-  const options = JSON.parse(fs.readFileSync(__dirname + '/51d.json'));
+  const options = JSON.parse(fs.readFileSync(path.join(__dirname, '/51d.json')));
 
   // If resource key is not set in the config file, set one from console input
   // or from environment variable.

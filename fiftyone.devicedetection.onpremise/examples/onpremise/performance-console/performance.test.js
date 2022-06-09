@@ -64,7 +64,7 @@ describe('Examples', () => {
   test('hash performance', (done) => {
     if (isAsync) {
       setTimeout(done, 1000);
-      testExample({ file: (__dirname) + '/performance.js' });
+      testExample({ file: path.join(__dirname, '/performance.js') });
     } else {
       done();
     }

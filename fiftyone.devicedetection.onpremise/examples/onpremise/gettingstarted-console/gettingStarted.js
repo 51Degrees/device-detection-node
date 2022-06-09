@@ -36,10 +36,11 @@ Required npm Dependencies:
 - fiftyone.devicedetection.onpremise
 */
 
+const path = require('path');
 const DeviceDetectionOnPremisePipelineBuilder =
-  require(__dirname + '/../../../deviceDetectionOnPremisePipelineBuilder');
+  require(path.join(__dirname, '/../../../deviceDetectionOnPremisePipelineBuilder'));
 
-const ExampleUtils = require(__dirname + '/../exampleUtils').ExampleUtils;
+const ExampleUtils = require(path.join(__dirname, '/../exampleUtils')).ExampleUtils;
 
 const DataExtension = require('fiftyone.devicedetection.shared').dataExtension;
 

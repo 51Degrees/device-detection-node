@@ -24,7 +24,7 @@ const fs = require('fs');
 
 const path = require('path');
 
-const swigHelpers = require((__dirname) + '/../../swigHelpers');
+const swigHelpers = require(path.join(__dirname, '/../../swigHelpers'));
 
 // Timeout used when searching for file
 const FIND_FILE_TIMEOUT_MS = 10000;

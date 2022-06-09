@@ -20,11 +20,12 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
+const path = require('path');
 const {
   liteDataFileName, getDataFilePath
-} = require(__dirname + '/../../../tests/testHelper');
+} = require(path.join(__dirname, '/../../../tests/testHelper'));
 
-const example = require(__dirname + '/gettingStarted.js');
+const example = require(path.join(__dirname, '/gettingStarted.js'));
 
 describe('Examples', () => {
   test('onpremise getting started Lite data file', async () => {

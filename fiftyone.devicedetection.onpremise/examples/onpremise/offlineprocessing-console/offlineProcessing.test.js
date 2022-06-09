@@ -20,12 +20,13 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
+const path = require('path');
 const {
   liteDataFileName, enterpriseDataFileName, evidenceFileName,
   getDataFilePath
-} = require(__dirname + '/../../../tests/testHelper');
+} = require(path.join(__dirname, '/../../../tests/testHelper'));
 
-const example = require(__dirname + '/offlineProcessing.js');
+const example = require(path.join(__dirname, '/offlineProcessing.js'));
 
 describe('Examples', () => {
   test('onpremise offline processing', async () => {

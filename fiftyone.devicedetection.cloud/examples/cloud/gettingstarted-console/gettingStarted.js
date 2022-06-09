@@ -37,11 +37,12 @@ Required npm Dependencies:
 @include 51d.json
 */
 
+const path = require('path');
 const fs = require('fs');
 
 const { PipelineBuilder } = require('fiftyone.pipeline.core');
 
-const ExampleUtils = require(__dirname + '/../exampleUtils');
+const ExampleUtils = require(path.join(__dirname, '/../exampleUtils'));
 
 const OptionsExtension =
   require('fiftyone.devicedetection.shared').optionsExtension;

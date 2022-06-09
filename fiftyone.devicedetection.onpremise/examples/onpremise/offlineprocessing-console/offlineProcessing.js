@@ -55,12 +55,13 @@ Required npm Dependencies:
 */
 
 const LineReader = require('n-readlines');
+const path = require('path');
 
 const DeviceDetectionOnPremisePipelineBuilder =
   require((process.env.directory || __dirname) +
   '/../../../deviceDetectionOnPremisePipelineBuilder');
 
-const ExampleUtils = require(__dirname + '/../exampleUtils').ExampleUtils;
+const ExampleUtils = require(path.join(__dirname, '/../exampleUtils')).ExampleUtils;
 
 const DataExtension = require('fiftyone.devicedetection.shared').dataExtension;
 
@@ -77,7 +78,6 @@ const EVIDENCE = '20000 Evidence Records.yml';
 
 // Check if files exists
 const fs = require('fs');
-const path = require('path');
 const yaml = require('js-yaml');
 
 const analyzeEvidence = async function (evidence, pipeline, outputFile, outputFunc) {
@@ -207,9 +207,9 @@ if (process.env.JEST_WORKER_ID === undefined) {
   const evidenceFile = args.length > 1 ? args[1] : ExampleUtils.findFile(EVIDENCE);
   // Finally, get the location for the output file. Use the same location as the
   // evidence if a path is not supplied on the command line.
-  const outputFile = args.length > 2 ? args[2]
-    : path.join(
-      path.dirname(path.resolve(evidenceFile)), 'offline-processing-output.yml');
+  const outputFile = args.length > 2
+    ? args[2]
+    : path.join(path.dirname(path.resolve(evidenceFile)), 'offline-processing-output.yml');
 
   if (dataFile !== undefined) {
     // Create output file or overwrite the existing one

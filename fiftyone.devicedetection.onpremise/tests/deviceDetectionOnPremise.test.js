@@ -20,10 +20,11 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
-const FiftyOneDegreesDeviceDetectionOnPremise = require(__dirname +
-  '/../../fiftyone.devicedetection.onpremise');
+const path = require('path');
+const FiftyOneDegreesDeviceDetectionOnPremise = require(path.join(__dirname,
+  '/../../fiftyone.devicedetection.onpremise'));
 const EngineBuilder = require(
-  __dirname + '/../deviceDetectionOnPremise'
+  path.join(__dirname, '/../deviceDetectionOnPremise')
 );
 const DataFile = (process.env.directory || __dirname) + '/../device-detection-cxx/device-detection-data/51Degrees-LiteV4.1.hash';
 

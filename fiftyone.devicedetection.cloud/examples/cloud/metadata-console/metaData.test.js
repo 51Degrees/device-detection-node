@@ -19,7 +19,8 @@
  * in the end user terms of the application under an appropriate heading,
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
-const example = require((__dirname) + '/metaData.js');
+const path = require('path');
+const example = require(path.join(__dirname, '/metaData.js'));
 
 // Test constants
 const tc = require('fiftyone.devicedetection.shared').testConstants;

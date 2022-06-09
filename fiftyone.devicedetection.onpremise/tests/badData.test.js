@@ -21,11 +21,12 @@
  * ********************************************************************* */
 const fs = require('fs');
 const os = require('os');
+const path = require('path');
 
 const errorMessages = require('fiftyone.devicedetection.shared').errorMessages;
 
-const FiftyOneDegreesDeviceDetectionOnPremise = require(__dirname +
-    '/../../fiftyone.devicedetection.onpremise');
+const FiftyOneDegreesDeviceDetectionOnPremise = require(path.join(__dirname,
+  '/../../fiftyone.devicedetection.onpremise'));
 const DataFile = (process.env.directory || __dirname) + '/../device-detection-cxx/device-detection-data/51Degrees-LiteV4.1.hash';
 const BadVersionDataFile = (process.env.directory || __dirname) + '/BadVersionDataFile.hash';
 const BadHeaderDataFile = (process.env.directory || __dirname) + '/BadHeaderDataFile.hash';

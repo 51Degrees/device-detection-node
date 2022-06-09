@@ -20,9 +20,10 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
+const path = require('path');
 const require51 = (requestedPackage) => {
   try {
-    return require(__dirname + '/../' + requestedPackage);
+    return require(path.join(__dirname, '/../', requestedPackage));
   } catch (e) {
     return require(requestedPackage);
   }
@@ -35,14 +36,13 @@ const cloudRequestEngine = require51('fiftyone.pipeline.cloudrequestengine');
 const RequestEngineBuilder = cloudRequestEngine.CloudRequestEngine;
 
 const EngineBuilder = require(
-  __dirname + '/../deviceDetectionCloud'
+  path.join(__dirname, '/../deviceDetectionCloud')
 );
 const DeviceDetectionCloudPipelineBuilder = require(
-  __dirname + '/../deviceDetectionCloudPipelineBuilder');
+  path.join(__dirname, '/../deviceDetectionCloudPipelineBuilder'));
 const errorMessages = require('fiftyone.devicedetection.shared').errorMessages;
 
 const fs = require('fs');
-const path = require('path');
 const each = require('jest-each').default;
 
 const CSVDataFile = (process.env.directory || __dirname) + '/51Degrees.csv';
@@ -86,7 +86,7 @@ describe('deviceDetectionCloud', () => {
 
   // Check that for a successful detection, all properties loaded by the engine
   // are accessible in the results.
-  test('Available Properties', async done => {
+  test('Available Properties', async () => {
     var line = await readFirstLine(CSVDataFile).catch(e => {});
 
     var properties = line
@@ -112,30 +112,25 @@ describe('deviceDetectionCloud', () => {
     properties.forEach(key => {
     // TODO: Once 'setheader' properties are supported, remove this check.
       if (!key.toLowerCase().startsWith('setheader')) {
-        try {
-          var apv = flowData.device[key.toLowerCase()];
-          if (apv === undefined) {
-            done.fail(new Error(`Aspect property value for ${key}should not be undefined.`));
+        var apv = flowData.device[key.toLowerCase()];
+        if (apv === undefined) {
+          throw new Error(`Aspect property value for ${key} should not be undefined.`);
+        }
+        expect(apv).not.toBeNull();
+        if (apv.hasValue === true) {
+          if (apv.value === null || apv.value === undefined) {
+            throw new Error(`${key}.value should not be null`);
           }
-          expect(apv).not.toBeNull();
-          if (apv.hasValue === true) {
-            if (apv.value === null || apv.value === undefined) {
-              done.fail(new Error(`${key}.value should not be null`));
-            }
-          } else {
-            if (apv.noValueMessage === null || apv.noValueMessage === undefined) {
-              done.fail(new Error(`${key}.noValueMessage should not be null`));
-            }
+        } else {
+          if (apv.noValueMessage === null || apv.noValueMessage === undefined) {
+            throw new Error(`${key}.noValueMessage should not be null`);
           }
-        } catch (err) {
-          done.fail(err);
         }
       }
     });
-    done();
   });
 
-  test('Value Types', async done => {
+  test('Value Types', async () => {
     var line = await readFirstLine(CSVDataFile).catch(e => {});
 
     var properties = line
@@ -161,23 +156,17 @@ describe('deviceDetectionCloud', () => {
     properties.forEach(key => {
     // TODO: Remove this check once 'setheader' properties are supported in Cloud.
       if (!key.toLowerCase().startsWith('setheader')) {
-        try {
-          var property = engine.properties[key.toLowerCase()];
-          if (property === undefined) {
-            throw new Error(`No property metadata defined for ${key.toLowerCase()}`);
-          }
-          var expectedType = property.type;
-          var apv = flowData.device[key.toLowerCase()];
-          expect(apv).not.toBe(null);
-          expect(apv).toBeDefined();
-          expect(apv.value).toBe51DType(key, expectedType);
-        } catch (err) {
-          done.fail(err);
+        var property = engine.properties[key.toLowerCase()];
+        if (property === undefined) {
+          throw new Error(`No property metadata defined for ${key.toLowerCase()}`);
         }
+        var expectedType = property.type;
+        var apv = flowData.device[key.toLowerCase()];
+        expect(apv).not.toBe(null);
+        expect(apv).toBeDefined();
+        expect(apv.value).toBe51DType(key, expectedType);
       }
     });
-
-    done();
   });
 });
 

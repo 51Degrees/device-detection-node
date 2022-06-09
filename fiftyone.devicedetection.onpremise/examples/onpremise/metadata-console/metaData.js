@@ -54,11 +54,12 @@ Required npm Dependencies:
 
  */
 
+const path = require('path');
 const DeviceDetectionOnPremisePipelineBuilder =
   require((process.env.directory || __dirname) +
   '/../../../deviceDetectionOnPremisePipelineBuilder');
 
-const ExampleUtils = require(__dirname + '/../exampleUtils').ExampleUtils;
+const ExampleUtils = require(path.join(__dirname, '/../exampleUtils')).ExampleUtils;
 
 // In this example, by default, the 51degrees "Lite" file needs to be in the
 // fiftyone.devicedetection.onpremise/device-detection-cxx/device-detection-data,

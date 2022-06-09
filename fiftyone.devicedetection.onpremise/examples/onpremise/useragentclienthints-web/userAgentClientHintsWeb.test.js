@@ -20,12 +20,13 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
+const path = require('path');
 const request = require('supertest');
 // Test constants
 const tc = require('fiftyone.devicedetection.shared').testConstants;
 
 // Load the example module
-const example = require((__dirname) + '/userAgentClientHintsWeb.js');
+const example = require(path.join(__dirname, '/userAgentClientHintsWeb.js'));
 
 describe('Examples', () => {
   test.each([

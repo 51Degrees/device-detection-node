@@ -20,8 +20,9 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
-const DeviceDetectionPipelineBuilder = require(__dirname +
-  '/../deviceDetectionPipelineBuilder');
+const path = require('path');
+const DeviceDetectionPipelineBuilder = require(path.join(__dirname,
+  '/../deviceDetectionPipelineBuilder'));
 const myResourceKey = process.env.RESOURCE_KEY || '!!YOUR_RESOURCE_KEY!!';
 const errorMessages = require('fiftyone.devicedetection.shared').errorMessages;
 

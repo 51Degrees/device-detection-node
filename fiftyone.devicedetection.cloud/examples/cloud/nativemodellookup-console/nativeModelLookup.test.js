@@ -20,7 +20,8 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
-const example = require((__dirname) + '/nativeModelLookup.js');
+const path = require('path');
+const example = require(path.join(__dirname, '/nativeModelLookup.js'));
 
 // Test constants
 const tc = require('fiftyone.devicedetection.shared').testConstants;

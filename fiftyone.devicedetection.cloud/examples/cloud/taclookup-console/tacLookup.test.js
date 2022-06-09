@@ -20,9 +20,10 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
+const path = require('path');
 const fs = require('fs');
 
-const example = require((__dirname) + '/tacLookup.js');
+const example = require(path.join(__dirname, '/tacLookup.js'));
 
 // Test constants
 const tc = require('fiftyone.devicedetection.shared').testConstants;
@@ -33,7 +34,7 @@ const OptionsExtension =
 describe('Examples', () => {
   test('cloud tac lookup', async () => {
     // Load the configuration from a config file to a JSON object.
-    const options = JSON.parse(fs.readFileSync((__dirname) + '/51d.json'), 'utf8');
+    const options = JSON.parse(fs.readFileSync(path.join(__dirname, '/51d.json')), 'utf8');
     OptionsExtension.updateElementPath(options, __dirname);
     OptionsExtension.setResourceKey(
       options, process.env[tc.envVars.superResourceKeyEnvVar]);

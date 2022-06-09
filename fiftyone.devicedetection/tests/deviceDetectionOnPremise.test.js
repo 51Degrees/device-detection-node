@@ -20,8 +20,9 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
-const FiftyOneDegreesDeviceDetection = require(__dirname +
-  '/../../fiftyone.devicedetection');
+const path = require('path');
+const FiftyOneDegreesDeviceDetection = require(path.join(__dirname,
+  '/../../fiftyone.devicedetection'));
 const DataFile = 'test.hash';
 
 describe('deviceDetectionOnPremise', () => {

@@ -21,11 +21,12 @@
  * ********************************************************************* */
 
 const request = require('supertest');
+const path = require('path');
 
 const fs = require('fs');
 
 // Load the example module
-const example = require((__dirname) + '/gettingStarted.js');
+const example = require(path.join(__dirname, '/gettingStarted.js'));
 
 const OptionsExtension =
   require('fiftyone.devicedetection.shared').optionsExtension;
@@ -33,12 +34,12 @@ const OptionsExtension =
 describe('Examples', () => {
   test('onpremise getting started web', async () => {
     // Load configuration options
-    const options = JSON.parse(fs.readFileSync(__dirname + '/51d.json'));
+    const options = JSON.parse(fs.readFileSync(path.join(__dirname, '/51d.json')));
 
     // Update data file path
     const dataFilePath = OptionsExtension.getDataFilePath(options);
     if (dataFilePath.startsWith('.')) {
-      OptionsExtension.setDataFilePath(options, __dirname + '/' + dataFilePath);
+      OptionsExtension.setDataFilePath(options, path.join(__dirname, '/', dataFilePath));
     }
 
     // Update element path with a full path
