@@ -208,7 +208,7 @@ stages:
         npm install -g eslint@8.16.0
         eslint '**/*.js'
       displayName: "Set up and run eslint"
-      condition: and(ne(${{ parameters.runTests }}, 'Off'), ne(variables['node_version'], '6.x'), ne(variables['node_version'], '8.x'))
+      condition: and(ne(${{ parameters.runTests }}, 'Off'), ne(variables['node_version'], '16'))
       failOnStderr: true
 
     - task: CopyFiles@2
