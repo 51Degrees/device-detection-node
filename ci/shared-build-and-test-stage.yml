@@ -32,8 +32,6 @@ stages:
 
     strategy:
       matrix:
-        node_10_x:
-          node_version: 10
         node_12_x:
           node_version: 12
         node_14_x:
@@ -112,7 +110,7 @@ stages:
         fi
 
         # Build binaries
-        rm -r build
+        rm -r -f build
         # This will automatically trigger node-gyp rebuild
         # which run clean, configure and build in a row
         shopt -s nocasematch
@@ -207,10 +205,10 @@ stages:
       condition: and(succeededOrFailed(), ne(${{ parameters.runTests }}, 'Off'))
 
     - bash: |
-        npm install -g eslint@6.8.0
+        npm install -g eslint@8.16.0
         eslint '**/*.js'
       displayName: "Set up and run eslint"
-      condition: and(ne(${{ parameters.runTests }}, 'Off'), ne(variables['node_version'], '6.x'), ne(variables['node_version'], '8.x'))
+      condition: and(ne(${{ parameters.runTests }}, 'Off'), ne(variables['node_version'], '16'))
       failOnStderr: true
 
     - task: CopyFiles@2

@@ -1,10 +1,10 @@
 /* *********************************************************************
  * This Original Work is copyright of 51 Degrees Mobile Experts Limited.
- * Copyright 2019 51 Degrees Mobile Experts Limited, 5 Charlotte Close,
- * Caversham, Reading, Berkshire, United Kingdom RG4 7BY.
+ * Copyright 2022 51 Degrees Mobile Experts Limited, Davidson House,
+ * Forbury Square, Reading, Berkshire, United Kingdom RG1 3EU.
  *
- * This Original Work is licensed under the European Union Public Licence (EUPL)
- * v.1.2 and is subject to its terms as set out below.
+ * This Original Work is licensed under the European Union Public Licence
+ * (EUPL) v.1.2 and is subject to its terms as set out below.
  *
  * If a copy of the EUPL was not distributed with this file, You can obtain
  * one at https://opensource.org/licenses/EUPL-1.2.
@@ -32,11 +32,12 @@ This example is available in full on [GitHub](https://github.com/51Degrees/devic
 
  */
 
+const path = require('path');
 const DeviceDetectionOnPremisePipelineBuilder =
   require((process.env.directory || __dirname) +
     '/../../../deviceDetectionOnPremisePipelineBuilder');
 
-const ExampleUtils = require(__dirname + '/../exampleUtils').ExampleUtils;
+const ExampleUtils = require(path.join(__dirname, '/../exampleUtils')).ExampleUtils;
 
 // In this example, by default, the 51degrees "Lite" file needs to be in the
 // fiftyone.devicedetection.onpremise/device-detection-cxx/device-detection-data,

@@ -1,10 +1,10 @@
 /* *********************************************************************
  * This Original Work is copyright of 51 Degrees Mobile Experts Limited.
- * Copyright 2022 51 Degrees Mobile Experts Limited, 5 Charlotte Close,
- * Caversham, Reading, Berkshire, United Kingdom RG4 7BY.
+ * Copyright 2022 51 Degrees Mobile Experts Limited, Davidson House,
+ * Forbury Square, Reading, Berkshire, United Kingdom RG1 3EU.
  *
- * This Original Work is licensed under the European Union Public Licence (EUPL)
- * v.1.2 and is subject to its terms as set out below.
+ * This Original Work is licensed under the European Union Public Licence
+ * (EUPL) v.1.2 and is subject to its terms as set out below.
  *
  * If a copy of the EUPL was not distributed with this file, You can obtain
  * one at https://opensource.org/licenses/EUPL-1.2.
@@ -20,11 +20,12 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
+const path = require('path');
 const {
   liteDataFileName, getDataFilePath
-} = require(__dirname + '/../../../tests/testHelper');
+} = require(path.join(__dirname, '/../../../tests/testHelper'));
 
-const example = require(__dirname + '/metaData.js');
+const example = require(path.join(__dirname, '/metaData.js'));
 
 describe('Examples', () => {
   test('onpremise meta data Lite data file', async () => {

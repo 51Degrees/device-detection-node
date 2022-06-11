@@ -1,10 +1,10 @@
 /* *********************************************************************
  * This Original Work is copyright of 51 Degrees Mobile Experts Limited.
- * Copyright 2019 51 Degrees Mobile Experts Limited, 5 Charlotte Close,
- * Caversham, Reading, Berkshire, United Kingdom RG4 7BY.
+ * Copyright 2022 51 Degrees Mobile Experts Limited, Davidson House,
+ * Forbury Square, Reading, Berkshire, United Kingdom RG1 3EU.
  *
- * This Original Work is licensed under the European Union Public Licence (EUPL)
- * v.1.2 and is subject to its terms as set out below.
+ * This Original Work is licensed under the European Union Public Licence
+ * (EUPL) v.1.2 and is subject to its terms as set out below.
  *
  * If a copy of the EUPL was not distributed with this file, You can obtain
  * one at https://opensource.org/licenses/EUPL-1.2.
@@ -21,11 +21,12 @@
  * ********************************************************************* */
 
 const request = require('supertest');
+const path = require('path');
 
 const fs = require('fs');
 
 // Load the example module
-const example = require((__dirname) + '/gettingStarted.js');
+const example = require(path.join(__dirname, '/gettingStarted.js'));
 
 const OptionsExtension =
   require('fiftyone.devicedetection.shared').optionsExtension;
@@ -33,12 +34,12 @@ const OptionsExtension =
 describe('Examples', () => {
   test('onpremise getting started web', async () => {
     // Load configuration options
-    const options = JSON.parse(fs.readFileSync(__dirname + '/51d.json'));
+    const options = JSON.parse(fs.readFileSync(path.join(__dirname, '/51d.json')));
 
     // Update data file path
     const dataFilePath = OptionsExtension.getDataFilePath(options);
     if (dataFilePath.startsWith('.')) {
-      OptionsExtension.setDataFilePath(options, __dirname + '/' + dataFilePath);
+      OptionsExtension.setDataFilePath(options, path.join(__dirname, '/', dataFilePath));
     }
 
     // Update element path with a full path

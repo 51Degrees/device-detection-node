@@ -10,14 +10,53 @@ The Pipeline is a generic web request intelligence and data processing solution 
 ## Device detection
 
 Device detection can be performed 'on-premise' using a local data file or via the 51Degrees cloud service. 
+On-premise provides better performance, while cloud is easier to deploy.
 
-These options all use the same evidence and property names so can be swapped out as needed.
+Both options use the same evidence values and expose (almost all) the same properties, so can be swapped out if needed at a later date.
 
 ### Packages
+
 - **fiftyone.devicedetection.cloud** - A Node.js engine which retrieves engine results by consuming data from the 51Degrees cloud service. A cloud builder is also included to build a pipeline for device detection cloud engine.
 - **fiftyone.devicedetection.onpremise** - A Node.js engine which retrieves engine results by consuming data from the 51Degrees data file. A on-premise builder is also included to build a pipeline for device detection on-premise engine.
 - **fiftyone.devicedetection.shared** - A Node.js module which contains shared functionality to build cloud and on-premise engines.
 - **fiftyone.devicedetection** - A Node.js pipeline builder which build pipeline for either cloud or on-premise engine based on the input.
+
+### Dependencies
+
+For runtime dependencies, see our [dependencies](http://51degrees.com/documentation/_info__dependencies.html) page.
+The [tested versions](https://51degrees.com/documentation/_info__tested_versions.html) page shows 
+the Node versions that we currently test against. The software may run fine against other 
+versions, but additional caution should be applied.
+
+### Data
+
+The API can either use our cloud service to get its data or it can use a local (on-premise) copy of the data.
+
+#### Cloud
+
+You will require a [resource key](https://51degrees.com/documentation/_info__resource_keys.html)
+to use the Cloud API. You can create resource keys using our 
+[configurator](https://configure.51degrees.com/), see our 
+[documentation](https://51degrees.com/documentation/_concepts__configurator.html) on how to use this.
+
+#### On-Premise
+
+In order to perform device detection on-premise, you will need to use a 51Degrees data file. 
+This repository includes a free, 'lite' file in the 'device-detection-data' sub-module that has a 
+significantly reduced set of properties. To obtain a file with a more complete set of device 
+properties see the [51Degrees website](https://51degrees.com/pricing). If you want to use the lite 
+file, you will need to install [GitLFS](https://git-lfs.github.com/):
+
+```
+sudo apt-get install git-lfs
+git lfs install
+```
+
+Then, navigate to 'fiftyone.devicedetection.onpremise/device-detection-cxx/device-detection-data' and execute:
+
+```
+git lfs pull
+```
 
 ### Installation
 
@@ -29,7 +68,57 @@ Using NPM call:
 
 `npm install fiftyone.devicedetection.onpremise`
 
-Or to install from this repository run:
+### Build from Source
+
+Device detection on-premise uses a native binary. (i.e. compiled from C code to target a specific 
+platform/architecture) The NPM package contains several binaries for common platforms. However, 
+in some cases, you'll need to build the native binaries yourself for your target platform. This
+section explains how to do this.
+
+#### Pre-requisites
+
+- Install Node.js.
+- Install node-gyp by running.
+  - `npm install node-gyp --global`  
+- Install C build tools:
+  - Windows:
+    - You will need either Visual Studio 2019 or the [C++ Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/) installed.
+      - Minimum platform toolset version is `v142`
+      - Minimum Windows SDK version is `10.0.18362.0`
+  - Linux/MacOS:
+    - `sudo apt-get install g++ make libatomic1`
+- Pull git submodules:
+  - `git submodule update --init --recursive`
+
+#### Build Steps
+
+- Navigate to fiftyone.devicedetection.onpremise
+- Rename the `binding.51d` to `binding.gyp`
+- Run `npm install`
+  - Alternatively this step can be replaced by the followings:
+    - Create a folder named `build`.
+    - Run `node-gyp configure`
+    - Run `node-gyp build`
+  - Platform specific:
+    - Windows
+      - By default this will look for Visual Studio 2019 and a minimum Windows SDK version `10.0.18362.0`.
+      - This can be overwritten by include `--msvs_version=[VS version]` and `--msvs_target_platform_version=[Windows SDK Version]` as part of the `npm install` command.
+        - **NOTE**: This is not recommended. Also, some time the latest SDK version is selected instead, as observed in environment with multiple SDK versions installed. Thus, only install the correct Visual Studio version and the minimum required Windows SDK version as recommended.
+- This will build the `FiftyOneDeviceDetectionHashV4.node` under `build/Release` folder.
+- Copy the `FiftyOneDeviceDetectionHashV4.node` to `build` directory (which is one level up) and rename it using the following convention.
+  - Windows:
+    - FiftyOneDeviceDetectionHashV4-win32-[ Node version ].node
+      - e.g. FiftyOneDeviceDetectionHashV4-win32-10.node for Node 10.
+  - Linux:
+    - FiftyOneDeviceDetectionHashV4-linux-[ Node version ].node
+      - e.g. FiftyOneDeviceDetectionHashV4-linux-10.node for Node 10.
+  - MacOS:
+    - FiftyOneDeviceDetectionHashV4-darwin-[ Node version ].node
+      - e.g. FiftyOneDeviceDetectionHashV4-darwin-10.node for Node 10.
+  - Please see the [tested versions page](https://51degrees.com/documentation/_info__tested_versions.html) for Node versions that we currently test against. The software may run fine against other versions, but extra caution should be applied.
+  - You can optionally clear up by removing all the build files and folders except for the *.node file that's been created.
+
+Once the native binaries have been built, you can install the packages as normal using:
 
 `npm install fiftyone.devicedetection/`
 
@@ -37,91 +126,36 @@ Or to install from this repository run:
 
 `npm install fiftyone.devicedetection.onpremise/`
 
-To install `fiftyone.devicedetection` and `fiftyone.devicedetection.onpremise` from this repository, you need to build the native binaries first. The step is described in **On-Premise** section.
-
-### On-Premise
-When running on-premise, a local Hash V4.1 data file is required.
-
-[**Hash**](https://51degrees.com/documentation/_device_detection__hash.html): A large binary file populated with User-Agent signatures allowing very fast detection speeds.
-
-51Degrees provides [multiple options](https://51degrees.com/Licencing-Pricing/On-Premise), some of which support automatic updates through the Pipeline API.
-
-If the module is installed directly from Git then the binaries are also required. These binaries are native module which contains the core engine of device detection. Below are the steps to build these binaries:
-- Pre-requisites
-  - Install Node.js.
-  - Install node-gyp by running.
-    - `npm install node-gyp --global`  
-  - Install C build tools:
-    - Windows:
-      - You will need either Visual Studio 2019 or the [C++ Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/) installed.
-        - Minimum platform toolset version is `v142`
-        - Minimum Windows SDK version is `10.0.18362.0`
-
-If you have Visual Studio Code, you'll still need to install the build tools from the link above.
-    - Linux/MacOS:
-      - You will need a C++ compiler which supports C++11. The compiler will and other build tools will be selected by CMake automatically based on your environment.
-- Build steps:
-  - Navigate to fiftyone.devicedetection.onpremise.
-  - Rename the `binding.51d` to `binding.gyp`
-  - Run `npm install`
-    - Alternatively this step can be replaced by the followings:
-      - Create a folder named `build`.
-      - Run `node-gyp configure`
-      - Run `node-gyp build`
-    - Platform specific:
-      - Windows
-        - By default this will look for Visual Studio 2019 and a minimum Windows SDK version `10.0.18362.0`.
-        - This can be overwritten by include `--msvs_version=[VS version]` and `--msvs_target_platform_version=[Windows SDK Version]` as part of the `npm install` command.
-          - **NOTE**: This is not recommended. Also, some time the latest SDK version is selected instead, as observed in environment with multiple SDK versions installed. Thus, only install the correct Visual Studio version and the minimum required Windows SDK version as recommended.
-  - This will build the `FiftyOneDeviceDetectionHashV4.node` under `build/Release` folder.
-  - Copy the `FiftyOneDeviceDetectionHashV4.node` to `build` directory (which is one level up) and rename it using the following convention.
-    - Windows:
-      - FiftyOneDeviceDetectionHashV4-win32-[ Node version ].node
-        - e.g. FiftyOneDeviceDetectionHashV4-win32-10.node for Node 10.
-    - Linux:
-      - FiftyOneDeviceDetectionHashV4-linux-[ Node version ].node
-        - e.g. FiftyOneDeviceDetectionHashV4-linux-10.node for Node 10.
-    - MacOS:
-      - FiftyOneDeviceDetectionHashV4-darwin-[ Node version ].node
-        - e.g. FiftyOneDeviceDetectionHashV4-darwin-10.node for Node 10.
-    - Please see the [tested versions page](https://51degrees.com/documentation/_info__tested_versions.html) for Node versions that we currently test against.
-    - At this point, other build files and folders can be removed apart from the binaries file *.node.
-
-If this module is installed as a package from `npm` and is intended to be used on Windows, make sure to install the `C++ Redistributable latest 14.2* version or above`.
-
-### Cloud
-
-The device detection cloud engine makes use of the 51Degrees cloud API. As such there is no data file to maintain, processing will always be performed using the latest data available.
-
 ### Examples
 
 For details of how to run the examples, please refer to [run examples](run_examples.md).
+The tables below describe the examples that are available.
 
 #### Cloud
 
-| Example                                | Revamped           | Description |
-|----------------------------------------|--------------------|-------------|
-| gettingstarted-console                 | &check;            | How to use the 51Degrees Cloud service to determine details about a device based on its User-Agent and User-Agent Client Hints HTTP header values. |
-| gettingstarted-web                     | &check;            | How to use the 51Degrees Cloud service to determine details about a device as part of a simple web server. |
-| metadata-console                       |                    | How to access the meta-data that relates to the device detection algorithm. |
-| useragentclienthints-web               |                    | This is now deprecated. Kept for testing purposes. Please see **gettingstarted-web** instead.
-| taclookup-console                      |                    | How to get device details from a TAC (Type Allocation Code) using the 51Degrees cloud service. |
-| nativemodellookup-console              |                    | How to get device details from a native model name using the 51Degrees cloud service. |
+| Example                                | Description |
+|----------------------------------------|-------------|
+| gettingstarted-console                 | How to use the 51Degrees Cloud service to determine details about a device based on its User-Agent and User-Agent Client Hints HTTP header values. |
+| gettingstarted-web                     | How to use the 51Degrees Cloud service to determine details about a device as part of a simple web server. |
+| metadata-console                       | How to access the meta-data that relates to the device detection algorithm. |
+| useragentclienthints-web               | This is now deprecated. Kept for testing purposes. Please see **gettingstarted-web** instead.
+| taclookup-console                      | How to get device details from a TAC (Type Allocation Code) using the 51Degrees cloud service. |
+| nativemodellookup-console              | How to get device details from a native model name using the 51Degrees cloud service. |
 
 #### On-Premise
 
-| Example                                | Revamped           | Description |
-|----------------------------------------|--------------------|-------------|
-| gettingstarted-console                 | &check;            | How to use the 51Degrees on-premise device detection API to determine details about a device based on its User-Agent and User-Agent Client Hints HTTP header values. |
-| gettingstarted-web                     | &check;            | How to use the 51Degrees Cloud service to determine details about a device as part of a simple web server. |
-| matchmetrics-console                   |                    | How to view metrics associated with the results of processing with a Device Detection engine. |
-| metadata-console                       |                    | How to access the meta-data that relates to the device detection algorithm. |
-| offlineprocessing-console              |                    | How to process data for later viewing using a Device Detection Hash data file. |
-| performance-console                    |                    | How to configure the various performance options and run a simple performance test. |
-| useragentclienthints-web               |                    | This is now deprecated. Kept for testing purposes. Please see **gettingstarted-web** instead. |
-| automaticupdates/dataFileSystemWatcher.js |                    | How to configure automatic updates using the file system watcher to monitor for changes to the data file. |
-| automaticupdates/updateOnStartUp.js    |                    | How to configure the Pipeline to automatically update the device detection data file on startup. |
-| automaticupdates/updatePollingInterval.js |                    | Ho to configure and verify the various automatic data file update settings. |
+| Example                                | Description |
+|----------------------------------------|-------------|
+| gettingstarted-console                 | How to use the 51Degrees on-premise device detection API to determine details about a device based on its User-Agent and User-Agent Client Hints HTTP header values. |
+| gettingstarted-web                     | How to use the 51Degrees Cloud service to determine details about a device as part of a simple web server. |
+| matchmetrics-console                   | How to view metrics associated with the results of processing with a Device Detection engine. |
+| metadata-console                       | How to access the meta-data that relates to the device detection algorithm. |
+| offlineprocessing-console              | How to process data for later viewing using a Device Detection Hash data file. |
+| performance-console                    | How to configure the various performance options and run a simple performance test. |
+| useragentclienthints-web               | This is now deprecated. Kept for testing purposes. Please see **gettingstarted-web** instead. |
+| automaticupdates/dataFileSystemWatcher.js | How to configure automatic updates using the file system watcher to monitor for changes to the data file. |
+| automaticupdates/updateOnStartUp.js    | How to configure the Pipeline to automatically update the device detection data file on startup. |
+| automaticupdates/updatePollingInterval.js | Ho to configure and verify the various automatic data file update settings. |
 
 ## Tests
 
@@ -147,7 +181,8 @@ To run the tests, execute the following command in the root directory or a sub-m
 
 ## Native code updates
 
-Process for rebuilding SWIG interfaces following an update to the device detection cxx code (This is only intended to be run by 51Degrees developers internally):
+Process for rebuilding SWIG interfaces following an update to the device detection cxx code 
+(This is only intended to be run by 51Degrees developers internally):
 
 1. Ensure Swig is installed.
    1. At the time when this README was updated, the current stable version of Swig did not support new changes in Node 12 and above.
