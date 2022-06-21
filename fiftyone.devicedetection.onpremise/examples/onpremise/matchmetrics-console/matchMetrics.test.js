@@ -20,30 +20,35 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
+const path = require('path');
 const {
   liteDataFileName, enterpriseDataFileName,
   dataFileDirectories, getDataFilePath
 } = require('../../../tests/testHelper');
-const { runExample } = require('./matchMetrics');
+
+const example = require(path.join(__dirname, '/matchMetrics.js'));
+const exampleConstants = require('fiftyone.devicedetection.shared').exampleConstants;
 
 describe('Examples', () => {
-  test('hash match metrics with Lite data file', async () => {
+  test('onpremise match metrics Lite data file', async () => {
     const filePath = getDataFilePath(liteDataFileName);
     if (filePath === undefined) {
       throw (`No Lite data file '${liteDataFileName}' found at 
         '${dataFileDirectories}'!`);
     }
-
-    await runExample(filePath);
+    await example.run(filePath, process.stdout, exampleConstants.defaultEvidenceValues.slice(2, 3));
+    expect(true);
   });
+});
 
-  test('hash match metrics with Enterprise data file', async () => {
+describe('Examples', () => {
+  test('onpremise match metrics Enterprise data file', async () => {
     const filePath = getDataFilePath(enterpriseDataFileName);
     if (filePath === undefined) {
-      throw (`This test requires Enterprise data file 
-        '${enterpriseDataFileName}' to exist at '${dataFileDirectories}'!`);
+      throw (`No Lite data file '${enterpriseDataFileName}' found at 
+        '${dataFileDirectories}'!`);
     }
-
-    await runExample(filePath);
+    await example.run(filePath, process.stdout, exampleConstants.defaultEvidenceValues.slice(2, 3));
+    expect(true);
   });
 });

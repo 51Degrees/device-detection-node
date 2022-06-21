@@ -23,7 +23,7 @@ Both options use the same evidence values and expose (almost all) the same prope
 
 ### Dependencies
 
-For runtime dependencies, see our [dependencies](http://51degrees.com/documentation/_info__dependencies.html) page.
+For runtime dependencies, see our [dependencies](https://51degrees.com/documentation/_info__dependencies.html) page.
 The [tested versions](https://51degrees.com/documentation/_info__tested_versions.html) page shows 
 the Node versions that we currently test against. The software may run fine against other 
 versions, but additional caution should be applied.

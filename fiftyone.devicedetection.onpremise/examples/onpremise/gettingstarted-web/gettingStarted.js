@@ -56,7 +56,7 @@ var hardwareVendor = deviceData.hardwarevendor;
 ```
 
 Results can also be accessed in client-side code by using the `fod` object. See the
-[JavaScriptBuilderElement](http://51degrees.com/pipeline-node/class_java_script_builder_element.html)
+[JavaScriptBuilderElement](https://51degrees.com/pipeline-node/class_java_script_builder_element.html)
 for details on available settings such as changing the `fod` name.
 ```
 window.onload = function () {
