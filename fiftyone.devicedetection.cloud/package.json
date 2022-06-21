@@ -24,10 +24,10 @@
   ],
   "dependencies": {
     "fiftyone.devicedetection.shared": "file:../fiftyone.devicedetection.shared",
-    "fiftyone.pipeline.cloudrequestengine": "^4.4.1",
-    "fiftyone.pipeline.core": "^4.4.1",
-    "fiftyone.pipeline.engines": "^4.4.1",
-    "fiftyone.pipeline.engines.fiftyone": "^4.4.1",
+    "fiftyone.pipeline.cloudrequestengine": "^4.4.2",
+    "fiftyone.pipeline.core": "^4.4.2",
+    "fiftyone.pipeline.engines": "^4.4.2",
+    "fiftyone.pipeline.engines.fiftyone": "^4.4.2",
     "pug": "^3.0.2",
     "supertest": "^6.1.6"
   },
