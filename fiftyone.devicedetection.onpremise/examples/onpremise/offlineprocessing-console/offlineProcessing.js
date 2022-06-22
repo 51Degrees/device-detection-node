@@ -128,15 +128,15 @@ const run = async function (dataFile, evidenceFile, outputFile, outputFunc) {
   // In this example, we use the DeviceDetectionOnPremisePipelineBuilder
   // and configure it in code. For more information about
   // pipelines in general see the documentation at
-  // http://51degrees.com/documentation/_concepts__configuration__builders__index.html
+  // https://51degrees.com/documentation/_concepts__configuration__builders__index.html
   const pipeline = new DeviceDetectionOnPremisePipelineBuilder({
     dataFile: dataFile,
     // We use the low memory profile as its performance is
     // sufficient for this example. See the documentation for
     // more detail on this and other configuration options:
-    // http://51degrees.com/documentation/_device_detection__features__performance_options.html
-    // http://51degrees.com/documentation/_features__automatic_datafile_updates.html
-    // http://51degrees.com/documentation/_features__usage_sharing.html
+    // https://51degrees.com/documentation/_device_detection__features__performance_options.html
+    // https://51degrees.com/documentation/_features__automatic_datafile_updates.html
+    // https://51degrees.com/documentation/_features__usage_sharing.html
     performanceProfile: 'LowMemory',
     //  Inhibit sharing usage for this example.
     // In general, off line processing usage should NOT be shared back to 51Degrees.

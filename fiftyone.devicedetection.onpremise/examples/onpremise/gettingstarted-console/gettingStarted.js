@@ -41,8 +41,8 @@ const DeviceDetectionOnPremisePipelineBuilder =
   require(path.join(__dirname, '/../../../deviceDetectionOnPremisePipelineBuilder'));
 
 const ExampleUtils = require(path.join(__dirname, '/../exampleUtils')).ExampleUtils;
-
 const DataExtension = require('fiftyone.devicedetection.shared').dataExtension;
+const exampleConstants = require('fiftyone.devicedetection.shared').exampleConstants;
 
 // In this example, by default, the 51degrees "Lite" file needs to be in the
 // fiftyone.devicedetection.onpremise/device-detection-cxx/device-detection-data,
@@ -53,36 +53,6 @@ const DataExtension = require('fiftyone.devicedetection.shared').dataExtension;
 // Find out about the Enterprise data file on our pricing page:
 // https://51degrees.com/pricing
 const LITE_V_4_1_HASH = '51Degrees-LiteV4.1.hash';
-
-// This collection contains the various input values that will
-// be passed to the device detection algorithm.
-const evidenceValues = [
-  // A User-Agent from a mobile device.
-  new Map([
-    ['header.user-agent', 'Mozilla/5.0 (Linux; Android 9; SAMSUNG SM-G960U) ' +
-      'AppleWebKit/537.36 (KHTML, like Gecko) ' +
-      'SamsungBrowser/10.1 Chrome/71.0.3578.99 Mobile ' +
-      'Safari/537.36']
-  ]),
-  // A User-Agent from a desktop device.
-  new Map([
-    ['header.user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) ' +
-      'AppleWebKit/537.36 (KHTML, like Gecko) ' +
-      'Chrome/78.0.3904.108 Safari/537.36']
-  ]),
-  // Evidence values from a windows 11 device using a browser
-  // that supports User-Agent Client Hints.
-  new Map([
-    ['header.user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) ' +
-      'AppleWebKit/537.36 (KHTML, like Gecko) ' +
-      'Chrome/98.0.4758.102 Safari/537.36'],
-    ['header.sec-ch-ua-mobile', '?0'],
-    ['header.sec-ch-ua', '" Not A; Brand";v="99", "Chromium";v="98", ' +
-      '"Google Chrome";v="98"'],
-    ['header.sec-ch-ua-platform', '"Windows"'],
-    ['header.sec-ch-ua-platform-version', '"14.0.0"']
-  ])
-];
 
 const outputValue = function (name, value) {
   // Individual result values have a wrapper called
@@ -144,15 +114,15 @@ const run = async function (dataFile, output) {
   // In this example, we use the DeviceDetectionOnPremisePipelineBuilder
   // and configure it in code. For more information about
   // pipelines in general see the documentation at
-  // http://51degrees.com/documentation/_concepts__configuration__builders__index.html
+  // https://51degrees.com/documentation/_concepts__configuration__builders__index.html
   const pipeline = new DeviceDetectionOnPremisePipelineBuilder({
     dataFile: dataFile,
     // We use the low memory profile as its performance is
     // sufficient for this example. See the documentation for
     // more detail on this and other configuration options:
-    // http://51degrees.com/documentation/_device_detection__features__performance_options.html
-    // http://51degrees.com/documentation/_features__automatic_datafile_updates.html
-    // http://51degrees.com/documentation/_features__usage_sharing.html
+    // https://51degrees.com/documentation/_device_detection__features__performance_options.html
+    // https://51degrees.com/documentation/_features__automatic_datafile_updates.html
+    // https://51degrees.com/documentation/_features__usage_sharing.html
     performanceProfile: 'LowMemory',
     // inhibit sharing usage for this test, usually this
     // should be set 'true'
@@ -164,7 +134,7 @@ const run = async function (dataFile, output) {
   }).build();
 
   // carry out some sample detections
-  for (var values of evidenceValues) {
+  for (var values of exampleConstants.defaultEvidenceValues) {
     await analyse(values, pipeline, output);
   }
 

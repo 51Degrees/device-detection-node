@@ -57,7 +57,7 @@ var hardwareVendor = deviceData.hardwarevendor;
 ```
 
 Results can also be accessed in client-side code by using the `fod` object. See the
-[JavaScriptBuilderElement](http://51degrees.com/pipeline-node/4.3/class_java_script_builder_element.html)
+[JavaScriptBuilderElement](https://51degrees.com/pipeline-node/class_java_script_builder_element.html)
 for details on available settings such as changing the `fod` name.
 ```
 window.onload = function () {
@@ -109,7 +109,7 @@ const setPipeline = (options) => {
       `'${ExampleUtils.RESOURCE_KEY_ENV_VAR}'. The 51Degrees cloud ` +
       'service is accessed using a \'ResourceKey\'. For more information ' +
       'see ' +
-      'http://51degrees.com/documentation/_info__resource_keys.html. ' +
+      'https://51degrees.com/documentation/_info__resource_keys.html. ' +
       'A resource key with the properties required by this example can be ' +
       'created for free at https://configure.51degrees.com/1QWJwHxl. ' +
       'Once complete, populate the config file or environment variable ' +

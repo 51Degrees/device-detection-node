@@ -124,6 +124,13 @@ class ExampleUtils {
         'pricing page: https://51degrees.com/pricing');
     }
   }
+
+  static sortMap (map, sortFunc) {
+    var tupleArray = [];
+    map.forEach((value, key, map) => { tupleArray.push([key, value]); });
+    tupleArray.sort(sortFunc);
+    return new Map(tupleArray);
+  }
 }
 
 module.exports = {
