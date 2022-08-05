@@ -20,15 +20,36 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
-/*
-This file is used for development package.
-*/
-
+/**
+ * Helpers to obtain keys from the environment
+ */
 module.exports = {
-  errorMessages: require('./errorMessages'),
-  testConstants: require('./tests/testConstants'),
-  keyUtils: require('./tests/keyUtils'),
-  exampleConstants: require('./examples/exampleConstants'),
-  optionsExtension: require('./examples/optionsExtension'),
-  dataExtension: require('./examples/dataExtension')
+  /**
+   * Obtain a key either from environment variable or from a property.
+   * Try resource key as env var, then as upper case env var, the system property
+   */
+  getNamedKey: function (keyName) {
+    let value = process.env[keyName];
+    if (!value) {
+      value = process.env[keyName.toUpperCase()];
+    }
+    return value;
+  },
+
+  /**
+   * Evaluate whether a key might be valid
+   * @param keyValue value to test
+   * @return boolean
+   */
+  isInvalidKey: function (keyValue) {
+    try {
+      const buff = Buffer.from(keyValue, 'base64');
+      const decoded = buff.toString('ascii');
+      return !keyValue ||
+        keyValue.trim().length < 19 ||
+        decoded.length < 14;
+    } catch (e) {
+      return true;
+    }
+  }
 };

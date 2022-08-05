@@ -158,6 +158,7 @@ stages:
         echo "SetHeaderBrowserAccept-CH resource key for cloud testing = $TEST_BROWSER_RESOURCE_KEY"
         echo "No SetHeader* resource key for cloud testing = $TEST_NO_SETHEADER_RESOURCE_KEY"
         echo "Cloud endpoint for testing = $FOD_CLOUD_API_URL"
+        echo "License key for testing = $TEST_LICENSE_KEY"
         export FOD_CLOUD_API_URL="$FOD_CLOUD_API_URL"
         echo "npm install"
         npm install
@@ -172,6 +173,7 @@ stages:
         TEST_HARDWARE_RESOURCE_KEY: $(AcceptChHardwareKey)
         TEST_BROWSER_RESOURCE_KEY: $(AcceptChBrowserKey)
         TEST_NO_SETHEADER_RESOURCE_KEY: $(AcceptChNoneKey)
+        TEST_LICENSE_KEY: $(DeviceDetectionLicenseKey)
       displayName: 'Build and Test'
       condition: ne(${{ parameters.runTests }}, 'Off')
 

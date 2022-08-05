@@ -49,5 +49,11 @@ module.exports = {
       ['header.sec-ch-ua-platform', '"Windows"'],
       ['header.sec-ch-ua-platform-version', '"14.0.0"']
     ])
-  ]
+  ],
+  fileNames: {
+    enterpriseDataFileName: 'Enterprise-HashV41.hash',
+    liteDataFileName: '51Degrees-LiteV4.1.hash',
+    uaFileName: '20000 User Agents.csv',
+    evidenceFileName: '20000 Evidence Records.yml'
+  }
 };
