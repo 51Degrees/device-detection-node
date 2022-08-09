@@ -27,7 +27,8 @@ module.exports = {
     platformResourceKeyEnvVar: 'TEST_PLATFORM_RESOURCE_KEY',
     hardwareResourceKeyEnvVar: 'TEST_HARDWARE_RESOURCE_KEY',
     browserResourceKeyEnvVar: 'TEST_BROWSER_RESOURCE_KEY',
-    noSetHeaderResourceKeyEnvVar: 'TEST_NO_SETHEADER_RESOURCE_KEY'
+    noSetHeaderResourceKeyEnvVar: 'TEST_NO_SETHEADER_RESOURCE_KEY',
+    licenseKeyEnvVar: 'TEST_LICENSE_KEY'
   },
   // User-Agent string for testing
   userAgents: {

@@ -95,6 +95,7 @@ class DeviceDetectionOnPremisePipelineBuilder extends PipelineBuilder {
    */
   constructor (
     {
+      dataFileUpdateService = null,
       licenceKeys = null,
       dataFile = null,
       autoUpdate = true,
