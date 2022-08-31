@@ -42,7 +42,7 @@ const pipeline = new DeviceDetectionOnPremisePipelineBuilder({
   performanceProfile: perfProfile,
   dataFile: datafile,
   autoUpdate: false,
-  sharedUsage: false
+  shareUsage: false
 }).build();
 
 // Logging of errors and other messages.
