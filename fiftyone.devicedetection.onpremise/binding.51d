@@ -45,7 +45,8 @@
         ],
         'linux_specific_c_core_additional_flags': [
             "-Wno-unused-but-set-variable"
-        ]
+        ],
+        'linux_specific_c_wrapper_additional_flags': '-Wno-cast-function-type'
     },
     'targets': [
         {
@@ -265,7 +266,8 @@
                     'cflags_c': ['<(linux_mac_c_std)'],
                     'cflags': [
                         '<@(linux_mac_c_common_flags)',
-                        '<@(linux_mac_c_wrapper_additional_flags)'
+                        '<@(linux_mac_c_wrapper_additional_flags)',
+                        '<@(linux_specific_c_wrapper_additional_flags)'
                     ],
                     'libraries': ["-latomic"]
                 }]
