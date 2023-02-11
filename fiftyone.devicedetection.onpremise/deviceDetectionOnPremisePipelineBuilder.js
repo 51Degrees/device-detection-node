@@ -20,6 +20,7 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
+const os = require('os');
 const core = require('fiftyone.pipeline.core');
 const DeviceDetectionOnPremise = require('./deviceDetectionOnPremise');
 const PipelineBuilder = core.PipelineBuilder;
@@ -62,6 +63,8 @@ class DeviceDetectionOnPremisePipelineBuilder extends PipelineBuilder {
    * between performance and system memory usage (Only applies to on-premise,
    * not cloud) options are: LowMemory, MaxPerformance, Balanced,
    * BalancedTemp, HighPerformance
+   * @param {number} options.concurrency defaults to the number of cpus
+   * in the machine
    * @param {boolean} options.updateMatchedUserAgent True if the detection
    * should record the matched characters from the target User-Agent
    * @param {number} options.maxMatchedUserAgentLength Number of characters to
@@ -107,6 +110,7 @@ class DeviceDetectionOnPremisePipelineBuilder extends PipelineBuilder {
       cacheSize = null,
       restrictedProperties,
       performanceProfile = 'LowMemory',
+      concurrency = os.cpus().length,
       updateMatchedUserAgent = false,
       maxMatchedUserAgentLength,
       drift,
@@ -139,6 +143,7 @@ class DeviceDetectionOnPremisePipelineBuilder extends PipelineBuilder {
         licenceKeys,
         restrictedProperties,
         performanceProfile,
+        concurrency,
         updateMatchedUserAgent,
         maxMatchedUserAgentLength,
         drift,
