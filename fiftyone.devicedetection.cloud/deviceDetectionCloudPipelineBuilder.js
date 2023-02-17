@@ -58,8 +58,6 @@ class DeviceDetectionCloudPipelineBuilder extends PipelineBuilder {
     }) {
     super(...arguments);
 
-    // Check if share usage enabled and add it to the pipeline if so
-
     let cache;
 
     if (cacheSize) {
