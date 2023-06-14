@@ -99,7 +99,7 @@ const { DATA_FILE_AGE_WARNING, ExampleUtils } =
   require(path.join(__dirname, '/../exampleUtils'));
 
 // Pipeline variable to be used
-var pipeline;
+let pipeline;
 
 const setPipeline = (options) => {
   const dataFilePath = optionsExtension.getDataFilePath(options);
@@ -184,7 +184,7 @@ const server = http.createServer((req, res) => {
           dataFileAgeWarning: DATA_FILE_AGE_WARNING,
           responseHeaders: res.getHeaders(),
           evidenceUsed: evidences,
-          allEvidence: allEvidence,
+          allEvidence,
           dataSourceTier: ExampleUtils.getDataTier(pipeline),
           fiftyOneJs: flowData.javascriptbuilder.javascript,
           hardwareVendor: dataExtension.getValueHelper(flowData.device, 'hardwarevendor'),
@@ -217,6 +217,6 @@ if (process.env.JEST_WORKER_ID === undefined) {
 
 // Export server object and set pipeline.
 module.exports = {
-  server: server,
-  setPipeline: setPipeline
+  server,
+  setPipeline
 };

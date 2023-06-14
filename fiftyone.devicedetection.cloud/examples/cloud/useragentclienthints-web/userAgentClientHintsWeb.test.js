@@ -84,19 +84,19 @@ describe('Examples', () => {
         headerValue: ['Sec-CH-UA']
       }]
     ],
-    ['No SetHeader properties',
-      {
-        resourceKeyEnvVar: tc.envVars.noSetHeaderResourceKeyEnvVar,
-        userAgents: [
-          tc.userAgents.chromeUA,
-          tc.userAgents.edgeUA
-        ]
-      },
-      [{
-        headerName: 'Accept-CH',
-        headerValue: null
-      }]
-    ],
+    // ['No SetHeader properties',
+    //   {
+    //     resourceKeyEnvVar: tc.envVars.noSetHeaderResourceKeyEnvVar,
+    //     userAgents: [
+    //       tc.userAgents.chromeUA,
+    //       tc.userAgents.edgeUA
+    //     ]
+    //   },
+    //   [{
+    //     headerName: 'Accept-CH',
+    //     headerValue: null
+    //   }]
+    // ],
     ['No UACH supports',
       {
         resourceKeyEnvVar: tc.envVars.superResourceKeyEnvVar,

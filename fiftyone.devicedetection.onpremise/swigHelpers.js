@@ -30,7 +30,7 @@ module.exports = {
   vectorToArray: function (vector) {
     const output = [];
 
-    for (var i = 0; i < vector.size(); i++) {
+    for (let i = 0; i < vector.size(); i++) {
       output.push(vector.get(i));
     }
 

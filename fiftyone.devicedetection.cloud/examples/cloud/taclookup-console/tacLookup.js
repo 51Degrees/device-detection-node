@@ -145,5 +145,5 @@ if (process.env.JEST_WORKER_ID === undefined) {
 };
 
 module.exports = {
-  run: run
+  run
 };

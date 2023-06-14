@@ -46,7 +46,7 @@ function writeInt (buf, offset, val) {
 
 function createBadVersionDataFile () {
   const buffer = Buffer.alloc(fileSize);
-  for (var i = 0; i < badVersion.length; i++) {
+  for (let i = 0; i < badVersion.length; i++) {
     writeInt(buffer, i * 4, badVersion[i]);
   }
   fs.writeFileSync(BadVersionDataFile, buffer);
@@ -54,7 +54,7 @@ function createBadVersionDataFile () {
 
 function createBadHeaderDataFile () {
   const buffer = Buffer.alloc(fileSize);
-  for (var i = 0; i < goodVersion.length; i++) {
+  for (let i = 0; i < goodVersion.length; i++) {
     writeInt(buffer, i * 4, goodVersion[i]);
   }
   fs.writeFileSync(BadHeaderDataFile, buffer);

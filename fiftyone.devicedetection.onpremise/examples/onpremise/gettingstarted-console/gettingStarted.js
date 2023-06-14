@@ -116,7 +116,7 @@ const run = async function (dataFile, output) {
   // pipelines in general see the documentation at
   // https://51degrees.com/documentation/_concepts__configuration__builders__index.html
   const pipeline = new DeviceDetectionOnPremisePipelineBuilder({
-    dataFile: dataFile,
+    dataFile,
     // We use the low memory profile as its performance is
     // sufficient for this example. See the documentation for
     // more detail on this and other configuration options:
@@ -134,7 +134,7 @@ const run = async function (dataFile, output) {
   }).build();
 
   // carry out some sample detections
-  for (var values of exampleConstants.defaultEvidenceValues) {
+  for (const values of exampleConstants.defaultEvidenceValues) {
     await analyse(values, pipeline, output);
   }
 
@@ -159,5 +159,5 @@ if (process.env.JEST_WORKER_ID === undefined) {
 };
 
 module.exports = {
-  run: run
+  run
 };

@@ -43,7 +43,7 @@ const run = async function (resourceKey, output) {
   // The pipeline should be managed as a singleton. Creating a pipeline instance for every request
   // will cause extreme resource problems.
   const pipeline = new DeviceDetectionCloudPipelineBuilder({
-    resourceKey: resourceKey,
+    resourceKey,
     // inhibit sharing usage for this test, usually this should be set 'true'.
     shareUsage: false
   }).build();
@@ -106,5 +106,5 @@ if (process.env.JEST_WORKER_ID === undefined) {
 };
 
 module.exports = {
-  run: run
+  run
 };

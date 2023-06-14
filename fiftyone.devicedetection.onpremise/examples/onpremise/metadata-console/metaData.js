@@ -148,7 +148,7 @@ const outputProfileDetails = async function (engine, output) {
   }
   output.write(`Load completed: ${count} profiles\n`);
   output.write('Profile count:\n');
-  for (var [key, value] of Object.entries(groups)) {
+  for (const [key, value] of Object.entries(groups)) {
     output.write(`${key} Profiles: ${value}\n`);
   }
 };
@@ -167,7 +167,7 @@ const run = async function (dataFile, output) {
   // pipelines in general see the documentation at
   // https://51degrees.com/documentation/_concepts__configuration__builders__index.html
   const pipeline = new DeviceDetectionOnPremisePipelineBuilder({
-    dataFile: dataFile,
+    dataFile,
     // We use the low memory profile as its performance is
     // sufficient for this example. See the documentation for
     // more detail on this and other configuration options:
@@ -212,5 +212,5 @@ if (process.env.JEST_WORKER_ID === undefined) {
 };
 
 module.exports = {
-  run: run
+  run
 };

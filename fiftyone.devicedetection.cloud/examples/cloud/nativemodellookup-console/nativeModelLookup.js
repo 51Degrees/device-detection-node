@@ -100,7 +100,7 @@ const run = async function (resourceKey, output) {
   // For more information about builders in general see the documentation at
   // https://51degrees.com/documentation/_concepts__configuration__builders__index.html
   const requestEngineInstance = new CloudRequestEngine.CloudRequestEngine({
-    resourceKey: resourceKey
+    resourceKey
   });
 
   // Create the hardware profile engine to process the response from the
@@ -151,5 +151,5 @@ if (process.env.JEST_WORKER_ID === undefined) {
 };
 
 module.exports = {
-  run: run
+  run
 };

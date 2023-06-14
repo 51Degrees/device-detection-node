@@ -77,7 +77,7 @@ const outputEvidenceKeyDetails = function (engine, output) {
 
 const run = async function (resourceKey, output) {
   const pipeline = new DeviceDetectionCloudPipelineBuilder({
-    resourceKey: resourceKey
+    resourceKey
   }).build();
 
   const device = pipeline.getElement('device');
@@ -122,5 +122,5 @@ if (process.env.JEST_WORKER_ID === undefined) {
 };
 
 module.exports = {
-  run: run
+  run
 };

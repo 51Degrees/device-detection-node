@@ -1,0 +1,21 @@
+name: Nightly Package Update
+
+on:
+  workflow_dispatch:
+    inputs:
+      dryrun:
+        default: 'false'
+        description: Dry Run
+    # schedule:
+    #   - cron: '0 1 * * *'
+
+
+jobs:
+  Nightly_Package_Update:
+    uses: postindustria-tech/common-ci/.github/workflows/nightly-package-update.yml@main
+    with:
+      repo-name: ${{ github.event.repository.name }}
+      org-name: ${{ github.event.repository.owner.login }}
+      dryrun: ${{ inputs.dryrun }}
+    secrets:
+      token: ${{ secrets.ACCESS_TOKEN }}

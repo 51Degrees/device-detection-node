@@ -148,6 +148,19 @@ eventEmitter.on('FinishProcessing', (calibration) => {
     console.log(`ismobile = true : ${isMobileTrue}`);
     console.log(`ismobile = false : ${isMobileFalse}`);
     console.log(`ismobile = unknown : ${isMobileUnknown}`);
+
+    timeMsec = (actualTime - calibrationTime) / msecToNanoSec;
+    timeSec = (actualTime - calibrationTime) / secToNanoSec;
+    fs.writeFileSync('performance_test_summary.json', JSON.stringify({
+      HigherIsBetter: {
+        Detections: userAgentsCount,
+        DetectionsPerSecond: userAgentsCount / timeSec
+      },
+      LowerIsBetter: {
+        RuntimeSeconds: timeSec,
+        AvgMillisecsPerDetection: timeMsec / userAgentsCount
+      }
+    }, null, 4));
   }
 });
 

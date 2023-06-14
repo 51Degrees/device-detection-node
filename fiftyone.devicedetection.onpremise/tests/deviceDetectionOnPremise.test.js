@@ -49,7 +49,7 @@ describe('deviceDetectionOnPremise', () => {
       licenceKeys: ''
     });
 
-    var fakePipeline = {
+    const fakePipeline = {
       dataFileUpdateService: {
         registerDataFile: function (dataFileConfig) {
           // No license key so auto update and update on startup
@@ -74,7 +74,7 @@ describe('deviceDetectionOnPremise', () => {
       updateOnStart: true
     });
 
-    var fakePipeline = {
+    const fakePipeline = {
       dataFileUpdateService: {
         registerDataFile: function (dataFileConfig) {
           expect(dataFileConfig.autoUpdate).toBe(true);
