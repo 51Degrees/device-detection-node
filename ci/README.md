@@ -10,8 +10,10 @@ The following secrets are required:
     * Example: `V3RYL0NGR4ND0M57R1NG`
 * `NPM_AUTH_TOKEN` - [NPM token](https://docs.npmjs.com/creating-and-viewing-access-tokens)  for publishing packages
     * Example: `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`
-* `UsePublishTests` - Flag for publish job, which used for splitting tests
 
 The following secrets are optional:
 * `DEVICE_DETECTION_URL` - URL for downloading the enterprise TAC hashes file
     * Default: `https://distributor.51degrees.com/api/v2/download?LicenseKeys=DEVICE_DETECTION_KEY&Type=HashV41&Download=True&Product=V4TAC`
+
+Workflow - `nightly-publish-main`:
+* `UsePublishTests` - Flag used for splitting tests integration tests(ignore tests inside examples folder)
