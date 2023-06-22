@@ -12,7 +12,7 @@ on:
 
 jobs:
   Nightly_Package_Update:
-    uses: postindustria-tech/common-ci/.github/workflows/nightly-package-update.yml@main
+    uses: 51Degrees/common-ci/.github/workflows/nightly-package-update.yml@main
     with:
       repo-name: ${{ github.event.repository.name }}
       org-name: ${{ github.event.repository.owner.login }}

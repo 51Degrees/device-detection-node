@@ -84,6 +84,7 @@ describe('Examples', () => {
         headerValue: ['Sec-CH-UA']
       }]
     ],
+    // TODO: Falls with errors
     // ['No SetHeader properties',
     //   {
     //     resourceKeyEnvVar: tc.envVars.noSetHeaderResourceKeyEnvVar,

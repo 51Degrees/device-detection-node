@@ -123,6 +123,8 @@ const eventEmitter = new events.EventEmitter();
 eventEmitter.on('FinishProcessing', (calibration) => {
   diffTime = process.hrtime(startTime);
 
+  let timeMsec;
+  let timeSec;
   if (calibration) {
     // Record the calibration time
     calibrationTime = diffTime[0] * secToNanoSec + diffTime[1];
@@ -151,16 +153,19 @@ eventEmitter.on('FinishProcessing', (calibration) => {
 
     timeMsec = (actualTime - calibrationTime) / msecToNanoSec;
     timeSec = (actualTime - calibrationTime) / secToNanoSec;
-    fs.writeFileSync('performance_test_summary.json', JSON.stringify({
-      HigherIsBetter: {
-        Detections: userAgentsCount,
-        DetectionsPerSecond: userAgentsCount / timeSec
-      },
-      LowerIsBetter: {
-        RuntimeSeconds: timeSec,
-        AvgMillisecsPerDetection: timeMsec / userAgentsCount
-      }
-    }, null, 4));
+
+    if (process.env.PERFORMANCE_JSON_OUTPUT === 'true') {
+      fs.writeFileSync('performance_test_summary.json', JSON.stringify({
+        HigherIsBetter: {
+          Detections: userAgentsCount,
+          DetectionsPerSecond: userAgentsCount / timeSec
+        },
+        LowerIsBetter: {
+          RuntimeSeconds: timeSec,
+          AvgMillisecsPerDetection: timeMsec / userAgentsCount
+        }
+      }, null, 4));
+    }
   }
 });
 

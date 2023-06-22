@@ -6,6 +6,7 @@ param (
     [string]$DeviceDetectionUrl
 )
 
+# Just a optimization step, not referencing to any logic, except of fetch-assets.ps1
 if ($env:GITHUB_JOB -eq "PreBuild") {
     Write-Output "Skipping assets fetching"
     exit 0

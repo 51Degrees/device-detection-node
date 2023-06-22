@@ -11,7 +11,7 @@ on:
 
 jobs:
   Nightly_PRs_to_Main:
-    uses: postindustria-tech/common-ci/.github/workflows/nightly-prs-to-main.yml@main
+    uses: 51Degrees/common-ci/.github/workflows/nightly-prs-to-main.yml@main
     with:
       repo-name: ${{ github.event.repository.name }}
       org-name: ${{ github.event.repository.owner.login }}

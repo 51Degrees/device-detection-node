@@ -11,7 +11,7 @@ on:
 
 jobs:
   Monthly_Copyright_Update:
-    uses: postindustria-tech/common-ci/.github/workflows/monthly-copyright-update.yml@main
+    uses: 51Degrees/common-ci/.github/workflows/monthly-copyright-update.yml@main
     with:
       repo-name: ${{ github.event.repository.name }}
       org-name: ${{ github.event.repository.owner.login }}
