@@ -27,4 +27,5 @@ try
 } finally {
     Pop-Location
 }
+exit $testsFailed ? 1 : 0
 
