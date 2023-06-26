@@ -12,7 +12,7 @@
         'win_warning_ignore_list': [4100, 4127, 4244, 4302, 4311, 4459, 4996], # Only used for SWIG generated files
         'win_debug_additional_ignore_list': [4701, 4702], # Only used for SWIG generated files
         'linux_mac_c_std': '-std=gnu11',
-        'linux_mac_cpp_std': '-std=gnu++14',
+        'linux_mac_cpp_std': '-std=gnu++17',
         'linux_mac_c_common_flags': [
             "<!(node -e \"\
             var v8Version = process.versions.v8;\
