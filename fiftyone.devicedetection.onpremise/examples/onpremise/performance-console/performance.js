@@ -65,13 +65,11 @@ const ExampleUtils = require(path.join(__dirname, '/../exampleUtils')).ExampleUt
 // Package for script standard which describes script args
 // https://www.npmjs.com/package/argparse
 const { ArgumentParser } = require('argparse');
-const { version } = require('./package.json');
 
 const parser = new ArgumentParser({
   description: 'Argparse example'
 });
 
-parser.add_argument('-v', '--version', { action: 'version', version });
 parser.add_argument('-df', '--datafile', { help: 'Datafile file name' });
 parser.add_argument('-e', '--evidence', { help: 'Evidence file name' });
 parser.add_argument('-jo', '--jsonoutput', { help: 'JSON output file name' });

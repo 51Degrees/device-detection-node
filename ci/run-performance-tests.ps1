@@ -11,18 +11,14 @@ try
     Write-Output "Running performance tests"
     $env:JEST_JUNIT_OUTPUT_DIR = 'test-results/performance'
 
-    $perfSummary = New-Item -ItemType directory -Path $RepoName/test-results/performance-summary -Force
+    $perfSummary = New-Item -ItemType directory -Path test-results/performance-summary -Force
     $perfJSONOutputName = "results_$Name.json";
 
-    Start-Process -FilePath "node" -ArgumentList "$RepoName/examples/onpremse/performance-console/performance.js", "--jsonoutput", $perfJSONOutputName -Wait
+    node fiftyone.devicedetection.onpremise/examples/onpremise/performance-console/performance.js --jsonoutput $perfJSONOutputName || $($testsFailed = $true)
 
-    npm run performance-test || $($testsFailed = $true)
+    Write-Output "Path to performance results - /"
 
-    Get-Content -Path $perfJSONOutputName
-
-    Write-Output "Path to performance results - $perfSummary/results_$Name.json"
-
-    Move-Item -Path $perfJSONOutputName -Destination $perfSummary || $(throw "failed to move summary")
+    Move-Item -Path $perfJSONOutputName -Destination "$perfSummary/$perfJSONOutputName" || $(throw "failed to move summary")
     Write-Output "OK"
 
 } finally {
