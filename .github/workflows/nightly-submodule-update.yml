@@ -6,8 +6,8 @@ on:
       dryrun:
         default: 'false'
         description: Dry Run
-    # schedule:
-    #   - cron: '0 0 * * *'
+  schedule:
+    - cron: '0 0 * * *'
 
 jobs:
   Nightly_Submodule_Update:

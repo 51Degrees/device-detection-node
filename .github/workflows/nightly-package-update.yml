@@ -6,9 +6,8 @@ on:
       dryrun:
         default: 'false'
         description: Dry Run
-    # schedule:
-    #   - cron: '0 1 * * *'
-
+  schedule:
+    - cron: '0 1 * * *'
 
 jobs:
   Nightly_Package_Update:
