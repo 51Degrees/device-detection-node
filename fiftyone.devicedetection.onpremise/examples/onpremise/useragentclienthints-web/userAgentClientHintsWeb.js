@@ -69,7 +69,7 @@ if (!fs.existsSync(datafile)) {
 
 // Helper function to read property values from flowData
 const getValueHelper = (flowData, propertyKey) => {
-  var device = flowData.device;
+  const device = flowData.device;
   try {
     const property = device[propertyKey];
     if (property.hasValue && property) {
@@ -83,7 +83,7 @@ const getValueHelper = (flowData, propertyKey) => {
 };
 
 // Pipeline variable to be used
-var pipeline;
+let pipeline;
 
 const setPipeline = (properties) => {
   pipeline = new DeviceDetectionOnPremisePipelineBuilder({
@@ -238,6 +238,6 @@ if (process.env.JEST_WORKER_ID === undefined) {
 
 // Export server object and set pipeline.
 module.exports = {
-  server: server,
-  setPipeline: setPipeline
+  server,
+  setPipeline
 };

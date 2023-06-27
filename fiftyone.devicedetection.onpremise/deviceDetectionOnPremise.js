@@ -54,8 +54,8 @@ const initProperties = function (metadata) {
   const propertiesInternal = metadata.getProperties();
   const properties = {};
 
-  for (var i = 0; i < propertiesInternal.getSize(); i++) {
-    var property = propertiesInternal.getByIndex(i);
+  for (let i = 0; i < propertiesInternal.getSize(); i++) {
+    const property = propertiesInternal.getByIndex(i);
     if (property.getAvailable()) {
       properties[property.getName().toLowerCase()] =
         new Property(property, metadata);
@@ -290,7 +290,7 @@ class DeviceDetectionOnPremise extends Engine {
         } catch (err) {
           // Couldn't load the native module so we need to give the
           // user some information.
-          var modules = {};
+          const modules = {};
           // Go through all the available modules to build a list of
           // supported platform/Node version combinations.
           fs.readdirSync(moduleDir).forEach(file => {
@@ -304,7 +304,7 @@ class DeviceDetectionOnPremise extends Engine {
           });
 
           let availableModules = '';
-          for (var platform in modules) {
+          for (const platform in modules) {
             if (availableModules.length > 0) {
               availableModules = availableModules.concat(', ');
             }
@@ -337,9 +337,9 @@ class DeviceDetectionOnPremise extends Engine {
       });
     }
 
-    var requiredProperties = new swigWrapper.RequiredPropertiesConfigSwig(propertiesList);
+    const requiredProperties = new swigWrapper.RequiredPropertiesConfigSwig(propertiesList);
 
-    var config = new swigWrapper['Config' + swigWrapperType + 'Swig']();
+    const config = new swigWrapper['Config' + swigWrapperType + 'Swig']();
 
     switch (performanceProfile) {
       case 'LowMemory':
@@ -468,14 +468,14 @@ class DeviceDetectionOnPremise extends Engine {
     const dataFileSettings = {
       flowElement: this,
       verifyMD5: true,
-      autoUpdate: autoUpdate,
-      updateOnStart: updateOnStart,
+      autoUpdate,
+      updateOnStart,
       decompress: true,
       path: dataFilePath,
-      download: download,
-      fileSystemWatcher: fileSystemWatcher,
-      pollingInterval: pollingInterval,
-      updateTimeMaximumRandomisation: updateTimeMaximumRandomisation
+      download,
+      fileSystemWatcher,
+      pollingInterval,
+      updateTimeMaximumRandomisation
     };
 
     dataFileSettings.getDatePublished = function () {

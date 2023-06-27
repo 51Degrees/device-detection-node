@@ -19,7 +19,6 @@
  * in the end user terms of the application under an appropriate heading,
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
-
 /**
 @example onpremise/performance-console/performance.js
 
@@ -63,6 +62,18 @@ const DeviceDetectionOnPremisePipelineBuilder =
 
 const ExampleUtils = require(path.join(__dirname, '/../exampleUtils')).ExampleUtils;
 
+// Package for script standard which describes script args
+// https://www.npmjs.com/package/argparse
+const { ArgumentParser } = require('argparse');
+
+const parser = new ArgumentParser({
+  description: 'Argparse example'
+});
+
+parser.add_argument('-df', '--datafile', { help: 'Datafile file name' });
+parser.add_argument('-e', '--evidence', { help: 'Evidence file name' });
+parser.add_argument('-jo', '--jsonoutput', { help: 'JSON output file name' });
+
 // In this example, by default, the 51degrees "Lite" file needs to be in the
 // fiftyone.devicedetection.onpremise/device-detection-cxx/device-detection-data,
 // or you may specify another file as a command line parameter.
@@ -74,15 +85,10 @@ const ExampleUtils = require(path.join(__dirname, '/../exampleUtils')).ExampleUt
 const LITE_V_4_1_HASH = '51Degrees-LiteV4.1.hash';
 const UA_CSV = '20000 User Agents.csv';
 
-// Load in a datafile
-const sliceLen = process.env.JEST_WORKER_ID === undefined ? 2 : process.argv.length;
-const args = process.argv.slice(sliceLen);
-// Use the supplied path for the data file or find the lite
-// file that is included in the repository.
-const datafile = args.length > 0 ? args[0] : ExampleUtils.findFile(LITE_V_4_1_HASH);
-
-// Load in a user-agents file
-const uafile = args.length > 1 ? args[1] : ExampleUtils.findFile(UA_CSV);
+const args = parser.parse_args();
+const datafile = args.datafile !== undefined ? args.datafile : ExampleUtils.findFile(LITE_V_4_1_HASH);
+const uafile = args.evidence !== undefined ? args.evidence : ExampleUtils.findFile(UA_CSV);
+const jsonoutput = args.jsonoutput;
 
 // Check if files exists
 const fs = require('fs');
@@ -123,6 +129,8 @@ const eventEmitter = new events.EventEmitter();
 eventEmitter.on('FinishProcessing', (calibration) => {
   diffTime = process.hrtime(startTime);
 
+  let timeMsec;
+  let timeSec;
   if (calibration) {
     // Record the calibration time
     calibrationTime = diffTime[0] * secToNanoSec + diffTime[1];
@@ -148,6 +156,22 @@ eventEmitter.on('FinishProcessing', (calibration) => {
     console.log(`ismobile = true : ${isMobileTrue}`);
     console.log(`ismobile = false : ${isMobileFalse}`);
     console.log(`ismobile = unknown : ${isMobileUnknown}`);
+
+    timeMsec = (actualTime - calibrationTime) / msecToNanoSec;
+    timeSec = (actualTime - calibrationTime) / secToNanoSec;
+
+    if (jsonoutput) {
+      fs.writeFileSync(jsonoutput, JSON.stringify({
+        HigherIsBetter: {
+          Detections: userAgentsCount,
+          DetectionsPerSecond: userAgentsCount / timeSec
+        },
+        LowerIsBetter: {
+          RuntimeSeconds: timeSec,
+          AvgMillisecsPerDetection: timeMsec / userAgentsCount
+        }
+      }, null, 4));
+    }
   }
 });
 

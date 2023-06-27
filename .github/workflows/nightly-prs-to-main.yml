@@ -1,0 +1,22 @@
+name: Nightly PRs to Main
+
+on:
+  workflow_dispatch:
+    inputs:
+      dryrun:
+        default: 'false'
+        description: Dry Run
+  schedule:
+    - cron: '0 1 * * *'
+
+jobs:
+  Nightly_PRs_to_Main:
+    uses: 51Degrees/common-ci/.github/workflows/nightly-prs-to-main.yml@main
+    with:
+      repo-name: ${{ github.event.repository.name }}
+      org-name: ${{ github.event.repository.owner.login }}
+      dryrun: ${{ inputs.dryrun }}
+      cache-assets: true
+    secrets:
+      token: ${{ secrets.ACCESS_TOKEN }}
+      asset-keys: '{"DeviceDetection": "${{ secrets.DEVICE_DETECTION_KEY }}", "DeviceDetectionUrl": "${{ secrets.DEVICE_DETECTION_URL }}", "TestResourceKey": "${{ secrets.SUPER_RESOURCE_KEY}}", "TestSuperResourceKey": "${{ secrets.TEST_SUPER_RESOURCE_KEY }}", "TestPlatformResourceKey": "${{ secrets.TEST_PLATFORM_RESOURCE_KEY }}", "TestHardwareResourceKey": "${{ secrets.TEST_HARDWARE_RESOURCE_KEY }}", "TestBrowserResourceKey": "${{ secrets.TEST_BROWSER_RESOURCE_KEY }}", "TestNoSetHeaderResourceKey": "${{ secrets.TEST_NO_SETHEADER_RESOURCE_KEY }}", "TestLicenseKey": "${{ secrets.TEST_LICENSE_KEY }}"}'

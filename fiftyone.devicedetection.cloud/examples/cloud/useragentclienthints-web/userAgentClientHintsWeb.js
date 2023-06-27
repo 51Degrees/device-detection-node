@@ -60,7 +60,7 @@ const DeviceDetectionCloudPipelineBuilder =
 
 // Helper function to read property values from flowData
 const getValueHelper = (flowData, propertyKey) => {
-  var device = flowData.device;
+  const device = flowData.device;
   try {
     const property = device[propertyKey];
     if (property.hasValue && property) {
@@ -81,13 +81,13 @@ const myResourceKey = process.env.RESOURCE_KEY || '!!YOUR_RESOURCE_KEY!!';
 let server;
 
 // Pipeline variable to be used
-var pipeline;
+let pipeline;
 const setPipeline = (resourceKey) => {
   // Create a new Device Detection pipeline and set the config.
   // You need to create a resource key at https://configure.51degrees.com
   // and paste it into the code.
   pipeline = new DeviceDetectionCloudPipelineBuilder({
-    resourceKey: resourceKey
+    resourceKey
   }).build();
 
   // Logging of errors and other messages.
@@ -243,6 +243,6 @@ if (myResourceKey === '!!YOUR_RESOURCE_KEY!!' &&
 }
 
 module.exports = {
-  server: server,
-  setPipeline: setPipeline
+  server,
+  setPipeline
 };

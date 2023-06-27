@@ -84,7 +84,7 @@ class OptionsExtension {
     const cloudRequestElement = this.getElement(options, CLOUD_REQUEST_ENGINE_NAME);
     if (cloudRequestElement) {
       if (!cloudRequestElement.elementParameters) {
-        cloudRequestElement.elementParameters = { resourceKey: resourceKey };
+        cloudRequestElement.elementParameters = { resourceKey };
       } else {
         cloudRequestElement.elementParameters.resourceKey = resourceKey;
       }

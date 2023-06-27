@@ -87,18 +87,18 @@ describe('deviceDetectionCloud', () => {
   // Check that for a successful detection, all properties loaded by the engine
   // are accessible in the results.
   test('Available Properties', async () => {
-    var line = await readFirstLine(CSVDataFile).catch(e => {});
+    const line = await readFirstLine(CSVDataFile).catch(e => {});
 
-    var properties = line
+    const properties = line
       .replace(/["\r]/g, '')
       .split(',');
 
-    var requestEngine = new RequestEngineBuilder({
+    const requestEngine = new RequestEngineBuilder({
       resourceKey: myResourceKey
     });
-    var engine = new EngineBuilder();
+    const engine = new EngineBuilder();
 
-    var pipeline = new PipelineBuilder()
+    const pipeline = new PipelineBuilder()
       .add(requestEngine)
       .add(engine)
       .build();
@@ -112,7 +112,7 @@ describe('deviceDetectionCloud', () => {
     properties.forEach(key => {
     // TODO: Once 'setheader' properties are supported, remove this check.
       if (!key.toLowerCase().startsWith('setheader')) {
-        var apv = flowData.device[key.toLowerCase()];
+        const apv = flowData.device[key.toLowerCase()];
         if (apv === undefined) {
           throw new Error(`Aspect property value for ${key} should not be undefined.`);
         }
@@ -131,18 +131,18 @@ describe('deviceDetectionCloud', () => {
   });
 
   test('Value Types', async () => {
-    var line = await readFirstLine(CSVDataFile).catch(e => {});
+    const line = await readFirstLine(CSVDataFile).catch(e => {});
 
-    var properties = line
+    const properties = line
       .replace(/["\r]/g, '')
       .split(',');
 
-    var requestEngine = new RequestEngineBuilder({
+    const requestEngine = new RequestEngineBuilder({
       resourceKey: myResourceKey
     });
-    var engine = new EngineBuilder();
+    const engine = new EngineBuilder();
 
-    var pipeline = new PipelineBuilder()
+    const pipeline = new PipelineBuilder()
       .add(requestEngine)
       .add(engine)
       .build();
@@ -156,12 +156,12 @@ describe('deviceDetectionCloud', () => {
     properties.forEach(key => {
     // TODO: Remove this check once 'setheader' properties are supported in Cloud.
       if (!key.toLowerCase().startsWith('setheader')) {
-        var property = engine.properties[key.toLowerCase()];
+        const property = engine.properties[key.toLowerCase()];
         if (property === undefined) {
           throw new Error(`No property metadata defined for ${key.toLowerCase()}`);
         }
-        var expectedType = property.type;
-        var apv = flowData.device[key.toLowerCase()];
+        const expectedType = property.type;
+        const apv = flowData.device[key.toLowerCase()];
         expect(apv).not.toBe(null);
         expect(apv).toBeDefined();
         expect(apv.value).toBe51DType(key, expectedType);
@@ -171,10 +171,10 @@ describe('deviceDetectionCloud', () => {
 });
 
 function readFirstLine (filePath) {
-  var rs = fs.createReadStream(path.resolve(filePath));
-  var line = '';
-  var pos = 0;
-  var index;
+  const rs = fs.createReadStream(path.resolve(filePath));
+  let line = '';
+  let pos = 0;
+  let index;
   return new Promise((resolve, reject) => {
     rs
       .on('data', function (chunk) {
@@ -194,8 +194,8 @@ function readFirstLine (filePath) {
 expect.extend({
   // Method to validate a given value has the expected type.
   toBe51DType (received, name, fodType) {
-    var valueType = typeof received;
-    var valid = false;
+    const valueType = typeof received;
+    let valid = false;
 
     switch (fodType) {
       case 'Boolean':
@@ -249,9 +249,9 @@ describe('Origin Header', () => {
     ['test.com', true],
     ['51degrees.com', false]
   ]).test('origin header set to "%s"', async (origin, expectError) => {
-    var error = false;
-    var message = '';
-    var expectErrorMessage = `This Resource Key is not authorized for use with this domain: '${origin}'`;
+    let error = false;
+    let message = '';
+    const expectErrorMessage = `This Resource Key is not authorized for use with this domain: '${origin}'`;
 
     const pipeline = new DeviceDetectionCloudPipelineBuilder({
       // Resource key configured with '51degrees.com' as allowed domains.

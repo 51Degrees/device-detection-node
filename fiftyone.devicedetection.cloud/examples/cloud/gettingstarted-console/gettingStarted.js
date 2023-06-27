@@ -129,7 +129,7 @@ const run = async function (options, output) {
   pipeline.on('error', console.error);
 
   // carry out some sample detections
-  for (var values of exampleConstants.defaultEvidenceValues) {
+  for (const values of exampleConstants.defaultEvidenceValues) {
     await analyse(values, pipeline, output);
   }
 };
@@ -153,5 +153,5 @@ if (process.env.JEST_WORKER_ID === undefined) {
 };
 
 module.exports = {
-  run: run
+  run
 };

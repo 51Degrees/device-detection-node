@@ -54,7 +54,7 @@ class ExampleUtils {
 
     const dirItems = fs.readdirSync(lookupDir);
     const dirs = [];
-    for (var item of dirItems) {
+    for (const item of dirItems) {
       const fullPath = path.resolve(`${lookupDir}/${item}`);
       if (fs.lstatSync(fullPath).isDirectory() &&
         !visited.includes(fullPath) &&
@@ -126,7 +126,7 @@ class ExampleUtils {
   }
 
   static sortMap (map, sortFunc) {
-    var tupleArray = [];
+    const tupleArray = [];
     map.forEach((value, key, map) => { tupleArray.push([key, value]); });
     tupleArray.sort(sortFunc);
     return new Map(tupleArray);
@@ -134,6 +134,6 @@ class ExampleUtils {
 }
 
 module.exports = {
-  ExampleUtils: ExampleUtils,
-  DATA_FILE_AGE_WARNING: DATA_FILE_AGE_WARNING
+  ExampleUtils,
+  DATA_FILE_AGE_WARNING
 };

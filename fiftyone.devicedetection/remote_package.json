@@ -22,24 +22,24 @@
     "Tung Pham <tung@51degrees.com> (https://51degrees.com)"
   ],
   "dependencies": {
+    "fiftyone.devicedetection.cloud": "^4.4.15",
+    "fiftyone.devicedetection.onpremise": "^4.4.15",
+    "fiftyone.devicedetection.shared": "^4.4.15",
     "fiftyone.pipeline.cloudrequestengine": "^4.4.7",
     "fiftyone.pipeline.core": "^4.4.7",
     "fiftyone.pipeline.engines": "^4.4.7",
-    "fiftyone.pipeline.engines.fiftyone": "^4.4.7",
-    "fiftyone.devicedetection.cloud": "^4.4.15",
-    "fiftyone.devicedetection.onpremise": "^4.4.15",
-    "fiftyone.devicedetection.shared": "^4.4.15"
+    "fiftyone.pipeline.engines.fiftyone": "^4.4.7"
   },
   "devDependencies": {
-    "eslint": "^8.16.0",
-    "eslint-config-standard": "^17.0.0",
-    "eslint-plugin-import": "^2.26.0",
+    "eslint": "^8.42.0",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-jest": "^26.9.0",
     "eslint-plugin-jsdoc": "^38.1.6",
+    "eslint-plugin-n": "^15.7.0",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^6.0.0",
-    "eslint-plugin-jest": "^26.2.2",
-    "eslint-plugin-n": "^15.0.0",
-    "jest": "^28.1.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "jest": "^28.1.3",
     "jest-junit": "^13.2.0"
   },
   "license": "EUPL-1.2",

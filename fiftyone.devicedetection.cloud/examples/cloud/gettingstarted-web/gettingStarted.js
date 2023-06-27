@@ -98,7 +98,7 @@ const DataExtension =
 const ExampleUtils = require(path.join(__dirname, '/../exampleUtils'));
 
 // Pipeline variable to be used
-var pipeline;
+let pipeline;
 
 const setPipeline = (options) => {
   const resourceKey = OptionsExtension.getResourceKey(options);
@@ -176,7 +176,7 @@ const server = http.createServer((req, res) => {
         {
           responseHeaders: res.getHeaders(),
           evidenceUsed: evidences,
-          allEvidence: allEvidence,
+          allEvidence,
           fiftyOneJs: flowData.javascriptbuilder.javascript,
           hardwareVendor: DataExtension.getValueHelper(device, 'hardwarevendor'),
           hardwareName: DataExtension.getValueHelper(device, 'hardwarename'),
@@ -221,6 +221,6 @@ if (process.env.JEST_WORKER_ID === undefined) {
 
 // Export server object and set pipeline.
 module.exports = {
-  server: server,
-  setPipeline: setPipeline
+  server,
+  setPipeline
 };

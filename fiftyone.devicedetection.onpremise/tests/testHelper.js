@@ -35,7 +35,7 @@ const fileDirs = [
   (process.env.directory || __dirname) +
     '/../device-detection-cxx/device-detection-data/'];
 
-var testDataFile;
+let testDataFile;
 
 /**
  * This looks into specific paths for the requested data file.
@@ -71,10 +71,10 @@ const getTestDataFile = function () {
 };
 
 module.exports = {
-  liteDataFileName: liteDataFileName,
-  enterpriseDataFileName: enterpriseDataFileName,
-  evidenceFileName: evidenceFileName,
+  liteDataFileName,
+  enterpriseDataFileName,
+  evidenceFileName,
   dataFileDirectories: fileDirs,
-  getDataFilePath: getDataFilePath,
-  getTestDataFile: getTestDataFile
+  getDataFilePath,
+  getTestDataFile
 };

@@ -177,10 +177,10 @@ class DeviceDetectionPipelineBuilder extends PipelineBuilder {
 
       this.flowElements.push(new CloudRequestEngine(
         {
-          resourceKey: resourceKey,
+          resourceKey,
           licenseKey: licenceKeys,
           baseURL: cloudEndPoint,
-          cloudRequestOrigin: cloudRequestOrigin,
+          cloudRequestOrigin,
           cache
         }));
 
