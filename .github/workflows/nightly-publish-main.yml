@@ -4,7 +4,8 @@ on:
   workflow_dispatch:
     inputs:
       dryrun:
-        default: 'false'
+        default: false
+        type: boolean
         description: Dry Run
   schedule:
     - cron: '0 1 * * *'
@@ -15,7 +16,7 @@ jobs:
     with:
       repo-name: ${{ github.event.repository.name }}
       org-name: ${{ github.event.repository.owner.login }}
-      dryrun: ${{ inputs.dryrun }}
+      dryrun: ${{ inputs.dryrun || false }}
       build-platform: ubuntu-latest
     secrets:
       token: ${{ secrets.ACCESS_TOKEN }}
