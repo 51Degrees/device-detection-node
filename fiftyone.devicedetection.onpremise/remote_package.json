@@ -23,9 +23,9 @@
   ],
   "dependencies": {
     "fiftyone.devicedetection.shared": "^4.4.23",
-    "fiftyone.pipeline.core": "^4.4.18",
-    "fiftyone.pipeline.engines": "^4.4.18",
-    "fiftyone.pipeline.engines.fiftyone": "^4.4.18",
+    "fiftyone.pipeline.core": "^4.4.19",
+    "fiftyone.pipeline.engines": "^4.4.19",
+    "fiftyone.pipeline.engines.fiftyone": "^4.4.19",
     "js-yaml": "^4.1.0",
     "n-readlines": "^1.0.1"
   },
