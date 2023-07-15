@@ -17,7 +17,7 @@
     "Tung Pham <tung@51degrees.com> (https://51degrees.com)"
   ],
   "devDependencies": {
-    "eslint": "^8.44.0",
+    "eslint": "^8.45.0",
     "eslint-config-standard": "^17.1.0",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-jest": "^26.9.0",
