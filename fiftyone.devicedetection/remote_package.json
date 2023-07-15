@@ -22,16 +22,16 @@
     "Tung Pham <tung@51degrees.com> (https://51degrees.com)"
   ],
   "dependencies": {
-    "fiftyone.devicedetection.cloud": "^4.4.25",
-    "fiftyone.devicedetection.onpremise": "^4.4.25",
-    "fiftyone.devicedetection.shared": "^4.4.25",
-    "fiftyone.pipeline.cloudrequestengine": "^4.4.21",
-    "fiftyone.pipeline.core": "^4.4.21",
-    "fiftyone.pipeline.engines": "^4.4.21",
-    "fiftyone.pipeline.engines.fiftyone": "^4.4.21"
+    "fiftyone.devicedetection.cloud": "^4.4.26",
+    "fiftyone.devicedetection.onpremise": "^4.4.26",
+    "fiftyone.devicedetection.shared": "^4.4.26",
+    "fiftyone.pipeline.cloudrequestengine": "^4.4.22",
+    "fiftyone.pipeline.core": "^4.4.22",
+    "fiftyone.pipeline.engines": "^4.4.22",
+    "fiftyone.pipeline.engines.fiftyone": "^4.4.22"
   },
   "devDependencies": {
-    "eslint": "^8.44.0",
+    "eslint": "^8.45.0",
     "eslint-config-standard": "^17.1.0",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-jest": "^26.9.0",
