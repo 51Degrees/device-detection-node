@@ -23,10 +23,10 @@
   ],
   "dependencies": {
     "fiftyone.devicedetection.shared": "^4.4.29",
-    "fiftyone.pipeline.cloudrequestengine": "^4.4.25",
-    "fiftyone.pipeline.core": "^4.4.25",
-    "fiftyone.pipeline.engines": "^4.4.25",
-    "fiftyone.pipeline.engines.fiftyone": "^4.4.25"
+    "fiftyone.pipeline.cloudrequestengine": "^4.4.26",
+    "fiftyone.pipeline.core": "^4.4.26",
+    "fiftyone.pipeline.engines": "^4.4.26",
+    "fiftyone.pipeline.engines.fiftyone": "^4.4.26"
   },
   "devDependencies": {
     "@types/node": "^15.14.9",
