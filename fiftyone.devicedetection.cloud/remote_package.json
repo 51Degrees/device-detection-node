@@ -22,11 +22,11 @@
     "Tung Pham <tung@51degrees.com> (https://51degrees.com)"
   ],
   "dependencies": {
-    "fiftyone.devicedetection.shared": "^4.4.36",
+    "fiftyone.devicedetection.shared": "^4.4.37",
     "fiftyone.pipeline.cloudrequestengine": "^4.4.33",
-    "fiftyone.pipeline.core": "^4.4.32",
-    "fiftyone.pipeline.engines": "^4.4.32",
-    "fiftyone.pipeline.engines.fiftyone": "^4.4.32"
+    "fiftyone.pipeline.core": "^4.4.33",
+    "fiftyone.pipeline.engines": "^4.4.33",
+    "fiftyone.pipeline.engines.fiftyone": "^4.4.33"
   },
   "devDependencies": {
     "@types/node": "^15.14.9",
