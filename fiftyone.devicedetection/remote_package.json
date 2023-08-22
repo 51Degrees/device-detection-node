@@ -25,10 +25,10 @@
     "fiftyone.devicedetection.cloud": "^4.4.53",
     "fiftyone.devicedetection.onpremise": "^4.4.53",
     "fiftyone.devicedetection.shared": "^4.4.53",
-    "fiftyone.pipeline.cloudrequestengine": "^4.4.43",
-    "fiftyone.pipeline.core": "^4.4.43",
-    "fiftyone.pipeline.engines": "^4.4.43",
-    "fiftyone.pipeline.engines.fiftyone": "^4.4.43"
+    "fiftyone.pipeline.cloudrequestengine": "^4.4.44",
+    "fiftyone.pipeline.core": "^4.4.44",
+    "fiftyone.pipeline.engines": "^4.4.44",
+    "fiftyone.pipeline.engines.fiftyone": "^4.4.44"
   },
   "devDependencies": {
     "eslint": "^8.47.0",
