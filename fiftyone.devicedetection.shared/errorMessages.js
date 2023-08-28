@@ -32,12 +32,12 @@ module.exports = {
   moduleDirNotFound: 'There is no directory at \'%s\'. This is ' +
     'expected to contain the native modules for the hash engine.' +
     ' For example, %s',
-  nativeModuleNotFound: 'Native module \'%s\' not found. This is probably ' +
+  nativeModuleNotFound: 'Failed to load native module \'%s\'. This is probably ' +
     'because a module for this platform and Node version has not been ' +
     'included with this distribution. Try changing to a platform and Node ' +
     'version from the list of available modules: %s. If the platform/version ' +
     'you want is not listed then please contact us directly for assistance: ' +
-    'https://51degrees.com/contact-us',
+    'https://51degrees.com/contact-us. Original error: \'%s\'',
   invalidFileExtension: 'dataFilePath must point to a file with a ".hash" ' +
     'extension',
   licenseKeyRequired: 'license key is required. A key can be obtained from ' +
