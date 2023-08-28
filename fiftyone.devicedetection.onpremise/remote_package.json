@@ -22,10 +22,10 @@
     "Tung Pham <tung@51degrees.com> (https://51degrees.com)"
   ],
   "dependencies": {
-    "fiftyone.devicedetection.shared": "^4.4.58",
-    "fiftyone.pipeline.core": "^4.4.46",
-    "fiftyone.pipeline.engines": "^4.4.46",
-    "fiftyone.pipeline.engines.fiftyone": "^4.4.46",
+    "fiftyone.devicedetection.shared": "^4.4.59",
+    "fiftyone.pipeline.core": "^4.4.47",
+    "fiftyone.pipeline.engines": "^4.4.47",
+    "fiftyone.pipeline.engines.fiftyone": "^4.4.47",
     "js-yaml": "^4.1.0",
     "n-readlines": "^1.0.1"
   },
