@@ -7,8 +7,9 @@ on:
         default: false
         type: boolean
         description: Dry Run
-  schedule:
-    - cron: '0 1 * * *'
+  workflow_run:
+    workflows: [Nightly PRs to Main]
+    types: [completed]
 
 jobs:
   Nightly_Publish_Main:
