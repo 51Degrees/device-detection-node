@@ -8,7 +8,7 @@ on:
         type: boolean
         description: Dry Run
   schedule:
-    - cron: '0 1 1 * *'
+    - cron: '0 0 1 * *'
 
 jobs:
   Monthly_Copyright_Update:

@@ -8,7 +8,7 @@ on:
         type: boolean
         description: Dry Run
 
-# This iss intentional change to prevent npm updates,
+# This is intentional change to prevent npm updates,
 # otherwise it is causing an endless dependency update loop for fiftyone.* packages in this repository
 #  schedule:
 #    - cron: '0 1 * * *'
