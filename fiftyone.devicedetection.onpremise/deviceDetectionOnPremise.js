@@ -316,7 +316,8 @@ class DeviceDetectionOnPremise extends Engine {
           throw util.format(
             errorMessages.nativeModuleNotFound,
             moduleName,
-            availableModules);
+            availableModules,
+            err);
         }
       }
       dataFileType = 'HashV41';
