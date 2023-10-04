@@ -104,7 +104,7 @@ class DeviceDetectionOnPremisePipelineBuilder extends PipelineBuilder {
       licenceKeys = null,
       dataFile = null,
       autoUpdate = true,
-      dataFileUpdateBaseUrl = constants.dataFileUpdateBaseUrl,
+      dataFileUpdateBaseUrl = null,
       pollingInterval = 30,
       updateTimeMaximumRandomisation = 10,
       shareUsage = true,
