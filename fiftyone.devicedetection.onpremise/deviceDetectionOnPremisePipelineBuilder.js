@@ -23,6 +23,7 @@
 const os = require('os');
 const core = require('fiftyone.pipeline.core');
 const DeviceDetectionOnPremise = require('./deviceDetectionOnPremise');
+const constants = require('./constants');
 const PipelineBuilder = core.PipelineBuilder;
 const ShareUsageElement = require('fiftyone.pipeline.engines.fiftyone').ShareUsage;
 const errorMessages = require('fiftyone.devicedetection.shared').errorMessages;
@@ -44,6 +45,7 @@ class DeviceDetectionOnPremisePipelineBuilder extends PipelineBuilder {
    * to be disabled.
    * @param {string} options.dataFile dataFile path for the on premise engine
    * @param {boolean} options.autoUpdate whether to autoUpdate the dataFile
+   * @param {string} options.dataFileUpdateBaseUrl base url for the datafile
    * @param {number} options.pollingInterval How often to poll for
    * updates to the datafile (minutes)
    * @param {number} options.updateTimeMaximumRandomisation
@@ -102,6 +104,7 @@ class DeviceDetectionOnPremisePipelineBuilder extends PipelineBuilder {
       licenceKeys = null,
       dataFile = null,
       autoUpdate = true,
+      dataFileUpdateBaseUrl = constants.dataFileUpdateBaseUrl,
       pollingInterval = 30,
       updateTimeMaximumRandomisation = 10,
       shareUsage = true,
@@ -129,14 +132,18 @@ class DeviceDetectionOnPremisePipelineBuilder extends PipelineBuilder {
       this.flowElements.push(new ShareUsageElement());
     }
 
+    if (dataFileUpdateBaseUrl == null) {
+      dataFileUpdateBaseUrl = constants.dataFileUpdateBaseUrl;
+    }
+
     if (cacheSize) {
       throw errorMessages.cacheNotSupport;
     }
-
     this.flowElements.push(new DeviceDetectionOnPremise(
       {
         dataFilePath: dataFile,
         autoUpdate,
+        dataFileUpdateBaseUrl,
         fileSystemWatcher,
         pollingInterval,
         updateTimeMaximumRandomisation,
