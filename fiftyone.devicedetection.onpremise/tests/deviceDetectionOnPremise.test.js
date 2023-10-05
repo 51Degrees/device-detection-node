@@ -203,20 +203,23 @@ describe('deviceDetectionOnPremise', () => {
 
   // Check if dataFileUpdateBaseUrl property are set correctly
   test('Properties for on-premise engine - dataFileUpdateBaseUrl', done => {
-    server.addListener('request', () => {});
+    let requestRecieved;
+    server.addListener('request', (req, res) => {
+      requestRecieved = !!req;
+    });
     server.listen(PORT);
 
     const customDataFileUpdateUrl = `http://localhost:${PORT}`; // in case of null passed, default update link ll be used
 
-    const pipeline = new FiftyOneDegreesDeviceDetectionOnPremise
+    new FiftyOneDegreesDeviceDetectionOnPremise
       .DeviceDetectionOnPremisePipelineBuilder({
         dataFile: DataFile,
         updateOnStart: true,
         autoUpdate: true,
         dataFileUpdateBaseUrl: customDataFileUpdateUrl
-      })
-    // We're just checking for access to our server, the evidence that it happened is non-existing header in response
-    expect(() => pipeline.build()).toThrow(`Invalid character in header content ["If-Modified-Since"]`);
+      }).build();
+     //We are simply verifying access to our server, and the confirmation of its occurrence is the presence of the 'request' object.
+    expect(requestRecieved).toBe(true);
     done();
   });
 });

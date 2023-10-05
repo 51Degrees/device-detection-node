@@ -89,7 +89,7 @@ if (myLicenseKey === '!!YOUR_LICENSE_KEY!!') {
     licenceKeys: myLicenseKey,
     // Enable automatic updates.
     autoUpdate: true,
-    baseUpdateUrl: customDataFileUpdateUrl, // passing a custom URL
+    dataFileUpdateBaseUrl: customDataFileUpdateUrl, // passing a custom URL
     // Enable update on startup, the auto update system
     // will be used to check for an update before the
     // device detection engine is created.
