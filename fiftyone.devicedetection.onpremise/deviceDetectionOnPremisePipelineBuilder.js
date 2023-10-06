@@ -44,8 +44,10 @@ class DeviceDetectionOnPremisePipelineBuilder extends PipelineBuilder {
    * an empty string, but this will cause automatic updates
    * to be disabled.
    * @param {string} options.dataFile dataFile path for the on premise engine
+   * @param {boolean} options.dataUpdateVerifyMd5 whether to check MD5 of datafile
+   * @param {boolean} options.dataUpdateUseUrlFormatter whether to append default URL params for Data File download
    * @param {boolean} options.autoUpdate whether to autoUpdate the dataFile
-   * @param {string} options.dataFileUpdateBaseUrl base url for the datafile
+   * @param {string} options.dataUpdateUrl base url for the datafile
    * @param {number} options.pollingInterval How often to poll for
    * updates to the datafile (minutes)
    * @param {number} options.updateTimeMaximumRandomisation
@@ -103,8 +105,10 @@ class DeviceDetectionOnPremisePipelineBuilder extends PipelineBuilder {
       dataFileUpdateService = null,
       licenceKeys = null,
       dataFile = null,
+      dataUpdateVerifyMd5 = true,
+      dataUpdateUseUrlFormatter= true,
       autoUpdate = true,
-      dataFileUpdateBaseUrl = null,
+      dataUpdateUrl = null,
       pollingInterval = 30,
       updateTimeMaximumRandomisation = 10,
       shareUsage = true,
@@ -132,8 +136,8 @@ class DeviceDetectionOnPremisePipelineBuilder extends PipelineBuilder {
       this.flowElements.push(new ShareUsageElement());
     }
 
-    if (dataFileUpdateBaseUrl == null) {
-      dataFileUpdateBaseUrl = constants.dataFileUpdateBaseUrl;
+    if (dataUpdateUrl == null) {
+      dataUpdateUrl = constants.dataUpdateUrl;
     }
 
     if (cacheSize) {
@@ -143,7 +147,9 @@ class DeviceDetectionOnPremisePipelineBuilder extends PipelineBuilder {
       {
         dataFilePath: dataFile,
         autoUpdate,
-        dataFileUpdateBaseUrl,
+        dataUpdateUrl,
+        dataUpdateVerifyMd5,
+        dataUpdateUseUrlFormatter,
         fileSystemWatcher,
         pollingInterval,
         updateTimeMaximumRandomisation,

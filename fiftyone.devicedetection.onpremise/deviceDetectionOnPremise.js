@@ -181,8 +181,10 @@ class DeviceDetectionOnPremise extends Engine {
    * @param {DataKeyedCache} options.cache an instance of the Cache class from
    * Fiftyone.Pipeline.Engines. NOTE: This is no longer supported for
    * on-premise engine.
-   * @param {string} options.dataFileUpdateBaseUrl base url for the datafile
+   * @param {string} options.dataUpdateUrl base url for the datafile
    * update service
+   * @param {boolean} options.dataUpdateVerifyMd5 whether to check MD5 of datafile
+   * @param {boolean} options.dataUpdateUseUrlFormatter whether to append default URL params for Data File download
    * @param {Array} options.restrictedProperties list of properties the engine
    * will be restricted to
    * @param {string} options.licenceKeys license key(s) used by the
@@ -235,7 +237,9 @@ class DeviceDetectionOnPremise extends Engine {
       dataFilePath,
       autoUpdate,
       cache,
-      dataFileUpdateBaseUrl = constants.dataFileUpdateBaseUrl,
+      dataUpdateUrl = constants.dataUpdateUrl,
+      dataUpdateVerifyMd5 = true,
+      dataUpdateUseUrlFormatter= true,
       restrictedProperties,
       licenceKeys,
       download,
@@ -457,7 +461,7 @@ class DeviceDetectionOnPremise extends Engine {
 
     // Disable features that require a license key if one was
     // not supplied.
-    if(dataFileUpdateBaseUrl === constants.dataFileUpdateBaseUrl) {
+    if(dataUpdateUrl === constants.dataUpdateUrl) {
       if (licenceKeys) {
         autoUpdate = autoUpdate && licenceKeys.length > 0;
         updateOnStart = updateOnStart && licenceKeys.length > 0;
@@ -466,10 +470,11 @@ class DeviceDetectionOnPremise extends Engine {
         updateOnStart = false;
       }
     }
+
     // Construct datafile
     const dataFileSettings = {
       flowElement: this,
-      verifyMD5: true,
+      verifyMD5: dataUpdateVerifyMd5,
       autoUpdate,
       updateOnStart,
       decompress: true,
@@ -477,7 +482,8 @@ class DeviceDetectionOnPremise extends Engine {
       download,
       fileSystemWatcher,
       pollingInterval,
-      updateTimeMaximumRandomisation
+      updateTimeMaximumRandomisation,
+      useUrlFormatter: dataUpdateUseUrlFormatter
     };
 
     dataFileSettings.getDatePublished = function () {
@@ -515,7 +521,7 @@ class DeviceDetectionOnPremise extends Engine {
       params.licenseKeys = licenceKeys;
     }
 
-    params.baseURL = dataFileUpdateBaseUrl;
+    params.baseURL = dataUpdateUrl;
 
     dataFileSettings.updateURLParams = params;
 
