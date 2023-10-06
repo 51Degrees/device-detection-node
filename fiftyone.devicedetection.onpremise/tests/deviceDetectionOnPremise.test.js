@@ -26,7 +26,13 @@ const FiftyOneDegreesDeviceDetectionOnPremise = require(path.join(__dirname,
 const EngineBuilder = require(
   path.join(__dirname, '/../deviceDetectionOnPremise')
 );
+const http = require('http');
+const crypto = require('crypto');
+const fs = require('fs');
+const zlib = require('zlib');
 const DataFile = (process.env.directory || __dirname) + '/../device-detection-cxx/device-detection-data/51Degrees-LiteV4.1.hash';
+
+let server;
 
 describe('deviceDetectionOnPremise', () => {
   // Check that an exception is thrown if license key is not
@@ -196,4 +202,56 @@ describe('deviceDetectionOnPremise', () => {
     expect(count).toBe(20);
     done();
   });
+
+  // Check if dataFileUpdateBaseUrl property are set correctly
+  test('Properties for on-premise engine - dataFileUpdateBaseUrl', done => {
+
+    const DataFile = (process.env.directory || __dirname) + '/../device-detection-cxx/device-detection-data/51Degrees-LiteV4.1.hash';
+    const DataFileOutput = (process.env.directory || __dirname) + '/../device-detection-cxx/device-detection-data/51Degrees-LiteV4.1.gz';
+
+    let requestReceived = false;
+    const PORT = 3000;
+
+    server = http.createServer(async (req, res) => {
+      requestReceived = !!req;
+
+      const md5sum = crypto.createHash('md5');
+      const LiteDataFileStream = fs.createReadStream(DataFile);
+      const writeStream = fs.createWriteStream(DataFileOutput);
+      const gzip = zlib.createGzip();
+
+      LiteDataFileStream.pipe(gzip).pipe(writeStream);
+
+      writeStream.on('finish', () => {
+        const DataFileOutputStream = fs.createReadStream(DataFileOutput);
+        DataFileOutputStream.on('data', (data) => {
+          md5sum.update(data);
+        });
+        DataFileOutputStream.on('end', () => {
+          const md5Hash = md5sum.digest('hex');
+          res.writeHead(200, {
+            'Content-Type': 'application/octet-stream',
+            'Content-MD5': md5Hash
+          });
+          const data = fs.readFileSync(DataFileOutput);
+          res.write(data);
+          res.end();
+          // Checking that server receives request
+          expect(requestReceived).toBe(true);
+          done();
+        });
+      });
+    }).listen(PORT);
+
+    const pipeline = new FiftyOneDegreesDeviceDetectionOnPremise.DeviceDetectionOnPremisePipelineBuilder({
+      dataFile: DataFile,
+      updateOnStart: true,
+      autoUpdate: true,
+      dataFileUpdateBaseUrl: `http://localhost:${PORT}`
+    }).build()
+  }, 20000);
+});
+
+afterAll(() => {
+  server.close();
 });

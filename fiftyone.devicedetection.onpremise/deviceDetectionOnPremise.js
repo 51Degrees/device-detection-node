@@ -235,7 +235,7 @@ class DeviceDetectionOnPremise extends Engine {
       dataFilePath,
       autoUpdate,
       cache,
-      dataFileUpdateBaseUrl = 'https://distributor.51degrees.com/api/v2/download',
+      dataFileUpdateBaseUrl = constants.dataFileUpdateBaseUrl,
       restrictedProperties,
       licenceKeys,
       download,
@@ -457,14 +457,15 @@ class DeviceDetectionOnPremise extends Engine {
 
     // Disable features that require a license key if one was
     // not supplied.
-    if (licenceKeys) {
-      autoUpdate = autoUpdate && licenceKeys.length > 0;
-      updateOnStart = updateOnStart && licenceKeys.length > 0;
-    } else {
-      autoUpdate = false;
-      updateOnStart = false;
+    if(dataFileUpdateBaseUrl === constants.dataFileUpdateBaseUrl) {
+      if (licenceKeys) {
+        autoUpdate = autoUpdate && licenceKeys.length > 0;
+        updateOnStart = updateOnStart && licenceKeys.length > 0;
+      } else {
+        autoUpdate = false;
+        updateOnStart = false;
+      }
     }
-
     // Construct datafile
     const dataFileSettings = {
       flowElement: this,

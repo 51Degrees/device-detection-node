@@ -21,6 +21,9 @@
  * ********************************************************************* */
 
 module.exports = {
+  /* Default params */
+  dataFileUpdateBaseUrl: 'https://distributor.51degrees.com/api/v2/download',
+
   /* Match metrics description */
   deviceIdDescription: 'Consists of four components separated by a ' +
     'hyphen symbol: Hardware-Platform-Browser-IsCrawler where each ' +
