@@ -203,18 +203,20 @@ describe('deviceDetectionOnPremise', () => {
     done();
   });
 
-  // Check if dataFileUpdateBaseUrl property are set correctly
-  test('Properties for on-premise engine - dataFileUpdateBaseUrl', done => {
+  // Check if dataUpdateUrl property are set correctly
+  // Check if dataUpdateVerifyMd5 property works as expected - default value = true
+  // Check if dataUpdateUseUrlFormatter property does not append query params to update url - default value = true
+  test('Properties for on-premise engine - Data File Update', done => {
 
-    const DataFile = (process.env.directory || __dirname) + '/../device-detection-cxx/device-detection-data/51Degrees-LiteV4.1.hash';
     const DataFileOutput = (process.env.directory || __dirname) + '/../device-detection-cxx/device-detection-data/51Degrees-LiteV4.1.gz';
 
     let requestReceived = false;
-    const PORT = 3000;
+    let requestUrl = '';
+    const PORT = 8080;
 
-    server = http.createServer(async (req, res) => {
+    server = http.createServer((req, res) => {
       requestReceived = !!req;
-
+      requestUrl = req.url;
       const md5sum = crypto.createHash('md5');
       const LiteDataFileStream = fs.createReadStream(DataFile);
       const writeStream = fs.createWriteStream(DataFileOutput);
@@ -231,23 +233,28 @@ describe('deviceDetectionOnPremise', () => {
           const md5Hash = md5sum.digest('hex');
           res.writeHead(200, {
             'Content-Type': 'application/octet-stream',
-            'Content-MD5': md5Hash
+            // 'Content-MD5': md5Hash
           });
           const data = fs.readFileSync(DataFileOutput);
           res.write(data);
           res.end();
           // Checking that server receives request
           expect(requestReceived).toBe(true);
+          expect(requestUrl).toBe('/');
           done();
+          server.close();
         });
       });
     }).listen(PORT);
+
 
     const pipeline = new FiftyOneDegreesDeviceDetectionOnPremise.DeviceDetectionOnPremisePipelineBuilder({
       dataFile: DataFile,
       updateOnStart: true,
       autoUpdate: true,
-      dataFileUpdateBaseUrl: `http://localhost:${PORT}`
+      dataUpdateUrl: `http://localhost:${PORT}`,
+      dataUpdateVerifyMd5: false,
+      dataUpdateUseUrlFormatter: false
     }).build()
   }, 20000);
 });
