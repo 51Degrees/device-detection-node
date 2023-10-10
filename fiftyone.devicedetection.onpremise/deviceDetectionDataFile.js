@@ -31,8 +31,13 @@ const DataFile = engines.DataFile;
  * update url which contains the product, type and licensekeys.
  * These paramaters are passed in to the datafile constructor's
  * updateURLParams parameter
+ * @param {string} options.useUrlFormatter whether to append default URL params for Data File download
  **/
 class DeviceDetectionDataFile extends DataFile {
+  constructor ({ useUrlFormatter = true, ...rest}) {
+    super({...rest});
+    this.useUrlFormatter = useUrlFormatter;
+  }
   /**
    * Uses the product, type and licensekey parameters the datafile
    * was constructed with to generate a querystring used in the datafile
@@ -44,14 +49,19 @@ class DeviceDetectionDataFile extends DataFile {
     const queryParams = {
       Product: this.updateURLParams.product,
       Type: this.updateURLParams.Type
-
     };
+
+    let URL = this.updateURLParams.baseURL;
 
     if (this.updateURLParams.licenseKeys) {
       queryParams.licenseKeys = this.updateURLParams.licenseKeys;
     }
 
-    return this.updateURLParams.baseURL + '?' + querystring.stringify(queryParams);
+    if(this.useUrlFormatter){
+      URL += '?' + querystring.stringify(queryParams);
+    }
+
+    return URL;
   }
 }
 
