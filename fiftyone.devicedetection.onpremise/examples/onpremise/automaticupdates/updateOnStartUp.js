@@ -75,7 +75,7 @@ if (myLicenseKey === '!!YOUR_LICENSE_KEY!!') {
     throw ("No data file at '" + datafile + "'");
   }
 
-  const customDataFileUpdateUrl = null; // specify your custom server hosting a data file
+  const customDataFileUpdateUrl = null; // Specify your custom server hosting a data file
 
   // Create the device detection pipeline with the following options
   // to configure updates on startup. There is no console output
@@ -89,11 +89,16 @@ if (myLicenseKey === '!!YOUR_LICENSE_KEY!!') {
     licenceKeys: myLicenseKey,
     // Enable automatic updates.
     autoUpdate: true,
-    dataFileUpdateBaseUrl: customDataFileUpdateUrl, // passing a custom URL
     // Enable update on startup, the auto update system
     // will be used to check for an update before the
     // device detection engine is created.
-    updateOnStart: true
+    updateOnStart: true,
+    // Passing a custom update URL
+    dataUpdateUrl: customDataFileUpdateUrl,
+    // Disable md5 verification for updated file if your server does not send Content-MD5 header
+    dataUpdateVerifyMd5: true,
+    // If you don't want to pass default or any other query params to URL, disable this option
+    dataUpdateUseUrlFormatter: true
   }).build();
 
   // To monitor the pipeline we can put in listeners for various log events.
