@@ -28,8 +28,8 @@ $downloads = @{
     "20000 User Agents.csv" = {Invoke-WebRequest -Uri "https://media.githubusercontent.com/media/51Degrees/device-detection-data/main/20000%20User%20Agents.csv" -OutFile $assets/$file}
     "51Degrees.csv" = {
         ./steps/fetch-csv-assets.ps1 -RepoName $RepoName -LicenseKey $DeviceDetection -Url $CsvUrl
-        Get-Content -TotalCount 1 $RepoName/51Degrees-TacV3.4.trie/51Degrees-Tac-All.csv | Out-File $assets/$file # We only need a header
-        Remove-Item -Path $RepoName/51Degrees-TacV3.4.trie.zip, $RepoName/51Degrees-TacV3.4.trie/51Degrees-Tac-All.csv
+        Get-Content -TotalCount 1 $RepoName/51Degrees-Tac/51Degrees-Tac-All.csv | Out-File $assets/$file # We only need a header
+        Remove-Item -Path $RepoName/51Degrees-Tac.zip, $RepoName/51Degrees-Tac/51Degrees-Tac-All.csv
     }
 }
 
