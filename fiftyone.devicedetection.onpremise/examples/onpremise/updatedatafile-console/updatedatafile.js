@@ -62,7 +62,7 @@ const KeyUtils = require('fiftyone.devicedetection.shared').keyUtils;
  * ## Lite Data File
  * Lite data files (free-to-use, limited capabilities, no license key required) are created roughly
  * once a month and cannot be updated using auto-update, they may be downloaded from
- * (Github)[href=https://github.com/51Degrees/device-detection-data] and are included with
+ * [Github](href=https://github.com/51Degrees/device-detection-data) and are included with
  * source distributions of this software.
  * # Update on Start-Up
  * You can configure the pipeline builder to download an Enterprise data file on start-up.
@@ -176,7 +176,7 @@ const run = async function (dataFilePath, licenseKey, interactive, output) {
   if (!licenseKey || KeyUtils.isInvalidKey(licenseKey)) {
     console.error('In order to test this example you will need a 51Degrees Enterprise ' +
       'license which can be obtained on a trial basis or purchased from our\n' +
-      'pricing page http://51degrees.com/pricing. You must supply the license ' +
+      'pricing page https://51degrees.com/pricing. You must supply the license ' +
       'key as an argument to this program, or as an environment or system variable ' +
       `named '${UPDATE_EXAMPLE_LICENSE_KEY_NAME}'`);
     throw new Error('No license key available');
