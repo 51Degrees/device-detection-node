@@ -38,14 +38,22 @@ Required npm Dependencies:
 */
 
 const path = require('path');
+const require51 = (requestedPackage) => {
+  try {
+    return require(requestedPackage);
+  } catch (e) {
+    return require(path.join(__dirname, '/../../', requestedPackage));
+  }
+};
+
 const fs = require('fs');
 
-const { PipelineBuilder } = require('fiftyone.pipeline.core');
+const PipelineBuilder = require51('fiftyone.pipeline.core').PipelineBuilder;
 
 const ExampleUtils = require(path.join(__dirname, '/../exampleUtils'));
-const exampleConstants = require('fiftyone.devicedetection.shared').exampleConstants;
-const OptionsExtension = require('fiftyone.devicedetection.shared').optionsExtension;
-const DataExtension = require('fiftyone.devicedetection.shared').dataExtension;
+const exampleConstants = require51('fiftyone.devicedetection.shared').exampleConstants;
+const OptionsExtension = require51('fiftyone.devicedetection.shared').optionsExtension;
+const DataExtension = require51('fiftyone.devicedetection.shared').dataExtension;
 
 const outputValue = function (name, value) {
   // Individual result values have a wrapper called

@@ -106,7 +106,7 @@ class DeviceDetectionOnPremisePipelineBuilder extends PipelineBuilder {
       licenceKeys = null,
       dataFile = null,
       dataUpdateVerifyMd5 = true,
-      dataUpdateUseUrlFormatter= true,
+      dataUpdateUseUrlFormatter = true,
       autoUpdate = true,
       dataUpdateUrl = null,
       pollingInterval = 30,

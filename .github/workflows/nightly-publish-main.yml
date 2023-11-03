@@ -21,4 +21,4 @@ jobs:
       build-platform: ubuntu-latest
     secrets:
       token: ${{ secrets.ACCESS_TOKEN }}
-      asset-keys: '{"DeviceDetection": "${{ secrets.DEVICE_DETECTION_KEY }}", "DeviceDetectionUrl": "${{ secrets.DEVICE_DETECTION_URL }}", "CsvUrl": "${{ secrets.CSV_URL }}", "TestResourceKey": "${{ secrets.SUPER_RESOURCE_KEY}}", "NPMAuthToken": "${{ secrets.NPM_AUTH_TOKEN}}", "UsePublishTests": true}'
+      asset-keys: '{"DeviceDetection": "${{ secrets.DEVICE_DETECTION_KEY }}", "DeviceDetectionUrl": "${{ secrets.DEVICE_DETECTION_URL }}", "CsvUrl": "${{ secrets.CSV_URL }}", "TestResourceKey": "${{ secrets.SUPER_RESOURCE_KEY}}", "TestSuperResourceKey": "${{ secrets.SUPER_RESOURCE_KEY }}", "TestPlatformResourceKey": "${{ secrets.ACCEPTCH_PLATFORM_KEY }}", "TestHardwareResourceKey": "${{ secrets.ACCEPTCH_HARDWARE_KEY }}", "TestBrowserResourceKey": "${{ secrets.ACCEPTCH_BROWSER_KEY }}", "TestNoSetHeaderResourceKey": "${{ secrets.ACCEPTCH_NONE_KEY }}", "TestLicenseKey": "${{ secrets.DEVICE_DETECTION_KEY }}"}'

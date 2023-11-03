@@ -6,10 +6,10 @@ param (
 )
 
 # List of packages for build
-$packages = "fiftyone.devicedetection", "fiftyone.devicedetection.cloud", "fiftyone.devicedetection.onpremise", "fiftyone.devicedetection.shared"
+$packages = "fiftyone.devicedetection", "fiftyone.devicedetection.cloud", "fiftyone.devicedetection.onpremise"
 
 # List of packages which does not use remote package.json
-$noRemote = ""
+$noRemote = "fiftyone.devicedetection.shared"
 
 # Creating build folder inside of specific package
 New-Item -ItemType Directory -Path "$RepoName/fiftyone.devicedetection.onpremise/build" | Out-Null

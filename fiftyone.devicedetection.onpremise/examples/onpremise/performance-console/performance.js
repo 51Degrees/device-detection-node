@@ -53,12 +53,18 @@ ismobile = unknown : [...]
 
 const events = require('events');
 const path = require('path');
+const require51 = (requestedPackage) => {
+  try {
+    return require(requestedPackage);
+  } catch (e) {
+    return require(path.join(__dirname, '/../../../../', requestedPackage));
+  }
+};
 
 const LineReader = require('n-readlines');
 
 const DeviceDetectionOnPremisePipelineBuilder =
-  require((process.env.directory || __dirname) +
-  '/../../../deviceDetectionOnPremisePipelineBuilder');
+  require51('fiftyone.devicedetection.onpremise').DeviceDetectionOnPremisePipelineBuilder;
 
 const ExampleUtils = require(path.join(__dirname, '/../exampleUtils')).ExampleUtils;
 

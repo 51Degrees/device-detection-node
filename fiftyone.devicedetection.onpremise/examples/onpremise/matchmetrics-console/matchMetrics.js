@@ -41,14 +41,21 @@ This example is available in full on
  */
 
 const path = require('path');
+const require51 = (requestedPackage) => {
+  try {
+    return require(requestedPackage);
+  } catch (e) {
+    return require(path.join(__dirname, '/../../', requestedPackage));
+  }
+};
+
 const fs = require('fs');
 
 const DeviceDetectionOnPremisePipelineBuilder =
-  require((process.env.directory || __dirname) +
-    '/../../../deviceDetectionOnPremisePipelineBuilder');
+  require51('fiftyone.devicedetection.onpremise').DeviceDetectionOnPremisePipelineBuilder;
 
 const ExampleUtils = require(path.join(__dirname, '/../exampleUtils')).ExampleUtils;
-const exampleConstants = require('fiftyone.devicedetection.shared').exampleConstants;
+const exampleConstants = require51('fiftyone.devicedetection.shared').exampleConstants;
 
 // In this example, by default, the 51degrees "Lite" file needs to be in the
 // fiftyone.devicedetection.onpremise/device-detection-cxx/device-detection-data,

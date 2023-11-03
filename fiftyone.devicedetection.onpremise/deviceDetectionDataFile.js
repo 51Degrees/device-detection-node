@@ -45,6 +45,11 @@ class DeviceDetectionDataFile extends DataFile {
    *
    * @returns {string} url
    */
+  constructor ({ useUrlFormatter = true, ...rest }) {
+    super({ ...rest });
+    this.useUrlFormatter = useUrlFormatter;
+  }
+
   urlFormatter () {
     const queryParams = {
       Product: this.updateURLParams.product,
@@ -57,7 +62,7 @@ class DeviceDetectionDataFile extends DataFile {
       queryParams.licenseKeys = this.updateURLParams.licenseKeys;
     }
 
-    if(this.useUrlFormatter){
+    if (this.useUrlFormatter) {
       URL += '?' + querystring.stringify(queryParams);
     }
 

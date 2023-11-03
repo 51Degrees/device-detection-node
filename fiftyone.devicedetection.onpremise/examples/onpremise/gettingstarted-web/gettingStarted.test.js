@@ -19,9 +19,16 @@
  * in the end user terms of the application under an appropriate heading,
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
+const path = require('path');
+const require51 = (requestedPackage) => {
+  try {
+    return require(requestedPackage);
+  } catch (e) {
+    return require(path.join(__dirname, '/../../', requestedPackage));
+  }
+};
 
 const request = require('supertest');
-const path = require('path');
 
 const fs = require('fs');
 
@@ -29,7 +36,7 @@ const fs = require('fs');
 const example = require(path.join(__dirname, '/gettingStarted.js'));
 
 const OptionsExtension =
-  require('fiftyone.devicedetection.shared').optionsExtension;
+  require51('fiftyone.devicedetection.shared').optionsExtension;
 
 describe('Examples', () => {
   test('onpremise getting started web', async () => {

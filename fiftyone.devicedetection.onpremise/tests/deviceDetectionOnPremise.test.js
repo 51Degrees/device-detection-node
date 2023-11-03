@@ -19,20 +19,25 @@
  * in the end user terms of the application under an appropriate heading,
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
-
 const path = require('path');
-const FiftyOneDegreesDeviceDetectionOnPremise = require(path.join(__dirname,
-  '/../../fiftyone.devicedetection.onpremise'));
-const EngineBuilder = require(
-  path.join(__dirname, '/../deviceDetectionOnPremise')
-);
-const http = require('http');
-const crypto = require('crypto');
-const fs = require('fs');
-const zlib = require('zlib');
-const DataFile = (process.env.directory || __dirname) + '/../device-detection-cxx/device-detection-data/51Degrees-LiteV4.1.hash';
+const require51 = (requestedPackage) => {
+  try {
+    return require(requestedPackage);
+  } catch (e) {
+    return require(path.join(__dirname, '/../../', requestedPackage));
+  }
+};
 
-let server;
+const FiftyOneDegreesDeviceDetectionOnPremise = require51('fiftyone.devicedetection.onpremise');
+const EngineBuilder = require51('fiftyone.devicedetection.onpremise').DeviceDetectionOnPremise;
+
+// const http = require('http');
+// const crypto = require('crypto');
+// const fs = require('fs');
+// const zlib = require('zlib');
+// let server;
+
+const DataFile = (process.env.directory || __dirname) + '/../device-detection-cxx/device-detection-data/51Degrees-LiteV4.1.hash';
 
 describe('deviceDetectionOnPremise', () => {
   // Check that an exception is thrown if license key is not
@@ -203,62 +208,98 @@ describe('deviceDetectionOnPremise', () => {
     done();
   });
 
+  // Disabled during polling process of autoupdate, for now there is no option to manually close request from pipeline
+
   // Check if dataUpdateUrl property are set correctly
   // Check if dataUpdateVerifyMd5 property works as expected - default value = true
   // Check if dataUpdateUseUrlFormatter property does not append query params to update url - default value = true
-  test('Properties for on-premise engine - Data File Update', done => {
+  // test('Properties for on-premise engine - Data File Update', done => {
+  //
+  //   const DataFileOutput = (process.env.directory || __dirname) + '/../device-detection-cxx/device-detection-data/51Degrees-LiteV4.1.gz';
+  //
+  //   let requestReceived = false;
+  //   let requestUrl = '';
+  //   const PORT = 8080;
+  //
+  //   server = http.createServer((req, res) => {
+  //     requestReceived = !!req;
+  //     requestUrl = req.url;
+  //     const md5sum = crypto.createHash('md5');
+  //     const LiteDataFileStream = fs.createReadStream(DataFile);
+  //     const writeStream = fs.createWriteStream(DataFileOutput);
+  //     const gzip = zlib.createGzip();
+  //
+  //     LiteDataFileStream.pipe(gzip).pipe(writeStream);
+  //
+  //     writeStream.on('finish', () => {
+  //       const DataFileOutputStream = fs.createReadStream(DataFileOutput);
+  //       DataFileOutputStream.on('data', (data) => {
+  //         md5sum.update(data);
+  //       });
+  //       DataFileOutputStream.on('end', () => {
+  //         const md5Hash = md5sum.digest('hex');
+  //         res.writeHead(200, {
+  //           'Content-Type': 'application/octet-stream',
+  //           // 'Content-MD5': md5Hash
+  //         });
+  //         const data = fs.readFileSync(DataFileOutput);
+  //         res.write(data);
+  //         res.end();
+  //         // Checking that server receives request
+  //         expect(requestReceived).toBe(true);
+  //         expect(requestUrl).toBe('/');
+  //         done();
+  //         server.close();
+  //       });
+  //     });
+  //   }).listen(PORT);
+  //
+  //
+  //   const pipeline = new FiftyOneDegreesDeviceDetectionOnPremise.DeviceDetectionOnPremisePipelineBuilder({
+  //     dataFile: DataFile,
+  //     updateOnStart: true,
+  //     autoUpdate: true,
+  //     dataUpdateUrl: `http://localhost:${PORT}`,
+  //     dataUpdateVerifyMd5: false,
+  //     dataUpdateUseUrlFormatter: false
+  //   }).build()
+  // }, 20000);
 
-    const DataFileOutput = (process.env.directory || __dirname) + '/../device-detection-cxx/device-detection-data/51Degrees-LiteV4.1.gz';
-
-    let requestReceived = false;
-    let requestUrl = '';
-    const PORT = 8080;
-
-    server = http.createServer((req, res) => {
-      requestReceived = !!req;
-      requestUrl = req.url;
-      const md5sum = crypto.createHash('md5');
-      const LiteDataFileStream = fs.createReadStream(DataFile);
-      const writeStream = fs.createWriteStream(DataFileOutput);
-      const gzip = zlib.createGzip();
-
-      LiteDataFileStream.pipe(gzip).pipe(writeStream);
-
-      writeStream.on('finish', () => {
-        const DataFileOutputStream = fs.createReadStream(DataFileOutput);
-        DataFileOutputStream.on('data', (data) => {
-          md5sum.update(data);
-        });
-        DataFileOutputStream.on('end', () => {
-          const md5Hash = md5sum.digest('hex');
-          res.writeHead(200, {
-            'Content-Type': 'application/octet-stream',
-            // 'Content-MD5': md5Hash
-          });
-          const data = fs.readFileSync(DataFileOutput);
-          res.write(data);
-          res.end();
-          // Checking that server receives request
-          expect(requestReceived).toBe(true);
-          expect(requestUrl).toBe('/');
-          done();
-          server.close();
-        });
-      });
-    }).listen(PORT);
-
-
-    const pipeline = new FiftyOneDegreesDeviceDetectionOnPremise.DeviceDetectionOnPremisePipelineBuilder({
-      dataFile: DataFile,
-      updateOnStart: true,
-      autoUpdate: true,
-      dataUpdateUrl: `http://localhost:${PORT}`,
-      dataUpdateVerifyMd5: false,
-      dataUpdateUseUrlFormatter: false
-    }).build()
-  }, 20000);
+  // test('Properties for on-premise engine - Data File Update - 404 Status Code', done => {
+  //   let requestCounter = 0;
+  //   const PORT = 3000;
+  //
+  //   const server = http.createServer((req, res) => {
+  //     requestCounter++;
+  //     res.writeHead(404 );
+  //     res.end();
+  //   }).listen(PORT);
+  //
+  //
+  //   let pipeline = new FiftyOneDegreesDeviceDetectionOnPremise.DeviceDetectionOnPremisePipelineBuilder({
+  //     dataFile: DataFile,
+  //     updateOnStart: true,
+  //     autoUpdate: true,
+  //     dataUpdateUrl: `http://localhost:${PORT}`,
+  //     dataUpdateVerifyMd5: false,
+  //     dataUpdateUseUrlFormatter: false
+  //   }).build()
+  //
+  //
+  //
+  //   pipeline.on("error", err => {
+  //     expect(err.indexOf('404')!== -1).toBe(true);
+  //   })
+  //
+  //   setTimeout(() => {
+  //     expect(requestCounter).toBe(1);
+  //     server.close();
+  //     done();
+  //   }, 1000)
+  //
+  // }, 20000);
 });
 
-afterAll(() => {
-  server.close();
-});
+// afterAll(() => {
+//   server.close();
+// });

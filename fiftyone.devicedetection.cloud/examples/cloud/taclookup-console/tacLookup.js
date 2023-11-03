@@ -42,6 +42,14 @@ Required npm Dependencies:
 */
 
 const path = require('path');
+const require51 = (requestedPackage) => {
+  try {
+    return require(requestedPackage);
+  } catch (e) {
+    return require(path.join(__dirname, '/../../', requestedPackage));
+  }
+};
+
 const fs = require('fs');
 
 const { PipelineBuilder } = require('fiftyone.pipeline.core');
@@ -49,10 +57,10 @@ const { PipelineBuilder } = require('fiftyone.pipeline.core');
 const ExampleUtils = require(path.join(__dirname, '/../exampleUtils'));
 
 const OptionsExtension =
-  require('fiftyone.devicedetection.shared').optionsExtension;
+  require51('fiftyone.devicedetection.shared').optionsExtension;
 
 const DataExtension =
-  require('fiftyone.devicedetection.shared').dataExtension;
+  require51('fiftyone.devicedetection.shared').dataExtension;
 
 const constants = require(path.join(__dirname, '/../../../constants.js'));
 

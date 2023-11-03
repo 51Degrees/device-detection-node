@@ -43,10 +43,16 @@ false
 ```
 
  */
+const path = require('path');
+const require51 = (requestedPackage) => {
+  try {
+    return require(requestedPackage);
+  } catch (e) {
+    return require(path.join(__dirname, '/../../', requestedPackage));
+  }
+};
 
-const DeviceDetectionPipelineBuilder =
-  require((process.env.directory || __dirname) +
-    '/../deviceDetectionPipelineBuilder');
+const DeviceDetectionPipelineBuilder = require51('fiftyone.devicedetection').DeviceDetectionPipelineBuilder;
 
 // Create the device detection pipeline with the desired settings.
 

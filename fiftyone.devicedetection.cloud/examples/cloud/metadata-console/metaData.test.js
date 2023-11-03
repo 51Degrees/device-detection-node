@@ -20,10 +20,18 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 const path = require('path');
+const require51 = (requestedPackage) => {
+  try {
+    return require(requestedPackage);
+  } catch (e) {
+    return require(path.join(__dirname, '/../../', requestedPackage));
+  }
+};
+
 const example = require(path.join(__dirname, '/metaData.js'));
 
 // Test constants
-const tc = require('fiftyone.devicedetection.shared').testConstants;
+const tc = require51('fiftyone.devicedetection.shared').testConstants;
 
 describe('Examples', () => {
   test('cloud metadata', async () => {

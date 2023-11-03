@@ -239,7 +239,7 @@ class DeviceDetectionOnPremise extends Engine {
       cache,
       dataUpdateUrl = constants.dataUpdateUrl,
       dataUpdateVerifyMd5 = true,
-      dataUpdateUseUrlFormatter= true,
+      dataUpdateUseUrlFormatter = true,
       restrictedProperties,
       licenceKeys,
       download,
@@ -461,7 +461,7 @@ class DeviceDetectionOnPremise extends Engine {
 
     // Disable features that require a license key if one was
     // not supplied.
-    if(dataUpdateUrl === constants.dataUpdateUrl) {
+    if (dataUpdateUrl === constants.dataUpdateUrl) {
       if (licenceKeys) {
         autoUpdate = autoUpdate && licenceKeys.length > 0;
         updateOnStart = updateOnStart && licenceKeys.length > 0;

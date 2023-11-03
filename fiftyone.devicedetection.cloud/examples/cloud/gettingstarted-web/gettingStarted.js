@@ -71,16 +71,15 @@ window.onload = function () {
 ## Configuration
 @include 51d.json
 */
-
+const path = require('path');
 const require51 = (requestedPackage) => {
   try {
-    return require('/../' + requestedPackage);
-  } catch (e) {
     return require(requestedPackage);
+  } catch (e) {
+    return require(path.join(__dirname, '/../../', requestedPackage));
   }
 };
 
-const path = require('path');
 const fs = require('fs');
 const http = require('http');
 const pug = require('pug');
@@ -90,10 +89,10 @@ const compiledFunction = pug.compileFile(path.join(__dirname, '/index.pug'));
 const core = require51('fiftyone.pipeline.core');
 
 const OptionsExtension =
-  require('fiftyone.devicedetection.shared').optionsExtension;
+  require51('fiftyone.devicedetection.shared').optionsExtension;
 
 const DataExtension =
-  require('fiftyone.devicedetection.shared').dataExtension;
+  require51('fiftyone.devicedetection.shared').dataExtension;
 
 const ExampleUtils = require(path.join(__dirname, '/../exampleUtils'));
 

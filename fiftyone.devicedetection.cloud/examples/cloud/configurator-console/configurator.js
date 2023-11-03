@@ -34,9 +34,15 @@ Required npm Dependencies:
 - fiftyone.devicedetection
 */
 const path = require('path');
+const require51 = (requestedPackage) => {
+  try {
+    return require(requestedPackage);
+  } catch (e) {
+    return require(path.join(__dirname, '/../../', requestedPackage));
+  }
+};
 
-const DeviceDetectionCloudPipelineBuilder =
-  require(path.join(__dirname, '/../../../deviceDetectionCloudPipelineBuilder'));
+const DeviceDetectionCloudPipelineBuilder = require51('fiftyone.devicedetection.cloud').DeviceDetectionCloudPipelineBuilder;
 const ExampleUtils = require(path.join(__dirname, '/../exampleUtils'));
 
 const run = async function (resourceKey, output) {

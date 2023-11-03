@@ -71,17 +71,17 @@ window.onload = function () {
 @include 51d.json
 */
 
+const path = require('path');
 const require51 = (requestedPackage) => {
   try {
-    return require('/../' + requestedPackage);
-  } catch (e) {
     return require(requestedPackage);
+  } catch (e) {
+    return require(path.join(__dirname, '/../../', requestedPackage));
   }
 };
 
 const fs = require('fs');
 const http = require('http');
-const path = require('path');
 const pug = require('pug');
 
 const compiledFunction =
@@ -90,10 +90,10 @@ const compiledFunction =
 const core = require51('fiftyone.pipeline.core');
 
 const optionsExtension =
-  require('fiftyone.devicedetection.shared').optionsExtension;
+  require51('fiftyone.devicedetection.shared').optionsExtension;
 
 const dataExtension =
-  require('fiftyone.devicedetection.shared').dataExtension;
+  require51('fiftyone.devicedetection.shared').dataExtension;
 
 const { DATA_FILE_AGE_WARNING, ExampleUtils } =
   require(path.join(__dirname, '/../exampleUtils'));

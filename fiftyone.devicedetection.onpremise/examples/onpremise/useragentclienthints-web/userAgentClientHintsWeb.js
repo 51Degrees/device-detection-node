@@ -43,18 +43,19 @@ Device Type: [...]
 
  */
 
+const path = require('path');
 const require51 = (requestedPackage) => {
   try {
-    return require('/../../../' + requestedPackage);
-  } catch (e) {
     return require(requestedPackage);
+  } catch (e) {
+    return require(path.join(__dirname, '/../../', requestedPackage));
   }
 };
+
 const core = require51('fiftyone.pipeline.core');
 
 const DeviceDetectionOnPremisePipelineBuilder =
-    require((process.env.directory || __dirname) +
-    '/../../../deviceDetectionOnPremisePipelineBuilder');
+  require51('fiftyone.devicedetection.onpremise').DeviceDetectionOnPremisePipelineBuilder;
 
 const fs = require('fs');
 

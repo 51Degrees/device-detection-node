@@ -33,9 +33,16 @@ This example is available in full on [GitHub](https://github.com/51Degrees/devic
  */
 
 const path = require('path');
+const require51 = (requestedPackage) => {
+  try {
+    return require(requestedPackage);
+  } catch (e) {
+    return require(path.join(__dirname, '/../../', requestedPackage));
+  }
+};
+
 const DeviceDetectionOnPremisePipelineBuilder =
-  require((process.env.directory || __dirname) +
-    '/../../../deviceDetectionOnPremisePipelineBuilder');
+  require51('fiftyone.devicedetection.onpremise').DeviceDetectionOnPremisePipelineBuilder;
 
 const ExampleUtils = require(path.join(__dirname, '/../exampleUtils')).ExampleUtils;
 
@@ -94,4 +101,10 @@ if (myLicenseKey === '!!YOUR_LICENSE_KEY!!') {
   // To monitor the pipeline we can put in listeners for various log events.
   // Valid types are info, debug, warn, error
   pipeline.on('error', console.error);
+
+  // Exit auto update process
+  setTimeout(() => {
+    console.log('Exiting auto update process');
+    process.exit(1);
+  }, 3000);
 }

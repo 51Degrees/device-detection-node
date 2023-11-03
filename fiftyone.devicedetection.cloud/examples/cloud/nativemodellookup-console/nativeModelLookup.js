@@ -44,21 +44,28 @@ Required npm Dependencies:
 */
 
 const path = require('path');
+const require51 = (requestedPackage) => {
+  try {
+    return require(requestedPackage);
+  } catch (e) {
+    return require(path.join(__dirname, '/../../', requestedPackage));
+  }
+};
+
 // Require the core Pipeline and Cloud Request Engine
-const pipelineCore = require('fiftyone.pipeline.core');
-const CloudRequestEngine = require('fiftyone.pipeline.cloudrequestengine');
+const pipelineCore = require51('fiftyone.pipeline.core');
+const CloudRequestEngine = require51('fiftyone.pipeline.cloudrequestengine');
 // Note that this example is designed to be run from within the
 // device detection code base. If this code has been copied to run
 // standalone then you'll need to replace the require below with the
 // commented out version below it.
-const HardwareProfileCloudEngine = require((process.env.directory || __dirname) +
-  '/../../../hardwareProfileCloudEngine');
+const HardwareProfileCloudEngine =  require51('fiftyone.devicedetection.cloud').HardwareProfileCloudEngine;
 
 const ExampleUtils = require(path.join(__dirname, '/../exampleUtils'));
 
 const constants = require(path.join(__dirname, '/../../../constants.js'));
 
-const DataExtension = require('fiftyone.devicedetection.shared').dataExtension;
+const DataExtension = require51('fiftyone.devicedetection.shared').dataExtension;
 
 const analyseNativeModel = async function (nativemodel, pipeline, output) {
   // Create a flow data instance.

@@ -56,14 +56,20 @@ Required npm Dependencies:
 
 const LineReader = require('n-readlines');
 const path = require('path');
+const require51 = (requestedPackage) => {
+  try {
+    return require(requestedPackage);
+  } catch (e) {
+    return require(path.join(__dirname, '/../../', requestedPackage));
+  }
+};
 
 const DeviceDetectionOnPremisePipelineBuilder =
-  require((process.env.directory || __dirname) +
-  '/../../../deviceDetectionOnPremisePipelineBuilder');
+  require51('fiftyone.devicedetection.onpremise').DeviceDetectionOnPremisePipelineBuilder;
 
 const ExampleUtils = require(path.join(__dirname, '/../exampleUtils')).ExampleUtils;
 
-const DataExtension = require('fiftyone.devicedetection.shared').dataExtension;
+const DataExtension = require51('fiftyone.devicedetection.shared').dataExtension;
 
 // In this example, by default, the 51degrees "Lite" file needs to be somewhere in the
 // project space, or you may specify another file as a command line parameter.

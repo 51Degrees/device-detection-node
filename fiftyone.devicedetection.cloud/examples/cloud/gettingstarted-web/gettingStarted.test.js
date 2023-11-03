@@ -21,15 +21,23 @@
  * ********************************************************************* */
 
 const path = require('path');
+const require51 = (requestedPackage) => {
+  try {
+    return require(requestedPackage);
+  } catch (e) {
+    return require(path.join(__dirname, '/../../', requestedPackage));
+  }
+};
+
 const request = require('supertest');
 
 const fs = require('fs');
 
 const OptionsExtension =
-  require('fiftyone.devicedetection.shared').optionsExtension;
+  require51('fiftyone.devicedetection.shared').optionsExtension;
 
 // Test constants
-const tc = require('fiftyone.devicedetection.shared').testConstants;
+const tc = require51('fiftyone.devicedetection.shared').testConstants;
 
 // Load the example module
 const example = require(path.join(__dirname, '/gettingStarted.js'));
@@ -38,9 +46,6 @@ describe('Examples', () => {
   test('cloud getting started web', async () => {
     // Load configuration options
     const options = JSON.parse(fs.readFileSync(path.join(__dirname, '/51d.json')));
-
-    console.log(OptionsExtension);
-    console.log(options);
 
     // Update element path with a full path
     OptionsExtension.updateElementPath(options, __dirname);

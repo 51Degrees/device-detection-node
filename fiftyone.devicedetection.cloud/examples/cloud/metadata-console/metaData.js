@@ -53,11 +53,17 @@ Required npm Dependencies:
  */
 
 const path = require('path');
+const require51 = (requestedPackage) => {
+  try {
+    return require(requestedPackage);
+  } catch (e) {
+    return require(path.join(__dirname, '/../../', requestedPackage));
+  }
+};
+
 const ExampleUtils = require(path.join(__dirname, '/../exampleUtils'));
 
-const DeviceDetectionCloudPipelineBuilder =
-  require((process.env.directory || __dirname) +
-    '/../../../deviceDetectionCloudPipelineBuilder');
+const DeviceDetectionCloudPipelineBuilder = require51('fiftyone.devicedetection.cloud').DeviceDetectionCloudPipelineBuilder;
 
 const outputProperties = function (engine, output) {
   for (let property in engine.properties) {
