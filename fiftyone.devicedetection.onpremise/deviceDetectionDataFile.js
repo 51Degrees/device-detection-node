@@ -45,10 +45,6 @@ class DeviceDetectionDataFile extends DataFile {
    *
    * @returns {string} url
    */
-  constructor ({ useUrlFormatter = true, ...rest }) {
-    super({ ...rest });
-    this.useUrlFormatter = useUrlFormatter;
-  }
 
   urlFormatter () {
     const queryParams = {

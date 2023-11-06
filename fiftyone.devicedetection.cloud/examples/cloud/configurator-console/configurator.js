@@ -45,7 +45,7 @@ const require51 = (requestedPackage) => {
 const DeviceDetectionCloudPipelineBuilder = require51('fiftyone.devicedetection.cloud').DeviceDetectionCloudPipelineBuilder;
 const ExampleUtils = require(path.join(__dirname, '/../exampleUtils'));
 
-const run = async function (resourceKey = "AQRb8GIR-KZ2oBJg20g", output) {
+const run = async function (resourceKey, output) {
   // The pipeline should be managed as a singleton. Creating a pipeline instance for every request
   // will cause extreme resource problems.
   const pipeline = new DeviceDetectionCloudPipelineBuilder({
