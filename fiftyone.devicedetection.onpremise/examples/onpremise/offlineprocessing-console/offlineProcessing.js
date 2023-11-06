@@ -58,9 +58,9 @@ const LineReader = require('n-readlines');
 const path = require('path');
 const require51 = (requestedPackage) => {
   try {
-    return require(requestedPackage);
+    return require(path.join(__dirname, '/../../../node_modules/', requestedPackage));
   } catch (e) {
-    return require(path.join(__dirname, '/../../', requestedPackage));
+    return require(path.join(__dirname, '/../../../../', requestedPackage));
   }
 };
 
