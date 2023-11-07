@@ -1,7 +1,6 @@
 param (
     [Parameter(Mandatory=$true)]
     [string]$RepoName,
-    [Parameter(Mandatory=$true)]
     [string]$DeviceDetection,
     [string]$DeviceDetectionUrl,
     [string]$CsvUrl
@@ -20,13 +19,24 @@ $deviceDetectionData = "$RepoName/fiftyone.devicedetection.onpremise/device-dete
 
 $downloads = @{
     "TAC-HashV41.hash" = {
+        if (!$DeviceDetection) {
+            Write-Output "::warning file=$($MyInvocation.ScriptName),line=$($MyInvocation.ScriptLineNumber),title=No License Key::A device detection license was not provided, so On-Premise Data file will not be downloaded."
+            return
+        }
         ./steps/fetch-hash-assets.ps1 -RepoName $RepoName -LicenseKey $DeviceDetection -Url $DeviceDetectionUrl
         Move-Item -Path $RepoName/$file -Destination $assets
+        # Tests mutate this file, so we copy it
+        Write-Output "Copying '$file' to '$deviceDetectionData/Enterprise-HashV41.hash'"
+        Copy-Item -Path $assets/$file -Destination $deviceDetectionData/Enterprise-HashV41.hash
     }
     "51Degrees-LiteV4.1.hash" = {Invoke-WebRequest -Uri "https://github.com/51Degrees/device-detection-data/raw/main/51Degrees-LiteV4.1.hash" -OutFile $assets/$file}
     "20000 Evidence Records.yml" = {Invoke-WebRequest -Uri "https://media.githubusercontent.com/media/51Degrees/device-detection-data/main/20000%20Evidence%20Records.yml" -OutFile $assets/$file}
     "20000 User Agents.csv" = {Invoke-WebRequest -Uri "https://media.githubusercontent.com/media/51Degrees/device-detection-data/main/20000%20User%20Agents.csv" -OutFile $assets/$file}
     "51Degrees.csv" = {
+        if (!$DeviceDetection) {
+            Write-Output "::warning file=$($MyInvocation.ScriptName),line=$($MyInvocation.ScriptLineNumber),title=No License Key::A device detection license was not provided, so '$file' will not be downloaded."
+            return
+        }
         ./steps/fetch-csv-assets.ps1 -RepoName $RepoName -LicenseKey $DeviceDetection -Url $CsvUrl
         Get-Content -TotalCount 1 $RepoName/51Degrees-Tac/51Degrees-Tac-All.csv | Out-File $assets/$file # We only need a header
         Remove-Item -Path $RepoName/51Degrees-Tac.zip, $RepoName/51Degrees-Tac/51Degrees-Tac-All.csv
@@ -42,13 +52,10 @@ foreach ($file in $downloads.Keys) {
     }
 }
 
-
-# Tests mutate this file, so we copy it
-Write-Output "Copying 'TAC-HashV41.hash' to '$RepoName/fiftyone.devicedetection.onpremise/tests/51Degrees-LiteV4.1.hash'"
-Copy-Item -Path $assets/51Degrees-LiteV4.1.hash -Destination $RepoName/fiftyone.devicedetection.onpremise/tests/51Degrees.hash
-
 # We can just symlink these
 New-Item -ItemType SymbolicLink -Force -Target "$assets/51Degrees-LiteV4.1.hash" -Path "$deviceDetectionData/51Degrees-LiteV4.1.hash"
+New-Item -ItemType SymbolicLink -Force -Target "$assets/51Degrees-LiteV4.1.hash" -Path "$deviceDetectionData/Enterprise-HashV41.hash"
+New-Item -ItemType SymbolicLink -Force -Target "$assets/51Degrees-LiteV4.1.hash" -Path "$deviceDetectionData/51Degrees.hash"
 New-Item -ItemType SymbolicLink -Force -Target "$assets/20000 Evidence Records.yml" -Path "$deviceDetectionData/20000 Evidence Records.yml"
 New-Item -ItemType SymbolicLink -Force -Target "$assets/20000 User Agents.csv" -Path "$deviceDetectionData/20000 User Agents.csv"
 New-Item -ItemType SymbolicLink -Force -Target "$assets/51Degrees.csv" -Path "$RepoName/fiftyone.devicedetection.cloud/tests/51Degrees.csv"

@@ -22,31 +22,31 @@
 
 /**
 @example onpremise/gettingstarted-web/gettingStarted.js
-
+ 
 @include{doc} example-getting-started-onpremise.txt
-
+ 
 This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection.onpremise/examples/onpremise/gettingstarted-web/gettingStarted.js).
-
+ 
 @include{doc} example-require-datafile.txt
-
+ 
 Required npm Dependencies:
 - fiftyone.pipeline.core
 - fiftyone.pipeline.engines
 - fiftyone.pipeline.engines.fiftyone
 - fiftyone.devicedetection.onpremise
-
+ 
 ## Overview
-
+ 
 The `flowData.evidence.addFromRequest(request)` is used to extract required
 evidence from a Http request. The `Helpers.setResponseHeaders(response, flowData)`
 from fiftyone.pipeline.core package is used to add extra headers to a Http
 response to request further evidence from the client.
 ```
 flowData.evidence.addFromRequest(request);
-
+ 
 core.Helpers.setResponseHeaders(response, flowData);
 ```
-
+ 
 The results of detection can be accessed by querying the `device` property of
 a FlowData object. This can then be used to interrogate the data.
 ```
@@ -54,7 +54,7 @@ var flowData = pipeline.createFlowData();
 var deviceData = pipeline.device;
 var hardwareVendor = deviceData.hardwarevendor;
 ```
-
+ 
 Results can also be accessed in client-side code by using the `fod` object. See the
 [JavaScriptBuilderElement](https://51degrees.com/pipeline-node/class_java_script_builder_element.html)
 for details on available settings such as changing the `fod` name.
@@ -66,22 +66,22 @@ window.onload = function () {
     }
 }
 ```
-
+ 
 ## Configuration
 @include 51d.json
-*/
+ */
 
+const path = require('path');
 const require51 = (requestedPackage) => {
   try {
-    return require('/../' + requestedPackage);
+    return require(path.join(__dirname, '/../../../node_modules/', requestedPackage));
   } catch (e) {
-    return require(requestedPackage);
+    return require(path.join(__dirname, '/../../../../', requestedPackage));
   }
 };
 
 const fs = require('fs');
 const http = require('http');
-const path = require('path');
 const pug = require('pug');
 
 const compiledFunction =
@@ -90,10 +90,10 @@ const compiledFunction =
 const core = require51('fiftyone.pipeline.core');
 
 const optionsExtension =
-  require('fiftyone.devicedetection.shared').optionsExtension;
+  require51('fiftyone.devicedetection.shared').optionsExtension;
 
 const dataExtension =
-  require('fiftyone.devicedetection.shared').dataExtension;
+  require51('fiftyone.devicedetection.shared').dataExtension;
 
 const { DATA_FILE_AGE_WARNING, ExampleUtils } =
   require(path.join(__dirname, '/../exampleUtils'));

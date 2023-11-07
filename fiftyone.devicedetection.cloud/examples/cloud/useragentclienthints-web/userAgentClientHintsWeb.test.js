@@ -21,9 +21,17 @@
  * ********************************************************************* */
 
 const path = require('path');
+const require51 = (requestedPackage) => {
+  try {
+    return require(path.join(__dirname, '/../../../node_modules/', requestedPackage));
+  } catch (e) {
+    return require(path.join(__dirname, '/../../../../', requestedPackage));
+  }
+};
+
 const request = require('supertest');
 // Test constants
-const tc = require('fiftyone.devicedetection.shared').testConstants;
+const tc = require51('fiftyone.devicedetection.shared').testConstants;
 
 // Load the example module
 const example = require(path.join(__dirname, '/userAgentClientHintsWeb.js'));

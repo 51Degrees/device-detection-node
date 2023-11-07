@@ -19,10 +19,16 @@
  * in the end user terms of the application under an appropriate heading,
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
-
 const path = require('path');
-const FiftyOneDegreesDeviceDetection = require(path.join(__dirname,
-  '/../../fiftyone.devicedetection'));
+const require51 = (requestedPackage) => {
+  try {
+    return require(path.join(__dirname, '/../node_modules/', requestedPackage));
+  } catch (e) {
+    return require(path.join(__dirname, '/../../', requestedPackage));
+  }
+};
+
+const FiftyOneDegreesDeviceDetection = require51('fiftyone.devicedetection');
 const DataFile = 'test.hash';
 
 describe('deviceDetectionOnPremise', () => {

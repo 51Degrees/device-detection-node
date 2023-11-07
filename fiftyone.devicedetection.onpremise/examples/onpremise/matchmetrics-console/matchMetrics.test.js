@@ -21,13 +21,21 @@
  * ********************************************************************* */
 
 const path = require('path');
+const require51 = (requestedPackage) => {
+  try {
+    return require(path.join(__dirname, '/../../../node_modules/', requestedPackage));
+  } catch (e) {
+    return require(path.join(__dirname, '/../../../../', requestedPackage));
+  }
+};
+
 const {
   liteDataFileName, enterpriseDataFileName,
   dataFileDirectories, getDataFilePath
 } = require('../../../tests/testHelper');
 
 const example = require(path.join(__dirname, '/matchMetrics.js'));
-const exampleConstants = require('fiftyone.devicedetection.shared').exampleConstants;
+const exampleConstants = require51('fiftyone.devicedetection.shared').exampleConstants;
 
 describe('Examples', () => {
   test('onpremise match metrics Lite data file', async () => {

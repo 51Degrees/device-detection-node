@@ -19,12 +19,18 @@
  * in the end user terms of the application under an appropriate heading,
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
-
 const path = require('path');
-const DeviceDetectionPipelineBuilder = require(path.join(__dirname,
-  '/../deviceDetectionPipelineBuilder'));
-const myResourceKey = process.env.RESOURCE_KEY || '!!YOUR_RESOURCE_KEY!!';
-const errorMessages = require('fiftyone.devicedetection.shared').errorMessages;
+const require51 = (requestedPackage) => {
+  try {
+    return require(path.join(__dirname, '/../node_modules/', requestedPackage));
+  } catch (e) {
+    return require(path.join(__dirname, '/../../', requestedPackage));
+  }
+};
+
+const DeviceDetectionPipelineBuilder = require51('fiftyone.devicedetection').DeviceDetectionPipelineBuilder;
+const myResourceKey = process.env.RESOURCE_KEY || 'AQRb8GIR-KZ2oBJg20g';
+const errorMessages = require51('fiftyone.devicedetection.shared').errorMessages;
 
 describe('deviceDetectionCloud', () => {
   // Check that if no evidence is provided for device

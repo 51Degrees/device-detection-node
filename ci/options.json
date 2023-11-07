@@ -46,8 +46,7 @@
     "LanguageVersion": "18.16.0",
     "RunPerformance": true,
     "PackageRequirement": true
-  },
-  {
+  }, {
     "Name": "Ubuntu_Node_20",
     "Image": "ubuntu-20.04",
     "Language": "node",

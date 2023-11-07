@@ -22,33 +22,40 @@
 
 /**
 @example onpremise/matchmetrics-console/matchMetrics.js
-
+ 
 The example illustrates the various metrics that can be obtained about the device detection
 process, for example, the degree of certainty about the result. Running the example outputs
 those properties and values.
-
+ 
 The example also illustrates controlling properties that are returned from the detection
 process - reducing the number of components required to return the properties requested reduces
 the overall time taken.
-
+ 
 There is a [discussion](https://51degrees.com/documentation/_device_detection__hash.html#DeviceDetection_Hash_DataSetProduction_Performance)
 of metrics and controlling performance on our web site. See also the
 [performance options](https://51degrees.com/documentation/_device_detection__features__performance_options.html)
 page.
-
+ 
 This example is available in full on
 [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection.onpremise/examples/onpremise/matchmetrics-console/matchMetrics.js).
  */
 
 const path = require('path');
+const require51 = (requestedPackage) => {
+  try {
+    return require(path.join(__dirname, '/../../../node_modules/', requestedPackage));
+  } catch (e) {
+    return require(path.join(__dirname, '/../../../../', requestedPackage));
+  }
+};
+
 const fs = require('fs');
 
 const DeviceDetectionOnPremisePipelineBuilder =
-  require((process.env.directory || __dirname) +
-    '/../../../deviceDetectionOnPremisePipelineBuilder');
+  require51('fiftyone.devicedetection.onpremise').DeviceDetectionOnPremisePipelineBuilder;
 
 const ExampleUtils = require(path.join(__dirname, '/../exampleUtils')).ExampleUtils;
-const exampleConstants = require('fiftyone.devicedetection.shared').exampleConstants;
+const exampleConstants = require51('fiftyone.devicedetection.shared').exampleConstants;
 
 // In this example, by default, the 51degrees "Lite" file needs to be in the
 // fiftyone.devicedetection.onpremise/device-detection-cxx/device-detection-data,
