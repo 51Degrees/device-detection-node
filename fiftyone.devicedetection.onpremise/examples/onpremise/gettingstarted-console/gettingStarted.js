@@ -22,27 +22,35 @@
 
 /**
 @example onpremise/gettingstarted-console/gettingStarted.js
-
+ 
 @include{doc} example-getting-started-onpremise.txt
-
+ 
 This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection.onpremise/examples/onpremise/gettingstarted-console/gettingStarted.js).
-
+ 
 @include{doc} example-require-datafile.txt
-
+ 
 Required npm Dependencies:
 - fiftyone.pipeline.core
 - fiftyone.pipeline.engines
 - fiftyone.pipeline.engines.fiftyone
 - fiftyone.devicedetection.onpremise
-*/
+ */
 
 const path = require('path');
+const require51 = (requestedPackage) => {
+  try {
+    return require(path.join(__dirname, '/../../../node_modules/', requestedPackage));
+  } catch (e) {
+    return require(path.join(__dirname, '/../../../../', requestedPackage));
+  }
+};
+
 const DeviceDetectionOnPremisePipelineBuilder =
-  require(path.join(__dirname, '/../../../deviceDetectionOnPremisePipelineBuilder'));
+  require51('fiftyone.devicedetection.onpremise').DeviceDetectionOnPremisePipelineBuilder;
 
 const ExampleUtils = require(path.join(__dirname, '/../exampleUtils')).ExampleUtils;
-const DataExtension = require('fiftyone.devicedetection.shared').dataExtension;
-const exampleConstants = require('fiftyone.devicedetection.shared').exampleConstants;
+const DataExtension = require51('fiftyone.devicedetection.shared').dataExtension;
+const exampleConstants = require51('fiftyone.devicedetection.shared').exampleConstants;
 
 // In this example, by default, the 51degrees "Lite" file needs to be in the
 // fiftyone.devicedetection.onpremise/device-detection-cxx/device-detection-data,

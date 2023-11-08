@@ -22,15 +22,23 @@
 
 const fs = require('fs');
 const path = require('path');
+const require51 = (requestedPackage) => {
+  try {
+    return require(path.join(__dirname, '/../../../node_modules/', requestedPackage));
+  } catch (e) {
+    return require(path.join(__dirname, '/../../../../', requestedPackage));
+  }
+};
+
 const os = require('os');
 const DataFileUpdateService = require('fiftyone.pipeline.engines').DataFileUpdateService;
 const AutoUpdateStatus = require('fiftyone.pipeline.engines').AutoUpdateStatus;
 const DeviceDetectionOnPremisePipelineBuilder =
-  require(path.join(__dirname, '/../../../deviceDetectionOnPremisePipelineBuilder'));
+  require51('fiftyone.devicedetection.onpremise').DeviceDetectionOnPremisePipelineBuilder;
 
 const ExampleUtils = require(path.join(__dirname, '/../exampleUtils')).ExampleUtils;
-const ExampleConstants = require('fiftyone.devicedetection.shared').exampleConstants;
-const KeyUtils = require('fiftyone.devicedetection.shared').keyUtils;
+const ExampleConstants = require51('fiftyone.devicedetection.shared').exampleConstants;
+const KeyUtils = require51('fiftyone.devicedetection.shared').keyUtils;
 
 /**
  * @example onpremise/updatedatafile-console/updatedatafile.js

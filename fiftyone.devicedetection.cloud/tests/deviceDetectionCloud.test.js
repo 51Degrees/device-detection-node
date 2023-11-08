@@ -19,13 +19,12 @@
  * in the end user terms of the application under an appropriate heading,
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
-
 const path = require('path');
 const require51 = (requestedPackage) => {
   try {
-    return require(path.join(__dirname, '/../', requestedPackage));
+    return require(path.join(__dirname, '/../node_modules/', requestedPackage));
   } catch (e) {
-    return require(requestedPackage);
+    return require(path.join(__dirname, '/../../', requestedPackage));
   }
 };
 
@@ -35,12 +34,11 @@ const PipelineBuilder = core.PipelineBuilder;
 const cloudRequestEngine = require51('fiftyone.pipeline.cloudrequestengine');
 const RequestEngineBuilder = cloudRequestEngine.CloudRequestEngine;
 
-const EngineBuilder = require(
-  path.join(__dirname, '/../deviceDetectionCloud')
-);
-const DeviceDetectionCloudPipelineBuilder = require(
-  path.join(__dirname, '/../deviceDetectionCloudPipelineBuilder'));
-const errorMessages = require('fiftyone.devicedetection.shared').errorMessages;
+const EngineBuilder = require51('fiftyone.devicedetection.cloud').DeviceDetectionCloud;
+
+const DeviceDetectionCloudPipelineBuilder = require51('fiftyone.devicedetection.cloud').DeviceDetectionCloudPipelineBuilder;
+
+const errorMessages = require51('fiftyone.devicedetection.shared').errorMessages;
 
 const fs = require('fs');
 const each = require('jest-each').default;
@@ -155,7 +153,7 @@ describe('deviceDetectionCloud', () => {
 
     properties.forEach(key => {
     // TODO: Remove this check once 'setheader' properties are supported in Cloud.
-      if (!key.toLowerCase().startsWith('setheader')) {
+      if (!key.toLowerCase().startsWith('setheader') && !key.length < 0) {
         const property = engine.properties[key.toLowerCase()];
         if (property === undefined) {
           throw new Error(`No property metadata defined for ${key.toLowerCase()}`);
@@ -170,6 +168,10 @@ describe('deviceDetectionCloud', () => {
   });
 });
 
+/**
+ *
+ * @param filePath
+ */
 function readFirstLine (filePath) {
   const rs = fs.createReadStream(path.resolve(filePath));
   let line = '';

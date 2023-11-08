@@ -22,41 +22,40 @@
 
 /**
 @example cloud/useragentclienthints-web/userAgentClientHintsWeb.js
-
+ 
 @include{doc} example-web-integration-client-hints.txt
-
+ 
 This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection.cloud/examples/cloud/useragentclienthints-web/userAgentClientHintsWeb.js).
-
+ 
 @include{doc} example-require-resourcekey.txt
-
+ 
 Make sure to include all the required properties used by this example.
-
+ 
 Expected output:
-
+ 
 User Agent Client Hints Example
-
+ 
 ```
 Hardware Vendor: [...]
 Hardware Name: [...]
 Device Type: [...]
  ...
-
+ 
 ```
-
+ 
  */
-
+const path = require('path');
 const require51 = (requestedPackage) => {
   try {
-    return require('/../../../' + requestedPackage);
+    return require(path.join(__dirname, '/../../../node_modules/', requestedPackage));
   } catch (e) {
-    return require(requestedPackage);
+    return require(path.join(__dirname, '/../../../../', requestedPackage));
   }
 };
+
 const core = require51('fiftyone.pipeline.core');
 
-const DeviceDetectionCloudPipelineBuilder =
-  require((process.env.directory || __dirname) +
-    '/../../../deviceDetectionCloudPipelineBuilder');
+const DeviceDetectionCloudPipelineBuilder = require51('fiftyone.devicedetection.cloud').DeviceDetectionCloudPipelineBuilder;
 
 // Helper function to read property values from flowData
 const getValueHelper = (flowData, propertyKey) => {

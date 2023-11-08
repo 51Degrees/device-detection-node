@@ -21,22 +21,22 @@
  * ********************************************************************* */
 /**
 @example onpremise/performance-console/performance.js
-
+ 
 @include{doc} example-performance-hash.txt
-
+ 
 This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection.onpremise/examples/onpremise/performance-console/performance.js).
-
+ 
 @include{doc} example-require-datafile.txt
-
+ 
 This example require module 'n-readlines' to operate. Please install the module
 before running the example, by using the following command:
-
+ 
 ```
 npm install n-readlines
 ```
-
+ 
 Expected output:
-
+ 
 ```
 Processing [...] User-Agents from [...]/20000 User Agents.csv
 Calibrating
@@ -46,19 +46,25 @@ Average [...] ms per User-Agent.
 ismobile = true : [...]
 ismobile = false : [...]
 ismobile = unknown : [...]
-
+ 
 ```
-
+ 
  */
 
 const events = require('events');
 const path = require('path');
+const require51 = (requestedPackage) => {
+  try {
+    return require(path.join(__dirname, '/../../../node_modules/', requestedPackage));
+  } catch (e) {
+    return require(path.join(__dirname, '/../../../../', requestedPackage));
+  }
+};
 
 const LineReader = require('n-readlines');
 
 const DeviceDetectionOnPremisePipelineBuilder =
-  require((process.env.directory || __dirname) +
-  '/../../../deviceDetectionOnPremisePipelineBuilder');
+  require51('fiftyone.devicedetection.onpremise').DeviceDetectionOnPremisePipelineBuilder;
 
 const ExampleUtils = require(path.join(__dirname, '/../exampleUtils')).ExampleUtils;
 

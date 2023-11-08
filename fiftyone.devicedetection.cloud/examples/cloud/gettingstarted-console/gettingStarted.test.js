@@ -21,15 +21,25 @@
  * ********************************************************************* */
 
 const path = require('path');
+const require51 = (requestedPackage) => {
+  try {
+    return require(path.join(__dirname, '/../../../node_modules/', requestedPackage));
+  } catch (e) {
+    return require(path.join(__dirname, '/../../../../', requestedPackage));
+  }
+};
+
+
+
 const fs = require('fs');
 
 const example = require(path.join(__dirname, '/gettingStarted.js'));
 
 // Test constants
-const tc = require('fiftyone.devicedetection.shared').testConstants;
+const tc = require51('fiftyone.devicedetection.shared').testConstants;
 
 const OptionsExtension =
-  require('fiftyone.devicedetection.shared').optionsExtension;
+  require51('fiftyone.devicedetection.shared').optionsExtension;
 
 describe('Examples', () => {
   test('cloud getting started', async () => {

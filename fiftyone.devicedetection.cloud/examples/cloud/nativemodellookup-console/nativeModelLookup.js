@@ -22,43 +22,50 @@
 
 /**
 @example cloud/nativemodellookup-console/nativeModelLookup.js
-
+ 
 This example shows how to use the 51Degrees Cloud service to lookup the details of a device
 based on a given 'native model name'. Native model name is a string of characters that are
 returned from a query to the device's OS.
 There are different mechanisms to get native model names for
 [Android devices](https://developer.android.com/reference/android/os/Build#MODEL) and
 [iOS devices](https://gist.github.com/soapyigu/c99e1f45553070726f14c1bb0a54053b#file-machinename-swift)
-
+ 
 This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection.cloud/examples/cloud/nativemodellookup-console/nativeModelLookup.js).
-
+ 
 @include{doc} example-require-resourcekey.txt
-
+ 
 Required npm Dependencies:
 - fiftyone.pipeline.cloudrequestengine
 - fiftyone.pipeline.core
 - fiftyone.pipeline.engines
 - fiftyone.pipeline.engines.fiftyone
 - fiftyone.devicedetection.cloud
-
-*/
+ 
+ */
 
 const path = require('path');
+const require51 = (requestedPackage) => {
+  try {
+    return require(path.join(__dirname, '/../../../node_modules/', requestedPackage));
+  } catch (e) {
+    return require(path.join(__dirname, '/../../../../', requestedPackage));
+  }
+};
+
 // Require the core Pipeline and Cloud Request Engine
-const pipelineCore = require('fiftyone.pipeline.core');
-const CloudRequestEngine = require('fiftyone.pipeline.cloudrequestengine');
+const pipelineCore = require51('fiftyone.pipeline.core');
+const CloudRequestEngine = require51('fiftyone.pipeline.cloudrequestengine');
 // Note that this example is designed to be run from within the
 // device detection code base. If this code has been copied to run
 // standalone then you'll need to replace the require below with the
 // commented out version below it.
-const HardwareProfileCloudEngine = require((process.env.directory || __dirname) +
-  '/../../../hardwareProfileCloudEngine');
+const HardwareProfileCloudEngine =  require51('fiftyone.devicedetection.cloud').HardwareProfileCloudEngine;
 
 const ExampleUtils = require(path.join(__dirname, '/../exampleUtils'));
 
 const constants = require(path.join(__dirname, '/../../../constants.js'));
 
-const DataExtension = require('fiftyone.devicedetection.shared').dataExtension;
+const DataExtension = require51('fiftyone.devicedetection.shared').dataExtension;
 
 const analyseNativeModel = async function (nativemodel, pipeline, output) {
   // Create a flow data instance.

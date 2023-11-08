@@ -11,7 +11,7 @@
         }
       },
       {
-        "elementName": "../../../../node_modules/fiftyone.pipeline.engines.fiftyone/shareUsage",
+        "elementName": "../../../node_modules/fiftyone.pipeline.engines.fiftyone/shareUsage",
         "elementParameters": {
           "sharePercentage": 100,
           "interval": 1200000,

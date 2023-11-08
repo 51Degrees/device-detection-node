@@ -25,27 +25,35 @@
 @include{doc} example-getting-started-cloud.txt
 This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection.cloud/examples/cloud/gettingstarted-console/gettingStarted.js).
 @include{doc} example-require-resourcekey.txt
-
+ 
 Required npm Dependencies:
 - fiftyone.pipeline.cloudrequestengine
 - fiftyone.pipeline.core
 - fiftyone.pipeline.engines
 - fiftyone.pipeline.engines.fiftyone
 - fiftyone.devicedetection.cloud
-
+ 
 ## Configuration
 @include 51d.json
-*/
+ */
 
 const path = require('path');
+const require51 = (requestedPackage) => {
+  try {
+    return require(path.join(__dirname, '/../../../node_modules/', requestedPackage));
+  } catch (e) {
+    return require(path.join(__dirname, '/../../../../', requestedPackage));
+  }
+};
+
 const fs = require('fs');
 
-const { PipelineBuilder } = require('fiftyone.pipeline.core');
+const PipelineBuilder = require51('fiftyone.pipeline.core').PipelineBuilder;
 
 const ExampleUtils = require(path.join(__dirname, '/../exampleUtils'));
-const exampleConstants = require('fiftyone.devicedetection.shared').exampleConstants;
-const OptionsExtension = require('fiftyone.devicedetection.shared').optionsExtension;
-const DataExtension = require('fiftyone.devicedetection.shared').dataExtension;
+const exampleConstants = require51('fiftyone.devicedetection.shared').exampleConstants;
+const OptionsExtension = require51('fiftyone.devicedetection.shared').optionsExtension;
+const DataExtension = require51('fiftyone.devicedetection.shared').dataExtension;
 
 const outputValue = function (name, value) {
   // Individual result values have a wrapper called
