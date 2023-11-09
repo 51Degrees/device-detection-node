@@ -156,6 +156,14 @@ eventEmitter.on('FinishProcessing', () => {
     }, null, 4));
   }
 });
+eventEmitter.on('WarmupFinished', () => {
+  console.log("Warmup finished");
+  console.log(`-----------------------------------------`)
+  console.log("Processing started");
+  run(function (userAgent) {
+    processUA(userAgent, false)
+  });
+})
 
 // Create the device detection pipeline with the desired settings.
 const pipeline = new DeviceDetectionOnPremisePipelineBuilder({
@@ -184,7 +192,7 @@ const reportProgress = function (uaProcessed) {
 // Here we make a function that gets a userAgent as evidence and
 // uses the Device Detection Engine to obtain the properties of the
 // device and output it to file.
-const processUA = async function (userAgent, calibration) {
+const processUA = async function (userAgent, warmup) {
   // Create a FlowData element
   // This is used to add evidence and process it through the
   // FlowElements in the Pipeline.
@@ -209,13 +217,20 @@ const processUA = async function (userAgent, calibration) {
     isMobileUnknown++;
   }
 
-  // Increment the number of User-Agent processed and
-  // signal if the required number has been reached
-  reportProgress(++userAgentsProcessed);
-  if (userAgentsProcessed === userAgentsCount) {
-    eventEmitter.emit('FinishProcessing');
-  }
 
+  if(warmup) {
+    reportProgress(++userAgentsProcessed);
+    if (userAgentsProcessed === userAgentsCount) {
+      eventEmitter.emit('WarmupFinished');
+    }
+  }else{
+    // Increment the number of User-Agent processed and
+    // signal if the required number has been reached
+    reportProgress(++userAgentsProcessed);
+    if (userAgentsProcessed === userAgentsCount) {
+      eventEmitter.emit('FinishProcessing');
+    }
+  }
 };
 
 // Loop through the User-Agents in the file
@@ -241,8 +256,10 @@ run(function () {
 });
 console.log('Processing ' + userAgentsCount + ' User-Agents from ' + uafile);
 
-// Run processing
-console.log('Processing');
+// Run warmup for pipeline
+console.log('Warmup');
 run(function (userAgent) {
-  processUA(userAgent);
+  processUA(userAgent, true)
 });
+
+
