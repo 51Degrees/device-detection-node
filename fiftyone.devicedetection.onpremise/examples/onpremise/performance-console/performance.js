@@ -21,34 +21,33 @@
  * ********************************************************************* */
 /**
 @example onpremise/performance-console/performance.js
- 
+
 @include{doc} example-performance-hash.txt
- 
+
 This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection.onpremise/examples/onpremise/performance-console/performance.js).
- 
+
 @include{doc} example-require-datafile.txt
- 
+
 This example require module 'n-readlines' to operate. Please install the module
 before running the example, by using the following command:
- 
+
 ```
 npm install n-readlines
 ```
- 
+
 Expected output:
- 
+
 ```
 Processing [...] User-Agents from [...]/20000 User Agents.csv
-Calibrating
 Processing
 Average [...] detections per second.
 Average [...] ms per User-Agent.
 ismobile = true : [...]
 ismobile = false : [...]
 ismobile = unknown : [...]
- 
+
 ```
- 
+
  */
 
 const events = require('events');
@@ -114,70 +113,47 @@ if (!fs.existsSync(uafile)) {
   throw ("No User-Agents file at '" + datafile + "'");
 }
 
-const secToNanoSec = 1e9;
-const msecToNanoSec = 1e6;
-
 let userAgentsProcessed = 0;
 let isMobileTrue = 0;
 let isMobileFalse = 0;
 let isMobileUnknown = 0;
 let userAgentsCount = 0;
-let startTime, diffTime, calibrationTime, actualTime;
+let startExecutionTime;
 
-// Create an event listener for when User-Agents
-// have been processed.
-// This event listener is used in two stages.
-// The first stage is when the calibration has finished
-// and the actual processing will be kicked off.
-// The second stage is when the actual processing has
-// finished and the final report is displayed.
+// Define an event listener for the 'FinishProcessing' event.
+// This listener is triggered once the processing of User-Agents is completed.
+// It calculates and displays benchmark results and, if specified, writes them to a JSON file.
 const eventEmitter = new events.EventEmitter();
-eventEmitter.on('FinishProcessing', (calibration) => {
-  diffTime = process.hrtime(startTime);
+eventEmitter.on('FinishProcessing', () => {
+  const endExecutionTime = process.hrtime(startExecutionTime);
 
-  let timeMsec;
-  let timeSec;
-  if (calibration) {
-    // Record the calibration time
-    calibrationTime = diffTime[0] * secToNanoSec + diffTime[1];
+  const executionTimeInSeconds = (endExecutionTime[0] + endExecutionTime[1] / 1e9);
+  const executionTimeInMilliseconds = (endExecutionTime[0] * 1e9 + endExecutionTime[1]) / 1e6;
 
-    // Run without calibration
-    console.log('Processing');
-    run(function (userAgent) {
-      processUA(userAgent, false);
-    });
-  } else {
-    // Record the actual time
-    actualTime = diffTime[0] * secToNanoSec + diffTime[1];
+  // Display benchmarks
+  console.log(
+    'Average ' +
+    `${userAgentsCount / executionTimeInSeconds} ` +
+    'detections per second per thread.');
+  console.log(
+    'Average ' +
+    `${executionTimeInMilliseconds / userAgentsCount} ` +
+    'ms per User-Agent.');
+  console.log(`ismobile = true : ${isMobileTrue}`);
+  console.log(`ismobile = false : ${isMobileFalse}`);
+  console.log(`ismobile = unknown : ${isMobileUnknown}`);
 
-    // Display benchmarks
-    console.log(
-      'Average ' +
-      `${(userAgentsCount / (actualTime - calibrationTime)) * secToNanoSec} ` +
-      'detections per second per thread.');
-    console.log(
-      'Average ' +
-      `${((actualTime - calibrationTime) / msecToNanoSec) / userAgentsCount} ` +
-      'ms per User-Agent.');
-    console.log(`ismobile = true : ${isMobileTrue}`);
-    console.log(`ismobile = false : ${isMobileFalse}`);
-    console.log(`ismobile = unknown : ${isMobileUnknown}`);
-
-    timeMsec = (actualTime - calibrationTime) / msecToNanoSec;
-    timeSec = (actualTime - calibrationTime) / secToNanoSec;
-
-    if (jsonoutput) {
-      fs.writeFileSync(jsonoutput, JSON.stringify({
-        HigherIsBetter: {
-          Detections: userAgentsCount,
-          DetectionsPerSecond: userAgentsCount / timeSec
-        },
-        LowerIsBetter: {
-          RuntimeSeconds: timeSec,
-          AvgMillisecsPerDetection: timeMsec / userAgentsCount
-        }
-      }, null, 4));
-    }
+  if (jsonoutput) {
+    fs.writeFileSync(jsonoutput, JSON.stringify({
+      HigherIsBetter: {
+        // Detections: userAgentsCount,
+        DetectionsPerSecond: userAgentsCount / executionTimeInSeconds
+      },
+      LowerIsBetter: {
+        // RuntimeSeconds: executionTimeInSeconds,
+        AvgMillisecsPerDetection: executionTimeInMilliseconds / userAgentsCount
+      }
+    }, null, 4));
   }
 });
 
@@ -209,40 +185,37 @@ const reportProgress = function (uaProcessed) {
 // uses the Device Detection Engine to obtain the properties of the
 // device and output it to file.
 const processUA = async function (userAgent, calibration) {
-  if (calibration) {
-    isMobileFalse++;
-  } else {
-    // Create a FlowData element
-    // This is used to add evidence and process it through the
-    // FlowElements in the Pipeline.
-    const flowData = pipeline.createFlowData();
+  // Create a FlowData element
+  // This is used to add evidence and process it through the
+  // FlowElements in the Pipeline.
+  const flowData = pipeline.createFlowData();
 
-    // Add the User-Agent as evidence
-    flowData.evidence.add('header.user-agent', userAgent);
+  // Add the User-Agent as evidence
+  flowData.evidence.add('header.user-agent', userAgent);
 
-    // Run process on the flowData (this returns a promise)
-    await flowData.process();
+  // Run process on the flowData (this returns a promise)
+  await flowData.process();
 
-    // Construct the output line
-    const ismobile = flowData.device.ismobile;
+  // Construct the output line
+  const ismobile = flowData.device.ismobile;
 
-    if (ismobile.hasValue) {
-      if (ismobile.value) {
-        isMobileTrue++;
-      } else {
-        isMobileFalse++;
-      }
+  if (ismobile.hasValue) {
+    if (ismobile.value) {
+      isMobileTrue++;
     } else {
-      isMobileUnknown++;
+      isMobileFalse++;
     }
+  } else {
+    isMobileUnknown++;
   }
 
   // Increment the number of User-Agent processed and
   // signal if the required number has been reached
   reportProgress(++userAgentsProcessed);
   if (userAgentsProcessed === userAgentsCount) {
-    eventEmitter.emit('FinishProcessing', calibration);
+    eventEmitter.emit('FinishProcessing');
   }
+
 };
 
 // Loop through the User-Agents in the file
@@ -253,7 +226,8 @@ const run = function (callback) {
 
   // Reset User-Agents processed count and start time
   userAgentsProcessed = 0;
-  startTime = process.hrtime();
+  isMobileTrue = isMobileFalse = isMobileUnknown = 0;
+  startExecutionTime = process.hrtime();
   line = liner.next();
   while (line) {
     callback(line.toString('utf8').replace(/\r?\n|\r/g, ''));
@@ -267,8 +241,8 @@ run(function () {
 });
 console.log('Processing ' + userAgentsCount + ' User-Agents from ' + uafile);
 
-// Run with calibration
-console.log('Calibrating');
+// Run processing
+console.log('Processing');
 run(function (userAgent) {
-  processUA(userAgent, true);
+  processUA(userAgent);
 });
