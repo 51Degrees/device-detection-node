@@ -22,14 +22,14 @@
 
 /**
 @example onpremise/automaticupdates/updatePollingInterval.js
- 
+
 @include{doc} example-automatic-updates-polling-interval-hash.txt
- 
+
 This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection.onpremise/examples/onpremise/automaticupdates/updatePollingInterval.js).
- 
+
 @include{doc} example-require-datafile.txt
 @include{doc} example-require-licensekey.txt
- 
+
  */
 
 const path = require('path');

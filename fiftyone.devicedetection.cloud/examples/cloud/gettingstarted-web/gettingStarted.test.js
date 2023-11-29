@@ -29,7 +29,6 @@ const require51 = (requestedPackage) => {
   }
 };
 
-
 const request = require('supertest');
 
 const fs = require('fs');
@@ -48,9 +47,9 @@ describe('Examples', () => {
     // Load configuration options
     const options = JSON.parse(fs.readFileSync(path.join(__dirname, '/51d.json')));
 
-    console.log(OptionsExtension);
-    console.log(options);
-
+    console.log(tc);
+    console.log(tc.envVars.superResourceKeyEnvVar);
+    console.log(process.env[tc.envVars.superResourceKeyEnvVar]);
     // Update element path with a full path
     OptionsExtension.updateElementPath(options, __dirname);
     OptionsExtension.setResourceKey(

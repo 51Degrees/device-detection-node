@@ -29,8 +29,6 @@ const require51 = (requestedPackage) => {
   }
 };
 
-
-
 const fs = require('fs');
 
 const example = require(path.join(__dirname, '/gettingStarted.js'));

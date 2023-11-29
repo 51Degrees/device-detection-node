@@ -36,7 +36,7 @@ Required npm Dependencies:
 - fiftyone.pipeline.engines
 - fiftyone.pipeline.engines.fiftyone
 - fiftyone.devicedetection.cloud
- 
+
 ## Configuration
 @include 51d.json
  */

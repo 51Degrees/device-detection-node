@@ -157,13 +157,13 @@ eventEmitter.on('FinishProcessing', () => {
   }
 });
 eventEmitter.on('WarmupFinished', () => {
-  console.log("Warmup finished");
-  console.log(`-----------------------------------------`)
-  console.log("Processing started");
+  console.log('Warmup finished');
+  console.log('-----------------------------------------');
+  console.log('Processing started');
   run(function (userAgent) {
-    processUA(userAgent, false)
+    processUA(userAgent, false);
   });
-})
+});
 
 // Create the device detection pipeline with the desired settings.
 const pipeline = new DeviceDetectionOnPremisePipelineBuilder({
@@ -217,13 +217,12 @@ const processUA = async function (userAgent, warmup) {
     isMobileUnknown++;
   }
 
-
-  if(warmup) {
+  if (warmup) {
     reportProgress(++userAgentsProcessed);
     if (userAgentsProcessed === userAgentsCount) {
       eventEmitter.emit('WarmupFinished');
     }
-  }else{
+  } else {
     // Increment the number of User-Agent processed and
     // signal if the required number has been reached
     reportProgress(++userAgentsProcessed);
@@ -259,7 +258,5 @@ console.log('Processing ' + userAgentsCount + ' User-Agents from ' + uafile);
 // Run warmup for pipeline
 console.log('Warmup');
 run(function (userAgent) {
-  processUA(userAgent, true)
+  processUA(userAgent, true);
 });
-
-

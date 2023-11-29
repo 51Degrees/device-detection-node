@@ -25,14 +25,14 @@
 @include{doc} example-getting-started-cloud.txt
 This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection.cloud/examples/cloud/gettingstarted-console/gettingStarted.js).
 @include{doc} example-require-resourcekey.txt
- 
+
 Required npm Dependencies:
 - fiftyone.pipeline.cloudrequestengine
 - fiftyone.pipeline.core
 - fiftyone.pipeline.engines
 - fiftyone.pipeline.engines.fiftyone
 - fiftyone.devicedetection.cloud
- 
+
 ## Configuration
 @include 51d.json
  */
@@ -158,7 +158,7 @@ if (process.env.JEST_WORKER_ID === undefined) {
   }
 
   run(options, process.stdout);
-};
+}
 
 module.exports = {
   run

@@ -48,6 +48,7 @@ describe('deviceDetectionOnPremise', () => {
   beforeAll(() => {
     // Copy data file to test directory if one does not exist.
     try {
+      console.log(fs.existsSync(DataFile));
       if (!fs.existsSync(DataFile)) {
         fs.copyFile(LiteDataFile, DataFile, (err) => {
           if (err) throw err;
@@ -83,7 +84,7 @@ describe('deviceDetectionOnPremise', () => {
       // TODO: Check why javascriptgethighentropyvalues null
       // APV signature of javascriptgethighentropyvalues
       // AspectPropertyValue { noValueMessage: undefined, hasValue: false }
-      if(key === 'javascriptgethighentropyvalues') return;
+      if (key === 'javascriptgethighentropyvalues') return;
 
       expect(apv).not.toBeNull();
       expect(apv).toBeDefined();
@@ -155,11 +156,10 @@ describe('deviceDetectionOnPremise', () => {
     await flowData.process();
 
     Object.keys(engine.properties).forEach(key => {
-
       // TODO: Check why javascriptgethighentropyvalues null
       // APV signature of javascriptgethighentropyvalues
       // AspectPropertyValue { noValueMessage: undefined, hasValue: false }
-      if(key === 'javascriptgethighentropyvalues') return;
+      if (key === 'javascriptgethighentropyvalues') return;
 
       const property = engine.properties[key];
       const expectedType = property.type;
