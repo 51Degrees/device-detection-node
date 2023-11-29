@@ -46,10 +46,6 @@ describe('Examples', () => {
   test('cloud getting started web', async () => {
     // Load configuration options
     const options = JSON.parse(fs.readFileSync(path.join(__dirname, '/51d.json')));
-
-    console.log(tc);
-    console.log(tc.envVars.superResourceKeyEnvVar);
-    console.log(process.env[tc.envVars.superResourceKeyEnvVar]);
     // Update element path with a full path
     OptionsExtension.updateElementPath(options, __dirname);
     OptionsExtension.setResourceKey(
