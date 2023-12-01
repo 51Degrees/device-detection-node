@@ -22,25 +22,25 @@
 
 /**
 @example onpremise/useragentclienthints-web/userAgentClientHintsWeb.js
- 
+
 @include{doc} example-web-integration-client-hints.txt
- 
+
 This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection.onpremise/examples/onpremise/useragentclienthints-web/userAgentClientHintsWeb.js).
- 
+
 @include{doc} example-require-datafile.txt
- 
+
 Expected output:
- 
+
 User Agent Client Hints Example
- 
+
 ```
 Hardware Vendor: [...]
 Hardware Name: [...]
 Device Type: [...]
  ...
- 
+
 ```
- 
+
  */
 
 const path = require('path');

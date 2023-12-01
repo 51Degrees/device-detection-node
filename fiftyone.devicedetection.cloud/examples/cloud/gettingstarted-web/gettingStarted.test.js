@@ -29,7 +29,6 @@ const require51 = (requestedPackage) => {
   }
 };
 
-
 const request = require('supertest');
 
 const fs = require('fs');
@@ -47,10 +46,6 @@ describe('Examples', () => {
   test('cloud getting started web', async () => {
     // Load configuration options
     const options = JSON.parse(fs.readFileSync(path.join(__dirname, '/51d.json')));
-
-    console.log(OptionsExtension);
-    console.log(options);
-
     // Update element path with a full path
     OptionsExtension.updateElementPath(options, __dirname);
     OptionsExtension.setResourceKey(

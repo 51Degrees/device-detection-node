@@ -34,8 +34,8 @@ const DataFile = engines.DataFile;
  * @param {string} options.useUrlFormatter whether to append default URL params for Data File download
  **/
 class DeviceDetectionDataFile extends DataFile {
-  constructor ({ useUrlFormatter = true, ...rest}) {
-    super({...rest});
+  constructor ({ useUrlFormatter = true, ...rest }) {
+    super({ ...rest });
     this.useUrlFormatter = useUrlFormatter;
   }
   /**
@@ -45,6 +45,7 @@ class DeviceDetectionDataFile extends DataFile {
    *
    * @returns {string} url
    */
+
   urlFormatter () {
     const queryParams = {
       Product: this.updateURLParams.product,
@@ -57,7 +58,7 @@ class DeviceDetectionDataFile extends DataFile {
       queryParams.licenseKeys = this.updateURLParams.licenseKeys;
     }
 
-    if(this.useUrlFormatter){
+    if (this.useUrlFormatter) {
       URL += '?' + querystring.stringify(queryParams);
     }
 
