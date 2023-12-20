@@ -8,14 +8,7 @@
     "type": "git",
     "url": "https://github.com/51Degrees/device-detection-node"
   },
-  "author": "51Degrees",
-  "contributors": [
-    "Filip Hnízdo <filip@octophin.com> (https://octophindigital.com/)",
-    "Steve Ballantine <stephen@51degrees.com> (https://51degrees.com)",
-    "Ben Shilito <ben@51degrees.com> (https://51degrees.com)",
-    "Joseph Dix <joseph@51degrees.com> (https://51degrees.com)",
-    "Tung Pham <tung@51degrees.com> (https://51degrees.com)"
-  ],
+  "author": "51Degrees Engineering <engineering@51degrees.com>",
   "devDependencies": {
     "eslint": "^8.16.0",
     "eslint-config-standard": "^17.0.0",
