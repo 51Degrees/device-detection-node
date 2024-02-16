@@ -2,6 +2,7 @@
   "name": "fiftyone.devicedetection.shared",
   "version": "1.0.0",
   "description": "Shared functionality for implementing device detection engine for the 51Degrees Pipeline API",
+  "keywords": ["51degrees", "device detection", "user-agent", "client hints", "browser", "os", "device", "cpu", "mobile", "phone", "tablet", "tv", "bot", "crawler", "WURFL", "DeviceAtlas"],
   "main": "index.js",
   "types": "types/index.d.ts",
   "repository": {
