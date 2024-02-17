@@ -2,6 +2,7 @@
   "name": "fiftyone.devicedetection.cloud",
   "version": "1.0.0",
   "description": "Device detection cloud services for the 51Degrees Pipeline API",
+  "keywords": ["51degrees", "device detection", "user-agent", "client hints", "browser", "os", "device", "cpu", "mobile", "phone", "tablet", "tv", "bot", "crawler", "cloud", "WURFL", "DeviceAtlas"],
   "main": "index.js",
   "directories": {
     "test": "tests"

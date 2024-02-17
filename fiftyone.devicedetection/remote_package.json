@@ -1,7 +1,8 @@
 {
   "name": "fiftyone.devicedetection",
   "version": "1.0.0",
-  "description": "Device detection services for the 51Degrees Pipeline API",
+  "description": "Parse HTTP headers to detect the device type, model, operating system, browser, and crawler information",
+  "keywords": ["51degrees", "device detection", "user-agent", "client hints", "browser", "os", "device", "cpu", "mobile", "phone", "tablet", "tv", "bot", "crawler", "detect", "WURFL", "DeviceAtlas"],
   "main": "index.js",
   "directories": {
     "test": "tests"
