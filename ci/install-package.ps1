@@ -35,7 +35,9 @@ try {
             $jsonContent = Get-Content $filePath | ConvertFrom-Json
 
             # Check if the dependency exists in the package.json
-            if ($jsonContent.dependencies."$package") {
+            if (! $jsonContent.dependencies -or $jsonContent.dependencies.count -lt 1) {
+                Write-Output "$package doesn't have any dependencies"
+            } elseif ($jsonContent.dependencies."$package") {
                 # Update the dependency value
                 $jsonContent.dependencies."$package" = "file:../../package/$package-$version.tgz"
             } else {
