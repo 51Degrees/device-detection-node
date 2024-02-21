@@ -6,7 +6,7 @@ param (
 )
 
 # List of packages for build
-$packages = "fiftyone.devicedetection", "fiftyone.devicedetection.cloud", "fiftyone.devicedetection.onpremise"
+$packages = "fiftyone.devicedetection", "fiftyone.devicedetection.cloud", "fiftyone.devicedetection.onpremise", "fiftyone.devicedetection.shared"
 
 # List of packages which does not use remote package.json
 $noRemote = "fiftyone.devicedetection.shared"
