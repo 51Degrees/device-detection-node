@@ -310,7 +310,7 @@ describe('deviceDetectionOnPremise', () => {
       if (err) return console.error(err);
 
       const pipeline = new FiftyOneDegreesDeviceDetectionOnPremise.DeviceDetectionOnPremisePipelineBuilder({
-        dataFile: "./tests/datafile.hash",
+        dataFile: DataFile,
         updateOnStart: true,
         autoUpdate: false,
         dataUpdateUrl: `http://localhost:${PORT}`,
