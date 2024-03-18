@@ -38,7 +38,7 @@ const fs = require('fs');
 const zlib = require('zlib');
 let server;
 
-const DataFile = path.resolve((process.env.directory || __dirname) + '/../device-detection-cxx/device-detection-data/51Degrees-LiteV4.1.hash');
+const DataFile = path.resolve((process.env.directory || __dirname) + '../device-detection-cxx/device-detection-data/51Degrees-LiteV4.1.hash');
 
 describe('deviceDetectionOnPremise', () => {
   // Check that an exception is thrown if license key is not
