@@ -38,7 +38,7 @@ const fs = require('fs');
 const zlib = require('zlib');
 let server;
 
-const DataFile = path.resolve((process.env.directory || __dirname) + '/../device-detection-cxx/device-detection-data/51Degrees-LiteV4.1.hash');
+const DataFile = (process.env.directory || __dirname) + '/../device-detection-cxx/device-detection-data/51Degrees-LiteV4.1.hash';
 
 describe('deviceDetectionOnPremise', () => {
   // Check that an exception is thrown if license key is not
@@ -303,12 +303,21 @@ describe('deviceDetectionOnPremise', () => {
   test('Temporary files clean up - OnUpdate', done => {
 
     const DataFileOutput = path.resolve(process.env.directory || __dirname, '../device-detection-cxx/device-detection-data/51Degrees-LiteV4.1.gz');
+    const tempDir = './tests/tmp';
 
     let requestUrl = '';
     const PORT = 8080;
     fs.copyFileSync(DataFile, "./tests/datafile.hash");
-    fs.mkdir('./tests/tmp', { recursive: true }, (err) => {
+    fs.mkdir(tempDir, { recursive: true }, (err) => {
       if (err) return console.error(err);
+
+      fs.readdir( path.resolve(process.env.directory || __dirname, '../device-detection-cxx/device-detection-data'), (err, files) => {
+        if (err) {
+          console.error('Error reading directory:', err);
+          return;
+        }
+        console.log('Directory contents:', files);
+      });
 
       const pipeline = new FiftyOneDegreesDeviceDetectionOnPremise.DeviceDetectionOnPremisePipelineBuilder({
         dataFile: "./tests/datafile.hash",
@@ -318,7 +327,7 @@ describe('deviceDetectionOnPremise', () => {
         dataUpdateVerifyMd5: false,
         dataUpdateUseUrlFormatter: false,
         createTempDataCopy: true,
-        tempDataDir: './tests/tmp'
+        tempDataDir: tempDir
       }).build()
 
       server = http.createServer((req, res) => {
