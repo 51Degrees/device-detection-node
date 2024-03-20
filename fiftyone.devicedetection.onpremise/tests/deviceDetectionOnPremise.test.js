@@ -302,15 +302,16 @@ describe('deviceDetectionOnPremise', () => {
 
   test('Temporary files clean up - OnUpdate', done => {
 
-    const DataFileOutput = path.resolve(process.env.directory || __dirname, '/../device-detection-cxx/device-detection-data/51Degrees-LiteV4.1.gz');
+    const DataFileOutput = path.resolve(process.env.directory || __dirname, '../device-detection-cxx/device-detection-data/51Degrees-LiteV4.1.gz');
 
     let requestUrl = '';
     const PORT = 8080;
+    fs.copyFileSync(DataFile, "./tests/datafile.hash");
     fs.mkdir('./tests/tmp', { recursive: true }, (err) => {
       if (err) return console.error(err);
 
       const pipeline = new FiftyOneDegreesDeviceDetectionOnPremise.DeviceDetectionOnPremisePipelineBuilder({
-        dataFile: DataFile,
+        dataFile: "./tests/datafile.hash",
         updateOnStart: true,
         autoUpdate: false,
         dataUpdateUrl: `http://localhost:${PORT}`,
@@ -345,6 +346,7 @@ describe('deviceDetectionOnPremise', () => {
             fs.readdir('./tests/tmp', (err, files) => {
               if (err) {
                 console.error('Error reading the directory:', err);
+                done();
                 return;
               }
               // Filter files that contain '_done' in their names
