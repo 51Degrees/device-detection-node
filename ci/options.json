@@ -6,5 +6,21 @@
     "LanguageVersion": "16.20.0",
     "RunPerformance": true,
     "PackageRequirement": true
+  },
+  {
+    "Name": "Windows_Node_16",
+    "Image": "windows-latest",
+    "Language": "node",
+    "LanguageVersion": "16.20.0",
+    "RunPerformance": true,
+    "PackageRequirement": true
+  },
+  {
+    "Name": "macOS_Node_16",
+    "Image": "macos-latest",
+    "Language": "node",
+    "LanguageVersion": "16.20.0",
+    "RunPerformance": true,
+    "PackageRequirement": true
   }
 ]
