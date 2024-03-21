@@ -303,7 +303,7 @@ describe('deviceDetectionOnPremise', () => {
   test('Temporary files clean up - OnUpdate', done => {
 
     const DataFileOutput = path.resolve((process.env.directory || __dirname) + '/51Degrees-LiteV4.1.gz');
-    const DataFileCopy = path.resolve((process.env.directory || __dirname) + '/51Degrees-Lite.hash');
+    const DataFileCopy = path.resolve((process.env.directory || __dirname) + '/51Degrees.hash');
     const tempDir = './tests/tmp';
 
     let requestUrl = '';
