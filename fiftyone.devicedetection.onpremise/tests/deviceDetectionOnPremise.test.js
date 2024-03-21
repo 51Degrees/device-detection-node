@@ -38,7 +38,7 @@ const fs = require('fs');
 const zlib = require('zlib');
 let server;
 
-const DataFile = path.resolve((process.env.directory || __dirname) + '/51Degrees.hash');
+const DataFile = path.resolve((process.env.directory || __dirname) + '/../device-detection-cxx/device-detection-data/51Degrees-LiteV4.1.hash');
 
 describe('deviceDetectionOnPremise', () => {
   // Check that an exception is thrown if license key is not
@@ -303,6 +303,7 @@ describe('deviceDetectionOnPremise', () => {
   test('Temporary files clean up - OnUpdate', done => {
 
     const DataFileOutput = path.resolve((process.env.directory || __dirname) + '/51Degrees-LiteV4.1.gz');
+    const DataFileCopy = path.resolve((process.env.directory || __dirname) + '/51Degrees-Lite.hash');
     const tempDir = './tests/tmp';
 
     let requestUrl = '';
@@ -311,7 +312,7 @@ describe('deviceDetectionOnPremise', () => {
     fs.mkdir(tempDir, { recursive: true }, (err) => {
       if (err) return console.error(err);
       const pipeline = new FiftyOneDegreesDeviceDetectionOnPremise.DeviceDetectionOnPremisePipelineBuilder({
-        dataFile: DataFile,
+        dataFile: DataFileCopy,
         updateOnStart: true,
         autoUpdate: false,
         dataUpdateUrl: `http://localhost:${PORT}`,
@@ -324,7 +325,7 @@ describe('deviceDetectionOnPremise', () => {
       server = http.createServer((req, res) => {
         requestUrl = req.url;
         const md5sum = crypto.createHash('md5');
-        const LiteDataFileStream = fs.createReadStream(DataFile);
+        const LiteDataFileStream = fs.createReadStream(DataFileCopy);
         const writeStream = fs.createWriteStream(DataFileOutput);
         const gzip = zlib.createGzip();
 
