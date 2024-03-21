@@ -216,7 +216,7 @@ describe('deviceDetectionOnPremise', () => {
   // Check if dataUpdateUseUrlFormatter property does not append query params to update url - default value = true
 
   test('Properties for on-premise engine - Data File Update', done => {
-    const DataFileOutput = path.resolve((process.env.directory || __dirname) + '/51Degrees-LiteV4.1.hash.gz');
+    const DataFileOutput = path.resolve(process.env.directory || __dirname + '../device-detection-cxx/device-detection-data/51Degrees-LiteV4.1.gz');
 
     let requestReceived = false;
     let requestUrl = '';
@@ -251,7 +251,6 @@ describe('deviceDetectionOnPremise', () => {
           expect(requestUrl).toBe('/');
           server.close();
           done();
-
         });
       });
     }).listen(PORT);
