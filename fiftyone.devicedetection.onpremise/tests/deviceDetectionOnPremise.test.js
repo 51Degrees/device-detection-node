@@ -216,7 +216,7 @@ describe('deviceDetectionOnPremise', () => {
   // Check if dataUpdateUseUrlFormatter property does not append query params to update url - default value = true
   test('Properties for on-premise engine - Data File Update', done => {
 
-    const DataFileOutput = path.resolve(process.env.directory || __dirname, '/51Degrees-LiteV4.1.gz');
+    const DataFileOutput = path.resolve((process.env.directory || __dirname) + '/51Degrees-LiteV4.1.gz');
 
     let requestReceived = false;
     let requestUrl = '';
@@ -302,7 +302,7 @@ describe('deviceDetectionOnPremise', () => {
 
   test('Temporary files clean up - OnUpdate', done => {
 
-    const DataFileOutput = path.resolve(process.env.directory || __dirname, '/51Degrees-LiteV4.1.gz');
+    const DataFileOutput = path.resolve((process.env.directory || __dirname) + '/51Degrees-LiteV4.1.gz');
     const tempDir = './tests/tmp';
 
     let requestUrl = '';
