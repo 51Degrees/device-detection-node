@@ -307,18 +307,16 @@ describe('deviceDetectionOnPremise', () => {
 
     let requestUrl = '';
     const PORT = 8080;
+    fs.readdir( path.resolve(process.env.directory || __dirname, '../device-detection-cxx/device-detection-data'), (err, files) => {
+      if (err) {
+        console.error('Error reading directory:', err);
+        return;
+      }
+      console.log('Directory contents:', files);
+    });
     fs.copyFileSync(DataFile, "./tests/datafile.hash");
     fs.mkdir(tempDir, { recursive: true }, (err) => {
       if (err) return console.error(err);
-
-      fs.readdir( path.resolve(process.env.directory || __dirname, '../device-detection-cxx/device-detection-data'), (err, files) => {
-        if (err) {
-          console.error('Error reading directory:', err);
-          return;
-        }
-        console.log('Directory contents:', files);
-      });
-
       const pipeline = new FiftyOneDegreesDeviceDetectionOnPremise.DeviceDetectionOnPremisePipelineBuilder({
         dataFile: "./tests/datafile.hash",
         updateOnStart: true,
