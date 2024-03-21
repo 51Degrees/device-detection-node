@@ -29,7 +29,7 @@ const require51 = (requestedPackage) => {
 };
 
 const DeviceDetectionPipelineBuilder = require51('fiftyone.devicedetection').DeviceDetectionPipelineBuilder;
-const myResourceKey = process.env.RESOURCE_KEY || 'AQRb8GIR-KZ2oBJg20g';
+const myResourceKey = process.env.RESOURCE_KEY;
 const errorMessages = require51('fiftyone.devicedetection.shared').errorMessages;
 
 describe('deviceDetectionCloud', () => {

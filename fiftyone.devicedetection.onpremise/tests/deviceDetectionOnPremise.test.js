@@ -38,7 +38,7 @@ const fs = require('fs');
 const zlib = require('zlib');
 let server;
 
-const DataFile = (process.env.directory || __dirname) + '/../device-detection-cxx/device-detection-data/51Degrees-LiteV4.1.hash';
+const DataFile = path.resolve((process.env.directory || __dirname) + '/51Degrees.hash');
 
 describe('deviceDetectionOnPremise', () => {
   // Check that an exception is thrown if license key is not
@@ -216,7 +216,7 @@ describe('deviceDetectionOnPremise', () => {
   // Check if dataUpdateUseUrlFormatter property does not append query params to update url - default value = true
   test('Properties for on-premise engine - Data File Update', done => {
 
-    const DataFileOutput = path.resolve(process.env.directory || __dirname, '../device-detection-cxx/device-detection-data/51Degrees-LiteV4.1.gz');
+    const DataFileOutput = path.resolve(process.env.directory || __dirname, '/51Degrees-LiteV4.1.gz');
 
     let requestReceived = false;
     let requestUrl = '';
@@ -302,23 +302,16 @@ describe('deviceDetectionOnPremise', () => {
 
   test('Temporary files clean up - OnUpdate', done => {
 
-    const DataFileOutput = path.resolve(process.env.directory || __dirname, '../device-detection-cxx/device-detection-data/51Degrees-LiteV4.1.gz');
+    const DataFileOutput = path.resolve(process.env.directory || __dirname, '/51Degrees-LiteV4.1.gz');
     const tempDir = './tests/tmp';
 
     let requestUrl = '';
     const PORT = 8080;
-    fs.readdir( path.resolve(process.env.directory || __dirname, '../device-detection-cxx/device-detection-data'), (err, files) => {
-      if (err) {
-        console.error('Error reading directory:', err);
-        return;
-      }
-      console.log('Directory contents:', files);
-    });
-    fs.copyFileSync(DataFile, "./tests/datafile.hash");
+
     fs.mkdir(tempDir, { recursive: true }, (err) => {
       if (err) return console.error(err);
       const pipeline = new FiftyOneDegreesDeviceDetectionOnPremise.DeviceDetectionOnPremisePipelineBuilder({
-        dataFile: "./tests/datafile.hash",
+        dataFile: DataFile,
         updateOnStart: true,
         autoUpdate: false,
         dataUpdateUrl: `http://localhost:${PORT}`,
