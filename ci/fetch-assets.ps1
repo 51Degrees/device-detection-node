@@ -54,9 +54,8 @@ foreach ($file in $downloads.Keys) {
 
 # We can just symlink these
 Copy-Item -Path $assets/51Degrees-LiteV4.1.hash -Destination "$RepoName/fiftyone.devicedetection.onpremise/tests/51Degrees-LiteV4.1.hash"
-New-Item -ItemType SymbolicLink -Force -Target "$assets/51Degrees-LiteV4.1.hash" -Path "$deviceDetectionData/51Degrees-LiteV4.1.hash"
-New-Item -ItemType SymbolicLink -Force -Target "$assets/51Degrees-LiteV4.1.hash" -Path "$deviceDetectionData/Enterprise-HashV41.hash"
-New-Item -ItemType SymbolicLink -Force -Target "$assets/51Degrees-LiteV4.1.hash" -Path "$deviceDetectionData/51Degrees.hash"
+Copy-Item -Path $assets/51Degrees-LiteV4.1.hash -Destination "$deviceDetectionData/51Degrees-LiteV4.1.hash"
+Copy-Item -Path $assets/51Degrees-LiteV4.1.hash -Destination "$deviceDetectionData/51Degrees.hash"
 New-Item -ItemType SymbolicLink -Force -Target "$assets/20000 Evidence Records.yml" -Path "$deviceDetectionData/20000 Evidence Records.yml"
 New-Item -ItemType SymbolicLink -Force -Target "$assets/20000 User Agents.csv" -Path "$deviceDetectionData/20000 User Agents.csv"
 New-Item -ItemType SymbolicLink -Force -Target "$assets/51Degrees.csv" -Path "$RepoName/fiftyone.devicedetection.cloud/tests/51Degrees.csv"
