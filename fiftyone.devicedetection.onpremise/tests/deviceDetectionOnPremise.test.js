@@ -351,6 +351,7 @@ describe('deviceDetectionOnPremise', () => {
               }
               // Filter files that contain '_done' in their names
               const doneFiles = files.filter(file => file.includes('_done'));
+              console.log(files)
               expect(doneFiles.length).toBe(0);
               server.close();
               done();
