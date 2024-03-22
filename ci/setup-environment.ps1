@@ -6,7 +6,7 @@ param (
 Push-Location $RepoName
 
 $integrationScript = @"
- "jest --ci --reporters=jest-junit --reporters=default --coverage --coverageReporters=cobertura --testPathPattern=\"(examples/*|tests/*)\" --testPathIgnorePatterns=\"(performance.test.js)\""
+ "jest --ci --reporters=jest-junit --reporters=default --coverage --coverageReporters=cobertura --testPathPattern=\"(examples/*)\" --testPathIgnorePatterns=\"(performance.test.js|tests/*)\""
 "@
 
 $packageJSON = @"
