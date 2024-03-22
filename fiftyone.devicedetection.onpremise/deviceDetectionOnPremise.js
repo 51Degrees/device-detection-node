@@ -255,7 +255,7 @@ class DeviceDetectionOnPremise extends Engine {
       pollingInterval,
       updateTimeMaximumRandomisation,
       createTempDataCopy,
-      tempDataDir,
+      tempDataDir = os.tmpdir(),
       updateOnStart = false,
       usePredictiveGraph = true,
       usePerformanceGraph = false
@@ -483,6 +483,7 @@ class DeviceDetectionOnPremise extends Engine {
       fileSystemWatcher,
       pollingInterval,
       updateTimeMaximumRandomisation,
+      tempDataDirectory: tempDataDir,
       useUrlFormatter: dataUpdateUseUrlFormatter
     };
 

@@ -32,13 +32,13 @@ const require51 = (requestedPackage) => {
 const FiftyOneDegreesDeviceDetectionOnPremise = require51('fiftyone.devicedetection.onpremise');
 const EngineBuilder = require51('fiftyone.devicedetection.onpremise').DeviceDetectionOnPremise;
 
-// const http = require('http');
-// const crypto = require('crypto');
-// const fs = require('fs');
-// const zlib = require('zlib');
-// let server;
+const http = require('http');
+const crypto = require('crypto');
+const fs = require('fs');
+const zlib = require('zlib');
+let server;
 
-const DataFile = (process.env.directory || __dirname) + '/../device-detection-cxx/device-detection-data/51Degrees-LiteV4.1.hash';
+const DataFile = path.resolve((process.env.directory || __dirname) + '/../device-detection-cxx/device-detection-data/51Degrees-LiteV4.1.hash');
 
 describe('deviceDetectionOnPremise', () => {
   // Check that an exception is thrown if license key is not
@@ -214,9 +214,9 @@ describe('deviceDetectionOnPremise', () => {
   // Check if dataUpdateUrl property are set correctly
   // Check if dataUpdateVerifyMd5 property works as expected - default value = true
   // Check if dataUpdateUseUrlFormatter property does not append query params to update url - default value = true
+
   // test('Properties for on-premise engine - Data File Update', done => {
-  //
-  //   const DataFileOutput = (process.env.directory || __dirname) + '/../device-detection-cxx/device-detection-data/51Degrees-LiteV4.1.gz';
+  //   const DataFileOutput = path.resolve(process.env.directory || __dirname + '/../device-detection-cxx/device-detection-data/51Degrees-LiteV4.1.gz');
   //
   //   let requestReceived = false;
   //   let requestUrl = '';
@@ -249,23 +249,22 @@ describe('deviceDetectionOnPremise', () => {
   //         // Checking that server receives request
   //         expect(requestReceived).toBe(true);
   //         expect(requestUrl).toBe('/');
-  //         done();
   //         server.close();
+  //         done();
   //       });
   //     });
   //   }).listen(PORT);
-  //
-  //
   //   const pipeline = new FiftyOneDegreesDeviceDetectionOnPremise.DeviceDetectionOnPremisePipelineBuilder({
   //     dataFile: DataFile,
   //     updateOnStart: true,
-  //     autoUpdate: true,
+  //     autoUpdate: false,
   //     dataUpdateUrl: `http://localhost:${PORT}`,
   //     dataUpdateVerifyMd5: false,
   //     dataUpdateUseUrlFormatter: false
-  //   }).build()
+  //   }).build();
+  //
   // }, 20000);
-
+  //
   // test('Properties for on-premise engine - Data File Update - 404 Status Code', done => {
   //   let requestCounter = 0;
   //   const PORT = 3000;
@@ -280,7 +279,7 @@ describe('deviceDetectionOnPremise', () => {
   //   let pipeline = new FiftyOneDegreesDeviceDetectionOnPremise.DeviceDetectionOnPremisePipelineBuilder({
   //     dataFile: DataFile,
   //     updateOnStart: true,
-  //     autoUpdate: true,
+  //     autoUpdate: false,
   //     dataUpdateUrl: `http://localhost:${PORT}`,
   //     dataUpdateVerifyMd5: false,
   //     dataUpdateUseUrlFormatter: false
@@ -299,8 +298,74 @@ describe('deviceDetectionOnPremise', () => {
   //   }, 1000)
   //
   // }, 20000);
+
+  test('Temporary files clean up - OnUpdate', done => {
+
+    const DataFileOutput = path.resolve((process.env.directory || __dirname) + '/51Degrees-LiteV4.1.hash.gz');
+    const DataFileCopy = path.resolve((process.env.directory || __dirname) + '/51Degrees-LiteV4.1.hash');
+    const tempDir = './tests/tmp';
+
+    let requestUrl = '';
+    const PORT = 8080;
+
+    fs.mkdir(tempDir, { recursive: true }, (err) => {
+      if (err) return console.error(err);
+      const pipeline = new FiftyOneDegreesDeviceDetectionOnPremise.DeviceDetectionOnPremisePipelineBuilder({
+        dataFile: DataFileCopy,
+        updateOnStart: true,
+        autoUpdate: false,
+        dataUpdateUrl: `http://localhost:${PORT}`,
+        dataUpdateVerifyMd5: false,
+        dataUpdateUseUrlFormatter: false,
+        createTempDataCopy: true,
+        tempDataDir: tempDir
+      }).build()
+
+      server = http.createServer((req, res) => {
+        requestUrl = req.url;
+        const md5sum = crypto.createHash('md5');
+        const LiteDataFileStream = fs.createReadStream(DataFileCopy);
+        const writeStream = fs.createWriteStream(DataFileOutput);
+        const gzip = zlib.createGzip();
+
+        LiteDataFileStream.pipe(gzip).pipe(writeStream);
+
+        writeStream.on('finish', () => {
+          const DataFileOutputStream = fs.createReadStream(DataFileOutput);
+          DataFileOutputStream.on('data', (data) => {
+            md5sum.update(data);
+          });
+          DataFileOutputStream.on('end', () => {
+            const md5Hash = md5sum.digest('hex');
+            res.writeHead(200, {
+              'Content-Type': 'application/octet-stream',
+            });
+            const data = fs.readFileSync(DataFileOutput);
+            res.write(data);
+            res.end();
+            fs.readdir('./tests/tmp', (err, files) => {
+              if (err) {
+                console.error('Error reading the directory:', err);
+                done();
+                return;
+              }
+              // Filter files that contain '_done' in their names
+              const doneFiles = files.filter(file => file.includes('_done'));
+              console.log(files)
+              expect(doneFiles.length).toBe(0);
+              server.close();
+              done();
+            });
+          });
+        });
+      }).listen(PORT);
+      pipeline.on('error', console.error);
+      pipeline.on('info', console.info);
+
+    });
+  }, 20000);
 });
 
-// afterAll(() => {
-//   server.close();
-// });
+afterAll(() => {
+  server.close();
+});
