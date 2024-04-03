@@ -147,7 +147,7 @@ describe('Examples', () => {
             expect(vals.find(item => item === v)).toBeDefined();
           });
         } else if (!(e.headerValue === null && resVal === undefined)) {
-          fail('Expected and actual values should be defined or null and undefined.');
+          throw new Error('Expected and actual values should be defined or null and undefined.');
         }
       });
     };
