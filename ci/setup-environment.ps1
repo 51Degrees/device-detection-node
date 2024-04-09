@@ -41,7 +41,7 @@ $packageJSON = @"
     "supertest": "^6.1.6"
   },
   "devDependencies": {
-    "eslint": "^8.16.0",
+    "eslint": "8.57.0",
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jest": "^26.2.2",
