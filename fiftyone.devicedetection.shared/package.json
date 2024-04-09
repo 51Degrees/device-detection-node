@@ -5,13 +5,16 @@
   "keywords": ["51degrees", "device detection", "user-agent", "client hints", "browser", "os", "device", "cpu", "mobile", "phone", "tablet", "tv", "bot", "crawler", "WURFL", "DeviceAtlas"],
   "main": "index.js",
   "types": "types/index.d.ts",
+  "scripts": {
+    "lint": "eslint . --ext .js"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/51Degrees/device-detection-node"
   },
   "author": "51Degrees Engineering <engineering@51degrees.com>",
   "devDependencies": {
-    "eslint": "^8.16.0",
+    "eslint": "8.57.0",
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jsdoc": "^38.1.6",
