@@ -5,10 +5,6 @@ param (
 
 Push-Location $RepoName
 
-$integrationScript = @"
- "jest --ci --reporters=jest-junit --reporters=default --coverage --coverageReporters=cobertura --testPathPattern=\"(examples/*)\" --testPathIgnorePatterns=\"(performance.test.js|tests/*)\""
-"@
-
 $packageJSON = @"
 {
   "name": "device-detection-node",
@@ -20,7 +16,8 @@ $packageJSON = @"
   },
   "scripts": {
     "unit-test": "jest --ci --reporters=jest-junit --reporters=default --coverage --coverageReporters=cobertura --testPathIgnorePatterns=\"(examples/*|performance.test.js)\"",
-    "integration-test": $integrationScript
+    "integration-test": "jest --ci --reporters=jest-junit --reporters=default --coverage --coverageReporters=cobertura --testPathPattern=\"(examples/*)\" --testPathIgnorePatterns=\"(performance.test.js|tests/*)\"",
+    "lint": "eslint . --ext .js"
   },
   "repository": {
     "type": "git",

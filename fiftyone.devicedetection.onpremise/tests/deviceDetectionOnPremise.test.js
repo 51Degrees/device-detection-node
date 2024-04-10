@@ -33,7 +33,6 @@ const FiftyOneDegreesDeviceDetectionOnPremise = require51('fiftyone.devicedetect
 const EngineBuilder = require51('fiftyone.devicedetection.onpremise').DeviceDetectionOnPremise;
 
 const http = require('http');
-const crypto = require('crypto');
 const fs = require('fs');
 const zlib = require('zlib');
 let server;
@@ -304,7 +303,6 @@ describe('deviceDetectionOnPremise', () => {
   // }, 20000);
 
   test('Temporary files clean up - OnUpdate', done => {
-
     const DataFileOutput = path.resolve((process.env.directory || __dirname) + '/51Degrees-LiteV4.1.hash.gz');
     const DataFileCopy = path.resolve((process.env.directory || __dirname) + '/51Degrees-LiteV4.1.hash');
     const tempDir = './tests/tmp';
@@ -322,10 +320,10 @@ describe('deviceDetectionOnPremise', () => {
         dataUpdateUseUrlFormatter: false,
         createTempDataCopy: true,
         tempDataDir: tempDir
-      }).build()
+      }).build();
 
       server = http.createServer((req, res) => {
-        if(req.url === `/temp`) {
+        if (req.url === '/temp') {
           const LiteDataFileStream = fs.createReadStream(DataFileCopy);
           const writeStream = fs.createWriteStream(DataFileOutput);
           const gzip = zlib.createGzip();
@@ -335,12 +333,11 @@ describe('deviceDetectionOnPremise', () => {
             const DataFileOutputStream = fs.createReadStream(DataFileOutput);
             DataFileOutputStream.on('end', () => {
               res.writeHead(200, {
-                'Content-Type': 'application/octet-stream',
+                'Content-Type': 'application/octet-stream'
               });
               const data = fs.readFileSync(DataFileOutput);
               res.write(data);
               res.end();
-
             });
           });
 
@@ -358,13 +355,11 @@ describe('deviceDetectionOnPremise', () => {
               server.close();
               done();
             });
-          }, 5000)
+          }, 5000);
         }
-
       }).listen(PORT);
       pipeline.on('error', console.error);
       pipeline.on('info', console.info);
-
     });
   }, 20000);
 });
