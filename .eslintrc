@@ -54,6 +54,7 @@
         "jsdoc/valid-types": 1
     },
     "ignorePatterns": [
-        "fiftyone.devicedetection.onpremise/device-detection-cxx/"
+        "**/node_modules/**",
+        "**/device-detection-cxx/**"
     ]
 }
