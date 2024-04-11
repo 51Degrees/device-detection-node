@@ -52,5 +52,8 @@
         "jsdoc/require-returns-description": 1,
         "jsdoc/require-returns-type": 1,
         "jsdoc/valid-types": 1
-    }
+    },
+    "ignorePatterns": [
+        "fiftyone.devicedetection.onpremise/device-detection-cxx/"
+    ]
 }
