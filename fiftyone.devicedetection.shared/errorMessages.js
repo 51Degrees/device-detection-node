@@ -48,8 +48,8 @@ module.exports = {
   propertyKeyDataFiles: 'Property %s can be found in the following datafiles ' +
     '%s not %s',
   propertyNotFound: 'Property %s not found in %s',
-  badDataUnsupportedVersion: 'The data is an unsupported version. Check ' +
+  badDataUnsupportedVersion: 'The data %s is an unsupported version. Check ' +
     'you have the latest data and API.',
   badDataIncorrectFormat: 'The data was not in the correct format. ' +
-    'Check the data file is uncompressed.'
+    'Check the data file %s is uncompressed.'
 };
