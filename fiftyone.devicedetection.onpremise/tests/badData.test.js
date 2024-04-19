@@ -115,7 +115,7 @@ describe('Bad data file error messages', () => {
 
     engine.initEngine().catch(function (e) {
       console.log(e.message);
-      expect(e.message).toMatch(errorMessages.badDataUnsupportedVersion.replace('%s', `(file: '${BadVersionDataFile}')`));    // expect(
+      expect(e.message).toMatch(errorMessages.badDataUnsupportedVersion.replace('%s', `(file: '${BadVersionDataFile}')`));
       done();
     });
   });
@@ -134,7 +134,7 @@ describe('Bad data file error messages', () => {
 
     engine.initEngine().catch(function (e) {
       console.log(e.message);
-      expect(e.message).toMatch(errorMessages.badDataIncorrectFormat.replace('%s', `'${BadHeaderDataFile}'`));    // expect(
+      expect(e.message).toMatch(errorMessages.badDataIncorrectFormat.replace('%s', `'${BadHeaderDataFile}'`));
       done();
     });
   });
@@ -153,7 +153,7 @@ describe('Bad data file error messages', () => {
 
     engine.initEngine().catch(function (e) {
       console.log(e.message);
-      expect(e.message).toMatch(errorMessages.badDataIncorrectFormat.replace('%s', `'${SmallDataFile}'`));    // expect(
+      expect(e.message).toMatch(errorMessages.badDataIncorrectFormat.replace('%s', `'${SmallDataFile}'`));
       done();
     });
   });
