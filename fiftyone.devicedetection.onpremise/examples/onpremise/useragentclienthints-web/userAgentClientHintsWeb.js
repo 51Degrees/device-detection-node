@@ -232,9 +232,9 @@ const server = http.createServer((req, res) => {
 // Don't run the server if under TEST
 if (process.env.JEST_WORKER_ID === undefined) {
   setPipeline(null);
-  const port = 3001;
-  server.listen(port);
-  console.log('Server listening on port: ' + port);
+  const hostname = "localhost"
+  server.listen(port, hostname);
+  console.log(`Server listening on: http://${hostname}:${port}`);
 };
 
 // Export server object and set pipeline.
