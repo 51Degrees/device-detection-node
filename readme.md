@@ -117,7 +117,7 @@ section explains how to do this.
       - e.g. FiftyOneDeviceDetectionHashV4-darwin-10.node for Node 10.
   - Please see the [tested versions page](https://51degrees.com/documentation/_info__tested_versions.html) for Node versions that we currently test against. The software may run fine against other versions, but extra caution should be applied.
   - You can optionally clear up by removing all the build files and folders except for the *.node file that's been created.
-  - `WARNING`: This section should be redone if `npm install` is executed for onpremice again as it will remove this file
+  - `WARNING`: `npm install` removes this copied file, so you will need to do the above steps again after running `npm install`
 
 ### Examples
 
