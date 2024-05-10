@@ -211,8 +211,9 @@ if (process.env.JEST_WORKER_ID === undefined) {
 
   setPipeline(options);
   const port = 3001;
-  server.listen(port);
-  console.log('Server listening on port: ' + port);
+  const hostname = 'localhost';
+  server.listen(port, hostname);
+  console.log(`Server listening on: http://${hostname}:${port}`);
 };
 
 // Export server object and set pipeline.

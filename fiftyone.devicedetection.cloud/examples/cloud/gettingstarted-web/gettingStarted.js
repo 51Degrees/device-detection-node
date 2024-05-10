@@ -104,15 +104,15 @@ const setPipeline = (options) => {
   // If we don't have a resource key then log an error
   if (!resourceKey) {
     throw 'No resource key specified in the configuration file ' +
-      '\'51d.json\' or the environment variable ' +
-      `'${ExampleUtils.RESOURCE_KEY_ENV_VAR}'. The 51Degrees cloud ` +
-      'service is accessed using a \'ResourceKey\'. For more information ' +
-      'see ' +
-      'https://51degrees.com/documentation/_info__resource_keys.html. ' +
-      'A resource key with the properties required by this example can be ' +
-      'created for free at https://configure.51degrees.com/1QWJwHxl. ' +
-      'Once complete, populate the config file or environment variable ' +
-      'mentioned at the start of this message with the key.';
+    '\'51d.json\' or the environment variable ' +
+    `'${ExampleUtils.RESOURCE_KEY_ENV_VAR}'. The 51Degrees cloud ` +
+    'service is accessed using a \'ResourceKey\'. For more information ' +
+    'see ' +
+    'https://51degrees.com/documentation/_info__resource_keys.html. ' +
+    'A resource key with the properties required by this example can be ' +
+    'created for free at https://configure.51degrees.com/1QWJwHxl. ' +
+    'Once complete, populate the config file or environment variable ' +
+    'mentioned at the start of this message with the key.';
   }
 
   pipeline = new core.PipelineBuilder({
@@ -214,8 +214,9 @@ if (process.env.JEST_WORKER_ID === undefined) {
 
   setPipeline(options);
   const port = 3001;
-  server.listen(port);
-  console.log('Server listening on port: ' + port);
+  const hostname = 'localhost';
+  server.listen(port, hostname);
+  console.log(`Server listening on: http://${hostname}:${port}`);
 }
 
 // Export server object and set pipeline.

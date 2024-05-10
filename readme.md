@@ -90,7 +90,7 @@ section explains how to do this.
 - Pull git submodules:
   - `git submodule update --init --recursive`
 
-#### Build Steps
+#### Build Steps for On-Premise
 
 - Navigate to fiftyone.devicedetection.onpremise
 - Rename the `binding.51d` to `binding.gyp`
@@ -117,14 +117,7 @@ section explains how to do this.
       - e.g. FiftyOneDeviceDetectionHashV4-darwin-10.node for Node 10.
   - Please see the [tested versions page](https://51degrees.com/documentation/_info__tested_versions.html) for Node versions that we currently test against. The software may run fine against other versions, but extra caution should be applied.
   - You can optionally clear up by removing all the build files and folders except for the *.node file that's been created.
-
-Once the native binaries have been built, you can install the packages as normal using:
-
-`npm install fiftyone.devicedetection/`
-
-`npm install fiftyone.devicedetection.cloud/`
-
-`npm install fiftyone.devicedetection.onpremise/`
+  - `WARNING`: `npm install` removes this copied file, so you will need to do the above steps again after running `npm install`
 
 ### Examples
 
