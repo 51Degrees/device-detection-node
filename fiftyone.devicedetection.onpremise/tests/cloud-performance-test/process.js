@@ -87,6 +87,6 @@ const server = http.createServer((req, res) => {
 });
 
 const port = 3000;
-const hostname = "localhost"
+const hostname = 'localhost';
 server.listen(port, hostname);
 console.log(`Server listening on: http://${hostname}:${port}`);
