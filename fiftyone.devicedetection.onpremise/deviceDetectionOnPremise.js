@@ -227,9 +227,9 @@ class DeviceDetectionOnPremise extends Engine {
    * temporary data copy if 'createTempDataCopy' is set to true.
    * @param {boolean} options.updateOnStart whether to download / update
    * the datafile on initialisation
-   * @param {boolean} options.usePredictiveGraph If true, the engine will
+   * @param {boolean} options.usePredictiveGraph [deprecated] If true, the engine will
    * use predictive optimized graph in detections.
-   * @param {boolean} options.usePerformanceGraph If true, the engine will
+   * @param {boolean} options.usePerformanceGraph [deprecated] If true, the engine will
    * use performance optimized graph in detections.
    */
   constructor (
@@ -256,13 +256,18 @@ class DeviceDetectionOnPremise extends Engine {
       updateTimeMaximumRandomisation,
       createTempDataCopy,
       tempDataDir = os.tmpdir(),
-      updateOnStart = false,
-      usePredictiveGraph = true,
-      usePerformanceGraph = false
+      updateOnStart = false
     }) {
     let swigWrapper;
     let swigWrapperType;
     let dataFileType;
+
+    const deprecatedOptions = ['usePredictiveGraph', 'usePerformanceGraph'];
+    for (const option of deprecatedOptions) {
+      if (arguments[0].hasOwnProperty(option)) {
+        console.warn(`{${option}} option is deprecated and has no effect on the configuration`);
+      }
+    }
 
     if (typeof cache !== 'undefined') {
       throw errorMessages.cacheNotSupport;
@@ -406,10 +411,6 @@ class DeviceDetectionOnPremise extends Engine {
     }
 
     config.setConcurrency(concurrency);
-
-    config.setUsePredictiveGraph(usePredictiveGraph);
-
-    config.setUsePerformanceGraph(usePerformanceGraph);
 
     // This should always be set to 'false' for on-premise
     config.setUseUpperPrefixHeaders(false);

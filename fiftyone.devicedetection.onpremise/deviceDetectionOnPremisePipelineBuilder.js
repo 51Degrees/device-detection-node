@@ -94,9 +94,9 @@ class DeviceDetectionOnPremisePipelineBuilder extends PipelineBuilder {
    * automatic data updates to occur.
    * @param {string} options.tempDataDir The directory to use for the
    * temporary data copy if 'createTempDataCopy' is set to true.
-   * @param {boolean} options.usePredictiveGraph True, the engine will use
+   * @param {boolean} options.usePredictiveGraph [deprecated] True, the engine will use
    * the predictive optimized graph to in detections.
-   * @param {boolean} options.usePerformanceGraph True, the engine will use
+   * @param {boolean} options.usePerformanceGraph [deprecated] True, the engine will use
    * the performance optimized graph to in detections.
    *
    * @param options.dataFileUpdateService
@@ -125,11 +125,16 @@ class DeviceDetectionOnPremisePipelineBuilder extends PipelineBuilder {
       difference,
       allowUnmatched = false,
       createTempDataCopy,
-      tempDataDir,
-      usePredictiveGraph = true,
-      usePerformanceGraph = false
+      tempDataDir
     }) {
     super(...arguments);
+
+    const deprecatedOptions = ['usePredictiveGraph', 'usePerformanceGraph'];
+    for (const option of deprecatedOptions) {
+      if (arguments[0].hasOwnProperty(option)) {
+        console.warn(`{${option}} option is deprecated and has no effect on the configuration`);
+      }
+    }
 
     // Check if share usage enabled and add it to the pipeline if so
 
@@ -165,9 +170,7 @@ class DeviceDetectionOnPremisePipelineBuilder extends PipelineBuilder {
         allowUnmatched,
         updateOnStart,
         createTempDataCopy,
-        tempDataDir,
-        usePredictiveGraph,
-        usePerformanceGraph
+        tempDataDir
       }));
   }
 }

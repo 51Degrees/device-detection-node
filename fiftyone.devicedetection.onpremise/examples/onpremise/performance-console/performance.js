@@ -172,8 +172,6 @@ const pipeline = new DeviceDetectionOnPremisePipelineBuilder({
   restrictedProperties: ['ismobile'],
   autoUpdate: false,
   shareUsage: false,
-  usePredictiveGraph: false,
-  usePerformanceGraph: true,
   addJavaScriptBuilder: false
 }).build();
 
