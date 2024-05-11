@@ -118,10 +118,10 @@ Public Member Functions</h2>
 <tbody class="c-table__body">
 <!-- member dec start -->
 <!-- startMemberItem() -->
-<tr class="c-table__row memitem:a54a11fd35d01a50f9f3d1fddedc3ad7d"><td class="c-table__cell"><!-- insertMemberAlign -->
-&#160;</td><td class="c-table__cell"><a class="el" href="class_device_detection_pipeline_builder.html#a54a11fd35d01a50f9f3d1fddedc3ad7d">constructor</a> ({ licenceKeys=null, dataFile=null, autoUpdate=true, fileSystemWatcher=true, pollingInterval=30, updateTimeMaximumRandomisation=10, shareUsage=true, resourceKey=null, cacheSize=null, restrictedProperties, performanceProfile='LowMemory', updateMatchedUserAgent=false, maxMatchedUserAgentLength, drift, difference, allowUnmatched=false, usePredictiveGraph=true, usePerformanceGraph=false, updateOnStart=false, cloudEndPoint=null, cloudRequestOrigin=null })
+<tr class="c-table__row memitem:af920190e096837139e7db7655fddb141"><td class="c-table__cell"><!-- insertMemberAlign -->
+&#160;</td><td class="c-table__cell"><a class="el" href="class_device_detection_pipeline_builder.html#af920190e096837139e7db7655fddb141">constructor</a> ({ licenceKeys=null, dataFile=null, autoUpdate=true, fileSystemWatcher=true, pollingInterval=30, updateTimeMaximumRandomisation=10, shareUsage=true, resourceKey=null, cacheSize=null, restrictedProperties, performanceProfile='LowMemory', updateMatchedUserAgent=false, maxMatchedUserAgentLength, drift, difference, allowUnmatched=false, updateOnStart=false, cloudEndPoint=null, cloudRequestOrigin=null })
 <!-- startMemberDescription -->
-<div class="c-table__desc memdesc:a54a11fd35d01a50f9f3d1fddedc3ad7d">Extension of pipelineBuilder class that allows for the quick generation of a device detection pipeline.  <a href="#a54a11fd35d01a50f9f3d1fddedc3ad7d">More...</a><!-- endMemberDescription -->
+<div class="c-table__desc memdesc:af920190e096837139e7db7655fddb141">Extension of pipelineBuilder class that allows for the quick generation of a device detection pipeline.  <a href="#af920190e096837139e7db7655fddb141">More...</a><!-- endMemberDescription -->
 </div></td></tr>
 <!-- endMemberList -->
 <!-- end member list -->
@@ -181,9 +181,9 @@ Public Member Functions</h2>
 <h2 class="g-docs__section-heading">Member Function Documentation</h2>
 <!-- startMemberDocList -->
 <article class="c-member">
-<a id="a54a11fd35d01a50f9f3d1fddedc3ad7d"></a><!-- startMemberDoc -->
+<a id="af920190e096837139e7db7655fddb141"></a><!-- startMemberDoc -->
 
-<h2 class="c-member__title"><span class="c-member__anchor"><a href="#a54a11fd35d01a50f9f3d1fddedc3ad7d">&#9670;&nbsp;</a></span>constructor()</h2>
+<h2 class="c-member__title"><span class="c-member__anchor"><a href="#af920190e096837139e7db7655fddb141">&#9670;&nbsp;</a></span>constructor()</h2>
 
 <div class="c-member__main">
 <div class="c-member__head">
@@ -200,7 +200,7 @@ Public Member Functions</h2>
           <td class="c-table__cell"><!-- endParameterType -->
 &#160;</td>
 <!-- startParameterName -->
-          <td class="c-table__cell"><em>{ licenceKeys=null, dataFile=null, autoUpdate=true, fileSystemWatcher=true, pollingInterval=30, updateTimeMaximumRandomisation=10, shareUsage=true, resourceKey=null, cacheSize=null, restrictedProperties, performanceProfile='LowMemory', updateMatchedUserAgent=false, maxMatchedUserAgentLength, drift, difference, allowUnmatched=false, usePredictiveGraph=true, usePerformanceGraph=false, updateOnStart=false, cloudEndPoint=null, cloudRequestOrigin=null }</em><!-- endParameterName -->
+          <td class="c-table__cell"><em>{ licenceKeys=null, dataFile=null, autoUpdate=true, fileSystemWatcher=true, pollingInterval=30, updateTimeMaximumRandomisation=10, shareUsage=true, resourceKey=null, cacheSize=null, restrictedProperties, performanceProfile='LowMemory', updateMatchedUserAgent=false, maxMatchedUserAgentLength, drift, difference, allowUnmatched=false, updateOnStart=false, cloudEndPoint=null, cloudRequestOrigin=null }</em><!-- endParameterName -->
 </td><td>)</td>
           <td><!-- endParameterList -->
 </td>
@@ -238,8 +238,8 @@ Public Member Functions</h2>
     <tr><dd class="c-list-definition__desc"><span class="b-text--red">{number}</span> - options.drift This setting only affects on-premise engines, not cloud. Set maximum drift in hash position to allow when processing HTTP headers. </dd>
     <tr><dd class="c-list-definition__desc"><span class="b-text--red">{number}</span> - options.difference This setting only affects on-premise engines, not cloud. Set the maximum difference to allow when processing HTTP headers. The difference is the difference in hash value between the hash that was found, and the hash that is being searched for. By default this is 0. </dd>
     <tr><dd class="c-list-definition__desc"><span class="b-text--red">{string}</span> - options.allowUnmatched This setting only affects on-premise engines, not cloud. If set to false, a non-matching User-Agent will result in properties without set values. If set to true, a non-matching User-Agent will cause the 'default profiles' to be returned. This means that properties will always have values (i.e. no need to check .HasValue) but some may be inaccurate. By default, this is false. </dd>
-    <tr><dd class="c-list-definition__desc"><span class="b-text--red">{boolean}</span> - options.usePredictiveGraph This setting on affects on-premise engines, not cloud. True, the engine will use the predictive optimized graph to in detections. </dd>
-    <tr><dd class="c-list-definition__desc"><span class="b-text--red">{boolean}</span> - options.usePerformanceGraph This setting on affects on-premise engines, not cloud. True, the engine will use the performance optimized graph to in detections. </dd>
+    <tr><dd class="c-list-definition__desc"><span class="b-text--red">{boolean}</span> - options.usePredictiveGraph [deprecated] This setting on affects on-premise engines, not cloud. True, the engine will use the predictive optimized graph to in detections. </dd>
+    <tr><dd class="c-list-definition__desc"><span class="b-text--red">{boolean}</span> - options.usePerformanceGraph [deprecated] This setting on affects on-premise engines, not cloud. True, the engine will use the performance optimized graph to in detections. </dd>
     <tr><dd class="c-list-definition__desc"><span class="b-text--red">{string}</span> - options.cloudEndPoint This setting only affects cloud engine, not on-premise. Choose a non default endpoint for the cloud request engine </dd>
     <tr><dd class="c-list-definition__desc"><span class="b-text--red">{string}</span> - options.cloudRequestOrigin This setting only affects cloud engine, not on-premise. Set the value to use for the Origin header when making requests to the cloud service. </dd>
   </dd>

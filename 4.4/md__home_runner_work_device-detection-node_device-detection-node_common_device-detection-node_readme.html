@@ -128,7 +128,7 @@ $(document).ready(function(){initNavTree('md__home_runner_work_device-detection-
 </ul>
 </li>
 </ul>
-<h4>Build Steps</h4>
+<h4>Build Steps for On-Premise</h4>
 <ul>
 <li>Navigate to fiftyone.devicedetection.onpremise</li>
 <li>Rename the <code>binding.51d</code> to <code>binding.gyp</code></li>
@@ -177,13 +177,10 @@ $(document).ready(function(){initNavTree('md__home_runner_work_device-detection-
 </li>
 <li>Please see the <a href="https://51degrees.com/documentation/_info__tested_versions.html">tested versions page</a> for Node versions that we currently test against. The software may run fine against other versions, but extra caution should be applied.</li>
 <li>You can optionally clear up by removing all the build files and folders except for the *.node file that's been created.</li>
+<li><code>WARNING</code>: <code>npm install</code> removes this copied file, so you will need to do the above steps again after running <code>npm install</code></li>
 </ul>
 </li>
 </ul>
-<p>Once the native binaries have been built, you can install the packages as normal using:</p>
-<p><code>npm install fiftyone.devicedetection/</code></p>
-<p><code>npm install fiftyone.devicedetection.cloud/</code></p>
-<p><code>npm install fiftyone.devicedetection.onpremise/</code></p>
 <h3>Examples</h3>
 <p>For details of how to run the examples, please refer to run examples. The tables below describe the examples that are available.</p>
 <h4>Cloud</h4>

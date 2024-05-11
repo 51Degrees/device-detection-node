@@ -118,10 +118,10 @@ Public Member Functions</h2>
 <tbody class="c-table__body">
 <!-- member dec start -->
 <!-- startMemberItem() -->
-<tr class="c-table__row memitem:ae2451d2d0cda6159d645048bdeea24a0"><td class="c-table__cell"><!-- insertMemberAlign -->
-&#160;</td><td class="c-table__cell"><a class="el" href="class_device_detection_on_premise_pipeline_builder.html#ae2451d2d0cda6159d645048bdeea24a0">constructor</a> ({ dataFileUpdateService=null, licenceKeys=null, dataFile=null, dataUpdateVerifyMd5=true, dataUpdateUseUrlFormatter=true, autoUpdate=true, dataUpdateUrl=null, pollingInterval=30, updateTimeMaximumRandomisation=10, shareUsage=true, fileSystemWatcher=true, updateOnStart=false, cacheSize=null, restrictedProperties, performanceProfile='LowMemory', concurrency=os.cpus().length, updateMatchedUserAgent=false, maxMatchedUserAgentLength, drift, difference, allowUnmatched=false, createTempDataCopy, tempDataDir, usePredictiveGraph=true, usePerformanceGraph=false })
+<tr class="c-table__row memitem:ac3b19cabb24a3611efa2f47782afb60c"><td class="c-table__cell"><!-- insertMemberAlign -->
+&#160;</td><td class="c-table__cell"><a class="el" href="class_device_detection_on_premise_pipeline_builder.html#ac3b19cabb24a3611efa2f47782afb60c">constructor</a> ({ dataFileUpdateService=null, licenceKeys=null, dataFile=null, dataUpdateVerifyMd5=true, dataUpdateUseUrlFormatter=true, autoUpdate=true, dataUpdateUrl=null, pollingInterval=30, updateTimeMaximumRandomisation=10, shareUsage=true, fileSystemWatcher=true, updateOnStart=false, cacheSize=null, restrictedProperties, performanceProfile='LowMemory', concurrency=os.cpus().length, updateMatchedUserAgent=false, maxMatchedUserAgentLength, drift, difference, allowUnmatched=false, createTempDataCopy, tempDataDir })
 <!-- startMemberDescription -->
-<div class="c-table__desc memdesc:ae2451d2d0cda6159d645048bdeea24a0">Extension of pipelineBuilder class that allows for the quick generation of a device detection pipeline.  <a href="#ae2451d2d0cda6159d645048bdeea24a0">More...</a><!-- endMemberDescription -->
+<div class="c-table__desc memdesc:ac3b19cabb24a3611efa2f47782afb60c">Extension of pipelineBuilder class that allows for the quick generation of a device detection pipeline.  <a href="#ac3b19cabb24a3611efa2f47782afb60c">More...</a><!-- endMemberDescription -->
 </div></td></tr>
 <!-- endMemberList -->
 <!-- end member list -->
@@ -181,9 +181,9 @@ Public Member Functions</h2>
 <h2 class="g-docs__section-heading">Member Function Documentation</h2>
 <!-- startMemberDocList -->
 <article class="c-member">
-<a id="ae2451d2d0cda6159d645048bdeea24a0"></a><!-- startMemberDoc -->
+<a id="ac3b19cabb24a3611efa2f47782afb60c"></a><!-- startMemberDoc -->
 
-<h2 class="c-member__title"><span class="c-member__anchor"><a href="#ae2451d2d0cda6159d645048bdeea24a0">&#9670;&nbsp;</a></span>constructor()</h2>
+<h2 class="c-member__title"><span class="c-member__anchor"><a href="#ac3b19cabb24a3611efa2f47782afb60c">&#9670;&nbsp;</a></span>constructor()</h2>
 
 <div class="c-member__main">
 <div class="c-member__head">
@@ -200,7 +200,7 @@ Public Member Functions</h2>
           <td class="c-table__cell"><!-- endParameterType -->
 &#160;</td>
 <!-- startParameterName -->
-          <td class="c-table__cell"><em>{ dataFileUpdateService=null, licenceKeys=null, dataFile=null, dataUpdateVerifyMd5=true, dataUpdateUseUrlFormatter=true, autoUpdate=true, dataUpdateUrl=null, pollingInterval=30, updateTimeMaximumRandomisation=10, shareUsage=true, fileSystemWatcher=true, updateOnStart=false, cacheSize=null, restrictedProperties, performanceProfile='LowMemory', concurrency=os.cpus().length, updateMatchedUserAgent=false, maxMatchedUserAgentLength, drift, difference, allowUnmatched=false, createTempDataCopy, tempDataDir, usePredictiveGraph=true, usePerformanceGraph=false }</em><!-- endParameterName -->
+          <td class="c-table__cell"><em>{ dataFileUpdateService=null, licenceKeys=null, dataFile=null, dataUpdateVerifyMd5=true, dataUpdateUseUrlFormatter=true, autoUpdate=true, dataUpdateUrl=null, pollingInterval=30, updateTimeMaximumRandomisation=10, shareUsage=true, fileSystemWatcher=true, updateOnStart=false, cacheSize=null, restrictedProperties, performanceProfile='LowMemory', concurrency=os.cpus().length, updateMatchedUserAgent=false, maxMatchedUserAgentLength, drift, difference, allowUnmatched=false, createTempDataCopy, tempDataDir }</em><!-- endParameterName -->
 </td><td>)</td>
           <td><!-- endParameterList -->
 </td>
@@ -243,8 +243,8 @@ Public Member Functions</h2>
     <tr><dd class="c-list-definition__desc"><span class="b-text--red">{string}</span> - options.allowUnmatched If set to false, a non-matching User-Agent will result in properties without set values. If set to true, a non-matching User-Agent will cause the 'default profiles' to be returned. This means that properties will always have values (i.e. no need to check .HasValue) but some may be inaccurate. By default, this is false. </dd>
     <tr><dd class="c-list-definition__desc"><span class="b-text--red">{boolean}</span> - options.createTempDataCopy If true, the engine will create a copy of the data file in a temporary location rather than using the file provided directly. If not loading all data into memory, this is required for automatic data updates to occur. </dd>
     <tr><dd class="c-list-definition__desc"><span class="b-text--red">{string}</span> - options.tempDataDir The directory to use for the temporary data copy if 'createTempDataCopy' is set to true. </dd>
-    <tr><dd class="c-list-definition__desc"><span class="b-text--red">{boolean}</span> - options.usePredictiveGraph True, the engine will use the predictive optimized graph to in detections. </dd>
-    <tr><dd class="c-list-definition__desc"><span class="b-text--red">{boolean}</span> - options.usePerformanceGraph True, the engine will use the performance optimized graph to in detections.</dd>
+    <tr><dd class="c-list-definition__desc"><span class="b-text--red">{boolean}</span> - options.usePredictiveGraph [deprecated] True, the engine will use the predictive optimized graph to in detections. </dd>
+    <tr><dd class="c-list-definition__desc"><span class="b-text--red">{boolean}</span> - options.usePerformanceGraph [deprecated] True, the engine will use the performance optimized graph to in detections.</dd>
     <tr><dd class="c-list-definition__desc"><span class="b-text--red">options.dataFileUpdateService</span> - </dd>
   </dd>
 </dl>
