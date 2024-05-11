@@ -54,13 +54,13 @@ declare class DeviceDetectionOnPremisePipelineBuilder extends DeviceDetectionOnP
      * This means that properties will always have values
      * (i.e. no need to check .HasValue) but some may be inaccurate.
      * By default, this is false.
-     * @param {boolean} options.usePredictiveGraph True, the engine will use
+     * @param {boolean} options.usePredictiveGraph [deprecated] True, the engine will use
      * the predictive optimized graph to in detections.
-     * @param {boolean} options.usePerformanceGraph True, the engine will use
+     * @param {boolean} options.usePerformanceGraph [deprecated] True, the engine will use
      * the performance optimized graph to in detections.
      *
      */
-    constructor({ licenceKeys, dataFile, autoUpdate, pollingInterval, updateTimeMaximumRandomisation, shareUsage, fileSystemWatcher, updateOnStart, cacheSize, restrictedProperties, performanceProfile, updateMatchedUserAgent, maxMatchedUserAgentLength, drift, difference, allowUnmatched, usePredictiveGraph, usePerformanceGraph }: {
+    constructor({ licenceKeys, dataFile, autoUpdate, pollingInterval, updateTimeMaximumRandomisation, shareUsage, fileSystemWatcher, updateOnStart, cacheSize, restrictedProperties, performanceProfile, updateMatchedUserAgent, maxMatchedUserAgentLength, drift, difference, allowUnmatched }: {
         licenceKeys: string;
         dataFile: string;
         autoUpdate: boolean;
@@ -77,7 +77,5 @@ declare class DeviceDetectionOnPremisePipelineBuilder extends DeviceDetectionOnP
         drift: number;
         difference: number;
         allowUnmatched: string;
-        usePredictiveGraph: boolean;
-        usePerformanceGraph: boolean;
     }, ...args: any[]);
 }

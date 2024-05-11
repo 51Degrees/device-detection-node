@@ -62,12 +62,12 @@ declare class DeviceDetectionOnPremise extends DeviceDetectionOnPremise_base {
      * automatic data updates to occur.
      * @param {boolean} options.updateOnStart whether to download / update
      * the datafile on initialisation
-     * @param {boolean} options.usePredictiveGraph If true, the engine will
+     * @param {boolean} options.usePredictiveGraph [deprecated] If true, the engine will
      * use predictive optimized graph in detections.
-     * @param {boolean} options.usePerformanceGraph If true, the engine will
+     * @param {boolean} options.usePerformanceGraph [deprecated] If true, the engine will
      * use performance optimized graph in detections.
      */
-    constructor({ dataFilePath, autoUpdate, cache, dataFileUpdateBaseUrl, restrictedProperties, licenceKeys, download, performanceProfile, reuseTempFile, updateMatchedUserAgent, maxMatchedUserAgentLength, drift, difference, concurrency, allowUnmatched, fileSystemWatcher, pollingInterval, updateTimeMaximumRandomisation, createTempDataCopy, updateOnStart, usePredictiveGraph, usePerformanceGraph }: {
+    constructor({ dataFilePath, autoUpdate, cache, dataFileUpdateBaseUrl, restrictedProperties, licenceKeys, download, performanceProfile, reuseTempFile, updateMatchedUserAgent, maxMatchedUserAgentLength, drift, difference, concurrency, allowUnmatched, fileSystemWatcher, pollingInterval, updateTimeMaximumRandomisation, createTempDataCopy, updateOnStart }: {
         dataFilePath: string;
         autoUpdate: boolean;
         pollingInterval: number;
@@ -88,8 +88,6 @@ declare class DeviceDetectionOnPremise extends DeviceDetectionOnPremise_base {
         allowUnmatched: boolean;
         createTempDataCopy: boolean;
         updateOnStart: boolean;
-        usePredictiveGraph: boolean;
-        usePerformanceGraph: boolean;
     }, ...args: any[]);
     initEngine: () => Promise<any>;
 }

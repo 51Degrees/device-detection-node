@@ -94,10 +94,10 @@ class DeviceDetectionPipelineBuilder extends PipelineBuilder {
    * This means that properties will always have values
    * (i.e. no need to check .HasValue) but some may be inaccurate.
    * By default, this is false.
-   * @param {boolean} options.usePredictiveGraph This setting on affects
+   * @param {boolean} options.usePredictiveGraph [deprecated] This setting on affects
    * on-premise engines, not cloud.
    * True, the engine will use the predictive optimized graph to in detections.
-   * @param {boolean} options.usePerformanceGraph This setting on affects
+   * @param {boolean} options.usePerformanceGraph [deprecated] This setting on affects
    * on-premise engines, not cloud.
    * True, the engine will use the performance optimized graph to in detections.
    * @param {string} options.cloudEndPoint This setting only affects
@@ -127,13 +127,18 @@ class DeviceDetectionPipelineBuilder extends PipelineBuilder {
       drift,
       difference,
       allowUnmatched = false,
-      usePredictiveGraph = true,
-      usePerformanceGraph = false,
       updateOnStart = false,
       cloudEndPoint = null,
       cloudRequestOrigin = null
     }) {
     super(...arguments);
+
+    const deprecatedOptions = ['usePredictiveGraph', 'usePerformanceGraph'];
+    for (const option of deprecatedOptions) {
+      if (arguments[0].hasOwnProperty(option)) {
+        console.warn(`{${option}} option is deprecated and has no effect on the configuration`);
+      }
+    }
 
     // Check if share usage enabled and add it to the pipeline if so
 
@@ -168,9 +173,7 @@ class DeviceDetectionPipelineBuilder extends PipelineBuilder {
           drift,
           difference,
           allowUnmatched,
-          updateOnStart,
-          usePredictiveGraph,
-          usePerformanceGraph
+          updateOnStart
         }));
     } else {
       // First we need the cloudRequestEngine

@@ -208,12 +208,6 @@ const run = async function (dataFile, output, evidenceList) {
     // Uncomment 'browsername' to include Browser component as well. This can be seen by looking
     // for the browser profile ID in the device ID value.
     restrictedProperties: ['ismobile', 'hardwarename', 'userAgents', 'deviceID', 'difference', 'method', 'matchedNodes', 'drift', 'iterations'], /* , 'browsername' */
-    // Only use the predictive graph to better handle variances between the training data and the
-    // target User-Agent string. For a more detailed description of the differences between
-    // performance and predictive, see
-    // https://51degrees.com/documentation/_device_detection__hash.html#DeviceDetection_Hash_DataSetProduction_Performance
-    usePredictiveGraph: true,
-    usePerformanceGraph: false,
     // We want to show the matching evidence characters as part of this example, so we have to set
     // this flag to true.
     updateMatchedUserAgent: true
