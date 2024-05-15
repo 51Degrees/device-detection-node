@@ -3,7 +3,7 @@
     "Name": "Ubuntu_Node_18",
     "Image": "ubuntu-20.04",
     "Language": "node",
-    "LanguageVersion": "18.16.0",
+    "LanguageVersion": "18",
     "RunPerformance": true,
     "PackageRequirement": true
   },
@@ -11,7 +11,7 @@
     "Name": "Windows_Node_18",
     "Image": "windows-latest",
     "Language": "node",
-    "LanguageVersion": "18.16.0",
+    "LanguageVersion": "18",
     "RunPerformance": true,
     "PackageRequirement": true
   },
@@ -19,14 +19,15 @@
     "Name": "macOS_Node_18",
     "Image": "macos-latest",
     "Language": "node",
-    "LanguageVersion": "18.16.0",
+    "LanguageVersion": "18",
     "RunPerformance": true,
     "PackageRequirement": true
-  }, {
+  },
+  {
     "Name": "Ubuntu_Node_20",
     "Image": "ubuntu-20.04",
     "Language": "node",
-    "LanguageVersion": "20.3.0",
+    "LanguageVersion": "20",
     "RunPerformance": true,
     "PackageRequirement": true
   },
@@ -34,7 +35,7 @@
     "Name": "Windows_Node_20",
     "Image": "windows-latest",
     "Language": "node",
-    "LanguageVersion": "20.3.0",
+    "LanguageVersion": "20",
     "RunPerformance": true,
     "PackageRequirement": true
   },
@@ -42,7 +43,23 @@
     "Name": "macOS_Node_20",
     "Image": "macos-latest",
     "Language": "node",
-    "LanguageVersion": "20.3.0",
+    "LanguageVersion": "20",
+    "RunPerformance": true,
+    "PackageRequirement": true
+  },
+  {
+    "Name": "Ubuntu_Node_22",
+    "Image": "ubuntu-22.04",
+    "Language": "node",
+    "LanguageVersion": "22",
+    "RunPerformance": true,
+    "PackageRequirement": true
+  },
+  {
+    "Name": "Windows_Node_22",
+    "Image": "windows-latest",
+    "Language": "node",
+    "LanguageVersion": "22",
     "RunPerformance": true,
     "PackageRequirement": true
   }
