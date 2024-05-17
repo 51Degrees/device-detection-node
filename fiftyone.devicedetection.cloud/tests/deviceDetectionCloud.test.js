@@ -73,7 +73,6 @@ describe('deviceDetectionCloud', () => {
       flowData.process().then(function () {
         const ismobile = flowData.device.ismobile;
         expect(ismobile.hasValue).toBe(false);
-        console.log(ismobile.noValueMessage);
         expect(ismobile.noValueMessage.indexOf(
           errorMessages.evidenceNotFound) !== -1).toBe(true);
 

@@ -130,7 +130,6 @@ describe('deviceDetectionOnPremise', () => {
         dataFilePath: DataFile,
         cache: 100
       });
-      console.log(engine);
     } catch (err) {
       expect(err.indexOf('cache cannot be configured') !== -1).toBe(true);
 

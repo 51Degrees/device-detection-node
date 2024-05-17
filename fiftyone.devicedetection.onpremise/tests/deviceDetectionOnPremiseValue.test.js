@@ -48,11 +48,9 @@ describe('deviceDetectionOnPremise', () => {
   beforeAll(() => {
     // Copy data file to test directory if one does not exist.
     try {
-      console.log(fs.existsSync(DataFile));
       if (!fs.existsSync(DataFile)) {
         fs.copyFile(LiteDataFile, DataFile, (err) => {
           if (err) throw err;
-          console.log(`${LiteDataFile} was copied to ${DataFile}`);
         });
       }
     } catch (err) {
@@ -90,13 +88,13 @@ describe('deviceDetectionOnPremise', () => {
       expect(apv).toBeDefined();
       if (apv.hasValue === true) {
         if (apv.value !== null && apv.value !== undefined) {
-          console.log(`${key}: ${apv.value}`);
+//          console.log(`${key}: ${apv.value}`);
         } else {
           throw new Error(`${key}.value should not be null`);
         }
       } else {
         if (apv.noValueMessage !== null && apv.noValueMessage !== undefined) {
-          console.log(`${key}: ${apv.noValueMessage}`);
+  //        console.log(`${key}: ${apv.noValueMessage}`);
         } else {
           throw new Error(`${key}.noValueMessage should not be null`);
         }
