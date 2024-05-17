@@ -44,15 +44,16 @@ const MobileUserAgent =
   'AppleWebKit/537.51.2 (KHTML, like Gecko) Version/7.0 Mobile' +
   '/11D167 Safari/9537.53';
 
+const ChromeUserAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) ' +
+  'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36';
+
 describe('deviceDetectionOnPremise', () => {
   beforeAll(() => {
     // Copy data file to test directory if one does not exist.
     try {
-      console.log(fs.existsSync(DataFile));
       if (!fs.existsSync(DataFile)) {
         fs.copyFile(LiteDataFile, DataFile, (err) => {
           if (err) throw err;
-          console.log(`${LiteDataFile} was copied to ${DataFile}`);
         });
       }
     } catch (err) {
@@ -74,29 +75,23 @@ describe('deviceDetectionOnPremise', () => {
 
     const flowData = pipeline.createFlowData();
 
-    flowData.evidence.add('header.user-agent', MobileUserAgent);
+    flowData.evidence.add('header.user-agent', ChromeUserAgent);
 
     await flowData.process();
 
     Object.keys(engine.properties).forEach(key => {
       const apv = flowData.device[key];
-
-      // TODO: Check why javascriptgethighentropyvalues null
-      // APV signature of javascriptgethighentropyvalues
-      // AspectPropertyValue { noValueMessage: undefined, hasValue: false }
-      if (key === 'javascriptgethighentropyvalues') return;
-
       expect(apv).not.toBeNull();
       expect(apv).toBeDefined();
       if (apv.hasValue === true) {
         if (apv.value !== null && apv.value !== undefined) {
-          console.log(`${key}: ${apv.value}`);
+          // console.log(`${key}: ${apv.value}`);
         } else {
           throw new Error(`${key}.value should not be null`);
         }
       } else {
         if (apv.noValueMessage !== null && apv.noValueMessage !== undefined) {
-          console.log(`${key}: ${apv.noValueMessage}`);
+          // console.log(`${key}: ${apv.noValueMessage}`);
         } else {
           throw new Error(`${key}.noValueMessage should not be null`);
         }
@@ -151,16 +146,11 @@ describe('deviceDetectionOnPremise', () => {
 
     const flowData = pipeline.createFlowData();
 
-    flowData.evidence.add('header.user-agent', MobileUserAgent);
+    flowData.evidence.add('header.user-agent', ChromeUserAgent);
 
     await flowData.process();
 
     Object.keys(engine.properties).forEach(key => {
-      // TODO: Check why javascriptgethighentropyvalues null
-      // APV signature of javascriptgethighentropyvalues
-      // AspectPropertyValue { noValueMessage: undefined, hasValue: false }
-      if (key === 'javascriptgethighentropyvalues') return;
-
       const property = engine.properties[key];
       const expectedType = property.type;
       const apv = flowData.device[key];
