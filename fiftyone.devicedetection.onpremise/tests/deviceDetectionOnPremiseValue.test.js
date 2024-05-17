@@ -44,8 +44,8 @@ const MobileUserAgent =
   'AppleWebKit/537.51.2 (KHTML, like Gecko) Version/7.0 Mobile' +
   '/11D167 Safari/9537.53';
 
-const ChromeUserAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) " +
-  "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36";
+const ChromeUserAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) ' +
+  'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36';
 
 describe('deviceDetectionOnPremise', () => {
   beforeAll(() => {
@@ -85,13 +85,13 @@ describe('deviceDetectionOnPremise', () => {
       expect(apv).toBeDefined();
       if (apv.hasValue === true) {
         if (apv.value !== null && apv.value !== undefined) {
-//          console.log(`${key}: ${apv.value}`);
+          // console.log(`${key}: ${apv.value}`);
         } else {
           throw new Error(`${key}.value should not be null`);
         }
       } else {
         if (apv.noValueMessage !== null && apv.noValueMessage !== undefined) {
-  //        console.log(`${key}: ${apv.noValueMessage}`);
+          // console.log(`${key}: ${apv.noValueMessage}`);
         } else {
           throw new Error(`${key}.noValueMessage should not be null`);
         }

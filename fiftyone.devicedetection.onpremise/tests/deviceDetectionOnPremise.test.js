@@ -130,6 +130,7 @@ describe('deviceDetectionOnPremise', () => {
         dataFilePath: DataFile,
         cache: 100
       });
+      console.log(engine); //to prevent linter error
     } catch (err) {
       expect(err.indexOf('cache cannot be configured') !== -1).toBe(true);
 
