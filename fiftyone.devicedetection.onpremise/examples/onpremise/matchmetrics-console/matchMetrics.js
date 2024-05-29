@@ -21,23 +21,23 @@
  * ********************************************************************* */
 
 /**
-@example onpremise/matchmetrics-console/matchMetrics.js
-
-The example illustrates the various metrics that can be obtained about the device detection
-process, for example, the degree of certainty about the result. Running the example outputs
-those properties and values.
-
-The example also illustrates controlling properties that are returned from the detection
-process - reducing the number of components required to return the properties requested reduces
-the overall time taken.
-
-There is a [discussion](https://51degrees.com/documentation/_device_detection__hash.html#DeviceDetection_Hash_DataSetProduction_Performance)
-of metrics and controlling performance on our web site. See also the
-[performance options](https://51degrees.com/documentation/_device_detection__features__performance_options.html)
-page.
-
-This example is available in full on
-[GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection.onpremise/examples/onpremise/matchmetrics-console/matchMetrics.js).
+ * @example onpremise/matchmetrics-console/matchMetrics.js
+ *
+ * The example illustrates the various metrics that can be obtained about the device detection
+ * process, for example, the degree of certainty about the result. Running the example outputs
+ * those properties and values.
+ *
+ * The example also illustrates controlling properties that are returned from the detection
+ * process - reducing the number of components required to return the properties requested reduces
+ * the overall time taken.
+ *
+ * There is a [discussion](https://51degrees.com/documentation/_device_detection__hash.html#DeviceDetection_Hash_DataSetProduction_Performance)
+ * of metrics and controlling performance on our web site. See also the
+ * [performance options](https://51degrees.com/documentation/_device_detection__features__performance_options.html)
+ * page.
+ *
+ * This example is available in full on
+ * [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection.onpremise/examples/onpremise/matchmetrics-console/matchMetrics.js).
  */
 
 const path = require('path');

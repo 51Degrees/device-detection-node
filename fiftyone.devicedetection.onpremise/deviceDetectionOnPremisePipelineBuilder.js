@@ -28,6 +28,10 @@ const PipelineBuilder = core.PipelineBuilder;
 const ShareUsageElement = require('fiftyone.pipeline.engines.fiftyone').ShareUsage;
 const errorMessages = require('fiftyone.devicedetection.shared').errorMessages;
 
+/**
+ * @typedef {import('fiftyone.pipeline.engines').DataFileUpdateService} DataFileUpdateService
+ */
+
 class DeviceDetectionOnPremisePipelineBuilder extends PipelineBuilder {
   /**
    * Extension of pipelineBuilder class that allows for the quick
@@ -94,12 +98,9 @@ class DeviceDetectionOnPremisePipelineBuilder extends PipelineBuilder {
    * automatic data updates to occur.
    * @param {string} options.tempDataDir The directory to use for the
    * temporary data copy if 'createTempDataCopy' is set to true.
-   * @param {boolean} options.usePredictiveGraph [deprecated] True, the engine will use
-   * the predictive optimized graph to in detections.
-   * @param {boolean} options.usePerformanceGraph [deprecated] True, the engine will use
-   * the performance optimized graph to in detections.
-   *
-   * @param options.dataFileUpdateService
+   * @param {DataFileUpdateService} options.dataFileUpdateService Set
+   * DataFileUpdateService so the datafiles can receive
+   * automatic updates
    */
   constructor (
     {

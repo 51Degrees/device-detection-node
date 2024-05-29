@@ -168,8 +168,11 @@ describe('deviceDetectionCloud', () => {
 });
 
 /**
+ * Read the first line of a file
  *
- * @param filePath
+ * @param {string} filePath Path to a file
+ * @returns {Promise<string>} A promise that resolves to a string containing the first line.
+ * @throws {Error} If read operation fails
  */
 function readFirstLine (filePath) {
   const rs = fs.createReadStream(path.resolve(filePath));

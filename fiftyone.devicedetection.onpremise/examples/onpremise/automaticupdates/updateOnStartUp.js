@@ -21,15 +21,10 @@
  * ********************************************************************* */
 
 /**
-@example onpremise/automaticupdates/updateOnStartUp.js
-
-@include{doc} example-automatic-updates-on-startup-hash.txt
-
-This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection.onpremise/examples/onpremise/automaticupdates/updateOnStartUp.js).
-
-@include{doc} example-require-datafile.txt
-@include{doc} example-require-licensekey.txt
-
+ * @example onpremise/automaticupdates/updateOnStartUp.js
+ *
+ * This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection.onpremise/examples/onpremise/automaticupdates/updateOnStartUp.js).
+ *
  */
 
 const path = require('path');

@@ -21,35 +21,33 @@
  * ********************************************************************* */
 
 /**
-@example cloud/metadata-console/metaData.js
-
-The cloud service exposes meta data that can provide additional information about the various
-properties that might be returned.
-This example shows how to access this data and display the values available.
-
-A list of the properties will be displayed, along with some additional information about each
-property. Note that this is the list of properties used by the supplied resource key, rather
-than all properties that can be returned by the cloud service.
-
-In addition, the evidence keys that are accepted by the service are listed. These are the
-keys that, when added to the evidence collection in flow data, could have some impact on the
-result that is returned.
-
-Bear in mind that this is a list of ALL evidence keys accepted by all products offered by the
-cloud. If you are only using a single product (for example - device detection) then not all
-of these keys will be relevant.
-
-This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection.cloud/examples/cloud/metadata-console/metaData.js).
-
-@include{doc} example-require-resourcekey.txt
-
-Required npm Dependencies:
-- fiftyone.pipeline.cloudrequestengine
-- fiftyone.pipeline.core
-- fiftyone.pipeline.engines
-- fiftyone.pipeline.engines.fiftyone
-- fiftyone.devicedetection.cloud
-
+ * @example cloud/metadata-console/metaData.js
+ *
+ * The cloud service exposes meta data that can provide additional information about the various
+ * properties that might be returned.
+ * This example shows how to access this data and display the values available.
+ *
+ * A list of the properties will be displayed, along with some additional information about each
+ * property. Note that this is the list of properties used by the supplied resource key, rather
+ * than all properties that can be returned by the cloud service.
+ *
+ * In addition, the evidence keys that are accepted by the service are listed. These are the
+ * keys that, when added to the evidence collection in flow data, could have some impact on the
+ * result that is returned.
+ *
+ * Bear in mind that this is a list of ALL evidence keys accepted by all products offered by the
+ * cloud. If you are only using a single product (for example - device detection) then not all
+ * of these keys will be relevant.
+ *
+ * This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection.cloud/examples/cloud/metadata-console/metaData.js).
+ *
+ * Required npm Dependencies:
+ * - fiftyone.pipeline.cloudrequestengine
+ * - fiftyone.pipeline.core
+ * - fiftyone.pipeline.engines
+ * - fiftyone.pipeline.engines.fiftyone
+ * - fiftyone.devicedetection.cloud
+ *
  */
 
 const path = require('path');

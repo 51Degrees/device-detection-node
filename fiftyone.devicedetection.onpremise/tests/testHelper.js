@@ -33,14 +33,15 @@ const datafiles = [enterpriseDataFileName, liteDataFileName];
 const fileDirs = [
   (process.env.directory || __dirname) + '/../tests/',
   (process.env.directory || __dirname) +
-    '/../device-detection-cxx/device-detection-data/'];
+  '/../device-detection-cxx/device-detection-data/'];
 
 let testDataFile;
 
 /**
  * This looks into specific paths for the requested data file.
- * @param fileName
- * @returns data file full path for testing
+ *
+ * @param {string} fileName Data file name
+ * @returns {string} Data file full path for testing
  */
 const getDataFilePath = function (fileName) {
   for (const fileDir of fileDirs) {
@@ -56,7 +57,8 @@ const getDataFilePath = function (fileName) {
 /**
  * Search for potential data file to be used for testing.
  * Enterprise data file first before Lite.
- * @returns data file should be used for testing
+ *
+ * @returns {string} Data file should be used for testing
  */
 const getTestDataFile = function () {
   if (testDataFile === undefined) {

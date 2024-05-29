@@ -21,37 +21,35 @@
  * ********************************************************************* */
 
 /**
-@example onpremise/offlineprocessing-console/offlineProcessing.js
-
-Provides an example of processing a YAML file containing evidence for device detection.
-There are 20,000 examples in the supplied file of evidence representing HTTP Headers.
-For example:
-
-```
-header.user - agent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36'
-header.sec - ch - ua: '" Not A;Brand";v="99", "Chromium";v="98", "Google Chrome";v="98"'
-header.sec - ch - ua - full - version: '"98.0.4758.87"'
-header.sec - ch - ua - mobile: '?0'
-header.sec - ch - ua - platform: '"Android"'
-```
-
-We create a device detection pipeline to read the data and find out about the associated device,
-we write this data to a YAML formatted output stream.
-
-As well as explaining the basic operation of off line processing using the defaults, for
-advanced operation this example can be used to experiment with tuning device detection for
-performance and predictive power using Performance Profile, Graph and Difference and Drift
-settings.
-
-This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection.onpremise/examples/onpremise/offlineprocessing-console/offlineProcessing.js).
-
-@include{doc} example-require-datafile.txt
-
-Required npm Dependencies:
-- fiftyone.pipeline.core
-- fiftyone.pipeline.engines
-- fiftyone.pipeline.engines.fiftyone
-- fiftyone.devicedetection.onpremise
+ * @example onpremise/offlineprocessing-console/offlineProcessing.js
+ *
+ * Provides an example of processing a YAML file containing evidence for device detection.
+ * There are 20,000 examples in the supplied file of evidence representing HTTP Headers.
+ * For example:
+ *
+ * ```
+ * header.user - agent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36'
+ * header.sec - ch - ua: '" Not A;Brand";v="99", "Chromium";v="98", "Google Chrome";v="98"'
+ * header.sec - ch - ua - full - version: '"98.0.4758.87"'
+ * header.sec - ch - ua - mobile: '?0'
+ * header.sec - ch - ua - platform: '"Android"'
+ * ```
+ *
+ * We create a device detection pipeline to read the data and find out about the associated device,
+ * we write this data to a YAML formatted output stream.
+ *
+ * As well as explaining the basic operation of off line processing using the defaults, for
+ * advanced operation this example can be used to experiment with tuning device detection for
+ * performance and predictive power using Performance Profile, Graph and Difference and Drift
+ * settings.
+ *
+ * This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection.onpremise/examples/onpremise/offlineprocessing-console/offlineProcessing.js).
+ *
+ * Required npm Dependencies:
+ * - fiftyone.pipeline.core
+ * - fiftyone.pipeline.engines
+ * - fiftyone.pipeline.engines.fiftyone
+ * - fiftyone.devicedetection.onpremise
  */
 
 const LineReader = require('n-readlines');

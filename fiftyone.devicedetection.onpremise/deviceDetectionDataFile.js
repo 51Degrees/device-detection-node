@@ -31,6 +31,7 @@ const DataFile = engines.DataFile;
  * update url which contains the product, type and licensekeys.
  * These paramaters are passed in to the datafile constructor's
  * updateURLParams parameter
+ *
  * @param {string} options.useUrlFormatter whether to append default URL params for Data File download
  **/
 class DeviceDetectionDataFile extends DataFile {
