@@ -44,10 +44,11 @@ const goodVersion = [4, 1, 0, 0];
 const fileSize = fs.statSync(DataFile).size;
 
 /**
+ * Write Int into a buffers at specific offset
  *
- * @param buf
- * @param offset
- * @param val
+ * @param {Buffer} buf Buffer to write to
+ * @param {number} offset Integer - Number of bytes to skip before starting to write
+ * @param {number} val Integer value to write
  */
 function writeInt (buf, offset, val) {
   if (os.endianness() === 'LE') {
@@ -58,7 +59,7 @@ function writeInt (buf, offset, val) {
 }
 
 /**
- *
+ * Create and fill BadVersionDataFile.hash
  */
 function createBadVersionDataFile () {
   const buffer = Buffer.alloc(fileSize);
@@ -69,7 +70,7 @@ function createBadVersionDataFile () {
 }
 
 /**
- *
+ * Create and fill BadHeaderDataFile.hash
  */
 function createBadHeaderDataFile () {
   const buffer = Buffer.alloc(fileSize);
@@ -80,7 +81,7 @@ function createBadHeaderDataFile () {
 }
 
 /**
- *
+ * Create SmallDataFile.hash
  */
 function createSmallDataFile () {
   const buffer = Buffer.alloc(1).fill(1);

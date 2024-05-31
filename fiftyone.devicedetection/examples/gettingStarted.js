@@ -21,27 +21,23 @@
  * ********************************************************************* */
 
 /**
-@example gettingStarted.js
-
-@include{doc} example-getting-started-cloud.txt
-
-This shows how to use DeviceDetectionPipelineBuilder instead of specific
-DeviceDetectionCloudPipelineBuilder.
-
-This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/main/fiftyone.devicedetection/examples/gettingStarted.js).
-
-@include{doc} example-require-resourcekey.txt
-
-Expected output:
-
-```
-Is user agent 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_2 like Mac OS X) AppleWebKit/604.4.7 (KHTML, like Gecko) Mobile/15C114' a mobile?
-true
-
-Is user agent 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36' a mobile?
-false
-```
-
+ * @example gettingStarted.js
+ *
+ * This shows how to use DeviceDetectionPipelineBuilder instead of specific
+ * DeviceDetectionCloudPipelineBuilder.
+ *
+ * This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/main/fiftyone.devicedetection/examples/gettingStarted.js).
+ *
+ * Expected output:
+ *
+ * ```
+ * Is user agent 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_2 like Mac OS X) AppleWebKit/604.4.7 (KHTML, like Gecko) Mobile/15C114' a mobile?
+ * true
+ *
+ * Is user agent 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36' a mobile?
+ * false
+ * ```
+ *
  */
 const path = require('path');
 const require51 = (requestedPackage) => {

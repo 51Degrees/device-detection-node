@@ -21,28 +21,24 @@
  * ********************************************************************* */
 
 /**
-@example cloud/useragentclienthints-web/userAgentClientHintsWeb.js
-
-@include{doc} example-web-integration-client-hints.txt
-
-This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection.cloud/examples/cloud/useragentclienthints-web/userAgentClientHintsWeb.js).
-
-@include{doc} example-require-resourcekey.txt
-
-Make sure to include all the required properties used by this example.
-
-Expected output:
-
-User Agent Client Hints Example
-
-```
-Hardware Vendor: [...]
-Hardware Name: [...]
-Device Type: [...]
- ...
-
-```
-
+ * @example cloud/useragentclienthints-web/userAgentClientHintsWeb.js
+ *
+ * This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection.cloud/examples/cloud/useragentclienthints-web/userAgentClientHintsWeb.js).
+ *
+ * Make sure to include all the required properties used by this example.
+ *
+ * Expected output:
+ *
+ * User Agent Client Hints Example
+ *
+ * ```
+ * Hardware Vendor: [...]
+ * Hardware Name: [...]
+ * Device Type: [...]
+ *  ...
+ *
+ * ```
+ *
  */
 const path = require('path');
 const require51 = (requestedPackage) => {

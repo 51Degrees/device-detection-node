@@ -21,17 +21,17 @@
  * ********************************************************************* */
 
 /**
-This example is displayed at the end of the [Configurator](https://configure.51degrees.com/)
-process, which is used to create resource keys for use with the 51Degrees cloud service.
-
-It shows how to call the cloud with the newly created key and how to access the values
-of the selected properties.
-
-See [Getting Started](https://51degrees.com/documentation/_examples__device_detection__getting_started__console__cloud.html)
-for a fuller example.
-
-Required npm Dependencies:
-- fiftyone.devicedetection
+ * This example is displayed at the end of the [Configurator](https://configure.51degrees.com/)
+ * process, which is used to create resource keys for use with the 51Degrees cloud service.
+ *
+ * It shows how to call the cloud with the newly created key and how to access the values
+ * of the selected properties.
+ *
+ * See [Getting Started](https://51degrees.com/documentation/_examples__device_detection__getting_started__console__cloud.html)
+ * for a fuller example.
+ *
+ * Required npm Dependencies:
+ * - fiftyone.devicedetection
  */
 const path = require('path');
 const require51 = (requestedPackage) => {

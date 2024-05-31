@@ -27,7 +27,9 @@ module.exports = {
   /**
    * Obtain a key either from environment variable or from a property.
    * Try resource key as env var, then as upper case env var, the system property
-   * @param keyName
+   *
+   * @param {string} keyName Name of the key
+   * @returns {string} Key value
    */
   getNamedKey: function (keyName) {
     let value = process.env[keyName];
@@ -39,8 +41,9 @@ module.exports = {
 
   /**
    * Evaluate whether a key might be valid
-   * @param keyValue value to test
-   * @returns boolean
+   *
+   * @param {string} keyValue Value to test
+   * @returns {boolean} Is invalid key
    */
   isInvalidKey: function (keyValue) {
     try {

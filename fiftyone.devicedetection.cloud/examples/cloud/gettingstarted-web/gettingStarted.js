@@ -21,55 +21,47 @@
  * ********************************************************************* */
 
 /**
-@example cloud/gettingstarted-web/gettingStarted.js
-
-@include{doc} example-getting-started-cloud.txt
-
-This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection.cloud/examples/cloud/gettingstarted-web/gettingStarted.js).
-
-@include{doc} example-require-resourcekey.txt
-
-Required npm Dependencies:
-- fiftyone.pipeline.cloudrequestengine
-- fiftyone.pipeline.core
-- fiftyone.pipeline.engines
-- fiftyone.pipeline.engines.fiftyone
-- fiftyone.devicedetection.cloud
-
-## Overview
-
-The `flowData.evidence.addFromRequest(request)` is used to extract required
-evidence from a Http request. The `Helpers.setResponseHeaders(response, flowData)`
-from fiftyone.pipeline.core package is used to add extra headers to a Http
-response to request further evidence from the client.
-```
-flowData.evidence.addFromRequest(request);
-
-core.Helpers.setResponseHeaders(response, flowData);
-```
-
-The results of detection can be accessed by querying the `device` property of
-a FlowData object. This can then be used to interrogate the data.
-```
-var flowData = pipeline.createFlowData();
-var deviceData = pipeline.device;
-var hardwareVendor = deviceData.hardwarevendor;
-```
-
-Results can also be accessed in client-side code by using the `fod` object. See the
-[JavaScriptBuilderElement](https://51degrees.com/pipeline-node/class_java_script_builder_element.html)
-for details on available settings such as changing the `fod` name.
-```
-window.onload = function () {
-    fod.complete(function(data) {
-        var hardwareName = data.device.hardwarename;
-        alert(hardwareName.join(", "));
-    }
-}
-```
-
-## Configuration
-@include 51d.json
+ * @example cloud/gettingstarted-web/gettingStarted.js
+ * This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection.cloud/examples/cloud/gettingstarted-web/gettingStarted.js).
+ *
+ * Required npm Dependencies:
+ * - fiftyone.pipeline.cloudrequestengine
+ * - fiftyone.pipeline.core
+ * - fiftyone.pipeline.engines
+ * - fiftyone.pipeline.engines.fiftyone
+ * - fiftyone.devicedetection.cloud
+ *
+ * ## Overview
+ *
+ * The `flowData.evidence.addFromRequest(request)` is used to extract required
+ * evidence from a Http request. The `Helpers.setResponseHeaders(response, flowData)`
+ * from fiftyone.pipeline.core package is used to add extra headers to a Http
+ * response to request further evidence from the client.
+ * ```
+ * flowData.evidence.addFromRequest(request);
+ *
+ * core.Helpers.setResponseHeaders(response, flowData);
+ * ```
+ *
+ * The results of detection can be accessed by querying the `device` property of
+ * a FlowData object. This can then be used to interrogate the data.
+ * ```
+ * var flowData = pipeline.createFlowData();
+ * var deviceData = pipeline.device;
+ * var hardwareVendor = deviceData.hardwarevendor;
+ * ```
+ *
+ * Results can also be accessed in client-side code by using the `fod` object. See the
+ * [JavaScriptBuilderElement](https://51degrees.com/pipeline-node/class_java_script_builder_element.html)
+ * for details on available settings such as changing the `fod` name.
+ * ```
+ * window.onload = function () {
+ *     fod.complete(function(data) {
+ *         var hardwareName = data.device.hardwarename;
+ *         alert(hardwareName.join(", "));
+ *     }
+ * }
+ * ```
  */
 const path = require('path');
 const require51 = (requestedPackage) => {

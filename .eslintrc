@@ -25,6 +25,11 @@
     "parserOptions": {
         "ecmaVersion": 2018
     },
+    "settings": {
+        "jsdoc": {
+            "mode": "typescript"
+        }
+    },
     "rules": {
         "node/no-deprecated-api": "off",
         "no-throw-literal": "off",

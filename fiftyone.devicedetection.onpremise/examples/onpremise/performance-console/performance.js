@@ -20,34 +20,30 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 /**
-@example onpremise/performance-console/performance.js
-
-@include{doc} example-performance-hash.txt
-
-This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection.onpremise/examples/onpremise/performance-console/performance.js).
-
-@include{doc} example-require-datafile.txt
-
-This example require module 'n-readlines' to operate. Please install the module
-before running the example, by using the following command:
-
-```
-npm install n-readlines
-```
-
-Expected output:
-
-```
-Processing [...] User-Agents from [...]/20000 User Agents.csv
-Processing
-Average [...] detections per second.
-Average [...] ms per User-Agent.
-ismobile = true : [...]
-ismobile = false : [...]
-ismobile = unknown : [...]
-
-```
-
+ * @example onpremise/performance-console/performance.js
+ *
+ * This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection.onpremise/examples/onpremise/performance-console/performance.js).
+ *
+ * This example require module 'n-readlines' to operate. Please install the module
+ * before running the example, by using the following command:
+ *
+ * ```
+ * npm install n-readlines
+ * ```
+ *
+ * Expected output:
+ *
+ * ```
+ * Processing [...] User-Agents from [...]/20000 User Agents.csv
+ * Processing
+ * Average [...] detections per second.
+ * Average [...] ms per User-Agent.
+ * ismobile = true : [...]
+ * ismobile = false : [...]
+ * ismobile = unknown : [...]
+ *
+ * ```
+ *
  */
 
 const events = require('events');

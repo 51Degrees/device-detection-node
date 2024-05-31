@@ -21,26 +21,24 @@
  * ********************************************************************* */
 
 /**
-@example cloud/nativemodellookup-console/nativeModelLookup.js
-
-This example shows how to use the 51Degrees Cloud service to lookup the details of a device
-based on a given 'native model name'. Native model name is a string of characters that are
-returned from a query to the device's OS.
-There are different mechanisms to get native model names for
-[Android devices](https://developer.android.com/reference/android/os/Build#MODEL) and
-[iOS devices](https://gist.github.com/soapyigu/c99e1f45553070726f14c1bb0a54053b#file-machinename-swift)
-
-This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection.cloud/examples/cloud/nativemodellookup-console/nativeModelLookup.js).
-
-@include{doc} example-require-resourcekey.txt
-
-Required npm Dependencies:
-- fiftyone.pipeline.cloudrequestengine
-- fiftyone.pipeline.core
-- fiftyone.pipeline.engines
-- fiftyone.pipeline.engines.fiftyone
-- fiftyone.devicedetection.cloud
-
+ * @example cloud/nativemodellookup-console/nativeModelLookup.js
+ *
+ * This example shows how to use the 51Degrees Cloud service to lookup the details of a device
+ * based on a given 'native model name'. Native model name is a string of characters that are
+ * returned from a query to the device's OS.
+ * There are different mechanisms to get native model names for
+ * [Android devices](https://developer.android.com/reference/android/os/Build#MODEL) and
+ * [iOS devices](https://gist.github.com/soapyigu/c99e1f45553070726f14c1bb0a54053b#file-machinename-swift)
+ *
+ * This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection.cloud/examples/cloud/nativemodellookup-console/nativeModelLookup.js).
+ *
+ * Required npm Dependencies:
+ * - fiftyone.pipeline.cloudrequestengine
+ * - fiftyone.pipeline.core
+ * - fiftyone.pipeline.engines
+ * - fiftyone.pipeline.engines.fiftyone
+ * - fiftyone.devicedetection.cloud
+ *
  */
 
 const path = require('path');

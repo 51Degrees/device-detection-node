@@ -21,37 +21,35 @@
  * ********************************************************************* */
 
 /**
-@example onpremise/metadata-console/metaData.js
-
-The device detection data file contains meta data that can provide additional information
-about the various records in the data model.
-This example shows how to access this data and display the values available.
-
-To help navigate the data, it's useful to have an understanding of the types of records that
-are present:
-- Component - A record relating to a major aspect of the entity making a web request. There are currently 4 components: Hardware, Software Platform (OS), Browser and Crawler.
-- Profile - A record containing the details for a specific instance of a component. An example of a hardware profile would be the profile for the iPhone 13. An example of a platform profile would be Android 12.1.0.
-- Property - Each property will have a specific value (or values) for each profile. An example of a hardware property is 'IsMobile'. An example of a browser property is 'BrowserName'.
-
-The example will output each component in turn, with a list of the properties associated with
-each component. Some of the possible values for each property are also displayed.
-There are too many profiles to display, so we just list the number of profiles for each
-component.
-
-Finally, the evidence keys that are accepted by device detection are listed. These are the
-keys that, when added to the evidence collection in flow data, could have some impact on the
-result returned by device detection.
-
-This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection.onpremise/examples/onpremise/metadata-console/metaData.js).
-
-@include{doc} example-require-datafile.txt
-
-Required npm Dependencies:
-- fiftyone.pipeline.core
-- fiftyone.pipeline.engines
-- fiftyone.pipeline.engines.fiftyone
-- fiftyone.devicedetection.onpremise
-
+ * @example onpremise/metadata-console/metaData.js
+ *
+ * The device detection data file contains meta data that can provide additional information
+ * about the various records in the data model.
+ * This example shows how to access this data and display the values available.
+ *
+ * To help navigate the data, it's useful to have an understanding of the types of records that
+ * are present:
+ * - Component - A record relating to a major aspect of the entity making a web request. There are currently 4 components: Hardware, Software Platform (OS), Browser and Crawler.
+ * - Profile - A record containing the details for a specific instance of a component. An example of a hardware profile would be the profile for the iPhone 13. An example of a platform profile would be Android 12.1.0.
+ * - Property - Each property will have a specific value (or values) for each profile. An example of a hardware property is 'IsMobile'. An example of a browser property is 'BrowserName'.
+ *
+ * The example will output each component in turn, with a list of the properties associated with
+ * each component. Some of the possible values for each property are also displayed.
+ * There are too many profiles to display, so we just list the number of profiles for each
+ * component.
+ *
+ * Finally, the evidence keys that are accepted by device detection are listed. These are the
+ * keys that, when added to the evidence collection in flow data, could have some impact on the
+ * result returned by device detection.
+ *
+ * This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection.onpremise/examples/onpremise/metadata-console/metaData.js).
+ *
+ * Required npm Dependencies:
+ * - fiftyone.pipeline.core
+ * - fiftyone.pipeline.engines
+ * - fiftyone.pipeline.engines.fiftyone
+ * - fiftyone.devicedetection.onpremise
+ *
  */
 
 const path = require('path');

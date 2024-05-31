@@ -21,19 +21,15 @@
  * ********************************************************************* */
 
 /**
-@example onpremise/gettingstarted-console/gettingStarted.js
-
-@include{doc} example-getting-started-onpremise.txt
-
-This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection.onpremise/examples/onpremise/gettingstarted-console/gettingStarted.js).
-
-@include{doc} example-require-datafile.txt
-
-Required npm Dependencies:
-- fiftyone.pipeline.core
-- fiftyone.pipeline.engines
-- fiftyone.pipeline.engines.fiftyone
-- fiftyone.devicedetection.onpremise
+ * @example onpremise/gettingstarted-console/gettingStarted.js
+ *
+ * This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection.onpremise/examples/onpremise/gettingstarted-console/gettingStarted.js).
+ *
+ * Required npm Dependencies:
+ * - fiftyone.pipeline.core
+ * - fiftyone.pipeline.engines
+ * - fiftyone.pipeline.engines.fiftyone
+ * - fiftyone.devicedetection.onpremise
  */
 
 const path = require('path');

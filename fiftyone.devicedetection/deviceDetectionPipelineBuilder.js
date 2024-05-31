@@ -94,12 +94,6 @@ class DeviceDetectionPipelineBuilder extends PipelineBuilder {
    * This means that properties will always have values
    * (i.e. no need to check .HasValue) but some may be inaccurate.
    * By default, this is false.
-   * @param {boolean} options.usePredictiveGraph [deprecated] This setting on affects
-   * on-premise engines, not cloud.
-   * True, the engine will use the predictive optimized graph to in detections.
-   * @param {boolean} options.usePerformanceGraph [deprecated] This setting on affects
-   * on-premise engines, not cloud.
-   * True, the engine will use the performance optimized graph to in detections.
    * @param {string} options.cloudEndPoint This setting only affects
    * cloud engine, not on-premise.
    * Choose a non default endpoint for the cloud request engine

@@ -162,8 +162,6 @@ const KeyUtils = require51('fiftyone.devicedetection.shared').keyUtils;
  * # Location
  * This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection.onpremise/examples/onpremise/updatedatafile-console/updatedatafile.js).
  *
- * @include{doc} example-require-licensekey.txt
- *
  * Required npm Dependencies:
  * - fiftyone.pipeline.core
  * - fiftyone.pipeline.engines

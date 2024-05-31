@@ -21,24 +21,21 @@
  * ********************************************************************* */
 
 /**
-@example cloud/taclookup-console/tacLookup.js
-
-This example shows how to use the 51Degrees Cloud service to lookup the details of a device
-based on a given 'TAC'. More background information on TACs can be found through various online
-sources such as <a href="https://en.wikipedia.org/wiki/Type_Allocation_Code">Wikipedia</a>.
-
-This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection.cloud/examples/cloud/taclookup-console/tacLookup.js).
-
-@include{doc} example-require-resourcekey.txt
-Required npm Dependencies:
-- fiftyone.pipeline.cloudrequestengine
-- fiftyone.pipeline.core
-- fiftyone.pipeline.engines
-- fiftyone.pipeline.engines.fiftyone
-- fiftyone.devicedetection.cloud
-
-## Configuration
-@include 51d.json
+ * @example cloud/taclookup-console/tacLookup.js
+ *
+ * This example shows how to use the 51Degrees Cloud service to lookup the details of a device
+ * based on a given 'TAC'. More background information on TACs can be found through various online
+ * sources such as <a href="https://en.wikipedia.org/wiki/Type_Allocation_Code">Wikipedia</a>.
+ *
+ * This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection.cloud/examples/cloud/taclookup-console/tacLookup.js).
+ *
+ * Required npm Dependencies:
+ * - fiftyone.pipeline.cloudrequestengine
+ * - fiftyone.pipeline.core
+ * - fiftyone.pipeline.engines
+ * - fiftyone.pipeline.engines.fiftyone
+ * - fiftyone.devicedetection.cloud
+ *
  */
 
 const path = require('path');
