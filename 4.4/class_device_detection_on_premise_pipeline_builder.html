@@ -243,9 +243,7 @@ Public Member Functions</h2>
     <tr><dd class="c-list-definition__desc"><span class="b-text--red">{string}</span> - options.allowUnmatched If set to false, a non-matching User-Agent will result in properties without set values. If set to true, a non-matching User-Agent will cause the 'default profiles' to be returned. This means that properties will always have values (i.e. no need to check .HasValue) but some may be inaccurate. By default, this is false. </dd>
     <tr><dd class="c-list-definition__desc"><span class="b-text--red">{boolean}</span> - options.createTempDataCopy If true, the engine will create a copy of the data file in a temporary location rather than using the file provided directly. If not loading all data into memory, this is required for automatic data updates to occur. </dd>
     <tr><dd class="c-list-definition__desc"><span class="b-text--red">{string}</span> - options.tempDataDir The directory to use for the temporary data copy if 'createTempDataCopy' is set to true. </dd>
-    <tr><dd class="c-list-definition__desc"><span class="b-text--red">{boolean}</span> - options.usePredictiveGraph [deprecated] True, the engine will use the predictive optimized graph to in detections. </dd>
-    <tr><dd class="c-list-definition__desc"><span class="b-text--red">{boolean}</span> - options.usePerformanceGraph [deprecated] True, the engine will use the performance optimized graph to in detections.</dd>
-    <tr><dd class="c-list-definition__desc"><span class="b-text--red">options.dataFileUpdateService</span> - </dd>
+    <tr><dd class="c-list-definition__desc"><span class="b-text--red">{DataFileUpdateService}</span> - options.dataFileUpdateService Set DataFileUpdateService so the datafiles can receive automatic updates </dd>
   </dd>
 </dl>
 <!-- endIndent -->
