@@ -98,7 +98,11 @@ const analyzeEvidence = async function (evidence, pipeline, outputFile, outputFu
   // Add the evidence values to the output and add it to output object
   // at the same time
   for (const [key, value] of Object.entries(evidence)) {
-    data.evidence.add(key, value.toString());
+    if (value === null) {
+      data.evidence.add(key, '');
+    } else {
+      data.evidence.add(key, value.toString());
+    }
     document[key] = value;
   }
 
