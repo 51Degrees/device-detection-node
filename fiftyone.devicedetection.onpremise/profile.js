@@ -21,13 +21,25 @@
  * ********************************************************************* */
 
 class Profile {
+  /**
+   *  Constructor for Profile
+   *
+   * @param {object} metadata Metadata
+   * @param {object} engineMetadata Engine metadata
+   */
   constructor (metadata, engineMetadata) {
     this.metadata = metadata;
     this.engineMetadata = engineMetadata;
 
     const Component = require('./component');
+    /**
+     * @type {Component}
+     */
     this.component = new Component(
       engineMetadata.getComponentForProfile(metadata), engineMetadata);
+    /**
+     * @type {number} uint32
+     */
     this.profileId = metadata.getProfileId();
   }
 }

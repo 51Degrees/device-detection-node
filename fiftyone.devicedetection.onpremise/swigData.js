@@ -43,7 +43,7 @@ class SwigData extends AspectData {
    * @param {object} options options object
    * @param {FlowElement} options.flowElement the FlowElement the
    * data is part of
-   * @param {ResultsHashSwig} options.swigResults the results from the
+   * @param {object} options.swigResults the results from the
    * swig engine
    */
   constructor ({
@@ -59,7 +59,7 @@ class SwigData extends AspectData {
    * correct type via a check of the engine's property list metadata
    *
    * @param {string} key the property key to retrieve
-   * @returns {mixed} value property value
+   * @returns {AspectPropertyValue} value property value
    */
   getInternal (key) {
     // Start with special properties

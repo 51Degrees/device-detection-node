@@ -20,9 +20,11 @@ declare class DeviceDetectionOnPremise extends DeviceDetectionOnPremise_base {
      * @param {DataKeyedCache} options.cache an instance of the Cache class from
      * Fiftyone.Pipeline.Engines. NOTE: This is no longer supported for
      * on-premise engine.
-     * @param {string} options.dataFileUpdateBaseUrl base url for the datafile
+     * @param {string} options.dataUpdateUrl base url for the datafile
      * update service
-     * @param {Array} options.restrictedProperties list of properties the engine
+     * @param {boolean} options.dataUpdateVerifyMd5 whether to check MD5 of datafile
+     * @param {boolean} options.dataUpdateUseUrlFormatter whether to append default URL params for Data File download
+     * @param {Array<string>} options.restrictedProperties list of properties the engine
      * will be restricted to
      * @param {string} options.licenceKeys license key(s) used by the
      * data file update service. A key can be obtained from the
@@ -43,7 +45,7 @@ declare class DeviceDetectionOnPremise extends DeviceDetectionOnPremise_base {
      * use the same file to prevent high disk usage.
      * @param {boolean} options.updateMatchedUserAgent True if the detection
      * should record the matched characters from the target User-Agent
-     * @param {object} options.maxMatchedUserAgentLength Number of characters to
+     * @param {number} options.maxMatchedUserAgentLength Number of characters to
      * consider in the matched User-Agent. Ignored if updateMatchedUserAgent
      * is false
      * @param {number} options.drift Set maximum drift in hash position to
@@ -60,21 +62,21 @@ declare class DeviceDetectionOnPremise extends DeviceDetectionOnPremise_base {
      * rather than using the file provided directly. If not
      * loading all data into memory, this is required for
      * automatic data updates to occur.
+     * @param {string} options.tempDataDir The directory to use for the
+     * temporary data copy if 'createTempDataCopy' is set to true.
      * @param {boolean} options.updateOnStart whether to download / update
      * the datafile on initialisation
-     * @param {boolean} options.usePredictiveGraph [deprecated] If true, the engine will
-     * use predictive optimized graph in detections.
-     * @param {boolean} options.usePerformanceGraph [deprecated] If true, the engine will
-     * use performance optimized graph in detections.
      */
-    constructor({ dataFilePath, autoUpdate, cache, dataFileUpdateBaseUrl, restrictedProperties, licenceKeys, download, performanceProfile, reuseTempFile, updateMatchedUserAgent, maxMatchedUserAgentLength, drift, difference, concurrency, allowUnmatched, fileSystemWatcher, pollingInterval, updateTimeMaximumRandomisation, createTempDataCopy, updateOnStart }: {
+    constructor({ dataFilePath, autoUpdate, cache, dataUpdateUrl, dataUpdateVerifyMd5, dataUpdateUseUrlFormatter, restrictedProperties, licenceKeys, download, performanceProfile, reuseTempFile, updateMatchedUserAgent, maxMatchedUserAgentLength, drift, difference, concurrency, allowUnmatched, fileSystemWatcher, pollingInterval, updateTimeMaximumRandomisation, createTempDataCopy, tempDataDir, updateOnStart }: {
         dataFilePath: string;
         autoUpdate: boolean;
         pollingInterval: number;
         updateTimeMaximumRandomisation: number;
         cache: DataKeyedCache;
-        dataFileUpdateBaseUrl: string;
-        restrictedProperties: any[];
+        dataUpdateUrl: string;
+        dataUpdateVerifyMd5: boolean;
+        dataUpdateUseUrlFormatter: boolean;
+        restrictedProperties: Array<string>;
         licenceKeys: string;
         download: boolean;
         performanceProfile: string;
@@ -82,16 +84,39 @@ declare class DeviceDetectionOnPremise extends DeviceDetectionOnPremise_base {
         concurrency: number;
         reuseTempFile: boolean;
         updateMatchedUserAgent: boolean;
-        maxMatchedUserAgentLength: object;
+        maxMatchedUserAgentLength: number;
         drift: number;
         difference: number;
         allowUnmatched: boolean;
         createTempDataCopy: boolean;
+        tempDataDir: string;
         updateOnStart: boolean;
     }, ...args: any[]);
-    initEngine: () => Promise<any>;
+    dataKey: string;
+    /**
+     * Function for initialising the engine, wrapped like this so
+     * that an engine can be initialised once the datafile is
+     * retrieved if updateOnStart is set to true
+     *
+     * @returns {Promise<void>} init Engine Promise
+     */
+    initEngine: () => Promise<void>;
+    profiles(): Generator<Profile, void, unknown>;
+    /**
+     * Internal process method for Device Detection On Premise engine
+     * Fetches the results from the SWIG wrapper into an instance of
+     * the SwigData class which can be used to retrieve results from
+     * the FlowData.
+     *
+     * @param {FlowData} flowData FlowData to process
+     * @returns {Promise<void>} the result of processing
+     **/
+    processInternal(flowData: FlowData): Promise<void>;
 }
 declare namespace DeviceDetectionOnPremise {
-    export { DataKeyedCache };
+    export { DataKeyedCache, Engine, FlowData };
 }
+import Profile = require("./profile");
 type DataKeyedCache = import("fiftyone.pipeline.engines/types/dataKeyedCache");
+type Engine = import("fiftyone.pipeline.engines/types/engine");
+type FlowData = import("fiftyone.pipeline.core/types/flowData");

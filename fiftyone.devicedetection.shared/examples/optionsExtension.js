@@ -25,6 +25,13 @@ const CLOUD_REQUEST_ENGINE_NAME = 'cloudRequestEngine';
 const ONPREMISE_DEVICE_ENGINE = 'deviceDetectionOnPremise';
 
 class OptionsExtension {
+  /**
+   * Get element by name
+   *
+   * @param {object} options Options
+   * @param {string} elementName Element name
+   * @returns {object} Element
+   */
   static getElement (options, elementName) {
     if (options.PipelineOptions) {
       if (options.PipelineOptions.Elements) {
@@ -38,6 +45,12 @@ class OptionsExtension {
     }
   }
 
+  /**
+   * Get Datafile path
+   *
+   * @param {object} options Options
+   * @returns {string} Datafile path
+   */
   static getDataFilePath (options) {
     const cloudRequestElement = this.getElement(options, ONPREMISE_DEVICE_ENGINE);
     if (cloudRequestElement &&
@@ -47,6 +60,12 @@ class OptionsExtension {
     }
   }
 
+  /**
+   * Set Datafile path
+   *
+   * @param {object} options Options
+   * @param {string} newDataFilePath New Datafile path
+   */
   static setDataFilePath (options, newDataFilePath) {
     const cloudRequestElement = this.getElement(options, ONPREMISE_DEVICE_ENGINE);
     if (cloudRequestElement) {
@@ -58,6 +77,12 @@ class OptionsExtension {
     }
   }
 
+  /**
+   * Update Element path
+   *
+   * @param {object} options Options
+   * @param {string} appendDir New element path
+   */
   static updateElementPath (options, appendDir) {
     if (options.PipelineOptions) {
       if (options.PipelineOptions.Elements) {
@@ -71,6 +96,12 @@ class OptionsExtension {
     }
   }
 
+  /**
+   * Get resource Key
+   *
+   * @param {object} options Options
+   * @returns {string} Resource key
+   */
   static getResourceKey (options) {
     const cloudRequestElement = this.getElement(options, CLOUD_REQUEST_ENGINE_NAME);
     if (cloudRequestElement &&
@@ -80,6 +111,12 @@ class OptionsExtension {
     }
   }
 
+  /**
+   * Set resource key
+   *
+   * @param {object} options Options
+   * @param {string} resourceKey New resource key
+   */
   static setResourceKey (options, resourceKey) {
     const cloudRequestElement = this.getElement(options, CLOUD_REQUEST_ENGINE_NAME);
     if (cloudRequestElement) {

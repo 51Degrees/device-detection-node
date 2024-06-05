@@ -21,13 +21,32 @@
  * ********************************************************************* */
 
 class Component {
+  /**
+   *  Constructor for Component
+   *
+   * @param {object} metadata Metadata
+   * @param {object} engineMetadata Engine metadata
+   */
   constructor (metadata, engineMetadata) {
     this.metadata = metadata;
     this.engineMetadata = engineMetadata;
+    /**
+     * @type {string}
+     */
     this.name = metadata.getName();
+    /**
+     * @type {object}
+     */
     this.properties = engineMetadata.getPropertiesForComponent(metadata);
   }
 
+  /**
+   * Yield component properties
+   *
+   * @generator
+   * @yields {Property}
+   * @returns {void}
+   */
   * getProperties () {
     const Property = require('./property');
     for (let i = 0; i < this.properties.getSize(); i++) {
