@@ -21,7 +21,6 @@ declare class SwigData extends SwigData_base {
         swigResults: object;
     }, ...args: any[]);
     swigResults: object;
-    missingPropertyService: DataFileMissingPropertyService;
     /**
      * Retrieves elementData via the swigWrapper but also casts it to the
      * correct type via a check of the engine's property list metadata
@@ -34,5 +33,4 @@ declare class SwigData extends SwigData_base {
 declare namespace SwigData {
     export { FlowElement };
 }
-import DataFileMissingPropertyService = require("./dataFileMissingPropertyService");
 type FlowElement = import("fiftyone.pipeline.core/types/flowElement");

@@ -92,7 +92,6 @@ declare class DeviceDetectionOnPremise extends DeviceDetectionOnPremise_base {
         tempDataDir: string;
         updateOnStart: boolean;
     }, ...args: any[]);
-    dataKey: string;
     /**
      * Function for initialising the engine, wrapped like this so
      * that an engine can be initialised once the datafile is
