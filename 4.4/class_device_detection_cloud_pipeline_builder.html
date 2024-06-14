@@ -71,7 +71,9 @@ $(document).ready(function(){initNavTree('class_device_detection_cloud_pipeline_
 <div class="g-docs__primary" id="primary">
 <section class="g-docs__section">
 <a name="details" id="details"></a><h2 class="g-docs__section-heading">Detailed Description</h2>
-<section class="g-docs__section"><dl class="c-list-definition examples"><dt class="c-list-definition__title">Examples</dt><dd class="c-list-definition__desc"><a class="el" href="cloud_2metadata-console_2meta_data_8js-example.html#_a1">cloud/metadata-console/metaData.js</a>, and <a class="el" href="cloud_2useragentclienthints-web_2user_agent_client_hints_web_8js-example.html#_a0">cloud/useragentclienthints-web/userAgentClientHintsWeb.js</a>.</dd>
+<section class="g-docs__section"><p>Extension of pipelineBuilder class that allows for the quick generation of a device detection cloud pipeline. </p>
+<p>Adds share usage, caching. </p>
+<dl class="c-list-definition examples"><dt class="c-list-definition__title">Examples</dt><dd class="c-list-definition__desc"><a class="el" href="cloud_2metadata-console_2meta_data_8js-example.html#_a1">cloud/metadata-console/metaData.js</a>, and <a class="el" href="cloud_2useragentclienthints-web_2user_agent_client_hints_web_8js-example.html#_a0">cloud/useragentclienthints-web/userAgentClientHintsWeb.js</a>.</dd>
 </dl>
 </section></section>
 <!-- start ClassInheritanceGraph -->
@@ -121,7 +123,7 @@ Public Member Functions</h2>
 <tr class="c-table__row memitem:a4ef890c90d548f2e5e894cfac669e187"><td class="c-table__cell"><!-- insertMemberAlign -->
 &#160;</td><td class="c-table__cell"><a class="el" href="class_device_detection_cloud_pipeline_builder.html#a4ef890c90d548f2e5e894cfac669e187">constructor</a> ({ licenceKeys=null, resourceKey=null, cacheSize=null, cloudEndPoint=null, cloudRequestOrigin=null })
 <!-- startMemberDescription -->
-<div class="c-table__desc memdesc:a4ef890c90d548f2e5e894cfac669e187">Extension of pipelineBuilder class that allows for the quick generation of a device detection cloud pipeline.  <a href="#a4ef890c90d548f2e5e894cfac669e187">More...</a><!-- endMemberDescription -->
+<div class="c-table__desc memdesc:a4ef890c90d548f2e5e894cfac669e187">Constructor for <a class="el" href="class_device_detection_cloud_pipeline_builder.html" title="Extension of pipelineBuilder class that allows for the quick generation of a device detection cloud p...">DeviceDetectionCloudPipelineBuilder</a>.  <a href="#a4ef890c90d548f2e5e894cfac669e187">More...</a><!-- endMemberDescription -->
 </div></td></tr>
 <!-- endMemberList -->
 <!-- end member list -->
@@ -217,8 +219,7 @@ Public Member Functions</h2>
 </div><!-- startIndent -->
 <div class="c-member__body">
 
-<p>Extension of pipelineBuilder class that allows for the quick generation of a device detection cloud pipeline. </p>
-<p>Adds share usage, caching.</p>
+<p>Constructor for <a class="el" href="class_device_detection_cloud_pipeline_builder.html" title="Extension of pipelineBuilder class that allows for the quick generation of a device detection cloud p...">DeviceDetectionCloudPipelineBuilder</a>. </p>
 <dl class="c-list-definition"><dt class="c-list-definition__title">Parameters</dt><dd class="c-list-definition__desc">
     <tr><dd class="c-list-definition__desc"><span class="b-text--red">{object}</span> - options the options for the pipeline builder </dd>
     <tr><dd class="c-list-definition__desc"><span class="b-text--red">{string}</span> - options.licenceKeys license key(s) used by the data file update service. A key can be obtained from the 51Degrees website: <a href="https://51degrees.com/pricing">https://51degrees.com/pricing</a>. This parameter MUST be set when using a data file. If you do not wish to use a key then you can specify an empty string, but this will cause automatic updates to be disabled. </dd>

@@ -240,7 +240,7 @@ Public Member Functions</h2>
     <tr><dd class="c-list-definition__desc"><span class="b-text--red">{string}</span> - options.dataUpdateUrl base url for the datafile update service </dd>
     <tr><dd class="c-list-definition__desc"><span class="b-text--red">{boolean}</span> - options.dataUpdateVerifyMd5 whether to check MD5 of datafile </dd>
     <tr><dd class="c-list-definition__desc"><span class="b-text--red">{boolean}</span> - options.dataUpdateUseUrlFormatter whether to append default URL params for Data File download </dd>
-    <tr><dd class="c-list-definition__desc"><span class="b-text--red">{Array}</span> - options.restrictedProperties list of properties the engine will be restricted to </dd>
+    <tr><dd class="c-list-definition__desc"><span class="b-text--red">{Array&lt;string&gt;}</span> - options.restrictedProperties list of properties the engine will be restricted to </dd>
     <tr><dd class="c-list-definition__desc"><span class="b-text--red">{string}</span> - options.licenceKeys license key(s) used by the data file update service. A key can be obtained from the 51Degrees website: <a href="https://51degrees.com/pricing">https://51degrees.com/pricing</a>. If you do not wish to use a key then you can specify an empty string, but this will cause automatic updates to be disabled. </dd>
     <tr><dd class="c-list-definition__desc"><span class="b-text--red">{boolean}</span> - options.download whether to download the datafile or store it in memory </dd>
     <tr><dd class="c-list-definition__desc"><span class="b-text--red">{string}</span> - options.performanceProfile options are: LowMemory, MaxPerformance, Balanced, BalancedTemp, HighPerformance </dd>
@@ -248,7 +248,7 @@ Public Member Functions</h2>
     <tr><dd class="c-list-definition__desc"><span class="b-text--red">{number}</span> - options.concurrency defaults to the number of cpus in the machine </dd>
     <tr><dd class="c-list-definition__desc"><span class="b-text--red">{boolean}</span> - options.reuseTempFile Indicates that an existing temp file may be used. This should be selected if multiple instances wish to use the same file to prevent high disk usage. </dd>
     <tr><dd class="c-list-definition__desc"><span class="b-text--red">{boolean}</span> - options.updateMatchedUserAgent True if the detection should record the matched characters from the target User-Agent </dd>
-    <tr><dd class="c-list-definition__desc"><span class="b-text--red">{object}</span> - options.maxMatchedUserAgentLength Number of characters to consider in the matched User-Agent. Ignored if updateMatchedUserAgent is false </dd>
+    <tr><dd class="c-list-definition__desc"><span class="b-text--red">{number}</span> - options.maxMatchedUserAgentLength Number of characters to consider in the matched User-Agent. Ignored if updateMatchedUserAgent is false </dd>
     <tr><dd class="c-list-definition__desc"><span class="b-text--red">{number}</span> - options.drift Set maximum drift in hash position to allow when processing HTTP headers. </dd>
     <tr><dd class="c-list-definition__desc"><span class="b-text--red">{number}</span> - options.difference Set the maximum difference to allow when processing HTTP headers. The difference is the difference in hash value between the hash that was found, and the hash that is being searched for. By default this is 0. </dd>
     <tr><dd class="c-list-definition__desc"><span class="b-text--red">{boolean}</span> - options.allowUnmatched True if there should be at least one matched node in order for the results to be considered valid. By default, this is false </dd>
@@ -257,6 +257,8 @@ Public Member Functions</h2>
     <tr><dd class="c-list-definition__desc"><span class="b-text--red">{boolean}</span> - options.updateOnStart whether to download / update the datafile on initialisation </dd>
   </dd>
 </dl>
+<p>Function for initialising the engine, wrapped like this so that an engine can be initialised once the datafile is retrieved if updateOnStart is set to true</p>
+<dl class="c-list-definition return"><dt class="c-list-definition__title">Returns</dt><dd class="c-list-definition__desc">{Promise&lt;void&gt;} init Engine Promise</dd></dl>
 <!-- endIndent -->
 
 </div>
@@ -304,7 +306,7 @@ Public Member Functions</h2>
     <tr><dd class="c-list-definition__desc"><span class="b-text--red">{FlowData}</span> - flowData FlowData to process </dd>
   </dd>
 </dl>
-<dl class="c-list-definition return"><dt class="c-list-definition__title">Returns</dt><dd class="c-list-definition__desc">{Promise} the result of processing </dd></dl>
+<dl class="c-list-definition return"><dt class="c-list-definition__title">Returns</dt><dd class="c-list-definition__desc">{Promise&lt;void&gt;} the result of processing </dd></dl>
 <!-- endIndent -->
 
 </div>
