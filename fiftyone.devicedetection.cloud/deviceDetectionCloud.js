@@ -29,6 +29,9 @@ const CloudEngine = require('fiftyone.pipeline.cloudrequestengine').CloudEngine;
  * device part. It also uses this data to generate a list of properties
  **/
 class DeviceDetectionCloud extends CloudEngine {
+  /**
+   * Constructor for DeviceDetectionCloud
+   */
   constructor () {
     super(...arguments);
     this.dataKey = 'device';

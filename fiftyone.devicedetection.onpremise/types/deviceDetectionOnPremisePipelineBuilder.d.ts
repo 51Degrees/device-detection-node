@@ -1,5 +1,8 @@
 export = DeviceDetectionOnPremisePipelineBuilder;
 declare const DeviceDetectionOnPremisePipelineBuilder_base: typeof import("fiftyone.pipeline.core/types/pipelineBuilder");
+/**
+ * @typedef {import('fiftyone.pipeline.engines').DataFileUpdateService} DataFileUpdateService
+ */
 declare class DeviceDetectionOnPremisePipelineBuilder extends DeviceDetectionOnPremisePipelineBuilder_base {
     /**
      * Extension of pipelineBuilder class that allows for the quick
@@ -16,7 +19,10 @@ declare class DeviceDetectionOnPremisePipelineBuilder extends DeviceDetectionOnP
      * an empty string, but this will cause automatic updates
      * to be disabled.
      * @param {string} options.dataFile dataFile path for the on premise engine
+     * @param {boolean} options.dataUpdateVerifyMd5 whether to check MD5 of datafile
+     * @param {boolean} options.dataUpdateUseUrlFormatter whether to append default URL params for Data File download
      * @param {boolean} options.autoUpdate whether to autoUpdate the dataFile
+     * @param {string} options.dataUpdateUrl base url for the datafile
      * @param {number} options.pollingInterval How often to poll for
      * updates to the datafile (minutes)
      * @param {number} options.updateTimeMaximumRandomisation
@@ -30,12 +36,14 @@ declare class DeviceDetectionOnPremisePipelineBuilder extends DeviceDetectionOnP
      * @param {number} options.cacheSize size of the default cache
      * (includes cache if set). NOTE: This is not supported for on-premise
      * engine.
-     * @param {Array} options.restrictedProperties list of properties the engine
+     * @param {Array<string>} options.restrictedProperties list of properties the engine
      * will be restricted to
      * @param {string} options.performanceProfile used to control the tradeoff
      * between performance and system memory usage (Only applies to on-premise,
      * not cloud) options are: LowMemory, MaxPerformance, Balanced,
      * BalancedTemp, HighPerformance
+     * @param {number} options.concurrency defaults to the number of cpus
+     * in the machine
      * @param {boolean} options.updateMatchedUserAgent True if the detection
      * should record the matched characters from the target User-Agent
      * @param {number} options.maxMatchedUserAgentLength Number of characters to
@@ -54,28 +62,44 @@ declare class DeviceDetectionOnPremisePipelineBuilder extends DeviceDetectionOnP
      * This means that properties will always have values
      * (i.e. no need to check .HasValue) but some may be inaccurate.
      * By default, this is false.
-     * @param {boolean} options.usePredictiveGraph [deprecated] True, the engine will use
-     * the predictive optimized graph to in detections.
-     * @param {boolean} options.usePerformanceGraph [deprecated] True, the engine will use
-     * the performance optimized graph to in detections.
-     *
+     * @param {boolean} options.createTempDataCopy If true, the engine will
+     * create a copy of the data file in a temporary location
+     * rather than using the file provided directly. If not
+     * loading all data into memory, this is required for
+     * automatic data updates to occur.
+     * @param {string} options.tempDataDir The directory to use for the
+     * temporary data copy if 'createTempDataCopy' is set to true.
+     * @param {DataFileUpdateService} options.dataFileUpdateService Set
+     * DataFileUpdateService so the datafiles can receive
+     * automatic updates
      */
-    constructor({ licenceKeys, dataFile, autoUpdate, pollingInterval, updateTimeMaximumRandomisation, shareUsage, fileSystemWatcher, updateOnStart, cacheSize, restrictedProperties, performanceProfile, updateMatchedUserAgent, maxMatchedUserAgentLength, drift, difference, allowUnmatched }: {
+    constructor({ dataFileUpdateService, licenceKeys, dataFile, dataUpdateVerifyMd5, dataUpdateUseUrlFormatter, autoUpdate, dataUpdateUrl, pollingInterval, updateTimeMaximumRandomisation, shareUsage, fileSystemWatcher, updateOnStart, cacheSize, restrictedProperties, performanceProfile, concurrency, updateMatchedUserAgent, maxMatchedUserAgentLength, drift, difference, allowUnmatched, createTempDataCopy, tempDataDir }: {
         licenceKeys: string;
         dataFile: string;
+        dataUpdateVerifyMd5: boolean;
+        dataUpdateUseUrlFormatter: boolean;
         autoUpdate: boolean;
+        dataUpdateUrl: string;
         pollingInterval: number;
         updateTimeMaximumRandomisation: number;
         shareUsage: boolean;
         fileSystemWatcher: boolean;
         updateOnStart: boolean;
         cacheSize: number;
-        restrictedProperties: any[];
+        restrictedProperties: Array<string>;
         performanceProfile: string;
+        concurrency: number;
         updateMatchedUserAgent: boolean;
         maxMatchedUserAgentLength: number;
         drift: number;
         difference: number;
         allowUnmatched: string;
+        createTempDataCopy: boolean;
+        tempDataDir: string;
+        dataFileUpdateService: DataFileUpdateService;
     }, ...args: any[]);
 }
+declare namespace DeviceDetectionOnPremisePipelineBuilder {
+    export { DataFileUpdateService };
+}
+type DataFileUpdateService = import("fiftyone.pipeline.engines/types/dataFileUpdateService");

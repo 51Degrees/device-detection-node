@@ -17,7 +17,8 @@ $packageJSON = @"
   "scripts": {
     "unit-test": "jest --ci --reporters=jest-junit --reporters=default --coverage --coverageReporters=cobertura --testPathIgnorePatterns=\"(examples/*|performance.test.js)\"",
     "integration-test": "jest --ci --reporters=jest-junit --reporters=default --coverage --coverageReporters=cobertura --testPathPattern=\"(examples/*)\" --testPathIgnorePatterns=\"(performance.test.js|tests/*)\"",
-    "lint": "eslint . --ext .js"
+    "lint": "eslint . --ext .js",
+    "tsc": "tsc -b --force"
   },
   "repository": {
     "type": "git",
@@ -43,11 +44,12 @@ $packageJSON = @"
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jest": "^26.2.2",
     "eslint-plugin-jsdoc": "^38.1.6",
+    "eslint-plugin-n": "^15.0.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^6.0.0",
-    "eslint-plugin-n": "^15.0.0",
     "jest": "^28.1.0",
-    "jest-junit": "^13.2.0"
+    "jest-junit": "^13.2.0",
+    "typescript": "^5.4.5"
   },
   "license": "EUPL-1.2",
   "bugs": {

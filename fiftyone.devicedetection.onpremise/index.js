@@ -21,10 +21,8 @@
  * ********************************************************************* */
 
 module.exports = {
-
   DeviceDetectionOnPremise: require('./deviceDetectionOnPremise'),
   DeviceDetectionOnPremisePipelineBuilder: require('./deviceDetectionOnPremisePipelineBuilder'),
   SwigData: require('./swigData'),
   swigHelpers: require('../fiftyone.devicedetection.onpremise/swigHelpers')
-
 };

@@ -21,7 +21,13 @@
  * ********************************************************************* */
 
 class DataExtension {
-  // Helper function to read property values from flowData
+  /**
+   * Helper function to read property values from flowData
+   *
+   * @param {object} elementData Element data
+   * @param {string} propertyName Property name
+   * @returns {string} result string, either property value or error
+   * */
   static getValueHelper (elementData, propertyName) {
     try {
       const property = elementData[propertyName];

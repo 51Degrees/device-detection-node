@@ -26,11 +26,14 @@ const CloudRequestEngine = require('fiftyone.pipeline.cloudrequestengine').Cloud
 const PipelineBuilder = core.PipelineBuilder;
 const LruCache = require('fiftyone.pipeline.engines').LruCache;
 
+/**
+ * Extension of pipelineBuilder class that allows for the quick
+ * generation of a device detection cloud pipeline. Adds share usage,
+ * caching.
+ */
 class DeviceDetectionCloudPipelineBuilder extends PipelineBuilder {
   /**
-   * Extension of pipelineBuilder class that allows for the quick
-   * generation of a device detection cloud pipeline. Adds share usage,
-   * caching.
+   * Constructor for DeviceDetectionCloudPipelineBuilder
    *
    * @param {object} options the options for the pipeline builder
    * @param {string} options.licenceKeys license key(s) used by the

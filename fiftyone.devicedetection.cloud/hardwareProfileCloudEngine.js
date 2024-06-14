@@ -20,17 +20,34 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
+/**
+ * @typedef {import('fiftyone.pipeline.core').FlowData} FlowData
+ */
+
 const CloudEngine = require('fiftyone.pipeline.cloudrequestengine').CloudEngine;
 
 const AspectPropertyValue = require('fiftyone.pipeline.core').AspectPropertyValue;
 const AspectDataDictionary = require('fiftyone.pipeline.engines').AspectDataDictionary;
 
+/**
+ * This Cloud Aspect Engine enables the parsing of 'hardware profile'
+ * responses from the 51Degrees cloud service.
+ */
 class HardwareProfileCloudEngine extends CloudEngine {
+  /**
+   * Constructor for HardwareProfileCloudEngine
+   */
   constructor () {
     super(...arguments);
     this.dataKey = 'hardware';
   }
 
+  /**
+   * Process internal FlowData cloud data for devices,
+   * set them as FlowData elements
+   *
+   * @param {FlowData} flowData The FlowData object
+   */
   processInternal (flowData) {
     const engine = this;
 

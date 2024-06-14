@@ -8,4 +8,14 @@ declare const DeviceDetectionDataFile_base: typeof import("fiftyone.pipeline.eng
  * updateURLParams parameter
  **/
 declare class DeviceDetectionDataFile extends DeviceDetectionDataFile_base {
+    /**
+     * Constructor for Device Detection DataFile
+     *
+     * @param {object} options options for the datafile
+     * @param {string} options.useUrlFormatter whether to append default URL params for Data File download
+     **/
+    constructor({ useUrlFormatter, ...rest }: {
+        useUrlFormatter: string;
+    });
+    useUrlFormatter: string;
 }

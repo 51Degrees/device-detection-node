@@ -43,6 +43,14 @@ const Profile = require('./profile');
  * @typedef {import('fiftyone.pipeline.engines').DataKeyedCache} DataKeyedCache
  */
 
+/**
+ * @typedef {import('fiftyone.pipeline.engines').Engine} Engine
+ */
+
+/**
+ * @typedef {import('fiftyone.pipeline.core').FlowData} FlowData
+ */
+
 // Determine if Windows or linux and which node version
 
 const nodeVersion = Number(process.version.match(/^v(\d+\.)/)[1]);
@@ -185,7 +193,7 @@ class DeviceDetectionOnPremise extends Engine {
    * update service
    * @param {boolean} options.dataUpdateVerifyMd5 whether to check MD5 of datafile
    * @param {boolean} options.dataUpdateUseUrlFormatter whether to append default URL params for Data File download
-   * @param {Array} options.restrictedProperties list of properties the engine
+   * @param {Array<string>} options.restrictedProperties list of properties the engine
    * will be restricted to
    * @param {string} options.licenceKeys license key(s) used by the
    * data file update service. A key can be obtained from the
@@ -206,7 +214,7 @@ class DeviceDetectionOnPremise extends Engine {
    * use the same file to prevent high disk usage.
    * @param {boolean} options.updateMatchedUserAgent True if the detection
    * should record the matched characters from the target User-Agent
-   * @param {object} options.maxMatchedUserAgentLength Number of characters to
+   * @param {number} options.maxMatchedUserAgentLength Number of characters to
    * consider in the matched User-Agent. Ignored if updateMatchedUserAgent
    * is false
    * @param {number} options.drift Set maximum drift in hash position to
@@ -417,10 +425,13 @@ class DeviceDetectionOnPremise extends Engine {
 
     const current = this;
 
-    // Function for initialising the engine, wrapped like this so
-    // that an engine can be initialised once the datafile is
-    // retrieved if updateOnStart is set to true
-
+    /**
+     * Function for initialising the engine, wrapped like this so
+     * that an engine can be initialised once the datafile is
+     * retrieved if updateOnStart is set to true
+     *
+     * @returns {Promise<void>} init Engine Promise
+     */
     this.initEngine = function () {
       return new Promise(function (resolve, reject) {
         const engine = new swigWrapper['Engine' + swigWrapperType + 'Swig'](dataFilePath, config, requiredProperties);
@@ -545,7 +556,7 @@ class DeviceDetectionOnPremise extends Engine {
    * the FlowData.
    *
    * @param {FlowData} flowData FlowData to process
-   * @returns {Promise} the result of processing
+   * @returns {Promise<void>} the result of processing
    **/
   processInternal (flowData) {
     const dd = this;

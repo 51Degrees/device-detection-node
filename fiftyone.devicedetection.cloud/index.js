@@ -21,7 +21,6 @@
  * ********************************************************************* */
 
 module.exports = {
-
   DeviceDetectionCloud: require('./deviceDetectionCloud'),
   DeviceDetectionCloudPipelineBuilder: require('./deviceDetectionCloudPipelineBuilder'),
   HardwareProfileCloudEngine: require('../fiftyone.devicedetection.cloud/hardwareProfileCloudEngine')

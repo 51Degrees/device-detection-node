@@ -65,7 +65,7 @@ class DeviceDetectionOnPremisePipelineBuilder extends PipelineBuilder {
    * @param {number} options.cacheSize size of the default cache
    * (includes cache if set). NOTE: This is not supported for on-premise
    * engine.
-   * @param {Array} options.restrictedProperties list of properties the engine
+   * @param {Array<string>} options.restrictedProperties list of properties the engine
    * will be restricted to
    * @param {string} options.performanceProfile used to control the tradeoff
    * between performance and system memory usage (Only applies to on-premise,

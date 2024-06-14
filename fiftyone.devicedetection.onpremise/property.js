@@ -23,29 +23,68 @@
 const swigHelpers = require('./swigHelpers');
 
 class Property {
+  /**
+   *  Constructor for Property
+   *
+   * @param {object} metadata Metadata
+   * @param {object} engineMetadata Engine metadata
+   */
   constructor (
     metadata,
     engineMetadata) {
     this.metadata = metadata;
     this.engineMetadata = engineMetadata;
+    /**
+     * @type {string}
+     */
     this.name = metadata.getName();
+    /**
+     * @type {string}
+     */
     this.type = metadata.getType();
+    /**
+     * @type {Array<string>}
+     */
     this.dataFiles = swigHelpers.vectorToArray(metadata.getDataFilesWherePresent());
+    /**
+     * @type {string}
+     */
     this.category = metadata.getCategory();
+    /**
+     * @type {string}
+     */
     this.description = metadata.getDescription();
 
     const Component = require('./component');
+    /**
+     * @type {Component}
+     */
     this.component = new Component(
       engineMetadata.getComponentForProperty(metadata), engineMetadata);
+    /**
+     * @type {object}
+     */
     this.values = engineMetadata.getValuesForProperty(metadata);
   }
 
+  /**
+   * Yield property values
+   *
+   * @generator
+   * @yields {object}
+   * @returns {void}
+   */
   * getValues () {
     for (let i = 0; i < this.values.getSize(); i++) {
       yield this.values.getByIndex(i);
     }
   }
 
+  /**
+   * Get number of values in the property
+   *
+   * @returns {number} uint32
+   */
   getNumberOfValues () {
     return this.values.getSize();
   }
