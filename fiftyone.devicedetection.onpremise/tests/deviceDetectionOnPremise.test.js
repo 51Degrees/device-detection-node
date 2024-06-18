@@ -46,7 +46,7 @@ describe('deviceDetectionOnPremise', () => {
   // specified when creating an on-premise engine.
   test('License key required', () => {
     const test = () => {
-      new EngineBuilder({
+      return new EngineBuilder({
         dataFilePath: DataFile
       });
     };
@@ -392,7 +392,7 @@ describe('deviceDetectionOnPremise', () => {
       if (requestsMade > 0) {
         clearInterval(tryForRequestInterval);
         setTimeout(() => {
-          expect(pipeline.flowElements?.device?.engine).toBeDefined();
+          expect(pipeline.flowElements.device.engine).toBeDefined();
           done();
         }, 200);
       }
