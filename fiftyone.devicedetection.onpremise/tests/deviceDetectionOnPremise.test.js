@@ -46,11 +46,11 @@ describe('deviceDetectionOnPremise', () => {
   // specified when creating an on-premise engine.
   test('License key required', () => {
     const test = () => {
-      EngineBuilder({
+      new EngineBuilder({
         dataFilePath: DataFile
       });
     };
-    expect(test).toThrow();
+    expect(test).toThrow(/^license key is required/);
   });
 
   // Check that an empty license key can be specified.
