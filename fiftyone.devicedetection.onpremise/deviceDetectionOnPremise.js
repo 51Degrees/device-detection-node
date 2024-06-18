@@ -461,12 +461,6 @@ class DeviceDetectionOnPremise extends Engine {
       });
     };
 
-    if (!updateOnStart) {
-      // Not updating on start. Initialise the engine straight away
-
-      this.initEngine();
-    }
-
     // Disable features that require a license key if one was
     // not supplied.
     if (dataUpdateUrl === constants.dataUpdateUrl) {
@@ -537,6 +531,8 @@ class DeviceDetectionOnPremise extends Engine {
     dataFileSettings.identifier = dataFileType;
 
     const ddDatafile = new DataFile(dataFileSettings);
+
+    this.initEngine();
 
     this.registerDataFile(ddDatafile);
   }
