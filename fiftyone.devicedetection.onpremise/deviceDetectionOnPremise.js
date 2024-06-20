@@ -430,42 +430,34 @@ class DeviceDetectionOnPremise extends Engine {
      * that an engine can be initialised once the datafile is
      * retrieved if updateOnStart is set to true
      *
-     * @returns {Promise<void>} init Engine Promise
+     * @returns {void}
      */
     this.initEngine = function () {
-      return new Promise(function (resolve, reject) {
-        const engine = new swigWrapper['Engine' + swigWrapperType + 'Swig'](dataFilePath, config, requiredProperties);
+      const engine = new swigWrapper['Engine' + swigWrapperType + 'Swig'](dataFilePath, config, requiredProperties);
 
-        // Get keys and add to evidenceKey filter
+      // Get keys and add to evidenceKey filter
 
-        const evidenceKeys = engine.getKeys();
+      const evidenceKeys = engine.getKeys();
 
-        const evidenceKeyArray = [];
+      const evidenceKeyArray = [];
 
-        for (let i = 0; i < evidenceKeys.size(); i += 1) {
-          evidenceKeyArray.push(evidenceKeys.get(i).toLowerCase());
-        }
+      for (let i = 0; i < evidenceKeys.size(); i += 1) {
+        evidenceKeyArray.push(evidenceKeys.get(i).toLowerCase());
+      }
 
-        current.evidenceKeyFilter = new EvidenceKeyFilter(evidenceKeyArray);
+      current.evidenceKeyFilter = new EvidenceKeyFilter(evidenceKeyArray);
 
-        current.engine = engine;
-        current.swigWrapper = swigWrapper;
-        current.swigWrapperType = swigWrapperType;
+      current.engine = engine;
+      current.swigWrapper = swigWrapper;
+      current.swigWrapperType = swigWrapperType;
 
-        // Get properties list
+      // Get properties list
 
-        const metadata = engine.getMetaData();
-        initProperties.call(current, metadata);
-        initComponents.call(current, metadata);
-        initMatchMetrics.call(current);
-      });
+      const metadata = engine.getMetaData();
+      initProperties.call(current, metadata);
+      initComponents.call(current, metadata);
+      initMatchMetrics.call(current);
     };
-
-    if (!updateOnStart) {
-      // Not updating on start. Initialise the engine straight away
-
-      this.initEngine();
-    }
 
     // Disable features that require a license key if one was
     // not supplied.
@@ -512,13 +504,7 @@ class DeviceDetectionOnPremise extends Engine {
     };
 
     dataFileSettings.refresh = function () {
-      if (current.engine) {
-        return current.engine.refreshData();
-      } else {
-        current.initEngine().then(function () {
-          current.engine.refreshData();
-        });
-      }
+      current.engine.refreshData();
     };
 
     const params = {
@@ -537,6 +523,8 @@ class DeviceDetectionOnPremise extends Engine {
     dataFileSettings.identifier = dataFileType;
 
     const ddDatafile = new DataFile(dataFileSettings);
+
+    this.initEngine();
 
     this.registerDataFile(ddDatafile);
   }

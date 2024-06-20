@@ -37,18 +37,20 @@ const fs = require('fs');
 const zlib = require('zlib');
 let server;
 
+const HTTP_PORT = 8080;
 const DataFile = path.resolve((process.env.directory || __dirname) + '/../device-detection-cxx/device-detection-data/51Degrees-LiteV4.1.hash');
+const DataFileEnterprise = path.resolve((process.env.directory || __dirname) + '/../device-detection-cxx/device-detection-data/Enterprise-HashV41.hash');
 
 describe('deviceDetectionOnPremise', () => {
   // Check that an exception is thrown if license key is not
   // specified when creating an on-premise engine.
   test('License key required', () => {
     const test = () => {
-      EngineBuilder({
+      return new EngineBuilder({
         dataFilePath: DataFile
       });
     };
-    expect(test).toThrow();
+    expect(test).toThrow(/^license key is required/);
   });
 
   // Check that an empty license key can be specified.
@@ -307,15 +309,13 @@ describe('deviceDetectionOnPremise', () => {
     const DataFileCopy = path.resolve((process.env.directory || __dirname) + '/51Degrees-LiteV4.1.hash');
     const tempDir = './tests/tmp';
 
-    const PORT = 8080;
-
     fs.mkdir(tempDir, { recursive: true }, (err) => {
       if (err) return console.error(err);
       const pipeline = new FiftyOneDegreesDeviceDetectionOnPremise.DeviceDetectionOnPremisePipelineBuilder({
         dataFile: DataFileCopy,
         updateOnStart: true,
         autoUpdate: false,
-        dataUpdateUrl: `http://localhost:${PORT}/temp`,
+        dataUpdateUrl: `http://localhost:${HTTP_PORT}/temp`,
         dataUpdateVerifyMd5: false,
         dataUpdateUseUrlFormatter: false,
         createTempDataCopy: true,
@@ -357,13 +357,51 @@ describe('deviceDetectionOnPremise', () => {
             });
           }, 5000);
         }
-      }).listen(PORT);
+      }).listen(HTTP_PORT);
       pipeline.on('error', console.error);
       pipeline.on('info', console.info);
     });
   }, 20000);
+
+  // Engine should be initialized with a valid data file even if updateOnStart is set to true
+  // and the server responds with a 304 status code (AUTO_UPDATE_NOT_NEEDED)
+  test('Initialise engine with updateOnStart and 304 status code', done => {
+    let requestsMade = 0;
+
+    server = http.createServer((req, res) => {
+      requestsMade++;
+      res.writeHead(304);
+      res.end();
+    }).listen(HTTP_PORT);
+
+    const pipeline = new FiftyOneDegreesDeviceDetectionOnPremise.DeviceDetectionOnPremisePipelineBuilder({
+      dataFile: DataFileEnterprise,
+      updateOnStart: true,
+      autoUpdate: true,
+      dataUpdateUrl: `http://localhost:${HTTP_PORT}/temp`,
+      dataUpdateVerifyMd5: false,
+      dataUpdateUseUrlFormatter: false,
+      createTempDataCopy: true,
+      tempDataDir: './tests/tmp'
+    }).build();
+
+    pipeline.on('error', console.error);
+    pipeline.on('info', console.info);
+
+    const tryForRequestInterval = setInterval(() => {
+      if (requestsMade > 0) {
+        clearInterval(tryForRequestInterval);
+        setTimeout(() => {
+          expect(pipeline.flowElements.device.engine).toBeDefined();
+          done();
+        }, 200);
+      }
+    }, 100);
+  }, 10000);
 });
 
-afterAll(() => {
-  server.close();
+afterEach(() => {
+  if (server && !server.closed) {
+    server.close();
+  }
 });
