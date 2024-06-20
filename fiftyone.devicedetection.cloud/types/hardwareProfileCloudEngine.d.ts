@@ -1,21 +1,10 @@
 export = HardwareProfileCloudEngine;
+declare const HardwareProfileCloudEngine_base: typeof import("fiftyone.pipeline.cloudrequestengine/types/cloudEngine");
 /**
  * This Cloud Aspect Engine enables the parsing of 'hardware profile'
  * responses from the 51Degrees cloud service.
  */
-declare class HardwareProfileCloudEngine {
-    /**
-     * Constructor for HardwareProfileCloudEngine
-     */
-    constructor(...args: any[]);
-    dataKey: string;
-    /**
-     * Process internal FlowData cloud data for devices,
-     * set them as FlowData elements
-     *
-     * @param {FlowData} flowData The FlowData object
-     */
-    processInternal(flowData: FlowData): void;
+declare class HardwareProfileCloudEngine extends HardwareProfileCloudEngine_base {
 }
 declare namespace HardwareProfileCloudEngine {
     export { FlowData };

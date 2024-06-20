@@ -21,6 +21,7 @@
  * ********************************************************************* */
 
 const os = require('os');
+const EventEmitter = require('events');
 const core = require('fiftyone.pipeline.core');
 const DeviceDetectionOnPremise = require('./deviceDetectionOnPremise');
 const constants = require('./constants');
@@ -128,7 +129,10 @@ class DeviceDetectionOnPremisePipelineBuilder extends PipelineBuilder {
       createTempDataCopy,
       tempDataDir
     }) {
-    super(...arguments);
+    const params = arguments[0];
+    const eventEmitter = new EventEmitter();
+    params.eventEmitter = eventEmitter;
+    super(params);
 
     const deprecatedOptions = ['usePredictiveGraph', 'usePerformanceGraph'];
     for (const option of deprecatedOptions) {
@@ -150,6 +154,11 @@ class DeviceDetectionOnPremisePipelineBuilder extends PipelineBuilder {
     if (cacheSize) {
       throw errorMessages.cacheNotSupport;
     }
+
+    if (dataFileUpdateService) {
+      dataFileUpdateService.registerPipelineEmmiter(eventEmitter);
+    }
+
     this.flowElements.push(new DeviceDetectionOnPremise(
       {
         dataFilePath: dataFile,
@@ -171,7 +180,8 @@ class DeviceDetectionOnPremisePipelineBuilder extends PipelineBuilder {
         allowUnmatched,
         updateOnStart,
         createTempDataCopy,
-        tempDataDir
+        tempDataDir,
+        dataFileUpdateService
       }));
   }
 }

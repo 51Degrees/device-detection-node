@@ -4,6 +4,7 @@
   "description": "Device detection on-premise services for the 51Degrees Pipeline API",
   "keywords": ["51degrees", "device detection", "user-agent", "client hints", "browser", "os", "device", "cpu", "mobile", "phone", "tablet", "tv", "bot", "crawler", "WURFL", "DeviceAtlas"],
   "main": "index.js",
+  "types": "types/index.d.ts",
   "directories": {
     "test": "tests"
   },

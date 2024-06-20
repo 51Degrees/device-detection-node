@@ -235,6 +235,9 @@ class DeviceDetectionOnPremise extends Engine {
    * temporary data copy if 'createTempDataCopy' is set to true.
    * @param {boolean} options.updateOnStart whether to download / update
    * the datafile on initialisation
+   * @param {DataFileUpdateService} options.dataFileUpdateService Set
+   * DataFileUpdateService so the datafiles can receive
+   * automatic updates
    */
   constructor (
     {
@@ -260,7 +263,8 @@ class DeviceDetectionOnPremise extends Engine {
       updateTimeMaximumRandomisation,
       createTempDataCopy,
       tempDataDir = os.tmpdir(),
-      updateOnStart = false
+      updateOnStart = false,
+      dataFileUpdateService = null
     }) {
     let swigWrapper;
     let swigWrapperType;

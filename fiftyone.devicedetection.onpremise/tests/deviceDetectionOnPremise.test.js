@@ -55,12 +55,9 @@ describe('deviceDetectionOnPremise', () => {
   // Also verify that this will cause auto update and
   // update on startup to be disabled.
   test('License key can be empty', done => {
-    const engine = new EngineBuilder({
+    EngineBuilder({
       dataFilePath: DataFile,
-      licenceKeys: ''
-    });
-
-    const fakePipeline = {
+      licenceKeys: '',
       dataFileUpdateService: {
         registerDataFile: function (dataFileConfig) {
           // No license key so auto update and update on startup
@@ -69,8 +66,7 @@ describe('deviceDetectionOnPremise', () => {
           expect(dataFileConfig.updateOnStart).toBe(false);
         }
       }
-    };
-    engine.registrationCallbacks[0](fakePipeline);
+    });
 
     done();
   });
@@ -78,14 +74,11 @@ describe('deviceDetectionOnPremise', () => {
   // Check that the license key is passed through correctly
   // if it is set.
   test('License key set', done => {
-    const engine = new EngineBuilder({
+    EngineBuilder({
       dataFilePath: DataFile,
       licenceKeys: 'ABC',
       autoUpdate: true,
-      updateOnStart: true
-    });
-
-    const fakePipeline = {
+      updateOnStart: true,
       dataFileUpdateService: {
         registerDataFile: function (dataFileConfig) {
           expect(dataFileConfig.autoUpdate).toBe(true);
@@ -93,8 +86,7 @@ describe('deviceDetectionOnPremise', () => {
           expect(dataFileConfig.updateURLParams.licenseKeys).toBe('ABC');
         }
       }
-    };
-    engine.registrationCallbacks[0](fakePipeline);
+    });
 
     done();
   });
