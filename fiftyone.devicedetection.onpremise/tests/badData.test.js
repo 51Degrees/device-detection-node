@@ -104,55 +104,64 @@ describe('Bad data file error messages', () => {
   // Check that an error with appropriate message is
   // thrown when the data file contains bad version
   // number
-  test('Bad version number', done => {
-    const engine = new FiftyOneDegreesDeviceDetectionOnPremise
-      .DeviceDetectionOnPremise({
-        performanceProfile: 'MaxPerformance',
-        dataFilePath: BadVersionDataFile,
-        autoUpdate: false,
-        updateOnStart: true,
-        licenceKeys: null
-      });
+  test('Bad version number', () => {
+    const createEngine = () => {
+      return new FiftyOneDegreesDeviceDetectionOnPremise
+        .DeviceDetectionOnPremise({
+          performanceProfile: 'MaxPerformance',
+          dataFilePath: BadVersionDataFile,
+          autoUpdate: false,
+          updateOnStart: true,
+          licenceKeys: null
+        });
+    };
 
-    engine.initEngine().catch(function (e) {
-      expect(e.message).toMatch(errorMessages.badDataUnsupportedVersion.replace('%s', `(file: '${BadVersionDataFile}')`));
-      done();
-    });
+    expect(createEngine).toThrow(
+      errorMessages.badDataUnsupportedVersion.replace(
+        '%s', `(file: '${BadVersionDataFile}')`
+      )
+    );
   });
   // Check that an error with appropriate message is
   // thrown when the data file contains correct version
   // number but bad data
-  test('Bad header', done => {
-    const engine = new FiftyOneDegreesDeviceDetectionOnPremise
-      .DeviceDetectionOnPremise({
-        performanceProfile: 'MaxPerformance',
-        dataFilePath: BadHeaderDataFile,
-        autoUpdate: false,
-        updateOnStart: true,
-        licenceKeys: null
-      });
+  test('Bad header', () => {
+    const createEngine = () => {
+      return new FiftyOneDegreesDeviceDetectionOnPremise
+        .DeviceDetectionOnPremise({
+          performanceProfile: 'MaxPerformance',
+          dataFilePath: BadHeaderDataFile,
+          autoUpdate: false,
+          updateOnStart: true,
+          licenceKeys: null
+        });
+    };
 
-    engine.initEngine().catch(function (e) {
-      expect(e.message).toMatch(errorMessages.badDataIncorrectFormat.replace('%s', `'${BadHeaderDataFile}'`));
-      done();
-    });
+    expect(createEngine).toThrow(
+      errorMessages.badDataIncorrectFormat.replace(
+        '%s', `'${BadHeaderDataFile}'`
+      )
+    );
   });
   // Check that an error with appropriate message is
   // thrown when the data file contains almost truncated
   // data.
-  test('Small data file', done => {
-    const engine = new FiftyOneDegreesDeviceDetectionOnPremise
-      .DeviceDetectionOnPremise({
-        performanceProfile: 'MaxPerformance',
-        dataFilePath: SmallDataFile,
-        autoUpdate: false,
-        updateOnStart: true,
-        licenceKeys: null
-      });
+  test('Small data file', () => {
+    const createEngine = () => {
+      return new FiftyOneDegreesDeviceDetectionOnPremise
+        .DeviceDetectionOnPremise({
+          performanceProfile: 'MaxPerformance',
+          dataFilePath: SmallDataFile,
+          autoUpdate: false,
+          updateOnStart: true,
+          licenceKeys: null
+        });
+    };
 
-    engine.initEngine().catch(function (e) {
-      expect(e.message).toMatch(errorMessages.badDataIncorrectFormat.replace('%s', `'${SmallDataFile}'`));
-      done();
-    });
+    expect(createEngine).toThrow(
+      errorMessages.badDataIncorrectFormat.replace(
+        '%s', `'${SmallDataFile}'`
+      )
+    );
   });
 });
