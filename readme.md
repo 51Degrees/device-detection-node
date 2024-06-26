@@ -16,10 +16,10 @@ Both options use the same evidence values and expose (almost all) the same prope
 
 ### Packages
 
-- **fiftyone.devicedetection.cloud** - A Node.js engine which retrieves engine results by consuming data from the 51Degrees cloud service. A cloud builder is also included to build a pipeline for device detection cloud engine.
-- **fiftyone.devicedetection.onpremise** - A Node.js engine which retrieves engine results by consuming data from the 51Degrees data file. A on-premise builder is also included to build a pipeline for device detection on-premise engine.
-- **fiftyone.devicedetection.shared** - A Node.js module which contains shared functionality to build cloud and on-premise engines.
-- **fiftyone.devicedetection** - A Node.js pipeline builder which build pipeline for either cloud or on-premise engine based on the input.
+- [**fiftyone.devicedetection.cloud**](/fiftyone.devicedetection.cloud#readme) - A Node.js engine which retrieves engine results by consuming data from the 51Degrees cloud service. A cloud builder is also included to build a pipeline for device detection cloud engine.
+- [**fiftyone.devicedetection.onpremise**](/fiftyone.devicedetection.onpremise#readme) - A Node.js engine which retrieves engine results by consuming data from the 51Degrees data file. A on-premise builder is also included to build a pipeline for device detection on-premise engine.
+- [**fiftyone.devicedetection.shared**](/fiftyone.devicedetection.shared#readme) - A Node.js module which contains shared functionality to build cloud and on-premise engines.
+- [**fiftyone.devicedetection**](/fiftyone.devicedetection#readme) - A Node.js pipeline builder which build pipeline for either cloud or on-premise engine based on the input.
 
 ### Dependencies
 
@@ -62,13 +62,15 @@ git lfs pull
 
 Using NPM call:
 
-`npm install fiftyone.devicedetection`
+```
+npm install fiftyone.devicedetection
 
-`npm install fiftyone.devicedetection.cloud`
+npm install fiftyone.devicedetection.cloud
 
-`npm install fiftyone.devicedetection.onpremise`
+npm install fiftyone.devicedetection.onpremise
+```
 
-### Build from Source
+### Build from Source On-Premise
 
 Device detection on-premise uses a native binary. (i.e. compiled from C code to target a specific 
 platform/architecture) The NPM package contains several binaries for common platforms. However, 
@@ -90,7 +92,7 @@ section explains how to do this.
 - Pull git submodules:
   - `git submodule update --init --recursive`
 
-#### Build Steps for On-Premise
+#### Build Steps 
 
 - Navigate to fiftyone.devicedetection.onpremise
 - Rename the `binding.51d` to `binding.gyp`
@@ -121,41 +123,52 @@ section explains how to do this.
 
 ### Examples
 
-For details of how to run the examples, please refer to [run examples](run_examples.md).
+For details of how to run the examples, please refer to [run examples](/run_examples.md).
 The tables below describe the examples that are available.
 
 #### Cloud
 
 | Example                                | Description |
 |----------------------------------------|-------------|
-| gettingstarted-console                 | How to use the 51Degrees Cloud service to determine details about a device based on its User-Agent and User-Agent Client Hints HTTP header values. |
-| gettingstarted-web                     | How to use the 51Degrees Cloud service to determine details about a device as part of a simple web server. |
-| metadata-console                       | How to access the meta-data that relates to the device detection algorithm. |
-| useragentclienthints-web               | This is now deprecated. Kept for testing purposes. Please see **gettingstarted-web** instead.
-| taclookup-console                      | How to get device details from a TAC (Type Allocation Code) using the 51Degrees cloud service. |
-| nativemodellookup-console              | How to get device details from a native model name using the 51Degrees cloud service. |
+| [configurator-console](/fiftyone.devicedetection.cloud/examples/cloud/configurator-console)                   | Shows how to call the cloud with the created key and how to access the values of the selected properties.|
+| [gettingstarted-console](/fiftyone.devicedetection.cloud/examples/cloud/gettingstarted-console)                 | How to use the 51Degrees Cloud service to determine details about a device based on its User-Agent and User-Agent Client Hints HTTP header values. |
+| [gettingstarted-web](/fiftyone.devicedetection.cloud/examples/cloud/gettingstarted-web)                     | How to use the 51Degrees Cloud service to determine details about a device as part of a simple web server. |
+| [metadata-console](/fiftyone.devicedetection.cloud/examples/cloud/metadata-console)                       | How to access the meta-data that relates to the device detection algorithm. |
+| [nativemodellookup-console](/fiftyone.devicedetection.cloud/examples/cloud/nativemodellookup-console)              | How to get device details based on a given 'native model name' using the 51Degrees cloud service. |
+| [taclookup-console](/fiftyone.devicedetection.cloud/examples/cloud/taclookup-console)                      | How to get device details based on a given TAC (Type Allocation Code) using the 51Degrees cloud service. |
+| [useragentclienthints-web](/fiftyone.devicedetection.cloud/examples/cloud/useragentclienthints-web)               | This is now deprecated. Kept for testing purposes. Please see **gettingstarted-web** instead.
 
 #### On-Premise
 
 | Example                                | Description |
 |----------------------------------------|-------------|
-| gettingstarted-console                 | How to use the 51Degrees on-premise device detection API to determine details about a device based on its User-Agent and User-Agent Client Hints HTTP header values. |
-| gettingstarted-web                     | How to use the 51Degrees Cloud service to determine details about a device as part of a simple web server. |
-| matchmetrics-console                   | How to view metrics associated with the results of processing with a Device Detection engine. |
-| metadata-console                       | How to access the meta-data that relates to the device detection algorithm. |
-| offlineprocessing-console              | How to process data for later viewing using a Device Detection Hash data file. |
-| performance-console                    | How to configure the various performance options and run a simple performance test. |
-| useragentclienthints-web               | This is now deprecated. Kept for testing purposes. Please see **gettingstarted-web** instead. |
-| automaticupdates/dataFileSystemWatcher.js | How to configure automatic updates using the file system watcher to monitor for changes to the data file. |
-| automaticupdates/updateOnStartUp.js    | How to configure the Pipeline to automatically update the device detection data file on startup. |
-| automaticupdates/updatePollingInterval.js | Ho to configure and verify the various automatic data file update settings. |
+| [automaticupdates/dataFileSystemWatcher.js](/fiftyone.devicedetection.onpremise/examples/onpremise/automaticupdates/dataFileSystemWatcher.js) | How to configure automatic updates using the file system watcher to monitor for changes to the data file. |
+| [automaticupdates/updateOnStartUp.js](/fiftyone.devicedetection.onpremise/examples/onpremise/automaticupdates/updateOnStartUp.js)    | How to configure the Pipeline to automatically update the device detection data file on startup. |
+| [automaticupdates/updatePollingInterval.js](/fiftyone.devicedetection.onpremise/examples/onpremise/automaticupdates/updatePollingInterval.js) | Ho to configure and verify the various automatic data file update settings. |
+| [gettingstarted-console](/fiftyone.devicedetection.onpremise/examples/onpremise/gettingstarted-console)                | How to use the 51Degrees on-premise device detection API to determine details about a device based on its User-Agent and User-Agent Client Hints HTTP header values. |
+| [gettingstarted-web](/fiftyone.devicedetection.onpremise/examples/onpremise/gettingstarted-web)                     | How to use the 51Degrees Cloud service to determine details about a device as part of a simple web server. |
+| [matchmetrics-console](/fiftyone.devicedetection.onpremise/examples/onpremise/matchmetrics-console)                   | How to view metrics associated with the results of processing with a Device Detection engine. |
+| [metadata-console](/fiftyone.devicedetection.onpremise/examples/onpremise/metadata-console)                       | How to access the meta-data that relates to the device detection algorithm. |
+| [offlineprocessing-console](/fiftyone.devicedetection.onpremise/examples/onpremise/offlineprocessing-console)              | How to process data for later viewing using a Device Detection Hash data file. |
+| [performance-console](/fiftyone.devicedetection.onpremise/examples/onpremise/performance-console)                    | How to configure the various performance options and run a simple performance test. |
+| [updatedatafile-console](/fiftyone.devicedetection.onpremise/examples/onpremise/updatedatafile-console)                 | This example illustrates various parameters that can be adjusted when using the on-premise device detection engine, and controls when a new data file is sought and when it is loaded by the device detection software. |
+| [useragentclienthints-web](/fiftyone.devicedetection.onpremise/examples/onpremise/useragentclienthints-web)               | This is now deprecated. Kept for testing purposes. Please see **gettingstarted-web** instead. |
+
+
+#### Device Detection
+
+| Example                                | Description |
+|----------------------------------------|-------------|
+| [gettingStarted.js](/fiftyone.devicedetection/examples/gettingStarted.js)                   |  Getting started example of using the 51Degrees device detection 'Hash' algorithm to determine whether a given User-Agent corresponds to a mobile device or not.|
 
 ## Tests
 
 In this repository, there are tests for the examples. 
 You will need to install jest to run them:
 
-`npm install jest --global`
+```
+npm install jest --global
+```
 
 You will also need to install any required packages for the examples in the **Examples** section.
 
@@ -170,7 +183,9 @@ There are other environment variables that you will also need to set in your tes
 
 To run the tests, execute the following command in the root directory or a sub-module directory:
 
-`npm test`
+```
+npm test
+```
 
 ## Native code updates
 
