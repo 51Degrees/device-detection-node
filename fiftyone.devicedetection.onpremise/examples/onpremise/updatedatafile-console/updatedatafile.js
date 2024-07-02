@@ -324,7 +324,7 @@ const run = async function (dataFilePath, licenseKey, interactive, output) {
     updateOnStart: true,
     // Watch the data file on disk and refresh the engine
     // as soon as that file is updated.
-    dataFileSystemWatcher: true,
+    fileSystemWatcher: true,
     // for the purposes of this example we are setting the time
     // between checks to see if the file has changed to 1 second
     // by default this is 30 mins
