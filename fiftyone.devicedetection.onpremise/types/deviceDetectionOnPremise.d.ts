@@ -66,8 +66,11 @@ declare class DeviceDetectionOnPremise extends DeviceDetectionOnPremise_base {
      * temporary data copy if 'createTempDataCopy' is set to true.
      * @param {boolean} options.updateOnStart whether to download / update
      * the datafile on initialisation
+     * @param {DataFileUpdateService} options.dataFileUpdateService Set
+     * DataFileUpdateService so the datafiles can receive
+     * automatic updates
      */
-    constructor({ dataFilePath, autoUpdate, cache, dataUpdateUrl, dataUpdateVerifyMd5, dataUpdateUseUrlFormatter, restrictedProperties, licenceKeys, download, performanceProfile, reuseTempFile, updateMatchedUserAgent, maxMatchedUserAgentLength, drift, difference, concurrency, allowUnmatched, fileSystemWatcher, pollingInterval, updateTimeMaximumRandomisation, createTempDataCopy, tempDataDir, updateOnStart }: {
+    constructor({ dataFilePath, autoUpdate, cache, dataUpdateUrl, dataUpdateVerifyMd5, dataUpdateUseUrlFormatter, restrictedProperties, licenceKeys, download, performanceProfile, reuseTempFile, updateMatchedUserAgent, maxMatchedUserAgentLength, drift, difference, concurrency, allowUnmatched, fileSystemWatcher, pollingInterval, updateTimeMaximumRandomisation, createTempDataCopy, tempDataDir, updateOnStart, dataFileUpdateService }: {
         dataFilePath: string;
         autoUpdate: boolean;
         pollingInterval: number;
@@ -91,6 +94,7 @@ declare class DeviceDetectionOnPremise extends DeviceDetectionOnPremise_base {
         createTempDataCopy: boolean;
         tempDataDir: string;
         updateOnStart: boolean;
+        dataFileUpdateService: DataFileUpdateService;
     }, ...args: any[]);
     /**
      * Function for initialising the engine, wrapped like this so
