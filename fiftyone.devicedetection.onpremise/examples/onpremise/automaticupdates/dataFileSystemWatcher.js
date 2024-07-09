@@ -90,7 +90,7 @@ if (myLicenseKey === '!!YOUR_LICENSE_KEY!!') {
     autoUpdate: true,
     // Watch the data file on disk and refresh the engine
     // as soon as that file is updated.
-    dataFileSystemWatcher: true
+    fileSystemWatcher: true
   }).build();
 
   // To monitor the pipeline we can put in listeners for various log events.

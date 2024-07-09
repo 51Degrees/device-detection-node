@@ -13,8 +13,10 @@ This package provides shared functionality to build cloud and on-premise engines
 
 ### Installation
 
-This package should be used along with `fiftyone.devicedetection`, `fiftyone.devicedetection.cloud` and `fiftyone.devicedetection.onpremise`.
+This package should be used along with [`fiftyone.devicedetection`](/fiftyone.devicedetection#readme.md), [`fiftyone.devicedetection.cloud`](/fiftyone.devicedetection.cloud#readme.md) and [`fiftyone.devicedetection.onpremise`](/fiftyone.devicedetection.onpremise#readme.md).
 
 To install, use NPM call:
 
-`npm install fiftyone.devicedetection.shared`
+```
+npm install fiftyone.devicedetection.shared
+```
