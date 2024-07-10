@@ -16,9 +16,9 @@ declare class DeviceDetectionMissingPropertyService extends DeviceDetectionMissi
      *
      * @param {string} key missing property key
      * @param {FlowElement} flowElement the FlowElement the key was missing from
-     * @returns {void}
+     * @returns {never} throws an error
      */
-    check(key: string, flowElement: FlowElement): void;
+    check(key: string, flowElement: FlowElement): never;
 }
 declare namespace DeviceDetectionMissingPropertyService {
     export { FlowElement };
