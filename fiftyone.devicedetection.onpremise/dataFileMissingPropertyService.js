@@ -42,7 +42,7 @@ class DeviceDetectionMissingPropertyService extends MissingPropertyService {
    *
    * @param {string} key missing property key
    * @param {FlowElement} flowElement the FlowElement the key was missing from
-   * @returns {void}
+   * @returns {never} throws an error
    */
   check (key, flowElement) {
     if (flowElement.properties[key]) {

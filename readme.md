@@ -205,3 +205,15 @@ Process for rebuilding SWIG interfaces following an update to the device detecti
 5. Run the 'Build Device Detection Binaries for Node.js' Azure CI Pipeline.
 6. Copy the produced artifacts into the fiftyone.pipeline.devicedetection/build directory.
 7. Commit changes to repository.
+
+## TypeScript
+
+Types are generated and exported automatically from JSDoc comments using [this script](https://github.com/51Degrees/common-ci/blob/main/node/generate-types.ps1#L10). Upon generation types are committed into the repository into the package's `types` directory. Calling the generation step is manual for now, but later will be added as part of CI/CD pipeline.
+
+The TypeScript example with typechecking enabled is available under `onpremise/gettingstarted-console/gettingStarted.ts`. 
+
+The example can be run as: 
+
+```
+npx ts-node gettingStarted.ts
+```
