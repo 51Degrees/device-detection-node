@@ -2,7 +2,25 @@
   "name": "fiftyone.devicedetection.cloud",
   "version": "1.0.0",
   "description": "Device detection cloud services for the 51Degrees Pipeline API",
-  "keywords": ["51degrees", "device detection", "user-agent", "client hints", "browser", "os", "device", "cpu", "mobile", "phone", "tablet", "tv", "bot", "crawler", "cloud", "WURFL", "DeviceAtlas"],
+  "keywords": [
+    "51degrees",
+    "device detection",
+    "user-agent",
+    "client hints",
+    "browser",
+    "os",
+    "device",
+    "cpu",
+    "mobile",
+    "phone",
+    "tablet",
+    "tv",
+    "bot",
+    "crawler",
+    "cloud",
+    "WURFL",
+    "DeviceAtlas"
+  ],
   "main": "index.js",
   "types": "types/index.d.ts",
   "directories": {
@@ -26,16 +44,18 @@
     "supertest": "^6.1.6"
   },
   "devDependencies": {
-    "@types/node": "^15.12.2",
+    "@types/jest": "^28.1.8",
+    "@types/node": "^20.14.10",
     "jest": "^28.1.0",
-    "jest-junit": "^13.2.0",
-    "jest-each": "^27.0.6"
+    "jest-each": "^27.0.6",
+    "jest-junit": "^13.2.0"
   },
   "license": "EUPL-1.2",
   "bugs": {
     "url": "https://github.com/51Degrees/device-detection-node/issues"
   },
   "files": [
-    "*.js"
+    "*.js",
+    "*.ts"
   ]
 }
