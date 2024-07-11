@@ -57,6 +57,6 @@
   "files": [
     "build",
     "*.js",
-    "*.ts"
+    "types"
   ]
 }
