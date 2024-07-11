@@ -2,7 +2,25 @@
   "name": "fiftyone.devicedetection",
   "version": "1.0.0",
   "description": "Parse HTTP headers to detect the device type, model, operating system, browser, and crawler information",
-  "keywords": ["51degrees", "device detection", "user-agent", "client hints", "browser", "os", "device", "cpu", "mobile", "phone", "tablet", "tv", "bot", "crawler", "detect", "WURFL", "DeviceAtlas"],
+  "keywords": [
+    "51degrees",
+    "device detection",
+    "user-agent",
+    "client hints",
+    "browser",
+    "os",
+    "device",
+    "cpu",
+    "mobile",
+    "phone",
+    "tablet",
+    "tv",
+    "bot",
+    "crawler",
+    "detect",
+    "WURFL",
+    "DeviceAtlas"
+  ],
   "main": "index.js",
   "directories": {
     "test": "tests"
@@ -16,15 +34,17 @@
   },
   "author": "51Degrees Engineering <engineering@51degrees.com>",
   "dependencies": {
+    "fiftyone.devicedetection.cloud": "file:../fiftyone.devicedetection.cloud",
+    "fiftyone.devicedetection.onpremise": "file:../fiftyone.devicedetection.onpremise",
+    "fiftyone.devicedetection.shared": "file:../fiftyone.devicedetection.shared",
     "fiftyone.pipeline.cloudrequestengine": "^4.4.7",
     "fiftyone.pipeline.core": "^4.4.7",
     "fiftyone.pipeline.engines": "^4.4.7",
-    "fiftyone.pipeline.engines.fiftyone": "^4.4.7",
-    "fiftyone.devicedetection.cloud": "file:../fiftyone.devicedetection.cloud",
-    "fiftyone.devicedetection.onpremise": "file:../fiftyone.devicedetection.onpremise",
-    "fiftyone.devicedetection.shared": "file:../fiftyone.devicedetection.shared"
+    "fiftyone.pipeline.engines.fiftyone": "^4.4.7"
   },
   "devDependencies": {
+    "@types/jest": "^28.1.8",
+    "@types/node": "^20.14.10",
     "jest": "^28.1.0",
     "jest-junit": "^13.2.0"
   },
@@ -33,6 +53,7 @@
     "url": "https://github.com/51Degrees/device-detection-node/issues"
   },
   "files": [
-    "*.js"
+    "*.js",
+    "*.ts"
   ]
 }

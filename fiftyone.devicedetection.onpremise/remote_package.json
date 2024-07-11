@@ -2,7 +2,24 @@
   "name": "fiftyone.devicedetection.onpremise",
   "version": "1.0.0",
   "description": "Device detection on-premise services for the 51Degrees Pipeline API",
-  "keywords": ["51degrees", "device detection", "user-agent", "client hints", "browser", "os", "device", "cpu", "mobile", "phone", "tablet", "tv", "bot", "crawler", "WURFL", "DeviceAtlas"],
+  "keywords": [
+    "51degrees",
+    "device detection",
+    "user-agent",
+    "client hints",
+    "browser",
+    "os",
+    "device",
+    "cpu",
+    "mobile",
+    "phone",
+    "tablet",
+    "tv",
+    "bot",
+    "crawler",
+    "WURFL",
+    "DeviceAtlas"
+  ],
   "main": "index.js",
   "types": "types/index.d.ts",
   "directories": {
@@ -15,14 +32,7 @@
     "type": "git",
     "url": "https://github.com/51Degrees/device-detection-node"
   },
-  "author": "51Degrees",
-  "contributors": [
-    "Filip Hnízdo <filip@octophin.com> (https://octophindigital.com/)",
-    "Steve Ballantine <stephen@51degrees.com> (https://51degrees.com)",
-    "Ben Shilito <ben@51degrees.com> (https://51degrees.com)",
-    "Joseph Dix <joseph@51degrees.com> (https://51degrees.com)",
-    "Tung Pham <tung@51degrees.com> (https://51degrees.com)"
-  ],
+  "author": "51Degrees Engineering <engineering@51degrees.com>",
   "dependencies": {
     "fiftyone.devicedetection.shared": "4.4.x",
     "fiftyone.pipeline.core": "4.4.x",
@@ -32,7 +42,8 @@
     "n-readlines": "^1.0.1"
   },
   "devDependencies": {
-    "@types/node": "^15.14.9",
+    "@types/jest": "^28.1.8",
+    "@types/node": "^20.14.10",
     "jest": "^28.1.3",
     "jest-junit": "^13.2.0"
   },
@@ -42,6 +53,7 @@
   },
   "files": [
     "build",
-    "*.js"
+    "*.js",
+    "*.ts"
   ]
 }
