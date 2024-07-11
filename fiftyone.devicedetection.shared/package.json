@@ -40,6 +40,6 @@
     "examples",
     "tests",
     "*.js",
-    "*.ts"
+    "types"
   ]
 }
