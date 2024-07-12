@@ -263,9 +263,13 @@ $(document).ready(function(){initNavTree('md__home_runner_work_device-detection-
 <li>Commit changes to repository.</li>
 <li>Run the 'Build Device Detection Binaries for Node.js' Azure CI Pipeline.</li>
 <li>Copy the produced artifacts into the fiftyone.pipeline.devicedetection/build directory.</li>
-<li>Commit changes to repository. </li>
+<li>Commit changes to repository.</li>
 </ol>
-</section></div><!-- PageDoc -->
+<h2>TypeScript</h2>
+<p>Types are generated and exported automatically from JSDoc comments using <a href="https://github.com/51Degrees/common-ci/blob/main/node/generate-types.ps1#L10">this script</a>. Upon generation types are committed into the repository into the package's <code>types</code> directory. Calling the generation step is manual for now, but later will be added as part of CI/CD pipeline.</p>
+<p>The TypeScript example with typechecking enabled is available under <code>onpremise/gettingstarted-console/gettingStarted.ts</code>.</p>
+<p>The example can be run as:</p>
+<div class="c-code__block c-code__block--outline"><div class="c-code__line">npx ts-node gettingStarted.ts</div></div> </section></div><!-- PageDoc -->
 </div><!-- primary -->
 </div><!-- inner-->
 <!-- HTML footer for doxygen 1.8.15-->
