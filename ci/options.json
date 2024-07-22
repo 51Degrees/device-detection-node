@@ -51,7 +51,7 @@
     "Name": "Ubuntu_Node_22",
     "Image": "ubuntu-22.04",
     "Language": "node",
-    "LanguageVersion": "22",
+    "LanguageVersion": "22.5.1",
     "RunPerformance": true,
     "PackageRequirement": true
   },
@@ -59,7 +59,7 @@
     "Name": "Windows_Node_22",
     "Image": "windows-latest",
     "Language": "node",
-    "LanguageVersion": "22",
+    "LanguageVersion": "22.5.1",
     "RunPerformance": true,
     "PackageRequirement": true
   }
