@@ -1,0 +1,96 @@
+name: Nightly Pipeline
+
+on:
+  workflow_dispatch:
+    inputs:
+      dryrun:
+        type: boolean
+        default: false
+  schedule:
+    - cron: '0 3 * * *'
+
+jobs:
+  DocumentationUpdate:
+    name: Nightly Documentation Update
+    uses: 51Degrees/common-ci/.github/workflows/nightly-documentation-update.yml@nightly-pipeline
+    with:
+      common-ci-ref: nightly-pipeline
+      repo-name: ${{ github.event.repository.name }}
+      org-name: ${{ github.event.repository.owner.login }}
+      dryrun: ${{ inputs.dryrun || false }}
+      separate-examples: true
+    secrets:
+      token: ${{ secrets.ACCESS_TOKEN }}
+
+  # TODO: Don't forget to add this job to PullRequests' needs when uncommenting
+  # PackageUpdate:
+  #   name: Nightly Package Update
+  #   uses: 51Degrees/common-ci/.github/workflows/nightly-package-update.yml@nightly-pipeline
+  #   with:
+  #     common-ci-ref: nightly-pipeline
+  #     repo-name: ${{ github.event.repository.name }}
+  #     org-name: ${{ github.event.repository.owner.login }}
+  #     dryrun: ${{ inputs.dryrun || false }}
+  #   secrets:
+  #     token: ${{ secrets.ACCESS_TOKEN }}
+
+  SubmoduleUpdate:
+    name: Nightly Submodule Update
+    uses: 51Degrees/common-ci/.github/workflows/nightly-submodule-update.yml@nightly-pipeline
+    with:
+      common-ci-ref: nightly-pipeline
+      repo-name: ${{ github.event.repository.name }}
+      org-name: ${{ github.event.repository.owner.login }}
+      dryrun: ${{ inputs.dryrun || false }}
+    secrets:
+      token: ${{ secrets.ACCESS_TOKEN }}
+
+  PullRequests:
+    if: ${{ !cancelled() }}
+    needs: [DocumentationUpdate, SubmoduleUpdate]
+    name: Nightly Pull Requests
+    uses: 51Degrees/common-ci/.github/workflows/nightly-pull-requests.yml@nightly-pipeline
+    with:
+      common-ci-ref: nightly-pipeline
+      repo-name: ${{ github.event.repository.name }}
+      org-name: ${{ github.event.repository.owner.login }}
+      dryrun: ${{ inputs.dryrun || false }}
+      cache-assets: true
+    secrets:
+      token: ${{ secrets.ACCESS_TOKEN }}
+      DeviceDetection: ${{ secrets.DEVICE_DETECTION_KEY }}
+      DeviceDetectionUrl: ${{ secrets.DEVICE_DETECTION_URL }}
+      CsvUrl: ${{ secrets.CSV_URL }}
+      TestResourceKey: ${{ secrets.SUPER_RESOURCE_KEY}}
+      TestSuperResourceKey: ${{ secrets.SUPER_RESOURCE_KEY }}
+      TestPlatformResourceKey: ${{ secrets.ACCEPTCH_PLATFORM_KEY }}
+      TestHardwareResourceKey: ${{ secrets.ACCEPTCH_HARDWARE_KEY }}
+      TestBrowserResourceKey: ${{ secrets.ACCEPTCH_BROWSER_KEY }}
+      TestNoSetHeaderResourceKey: ${{ secrets.ACCEPTCH_NONE_KEY }}
+      TestLicenseKey: ${{ secrets.DEVICE_DETECTION_KEY }}
+
+  Publish:
+    if: ${{ !cancelled() }}
+    needs: PullRequests
+    name: Nightly Publish
+    uses: 51Degrees/common-ci/.github/workflows/nightly-publish.yml@nightly-pipeline
+    with:
+      common-ci-ref: nightly-pipeline
+      repo-name: ${{ github.event.repository.name }}
+      org-name: ${{ github.event.repository.owner.login }}
+      dryrun: ${{ inputs.dryrun || false }}
+      cache-assets: true
+    secrets:
+      token: ${{ secrets.ACCESS_TOKEN }}
+      DeviceDetection: ${{ secrets.DEVICE_DETECTION_KEY }}
+      DeviceDetectionUrl: ${{ secrets.DEVICE_DETECTION_URL }}
+      CsvUrl: ${{ secrets.CSV_URL }}
+      TestResourceKey: ${{ secrets.SUPER_RESOURCE_KEY}}
+      TestSuperResourceKey: ${{ secrets.SUPER_RESOURCE_KEY }}
+      TestPlatformResourceKey: ${{ secrets.ACCEPTCH_PLATFORM_KEY }}
+      TestHardwareResourceKey: ${{ secrets.ACCEPTCH_HARDWARE_KEY }}
+      TestBrowserResourceKey: ${{ secrets.ACCEPTCH_BROWSER_KEY }}
+      TestNoSetHeaderResourceKey: ${{ secrets.ACCEPTCH_NONE_KEY }}
+      TestLicenseKey: ${{ secrets.DEVICE_DETECTION_KEY }}
+      NPMAuthToken: ${{ secrets.NPM_AUTH_TOKEN}}
+
