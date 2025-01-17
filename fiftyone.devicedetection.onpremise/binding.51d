@@ -25,8 +25,7 @@
                 string += arr[i];\
             }\
             console.log(string);\")",
-            "-Wall",
-            "-Werror"
+            "-Wall"
         ],
         'linux_mac_c_core_additional_flags': [
             "-Wno-unused-variable",
@@ -76,7 +75,6 @@
                 "device-detection-cxx/src/common-cxx/profile.c",
                 "device-detection-cxx/src/common-cxx/properties.c",
                 "device-detection-cxx/src/common-cxx/property.c",
-                "device-detection-cxx/src/common-cxx/pseudoheader.c",
                 "device-detection-cxx/src/common-cxx/resource.c",
                 "device-detection-cxx/src/common-cxx/results.c",
                 "device-detection-cxx/src/common-cxx/status.c",
@@ -102,6 +100,7 @@
                 # Device Detection C
                 "device-detection-cxx/src/dataset-dd.c",
                 "device-detection-cxx/src/results-dd.c",
+                "device-detection-cxx/src/transform.c",
                 # Device Detection C++
                 "device-detection-cxx/src/ConfigDeviceDetection.cpp",
                 "device-detection-cxx/src/EngineDeviceDetection.cpp",
