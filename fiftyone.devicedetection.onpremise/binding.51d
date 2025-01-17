@@ -56,9 +56,11 @@
             'target_name': '<(core_lib_name)',
             'sources': [
                 # Common C
+                "device-detection-cxx/src/common-cxx/bool.c",
                 "device-detection-cxx/src/common-cxx/cache.c",
                 "device-detection-cxx/src/common-cxx/collection.c",
                 "device-detection-cxx/src/common-cxx/component.c",
+                "device-detection-cxx/src/common-cxx/coordinate.c",
                 "device-detection-cxx/src/common-cxx/data.c",
                 "device-detection-cxx/src/common-cxx/dataset.c",
                 "device-detection-cxx/src/common-cxx/evidence.c",
@@ -66,12 +68,14 @@
                 "device-detection-cxx/src/common-cxx/file.c",
                 "device-detection-cxx/src/common-cxx/float.c",
                 "device-detection-cxx/src/common-cxx/headers.c",
+                "device-detection-cxx/src/common-cxx/indices.c",
                 "device-detection-cxx/src/common-cxx/ip.c",
+                "device-detection-cxx/src/common-cxx/json.c",
                 "device-detection-cxx/src/common-cxx/list.c",
                 "device-detection-cxx/src/common-cxx/memory.c",
                 "device-detection-cxx/src/common-cxx/overrides.c",
                 "device-detection-cxx/src/common-cxx/pool.c",
-				"device-detection-cxx/src/common-cxx/process.c",
+                "device-detection-cxx/src/common-cxx/process.c",
                 "device-detection-cxx/src/common-cxx/profile.c",
                 "device-detection-cxx/src/common-cxx/properties.c",
                 "device-detection-cxx/src/common-cxx/property.c",
@@ -83,6 +87,8 @@
                 "device-detection-cxx/src/common-cxx/threading.c",
                 "device-detection-cxx/src/common-cxx/tree.c",
                 "device-detection-cxx/src/common-cxx/value.c",
+                "device-detection-cxx/src/common-cxx/yamlfile.c",
+
                 # Common C++
                 "device-detection-cxx/src/common-cxx/CollectionConfig.cpp",
                 "device-detection-cxx/src/common-cxx/ComponentMetaData.cpp",
@@ -100,12 +106,14 @@
                 # Device Detection C
                 "device-detection-cxx/src/dataset-dd.c",
                 "device-detection-cxx/src/results-dd.c",
+                "device-detection-cxx/src/gethighentropyvalues.c",
                 "device-detection-cxx/src/transform.c",
                 # Device Detection C++
                 "device-detection-cxx/src/ConfigDeviceDetection.cpp",
                 "device-detection-cxx/src/EngineDeviceDetection.cpp",
                 "device-detection-cxx/src/EvidenceDeviceDetection.cpp",
                 "device-detection-cxx/src/ResultsDeviceDetection.cpp",
+                "device-detection-cxx/src/Transform.cpp",
                 # Hash C
                 "device-detection-cxx/src/hash/graph.c",
                 "device-detection-cxx/src/hash/hash.c",
