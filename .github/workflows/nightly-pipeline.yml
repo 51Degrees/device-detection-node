@@ -14,7 +14,6 @@ jobs:
     name: Nightly Documentation Update
     uses: 51Degrees/common-ci/.github/workflows/nightly-documentation-update.yml@main
     with:
-      common-ci-ref: nightly-pipeline
       repo-name: ${{ github.event.repository.name }}
       org-name: ${{ github.event.repository.owner.login }}
       dryrun: ${{ inputs.dryrun || false }}
@@ -27,7 +26,6 @@ jobs:
   #   name: Nightly Package Update
   #   uses: 51Degrees/common-ci/.github/workflows/nightly-package-update.yml@main
   #   with:
-  #     common-ci-ref: nightly-pipeline
   #     repo-name: ${{ github.event.repository.name }}
   #     org-name: ${{ github.event.repository.owner.login }}
   #     dryrun: ${{ inputs.dryrun || false }}
@@ -38,7 +36,6 @@ jobs:
     name: Nightly Submodule Update
     uses: 51Degrees/common-ci/.github/workflows/nightly-submodule-update.yml@main
     with:
-      common-ci-ref: nightly-pipeline
       repo-name: ${{ github.event.repository.name }}
       org-name: ${{ github.event.repository.owner.login }}
       dryrun: ${{ inputs.dryrun || false }}
@@ -51,7 +48,6 @@ jobs:
     name: Nightly Pull Requests
     uses: 51Degrees/common-ci/.github/workflows/nightly-pull-requests.yml@main
     with:
-      common-ci-ref: nightly-pipeline
       repo-name: ${{ github.event.repository.name }}
       org-name: ${{ github.event.repository.owner.login }}
       dryrun: ${{ inputs.dryrun || false }}
@@ -75,7 +71,6 @@ jobs:
     name: Nightly Publish
     uses: 51Degrees/common-ci/.github/workflows/nightly-publish.yml@main
     with:
-      common-ci-ref: nightly-pipeline
       repo-name: ${{ github.event.repository.name }}
       org-name: ${{ github.event.repository.owner.login }}
       dryrun: ${{ inputs.dryrun || false }}
