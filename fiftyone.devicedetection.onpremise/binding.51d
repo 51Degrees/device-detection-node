@@ -107,7 +107,7 @@
                 "device-detection-cxx/src/dataset-dd.c",
                 "device-detection-cxx/src/results-dd.c",
                 "device-detection-cxx/src/gethighentropyvalues.c",
-                "device-detection-cxx/src/transform.c",
+                "device-detection-cxx/src/transformc.c",
                 # Device Detection C++
                 "device-detection-cxx/src/ConfigDeviceDetection.cpp",
                 "device-detection-cxx/src/EngineDeviceDetection.cpp",
