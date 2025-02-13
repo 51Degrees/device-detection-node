@@ -210,6 +210,22 @@ describe('deviceDetectionOnPremise', () => {
     done();
   });
 
+  test('key filter has GHEV and SUA keys', done => {
+    const pipeline = new FiftyOneDegreesDeviceDetectionOnPremise
+      .DeviceDetectionOnPremisePipelineBuilder({
+        dataFile: DataFile
+      }).build();
+    const deviceKeyFilter = pipeline.getElement('device').evidenceKeyFilter.list;
+
+    // check that the key filter contains keys for GHEV and SUA
+    expect(deviceKeyFilter).toContain('query.51d_gethighentropyvalues');
+    expect(deviceKeyFilter).toContain('cookie.51d_gethighentropyvalues');
+    expect(deviceKeyFilter).toContain('query.51d_structureduseragent');
+    expect(deviceKeyFilter).toContain('cookie.51d_structureduseragent');
+
+    done();
+  });
+
   // Disabled during polling process of autoupdate, for now there is no option to manually close request from pipeline
 
   // Check if dataUpdateUrl property are set correctly
