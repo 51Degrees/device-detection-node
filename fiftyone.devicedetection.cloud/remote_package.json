@@ -35,7 +35,7 @@
   },
   "author": "51Degrees Engineering <engineering@51degrees.com>",
   "dependencies": {
-    "fiftyone.devicedetection.shared": "4.4.x",
+    "fiftyone.devicedetection.shared": ">=4.5.0-alpha.0",
     "fiftyone.pipeline.cloudrequestengine": "4.4.x",
     "fiftyone.pipeline.core": "4.4.x",
     "fiftyone.pipeline.engines": "4.4.x",
