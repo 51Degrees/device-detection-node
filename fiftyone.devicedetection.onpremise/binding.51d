@@ -87,6 +87,7 @@
                 "device-detection-cxx/src/common-cxx/threading.c",
                 "device-detection-cxx/src/common-cxx/tree.c",
                 "device-detection-cxx/src/common-cxx/value.c",
+                "device-detection-cxx/src/common-cxx/wkbtot.c",
                 "device-detection-cxx/src/common-cxx/yamlfile.c",
 
                 # Common C++
