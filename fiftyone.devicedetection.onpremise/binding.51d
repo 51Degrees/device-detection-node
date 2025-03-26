@@ -60,7 +60,6 @@
                 "device-detection-cxx/src/common-cxx/cache.c",
                 "device-detection-cxx/src/common-cxx/collection.c",
                 "device-detection-cxx/src/common-cxx/component.c",
-                "device-detection-cxx/src/common-cxx/coordinate.c",
                 "device-detection-cxx/src/common-cxx/data.c",
                 "device-detection-cxx/src/common-cxx/dataset.c",
                 "device-detection-cxx/src/common-cxx/evidence.c",
