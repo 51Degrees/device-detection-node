@@ -1,7 +1,7 @@
 [
   {
     "Name": "Ubuntu_Node_18",
-    "Image": "ubuntu-20.04",
+    "Image": "ubuntu-latest",
     "Language": "node",
     "LanguageVersion": "18",
     "RunPerformance": true,
@@ -25,7 +25,7 @@
   },
   {
     "Name": "Ubuntu_Node_20",
-    "Image": "ubuntu-20.04",
+    "Image": "ubuntu-latest",
     "Language": "node",
     "LanguageVersion": "20",
     "RunPerformance": true,
@@ -49,7 +49,7 @@
   },
   {
     "Name": "Ubuntu_Node_22",
-    "Image": "ubuntu-22.04",
+    "Image": "ubuntu-latest",
     "Language": "node",
     "LanguageVersion": "22.5.1",
     "RunPerformance": true,
