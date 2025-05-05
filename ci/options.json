@@ -1,29 +1,5 @@
 [
   {
-    "Name": "Ubuntu_Node_18",
-    "Image": "ubuntu-latest",
-    "Language": "node",
-    "LanguageVersion": "18",
-    "RunPerformance": true,
-    "PackageRequirement": true
-  },
-  {
-    "Name": "Windows_Node_18",
-    "Image": "windows-latest",
-    "Language": "node",
-    "LanguageVersion": "18",
-    "RunPerformance": true,
-    "PackageRequirement": true
-  },
-  {
-    "Name": "macOS_Node_18",
-    "Image": "macos-latest",
-    "Language": "node",
-    "LanguageVersion": "18",
-    "RunPerformance": true,
-    "PackageRequirement": true
-  },
-  {
     "Name": "Ubuntu_Node_20",
     "Image": "ubuntu-latest",
     "Language": "node",
