@@ -38,5 +38,29 @@
     "LanguageVersion": "22.5.1",
     "RunPerformance": true,
     "PackageRequirement": true
+  },
+  {
+    "Name": "Ubuntu_Node_24",
+    "Image": "ubuntu-latest",
+    "Language": "node",
+    "LanguageVersion": "24",
+    "RunPerformance": true,
+    "PackageRequirement": true
+  },
+  {
+    "Name": "Windows_Node_24",
+    "Image": "windows-latest",
+    "Language": "node",
+    "LanguageVersion": "24",
+    "RunPerformance": true,
+    "PackageRequirement": true
+  },
+  {
+    "Name": "macOS_Node_24",
+    "Image": "macos-latest",
+    "Language": "node",
+    "LanguageVersion": "24",
+    "RunPerformance": true,
+    "PackageRequirement": true
   }
 ]
