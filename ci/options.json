@@ -40,6 +40,14 @@
     "PackageRequirement": true
   },
   {
+    "Name": "macOS_Node_22",
+    "Image": "macos-latest",
+    "Language": "node",
+    "LanguageVersion": "22",
+    "RunPerformance": true,
+    "PackageRequirement": true
+  },
+  {
     "Name": "Ubuntu_Node_24",
     "Image": "ubuntu-latest",
     "Language": "node",
