@@ -33,11 +33,11 @@
  * This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection.cloud/examples/cloud/nativemodellookup-console/nativeModelLookup.js).
  *
  * Required npm Dependencies:
- * - fiftyone.pipeline.cloudrequestengine
- * - fiftyone.pipeline.core
- * - fiftyone.pipeline.engines
- * - fiftyone.pipeline.engines.fiftyone
- * - fiftyone.devicedetection.cloud
+ * - [fiftyone.pipeline.cloudrequestengine](https://www.npmjs.com/package/fiftyone.pipeline.cloudrequestengine)
+ * - [fiftyone.pipeline.core](https://www.npmjs.com/package/fiftyone.pipeline.core)
+ * - [fiftyone.pipeline.engines](https://www.npmjs.com/package/fiftyone.pipeline.engines)
+ * - [fiftyone.pipeline.engines.fiftyone](https://www.npmjs.com/package/fiftyone.pipeline.engines.fiftyone)
+ * - [fiftyone.devicedetection.cloud](https://www.npmjs.com/package/fiftyone.devicedetection.cloud)
  *
  */
 

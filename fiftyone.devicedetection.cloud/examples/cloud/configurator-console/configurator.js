@@ -31,7 +31,7 @@
  * for a fuller example.
  *
  * Required npm Dependencies:
- * - fiftyone.devicedetection
+ * - [fiftyone.devicedetection](https://www.npmjs.com/package/fiftyone.devicedetection)
  */
 const path = require('path');
 const require51 = (requestedPackage) => {

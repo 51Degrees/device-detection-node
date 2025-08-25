@@ -26,10 +26,10 @@
  * This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection.onpremise/examples/onpremise/gettingstarted-web/gettingStarted.js).
  *
  * Required npm Dependencies:
- * - fiftyone.pipeline.core
- * - fiftyone.pipeline.engines
- * - fiftyone.pipeline.engines.fiftyone
- * - fiftyone.devicedetection.onpremise
+ * - [fiftyone.pipeline.core](https://www.npmjs.com/package/fiftyone.pipeline.core)
+ * - [fiftyone.pipeline.engines](https://www.npmjs.com/package/fiftyone.pipeline.engines)
+ * - [fiftyone.pipeline.engines.fiftyone](https://www.npmjs.com/package/fiftyone.pipeline.engines.fiftyone)
+ * - [fiftyone.devicedetection.onpremise](https://www.npmjs.com/package/fiftyone.devicedetection.onpremise)
  *
  * ## Overview
  *
