@@ -31,9 +31,9 @@
  * process - reducing the number of components required to return the properties requested reduces
  * the overall time taken.
  *
- * There is a [discussion](https://51degrees.com/documentation/_device_detection__hash.html#DeviceDetection_Hash_DataSetProduction_Performance)
- * of metrics and controlling performance on our web site. See also the
- * [performance options](https://51degrees.com/documentation/_device_detection__features__performance_options.html)
+ * There is a [discussion](/documentation/4.5/_device_detection__hash.html#DeviceDetection_Hash_DataSetProduction)
+ * of metrics and data set production on our web site. See also the
+ * [performance options](/documentation/4.5/_device_detection__features__performance_options.html)
  * page.
  *
  * This example is available in full on
@@ -106,7 +106,7 @@ const displayMatchMetrics = async function (pipeline, output, evidenceValues) {
 
   output.write('--- Listing all available properties, by component, by property name ---\n');
   output.write(`For a discussion of what the match properties mean, see: 
-https://51degrees.com/documentation/_device_detection__hash.html#DeviceDetection_Hash_DataSetProduction_Performance\n`);
+/documentation/4.5/_device_detection__hash.html#DeviceDetection_Hash_DataSetProduction\n`);
 
   // Get the properties available from the DeviceDetection engine.
   const availableProperties = Object.entries(device.flowElement.properties);
