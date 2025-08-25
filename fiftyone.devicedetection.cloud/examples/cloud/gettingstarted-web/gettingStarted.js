@@ -52,7 +52,7 @@
  * ```
  *
  * Results can also be accessed in client-side code by using the `fod` object. See the
- * [JavaScriptBuilderElement](https://51degrees.com/pipeline-node/class_java_script_builder_element.html)
+ * [JavaScriptBuilderElement](/documentation/4.5/apis/pipeline-node/class_java_script_builder_element.html)
  * for details on available settings such as changing the `fod` name.
  * ```
  * window.onload = function () {
