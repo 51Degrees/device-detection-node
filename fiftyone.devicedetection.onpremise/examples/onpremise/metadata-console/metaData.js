@@ -29,9 +29,9 @@
  *
  * To help navigate the data, it's useful to have an understanding of the types of records that
  * are present:
- * - Component - A record relating to a major aspect of the entity making a web request. There are currently 4 components: Hardware, Software Platform (OS), Browser and Crawler.
- * - Profile - A record containing the details for a specific instance of a component. An example of a hardware profile would be the profile for the iPhone 13. An example of a platform profile would be Android 12.1.0.
- * - Property - Each property will have a specific value (or values) for each profile. An example of a hardware property is 'IsMobile'. An example of a browser property is 'BrowserName'.
+ * - [Component](/documentation/4.5/apis/device-detection-node/class_component.html) - A record relating to a major aspect of the entity making a web request. There are currently 4 components: Hardware, Software Platform (OS), Browser and Crawler.
+ * - [Profile](/documentation/4.5/apis/device-detection-node/class_profile.html) - A record containing the details for a specific instance of a component. An example of a hardware profile would be the profile for the iPhone 13. An example of a platform profile would be Android 12.1.0.
+ * - [Property](/documentation/4.5/apis/device-detection-node/class_property.html) - Each property will have a specific value (or values) for each profile. An example of a hardware property is 'IsMobile'. An example of a browser property is 'BrowserName'.
  *
  * The example will output each component in turn, with a list of the properties associated with
  * each component. Some of the possible values for each property are also displayed.

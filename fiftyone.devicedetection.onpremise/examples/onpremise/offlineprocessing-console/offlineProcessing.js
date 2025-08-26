@@ -40,7 +40,7 @@
  *
  * As well as explaining the basic operation of off line processing using the defaults, for
  * advanced operation this example can be used to experiment with tuning device detection for
- * performance and predictive power using Performance Profile, Graph and Difference and Drift
+ * performance and predictive power using Performance [Profile](/documentation/4.5/apis/device-detection-node/class_profile.html), Graph and Difference and Drift
  * settings.
  *
  * This example is available in full on [GitHub](https://github.com/51Degrees/device-detection-node/blob/master/fiftyone.devicedetection.onpremise/examples/onpremise/offlineprocessing-console/offlineProcessing.js).
