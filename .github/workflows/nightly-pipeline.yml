@@ -10,26 +10,20 @@ on:
     - cron: '0 3 * * *'
 
 jobs:
-  DocumentationUpdate:
-    name: Nightly Documentation Update
-    uses: 51Degrees/common-ci/.github/workflows/nightly-documentation-update.yml@main
+  PackageUpdate:
+    # This is intentionally disabled to prevent npm updates, otherwise it is
+    # causing an endless dependency update loop for fiftyone.* packages in this
+    # repository.
+    # TODO: Don't forget to add this job to PullRequests' needs when enabling back.
+    if: false
+    name: Nightly Package Update
+    uses: 51Degrees/common-ci/.github/workflows/nightly-package-update.yml@main
     with:
       repo-name: ${{ github.event.repository.name }}
       org-name: ${{ github.event.repository.owner.login }}
       dryrun: ${{ inputs.dryrun || false }}
     secrets:
       token: ${{ secrets.ACCESS_TOKEN }}
-
-  # TODO: Don't forget to add this job to PullRequests' needs when uncommenting
-  # PackageUpdate:
-  #   name: Nightly Package Update
-  #   uses: 51Degrees/common-ci/.github/workflows/nightly-package-update.yml@main
-  #   with:
-  #     repo-name: ${{ github.event.repository.name }}
-  #     org-name: ${{ github.event.repository.owner.login }}
-  #     dryrun: ${{ inputs.dryrun || false }}
-  #   secrets:
-  #     token: ${{ secrets.ACCESS_TOKEN }}
 
   SubmoduleUpdate:
     name: Nightly Submodule Update
@@ -43,7 +37,7 @@ jobs:
 
   PullRequests:
     if: ${{ !cancelled() }}
-    needs: [DocumentationUpdate, SubmoduleUpdate]
+    needs: SubmoduleUpdate
     name: Nightly Pull Requests
     uses: 51Degrees/common-ci/.github/workflows/nightly-pull-requests.yml@main
     with:

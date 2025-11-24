@@ -1,17 +1,15 @@
-name: Nightly Submodule Update
+name: Submodule Update
 
 on:
   workflow_dispatch:
     inputs:
       dryrun:
-        default: false
         type: boolean
-        description: Dry Run
-  schedule:
-    - cron: '0 2 * * *'
+        default: false
 
 jobs:
-  Nightly_Submodule_Update:
+  SubmoduleUpdate:
+    name: Submodule Update
     uses: 51Degrees/common-ci/.github/workflows/nightly-submodule-update.yml@main
     with:
       repo-name: ${{ github.event.repository.name }}

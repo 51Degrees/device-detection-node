@@ -1,18 +1,16 @@
-name: Nightly Documentation Update
+name: Package Update
 
 on:
   workflow_dispatch:
     inputs:
       dryrun:
-        default: false
         type: boolean
-        description: Dry Run
-  schedule:
-    - cron: '30 3 * * *'
+        default: false
 
 jobs:
-  Nightly_Documentation_Update:
-    uses: 51Degrees/common-ci/.github/workflows/nightly-documentation-update.yml@main
+  PackageUpdate:
+    name: Package Update
+    uses: 51Degrees/common-ci/.github/workflows/nightly-package-update.yml@main
     with:
       repo-name: ${{ github.event.repository.name }}
       org-name: ${{ github.event.repository.owner.login }}
