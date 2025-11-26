@@ -36,59 +36,8 @@ const tc = require51('fiftyone.devicedetection.shared').testConstants;
 // Load the example module
 const example = require(path.join(__dirname, '/userAgentClientHintsWeb.js'));
 
-// Valid Sec-CH-UA header values that can appear in Accept-CH
-const validClientHintsHeaders = [
-  'sec-ch-ua',
-  'sec-ch-ua-mobile',
-  'sec-ch-ua-platform',
-  'sec-ch-ua-platform-version',
-  'sec-ch-ua-model',
-  'sec-ch-ua-full-version',
-  'sec-ch-ua-full-version-list',
-  'sec-ch-ua-arch',
-  'sec-ch-ua-bitness',
-  'sec-ch-ua-wow64',
-  'sec-ch-ua-form-factors'
-];
-
-/**
- * Helper function to verify Accept-CH header contains valid client hints values.
- * @param {string} acceptChValue - The Accept-CH header value
- * @returns {boolean} - True if all values are valid client hints headers
- */
-const hasValidClientHintsValues = (acceptChValue) => {
-  if (!acceptChValue) return false;
-  const vals = acceptChValue.split(',').map(v => v.trim().toLowerCase());
-  // At least one value should be a valid client hints header
-  return vals.some(v => validClientHintsHeaders.includes(v));
-};
-
-/**
- * Helper function to check if specific header values are present (case-insensitive).
- * @param {string} acceptChValue - The Accept-CH header value
- * @param {string[]} expectedValues - Array of expected header values
- * @returns {{found: string[], missing: string[]}} - Found and missing values
- */
-const checkExpectedValues = (acceptChValue, expectedValues) => {
-  if (!acceptChValue) return { found: [], missing: expectedValues };
-  const vals = acceptChValue.split(',').map(v => v.trim().toLowerCase());
-  const found = [];
-  const missing = [];
-  expectedValues.forEach(expected => {
-    if (vals.includes(expected.toLowerCase())) {
-      found.push(expected);
-    } else {
-      missing.push(expected);
-    }
-  });
-  return { found, missing };
-};
-
 describe('Examples', () => {
   test.each([
-    // Test that Accept-CH header is returned with valid client hints values
-    // Note: We verify that SOME valid client hints are returned rather than
-    // exact values, since cloud service configuration can change over time.
     ['All available properties',
       {
         resourceKeyEnvVar: tc.envVars.superResourceKeyEnvVar,
@@ -97,11 +46,10 @@ describe('Examples', () => {
           tc.userAgents.edgeUA
         ]
       },
-      {
-        expectAcceptCH: true,
-        // Optional: specific values we'd like to see (logged as warning if missing)
-        preferredValues: ['Sec-CH-UA-Model', 'Sec-CH-UA-Platform', 'Sec-CH-UA']
-      }
+      [{
+        headerName: 'Accept-CH',
+        headerValue: ['Sec-CH-UA-Model', 'Sec-CH-UA-Platform', 'Sec-CH-UA']
+      }]
     ],
     ['SetHeaderPlatformAccept-CH',
       {
@@ -111,10 +59,10 @@ describe('Examples', () => {
           tc.userAgents.edgeUA
         ]
       },
-      {
-        expectAcceptCH: true,
-        preferredValues: ['Sec-CH-UA-Platform']
-      }
+      [{
+        headerName: 'Accept-CH',
+        headerValue: ['Sec-CH-UA-Platform']
+      }]
     ],
     ['SetHeaderHardwareAccept-CH',
       {
@@ -124,10 +72,10 @@ describe('Examples', () => {
           tc.userAgents.edgeUA
         ]
       },
-      {
-        expectAcceptCH: true,
-        preferredValues: ['Sec-CH-UA-Model']
-      }
+      [{
+        headerName: 'Accept-CH',
+        headerValue: ['Sec-CH-UA-Model']
+      }]
     ],
     ['SetHeaderBrowserAccept-CH',
       {
@@ -137,15 +85,15 @@ describe('Examples', () => {
           tc.userAgents.edgeUA
         ]
       },
-      {
-        expectAcceptCH: true,
-        preferredValues: ['Sec-CH-UA']
-      }
+      [{
+        headerName: 'Accept-CH',
+        headerValue: ['Sec-CH-UA']
+      }]
     ],
     // Note: Unlike on-premise, the cloud service may still send Accept-CH
     // headers for browsers that don't support UACH, since the server
     // determines what headers to request based on configuration, not client
-    // capabilities.
+    // capabilities. We allow Accept-CH to be present or absent for these UAs.
     ['No UACH supports',
       {
         resourceKeyEnvVar: tc.envVars.superResourceKeyEnvVar,
@@ -155,13 +103,14 @@ describe('Examples', () => {
           tc.userAgents.curlUA
         ]
       },
-      {
-        // Cloud may send Accept-CH regardless - we just verify response is valid
-        expectAcceptCH: false,
-        allowAcceptCH: true
-      }
+      [{
+        headerName: 'Accept-CH',
+        headerValue: null,
+        // Cloud may still send Accept-CH headers regardless of client support
+        allowActualValue: true
+      }]
     ]
-  ])('hash user agent client hints web - %s', async (name, testData, expectations) => {
+  ])('hash user agent client hints web - %s', async (name, testData, expectedResponses) => {
     // Loop through the test user agents
     for (const ua of testData.userAgents) {
       // Make sure required resource key is defined.
@@ -177,31 +126,54 @@ describe('Examples', () => {
       // Verify response is successful
       expect(response.statusCode).toBe(200);
 
-      const acceptCH = response.headers['accept-ch'];
+      // Assess the returned headers
+      expectedResponses.forEach(e => {
+        const resVal = response.headers[e.headerName.toLowerCase()];
 
-      if (expectations.expectAcceptCH) {
-        // We expect Accept-CH header to be present with valid client hints
-        expect(acceptCH).toBeDefined();
-        expect(hasValidClientHintsValues(acceptCH)).toBe(true);
+        // Debug output for troubleshooting
+        console.log(`[DEBUG] Test: ${name}`);
+        console.log(`[DEBUG] User-Agent: ${ua.substring(0, 60)}...`);
+        console.log(`[DEBUG] Expected headerValue: ${JSON.stringify(e.headerValue)}`);
+        console.log(`[DEBUG] Actual ${e.headerName}: "${resVal}"`);
+        if (resVal) {
+          const actualValues = resVal.split(',').map(v => v.trim());
+          console.log(`[DEBUG] Actual parsed values: [${actualValues.join(', ')}]`);
+        }
 
-        // Check for preferred values (informational, not a hard failure)
-        if (expectations.preferredValues && expectations.preferredValues.length > 0) {
-          const { found, missing } = checkExpectedValues(acceptCH, expectations.preferredValues);
-          if (missing.length > 0) {
-            // Log warning but don't fail - cloud config may differ
-            console.warn(
-              `[${name}] UA: ${ua.substring(0, 50)}... - ` +
-              `Accept-CH missing preferred values: [${missing.join(', ')}]. ` +
-              `Got: [${acceptCH}]`
+        if (e.headerValue !== null && resVal !== undefined) {
+          // Get the list of items in the header value (case-insensitive comparison)
+          const vals = resVal.split(',').map(v => v.trim().toLowerCase());
+
+          // Verify each expected header value is present
+          e.headerValue.forEach(v => {
+            const found = vals.find(item => item === v.toLowerCase());
+            if (!found) {
+              throw new Error(
+                `[${name}] Expected Accept-CH to contain '${v}' ` +
+                `but got: [${resVal}]. ` +
+                `User-Agent: ${ua.substring(0, 60)}...`
+              );
+            }
+          });
+        } else if (e.headerValue === null && resVal !== undefined) {
+          // Expected null but got a value - only fail if allowActualValue is not set
+          if (!e.allowActualValue) {
+            throw new Error(
+              `[${name}] Expected Accept-CH to be absent but got: ${resVal}. ` +
+              `User-Agent: ${ua.substring(0, 60)}...`
             );
           }
+        } else if (e.headerValue !== null && resVal === undefined) {
+          // Expected a value but got nothing
+          throw new Error(
+            `[${name}] Expected Accept-CH with values [${e.headerValue.join(', ')}] ` +
+            `but header was not present. ` +
+            `User-Agent: ${ua.substring(0, 60)}... ` +
+            `All headers: ${JSON.stringify(response.headers)}`
+          );
         }
-      } else if (!expectations.allowAcceptCH && acceptCH) {
-        // We didn't expect Accept-CH but got one
-        throw new Error(
-          `Expected no Accept-CH header but got: ${acceptCH}`);
-      }
-      // If allowAcceptCH is true, we don't care whether Accept-CH is present or not
+        // Both null/undefined is fine - no assertion needed
+      });
     }
   }, 10000);
 });
