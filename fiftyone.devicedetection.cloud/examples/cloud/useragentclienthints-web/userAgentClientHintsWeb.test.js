@@ -128,13 +128,37 @@ describe('Examples', () => {
 
       // Assess the returned headers
       expectedResponses.forEach(e => {
-        const resVal = response.headers[e.headerName.toLowerCase()];
+        let resVal = response.headers[e.headerName.toLowerCase()];
 
         // Debug output for troubleshooting
         console.log(`[DEBUG] Test: ${name}`);
         console.log(`[DEBUG] User-Agent: ${ua.substring(0, 60)}...`);
         console.log(`[DEBUG] Expected headerValue: ${JSON.stringify(e.headerValue)}`);
-        console.log(`[DEBUG] Actual ${e.headerName}: "${resVal}"`);
+        console.log(`[DEBUG] Actual ${e.headerName} type: ${typeof resVal}`);
+        console.log(`[DEBUG] Actual ${e.headerName} isArray: ${Array.isArray(resVal)}`);
+        console.log(`[DEBUG] Actual ${e.headerName} raw: ${JSON.stringify(resVal)}`);
+
+        // Handle case where header value is an array (some HTTP libraries do this)
+        if (Array.isArray(resVal)) {
+          resVal = resVal.join(', ');
+          console.log(`[DEBUG] Converted array to string: "${resVal}"`);
+        }
+
+        // Handle case where header value is an object (extract value property if present)
+        if (resVal && typeof resVal === 'object' && !Array.isArray(resVal)) {
+          console.log(`[DEBUG] resVal is object, keys: ${Object.keys(resVal).join(', ')}`);
+          // Try common property names
+          if (resVal.value) {
+            resVal = resVal.value;
+          } else if (resVal.toString && resVal.toString() !== '[object Object]') {
+            resVal = resVal.toString();
+          } else {
+            // Last resort: use JSON stringify
+            resVal = JSON.stringify(resVal);
+          }
+          console.log(`[DEBUG] Extracted value from object: "${resVal}"`);
+        }
+
         if (resVal) {
           const actualValues = resVal.split(',').map(v => v.trim());
           console.log(`[DEBUG] Actual parsed values: [${actualValues.join(', ')}]`);
