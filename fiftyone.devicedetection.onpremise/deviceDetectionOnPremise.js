@@ -290,7 +290,7 @@ class DeviceDetectionOnPremise extends Engine {
       // Hash
       swigWrapperType = 'Hash';
       const moduleDir = path.join(__dirname, 'build');
-      const moduleName = path.join(moduleDir, 'FiftyOneDeviceDetectionHashV4-' + os.platform() + '-' + nodeVersion + '.node');
+      const moduleName = path.join(moduleDir, `FiftyOneDeviceDetectionHashV4-${os.platform()}-${process.arch}-${nodeVersion}.node`);
 
       // Check if the directory containing the native modules exists.
       if (fs.existsSync(moduleDir) === false) {
