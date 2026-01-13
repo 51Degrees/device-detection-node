@@ -1,7 +1,15 @@
 [
   {
     "Name": "Ubuntu_Node_20",
-    "Image": "ubuntu-latest",
+    "Image": "ubuntu-22.04",
+    "Language": "node",
+    "LanguageVersion": "20",
+    "RunPerformance": true,
+    "PackageRequirement": true
+  },
+  {
+    "Name": "Ubuntu_ARM_Node_20",
+    "Image": "ubuntu-22.04-arm",
     "Language": "node",
     "LanguageVersion": "20",
     "RunPerformance": true,
@@ -25,7 +33,15 @@
   },
   {
     "Name": "Ubuntu_Node_22",
-    "Image": "ubuntu-latest",
+    "Image": "ubuntu-22.04",
+    "Language": "node",
+    "LanguageVersion": "22.5.1",
+    "RunPerformance": true,
+    "PackageRequirement": true
+  },
+  {
+    "Name": "Ubuntu_ARM_Node_22",
+    "Image": "ubuntu-22.04-arm",
     "Language": "node",
     "LanguageVersion": "22.5.1",
     "RunPerformance": true,
