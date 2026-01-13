@@ -1,7 +1,7 @@
 {
   "name": "fiftyone.devicedetection.onpremise",
   "version": "1.0.0",
-  "description": "Device detection on-premise services for the 51Degrees Pipeline API",
+  "description": "On-premise device detection for Node.js using the 51Degrees Pipeline API. Detect devices, operating systems, browsers, and bots locally from HTTP headers.",
   "keywords": [
     "51degrees",
     "device detection",

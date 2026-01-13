@@ -1,7 +1,7 @@
 {
   "name": "fiftyone.devicedetection",
   "version": "1.0.0",
-  "description": "Parse HTTP headers to detect the device type, model, operating system, browser, and crawler information",
+  "description": "Accurate device detection from HTTP headers, identifying device type, model, operating system, browsers, and bots.",
   "keywords": [
     "51degrees",
     "device detection",

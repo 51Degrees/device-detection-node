@@ -1,7 +1,7 @@
 {
   "name": "fiftyone.devicedetection.cloud",
   "version": "1.0.0",
-  "description": "Device detection cloud services for the 51Degrees Pipeline API",
+  "description": "Cloud-based device detection for Node.js using the 51Degrees Pipeline API. Identify devices, operating systems, browsers, and bots from HTTP headers.",
   "keywords": [
     "51degrees",
     "device detection",
