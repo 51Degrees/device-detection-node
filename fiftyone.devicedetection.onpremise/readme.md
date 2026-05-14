@@ -36,13 +36,14 @@ If the module is installed directly from Git then the binaries are also required
 - Install Node.js.
 - Install node-gyp by running.
   - `npm install node-gyp --global`  
-- Install C build tools:
+- Install C build tools (a C++20-capable toolchain is required):
   - Windows:
-    - You will need either Visual Studio 2019 or the [C++ Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/) installed.
-      - Minimum platform toolset version is `v142`
+    - You will need either Visual Studio 2022 or the [C++ Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/) installed (MSVC v143+).
       - Minimum Windows SDK version is `10.0.18362.0`
-  - Linux/MacOS:
-    - `sudo apt-get install g++ make libatomic1`
+  - Linux:
+    - `sudo apt-get install g++ make libatomic1` (GCC 10+ or Clang 10+ for C++20)
+  - macOS:
+    - `xcode-select --install` (provides Clang with C++20 support)
 - Pull git submodules:
   - `git submodule update --init --recursive`
 
@@ -57,20 +58,20 @@ If the module is installed directly from Git then the binaries are also required
     - Run `node-gyp build`
   - Platform specific:
     - Windows
-      - By default this will look for Visual Studio 2019 and a minimum Windows SDK version `10.0.18362.0`.
+      - By default this will look for Visual Studio 2022 and a minimum Windows SDK version `10.0.18362.0`.
       - This can be overwritten by include `--msvs_version=[VS version]` and `--msvs_target_platform_version=[Windows SDK Version]` as part of the `npm install` command.
         - **NOTE**: This is not recommended. Also, some time the latest SDK version is selected instead, as observed in environment with multiple SDK versions installed. Thus, only install the correct Visual Studio version and the minimum required Windows SDK version as recommended.
 - This will build the `FiftyOneDeviceDetectionHashV4.node` under `build/Release` folder.
 - Copy the `FiftyOneDeviceDetectionHashV4.node` to `build` directory (which is one level up) and rename it using the following convention.
   - Windows:
-    - FiftyOneDeviceDetectionHashV4-win32-[ Node version ].node
-      - e.g. FiftyOneDeviceDetectionHashV4-win32-10.node for Node 10.
+    - FiftyOneDeviceDetectionHashV4-win32-[arch]-[Node version].node
+      - e.g. FiftyOneDeviceDetectionHashV4-win32-x64-22.node for Node 22 on x64.
   - Linux:
-    - FiftyOneDeviceDetectionHashV4-linux-[ Node version ].node
-      - e.g. FiftyOneDeviceDetectionHashV4-linux-10.node for Node 10.
-  - MacOS:
-    - FiftyOneDeviceDetectionHashV4-darwin-[ Node version ].node
-      - e.g. FiftyOneDeviceDetectionHashV4-darwin-10.node for Node 10.
+    - FiftyOneDeviceDetectionHashV4-linux-[arch]-[Node version].node
+      - e.g. FiftyOneDeviceDetectionHashV4-linux-x64-22.node for Node 22 on x64.
+  - macOS:
+    - FiftyOneDeviceDetectionHashV4-darwin-[arch]-[Node version].node
+      - e.g. FiftyOneDeviceDetectionHashV4-darwin-arm64-22.node for Node 22 on Apple Silicon.
   - Please see the [tested versions page](https://51degrees.com/documentation/_info__tested_versions.html) for Node versions that we currently test against. The software may run fine against other versions, but extra caution should be applied.
   - You can optionally clear up by removing all the build files and folders except for the *.node file that's been created.
   - `WARNING`: `npm install` removes this copied file, so you will need to do the above steps again after running `npm install`
@@ -115,19 +116,27 @@ npm test
 
 ## Native code updates
 
-Process for rebuilding SWIG interfaces following an update to the device detection cxx code (This is only intended to be run by 51Degrees developers internally):
+Process for rebuilding SWIG interfaces following an update to the device detection cxx code
+(This is only intended to be run by 51Degrees developers internally):
 
-1. Ensure Swig is installed.
-   1. At the time when this README was updated, the current stable version of Swig did not support new changes in Node 12 and above.
-   2. The Swig version being used is built from the following branch.
-      1. https://github.com/yegorich/swig/tree/pr/new-node-fixes.
-      2. There had been an active Pull Request created to merge the changes to the main Swig master branch.
-      3. Once the Pull Request is completed, the consequent Swig releases should be used.
-2. Update the device-detection-cxx submodule to reference the relevant commit.
-3. From terminal, navigate to fiftyone.pipeline.devicedetection and run:
-    a) swig -c++ -javascript -node hash_node.i
-4. Commit changes to repository.
-5. Run the 'Build Device Detection Binaries for Node.js' Azure CI Pipeline.
-6. Copy the produced artifacts into the fiftyone.pipeline.devicedetection/build directory.
-7. Commit changes to repository.
+1. Install SWIG 4.4.1 or newer (mainline upstream).
+   - macOS: `brew install swig`
+   - Linux: `apt install swig` (or build from source if your distro is older than 4.4.1)
+   - Windows: download the binary release from https://www.swig.org/download.html
+2. Update the `device-detection-cxx` submodule to reference the relevant commit.
+3. From this directory (`fiftyone.devicedetection.onpremise`) run:
+   ```
+   ./regenerate-swig.sh
+   ```
+   This wraps `swig -c++ -javascript -node hash_node.i` and applies a post-generation
+   `sed` step that rewrites `args.Holder()` → `args.This()` so the wrapper compiles
+   against V8 13+ (Node 24+), which removed `FunctionCallbackInfo::Holder()`. See the
+   header comment in `regenerate-swig.sh` for the rationale.
+4. Commit the regenerated `hash_node_wrap.cxx` to the repository.
+5. The platform-specific `.node` binaries shipped in the npm package are produced by
+   the GitHub Actions `Publish` workflow (`.github/workflows/publish.yml`), which runs
+   `51Degrees/common-ci`'s `nightly-publish` reusable workflow across the matrix in
+   `ci/options.json`. Each matrix entry runs `node-gyp rebuild` against the committed
+   wrapper and uploads the resulting `FiftyOneDeviceDetectionHashV4-<plat>-<arch>-<node>.node`
+   into the published package. No manual artifact copy is required.
 

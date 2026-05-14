@@ -12,7 +12,7 @@
         'win_warning_ignore_list': [4100, 4127, 4244, 4302, 4311, 4459, 4996], # Only used for SWIG generated files
         'win_debug_additional_ignore_list': [4701, 4702], # Only used for SWIG generated files
         'linux_mac_c_std': '-std=gnu11',
-        'linux_mac_cpp_std': '-std=gnu++17',
+        'linux_mac_cpp_std': '-std=gnu++20',
         'linux_mac_c_common_flags': [
             "<!(node -e \"\
             var v8Version = process.versions.v8;\
@@ -77,7 +77,7 @@
                         'Debug': {
                             'msvs_settings': {
                                 'VCCLCompilerTool': {
-                                    'AdditionalOptions': [ '-std:c++17', ],
+                                    'AdditionalOptions': [ '-std:c++20', ],
                                     'WarningLevel': '<(win_warning_level)',
                                     'ExceptionHandling': '<(win_exception_handling)',
                                     'WarnAsError': '<(win_warn_as_error)',
@@ -93,7 +93,7 @@
                         'Release': {
                             'msvs_settings': {
                                 'VCCLCompilerTool': {
-                                    'AdditionalOptions': [ '-std:c++17', ],
+                                    'AdditionalOptions': [ '-std:c++20', ],
                                     'WarningLevel': '<(win_warning_level)',
                                     'ExceptionHandling': '<(win_exception_handling)',
                                     'WarnAsError': '<(win_warn_as_error)',
@@ -150,7 +150,7 @@
                         'Debug': {
                             'msvs_settings': {
                                 'VCCLCompilerTool': {
-                                    'AdditionalOptions': [ '-std:c++17', ],
+                                    'AdditionalOptions': [ '-std:c++20', ],
                                     'WarningLevel': '<(win_warning_level)',
                                     'ExceptionHandling': '<(win_exception_handling)',
                                     'DisableSpecificWarnings': [
@@ -172,7 +172,7 @@
                         'Release': {
                             'msvs_settings': {
                                 'VCCLCompilerTool': {
-                                    'AdditionalOptions': [ '-std:c++17', ],
+                                    'AdditionalOptions': [ '-std:c++20', ],
                                     'WarningLevel': '<(win_warning_level)',
                                     'ExceptionHandling': '<(win_exception_handling)',
                                     'WarnAsError': '<(win_warn_as_error)',

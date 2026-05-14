@@ -28,7 +28,11 @@
  * Override the overloaded constructor template to
  * carry though the correct error message. The additions are the
  * two "goto fail"'s.
+ *
+ * V8 backend only — the NAPI backend uses Napi::CallbackInfo (`info`) and
+ * C++ exceptions for overload dispatch, so this override doesn't apply.
  */
+#ifdef SWIG_JAVASCRIPT_V8
 %fragment ("js_ctor_dispatch_case", "templates")
 %{
 	if(args.Length() == $jsargcount) {
@@ -50,3 +54,15 @@
 #endif
 	}
 %}
+
+#endif
+
+/*
+ * NOTE: V8 13+ removed FunctionCallbackInfo<T>::Holder(); use args.This().
+ * SWIG 4.4.1 still emits args.Holder() in its built-in templates
+ * (javascriptcode.swg, javascriptrun.swg). A C-preprocessor macro shim
+ * cannot be used here because V8 headers also declare
+ * PropertyCallbackInfo::Holder() which would be wrongly remapped.
+ * Instead, regenerate-swig.sh runs `sed` over the generated wrapper to
+ * rewrite `args.Holder()` -> `args.This()`. See that script.
+ */
