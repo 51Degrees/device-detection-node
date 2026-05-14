@@ -64,5 +64,29 @@
  * cannot be used here because V8 headers also declare
  * PropertyCallbackInfo::Holder() which would be wrongly remapped.
  * Instead, regenerate-swig.sh runs `sed` over the generated wrapper to
- * rewrite `args.Holder()` -> `args.This()`. See that script.
+ * rewrite `args.Holder()` -> `args.This()`. See that script for the full set
+ * of V8 API-drift patches it applies.
  */
+
+/*
+ * V8 14.5+ (Node 26+) removed the 1-arg overloads of
+ * (Get|Set)AlignedPointerInInternalField; the new signature requires a
+ * v8::EmbedderDataTypeTag. Older V8 doesn't define EmbedderDataTypeTag at all.
+ *
+ * regenerate-swig.sh appends `SWIGFOD_EMBEDDER_TAG_ARG` to each affected call
+ * site. We define the macro here as either ", v8::EmbedderDataTypeTag(0)"
+ * (new V8) or empty (old V8). Using a fixed tag value (0) is safe because the
+ * SWIG wrapper is the sole owner of every Set/Get pair.
+ *
+ * `%insert("begin")` lands at the very top of the generated wrapper, before
+ * <v8.h> is pulled in. <v8-version.h> is self-contained and just defines
+ * V8_MAJOR_VERSION / V8_MINOR_VERSION, so it is safe to include here.
+ */
+%insert("begin") %{
+#include <v8-version.h>
+#if V8_MAJOR_VERSION > 14 || (V8_MAJOR_VERSION == 14 && V8_MINOR_VERSION >= 5)
+#define SWIGFOD_EMBEDDER_TAG_ARG , v8::EmbedderDataTypeTag(0)
+#else
+#define SWIGFOD_EMBEDDER_TAG_ARG
+#endif
+%}

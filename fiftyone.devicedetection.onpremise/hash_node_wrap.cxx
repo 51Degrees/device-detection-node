@@ -6,6 +6,14 @@
  * the SWIG interface file instead.
  * ----------------------------------------------------------------------------- */
 
+#include <v8-version.h>
+#if V8_MAJOR_VERSION > 14 || (V8_MAJOR_VERSION == 14 && V8_MINOR_VERSION >= 5)
+#define SWIGFOD_EMBEDDER_TAG_ARG , v8::EmbedderDataTypeTag(0)
+#else
+#define SWIGFOD_EMBEDDER_TAG_ARG
+#endif
+
+
 
 #define SWIG_VERSION 0x040401
 #define SWIGJAVASCRIPT
@@ -940,8 +948,16 @@ typedef v8::PropertyCallbackInfo<v8::Value> SwigV8PropertyCallbackInfo;
 #define SWIGV8_TO_STRING(handle) (handle)->ToString(SWIGV8_CURRENT_CONTEXT()).ToLocalChecked()
 #define SWIGV8_NUMBER_VALUE(handle) (handle)->NumberValue(SWIGV8_CURRENT_CONTEXT()).ToChecked()
 #define SWIGV8_INTEGER_VALUE(handle) (handle)->IntegerValue(SWIGV8_CURRENT_CONTEXT()).ToChecked()
+#if V8_MAJOR_VERSION >= 13
+#define SWIGV8_WRITE_UTF8(handle, buffer, len) ((handle)->WriteUtf8V2(v8::Isolate::GetCurrent(), (buffer), (len), v8::String::WriteFlags::kNullTerminate))
+#else
 #define SWIGV8_WRITE_UTF8(handle, buffer, len) (handle)->WriteUtf8(v8::Isolate::GetCurrent(), buffer, len)
+#endif
+#if V8_MAJOR_VERSION >= 13
+#define SWIGV8_UTF8_LENGTH(handle) ((int)(handle)->Utf8LengthV2(v8::Isolate::GetCurrent()))
+#else
 #define SWIGV8_UTF8_LENGTH(handle) (handle)->Utf8Length(v8::Isolate::GetCurrent())
+#endif
 #define SWIGV8_OBJECT_TEMPLATE_INSTACE(tmpl) tmpl->NewInstance(SWIGV8_CURRENT_CONTEXT()).ToLocalChecked();
 #define SWIGV8_BOOLEAN_VALUE(handle) (handle)->BooleanValue(v8::Isolate::GetCurrent())
 
@@ -1041,7 +1057,7 @@ SWIGRUNTIME int SWIG_V8_ConvertInstancePtr(SWIGV8_OBJECT objRef, void **ptr, swi
 
   if(objRef->InternalFieldCount() < 1) return SWIG_ERROR;
 
-  SWIGV8_Proxy *cdata = static_cast<SWIGV8_Proxy *>(objRef->GetAlignedPointerFromInternalField(0));
+  SWIGV8_Proxy *cdata = static_cast<SWIGV8_Proxy *>(objRef->GetAlignedPointerFromInternalField(0 SWIGFOD_EMBEDDER_TAG_ARG));
 
   if(cdata == NULL) {
     return SWIG_ERROR;
@@ -1089,7 +1105,7 @@ SWIGRUNTIME int SWIG_V8_GetInstancePtr(SWIGV8_VALUE valRef, void **ptr) {
 
   if(objRef->InternalFieldCount() < 1) return SWIG_ERROR;
 
-  SWIGV8_Proxy *cdata = static_cast<SWIGV8_Proxy *>(objRef->GetAlignedPointerFromInternalField(0));
+  SWIGV8_Proxy *cdata = static_cast<SWIGV8_Proxy *>(objRef->GetAlignedPointerFromInternalField(0 SWIGFOD_EMBEDDER_TAG_ARG));
 
   if(cdata == NULL) {
     return SWIG_ERROR;
@@ -1106,7 +1122,7 @@ SWIGRUNTIME void SWIGV8_SetPrivateData(SWIGV8_OBJECT obj, void *ptr, swig_type_i
   cdata->swigCMemOwn = (flags & SWIG_POINTER_OWN) ? 1 : 0;
   cdata->info = info;
 
-  obj->SetAlignedPointerInInternalField(0, cdata);
+  obj->SetAlignedPointerInInternalField(0, cdata SWIGFOD_EMBEDDER_TAG_ARG);
 
   cdata->handle.Reset(v8::Isolate::GetCurrent(), obj);
 
@@ -1266,7 +1282,7 @@ swig_type_info *SwigV8Packed_UnpackData(SWIGV8_VALUE valRef, void *ptr, size_t s
 
     SWIGV8_OBJECT objRef = SWIGV8_TO_OBJECT(valRef);
 
-    sobj = static_cast<SwigV8PackedData*>(objRef->GetAlignedPointerFromInternalField(0));
+    sobj = static_cast<SwigV8PackedData*>(objRef->GetAlignedPointerFromInternalField(0 SWIGFOD_EMBEDDER_TAG_ARG));
     if (sobj == NULL || sobj->size != size) return 0;
     memcpy(ptr, sobj->data, size);
     return sobj->type;
@@ -1307,7 +1323,7 @@ SWIGV8_VALUE SWIGV8_NewPackedObj(void *data, size_t size, swig_type_info *type) 
   v8::Local<v8::Private> privateKey = v8::Private::ForApi(v8::Isolate::GetCurrent(), SWIGV8_STRING_NEW("__swig__packed_data__"));
   obj->SetPrivate(SWIGV8_CURRENT_CONTEXT(), privateKey, SWIGV8_BOOLEAN_NEW(true));
 
-  obj->SetAlignedPointerInInternalField(0, cdata);
+  obj->SetAlignedPointerInInternalField(0, cdata SWIGFOD_EMBEDDER_TAG_ARG);
 
   cdata->handle.Reset(v8::Isolate::GetCurrent(), obj);
 
