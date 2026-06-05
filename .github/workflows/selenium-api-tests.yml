@@ -1,0 +1,63 @@
+name: Selenium API tests
+
+# Runs the shared Selenium contract for this repo's example against the live cloud.
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  selenium-api-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out device-detection-node
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+          token: ${{ secrets.ACCESS_TOKEN }}
+
+      - name: Check out selenium-api-tests
+        uses: actions/checkout@v4
+        with:
+          repository: 51Degrees/selenium-api-tests
+          path: selenium-api-tests
+          token: ${{ secrets.ACCESS_TOKEN }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Build the shared contract tests
+        run: dotnet build selenium-api-tests/SeleniumApiTests.csproj -c Release
+
+      - name: Launch the example and run the contract
+        env:
+          PORT: "8098"
+          FOD_CLOUD_API_URL: https://cloud.51degrees.com/api/v4/
+          RESOURCE_KEY: ${{ secrets.SUPER_RESOURCE_KEY }}
+          EXAMPLE_URL: http://localhost:8098
+          EXAMPLE_LANG: node
+          SUPER_RESOURCE_KEY: ${{ secrets.SUPER_RESOURCE_KEY }}
+        run: |
+          # Start this repo's cloud example, pointed at the live cloud.
+          pushd fiftyone.devicedetection.cloud/examples/cloud/gettingstarted-web
+          npm install --prefix ../../..
+          node gettingStarted.js &
+          example_pid=$!
+          popd
+          for i in $(seq 1 30); do
+            curl -sf -o /dev/null "http://localhost:${PORT}/" && break || sleep 2
+          done
+          # Run the shared contract against the live cloud.
+          printf '{ "cloud_root_url": "https://cloud.51degrees.com/", "paid_resource_key": "%s" }\n' \
+            "$SUPER_RESOURCE_KEY" > "$RUNNER_TEMP/testConfig.json"
+          TEST_CONFIG_FILE="$RUNNER_TEMP/testConfig.json" \
+            dotnet test selenium-api-tests/SeleniumApiTests.csproj -c Release --no-build \
+              --filter 'FullyQualifiedName~ExampleClientSideOverride|FullyQualifiedName~ExampleRenderTests'
+          status=$?
+          kill "$example_pid" 2>/dev/null || true
+          exit $status
