@@ -2,6 +2,7 @@ name: Selenium API tests
 
 # Runs the shared Selenium contract for this repo's example against the live cloud.
 on:
+  push:  # TEMPORARY: run on any branch push (no PR needed) — remove before merge
   pull_request:
     branches: [main]
   workflow_dispatch:
