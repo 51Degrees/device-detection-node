@@ -52,8 +52,11 @@ const DeviceDetectionPipelineBuilder = require51('fiftyone.devicedetection').Dev
 
 // Create the device detection pipeline with the desired settings.
 
-// You need to create a resource key at https://configure.51degrees.com?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection-examples-gettingstarted.js&utm_term=top
-// and paste it into the code, replacing !!YOUR_RESOURCE_KEY!! below.
+// You need to create a resource key at
+// https://configure.51degrees.com/Wkqxf3Bs?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection-examples-gettingstarted.js&utm_term=top
+// and paste it into the code, replacing !!YOUR_RESOURCE_KEY!! below. The link
+// selects the free properties, which include the ismobile property used by
+// this example.
 
 // The aligned '51DEGREES_RESOURCE_KEY' environment variable is checked
 // first, followed by the legacy 'RESOURCE_KEY' variable.
@@ -62,8 +65,8 @@ const myResourceKey = process.env['51DEGREES_RESOURCE_KEY'] ||
 
 if (myResourceKey === '!!YOUR_RESOURCE_KEY!!') {
   console.log('You need to create a resource key at ' +
-        'https://configure.51degrees.com?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection-examples-gettingstarted.js&utm_term=resource-key-required and paste it into the code, ' +
-        'replacing !!YOUR_RESOURCE_KEY!!');
+        'https://configure.51degrees.com/Wkqxf3Bs?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection-examples-gettingstarted.js&utm_term=resource-key-required and paste it into ' +
+        'the code, replacing !!YOUR_RESOURCE_KEY!!');
   console.log('Make sure to include the ismobile property ' +
         'as it is used by this example.');
 } else {

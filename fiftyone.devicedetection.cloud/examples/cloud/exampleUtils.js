@@ -38,8 +38,15 @@ const getResourceKeyFromEnv = function () {
     process.env[LEGACY_RESOURCE_KEY_ENV_VAR];
 };
 
+// The common message shown when a resource key leaves one or more of
+// the properties used by an example without values.
+const PRICING_MESSAGE = 'Some properties used by this example are not ' +
+  'available with a free resource key. See https://51degrees.com/pricing ' +
+  'to get a paid subscription with more properties.';
+
 module.exports = {
   RESOURCE_KEY_ENV_VAR,
   LEGACY_RESOURCE_KEY_ENV_VAR,
+  PRICING_MESSAGE,
   getResourceKeyFromEnv
 };

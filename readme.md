@@ -39,6 +39,22 @@ to use the Cloud API. You can create resource keys using our
 [configurator](https://configure.51degrees.com/?utm_source=github&utm_medium=readme&utm_campaign=device-detection-node&utm_content=readme.md&utm_term=cloud), see our
 [documentation](https://51degrees.com/documentation/_concepts__configurator.html?utm_source=github&utm_medium=readme&utm_campaign=device-detection-node&utm_content=readme.md&utm_term=cloud) on how to use this.
 
+The cloud property tiers changed in May 2026. The examples and this documentation
+now reflect what is free and what needs a paid subscription. The free tier includes
+the following device properties used by the examples: IsMobile, DeviceType,
+ScreenPixelsWidth, ScreenPixelsHeight, ScreenPixelsHeightJavaScript, the three
+`SetHeader*Accept-CH` properties, JavascriptGetHighEntropyValues, IsCrawler,
+DeviceId and UserAgents. A resource key that selects these free properties can be
+created at [https://configure.51degrees.com/Wkqxf3Bs](https://configure.51degrees.com/Wkqxf3Bs).
+
+The paid device properties used by the examples are: HardwareVendor, HardwareName,
+HardwareModel, PlatformVendor, PlatformName, PlatformVersion, BrowserVendor,
+BrowserName, BrowserVersion, ScreenPixelsWidthJavaScript and
+JavascriptHardwareProfile, plus the TAC and native model hardware profiles. A
+resource key that selects the free properties plus these paid properties can be
+created at [https://configure.51degrees.com/hYzn3TV3](https://configure.51degrees.com/hYzn3TV3).
+See https://51degrees.com/pricing to get a paid subscription with more properties.
+
 #### On-Premise
 
 In order to perform device detection on-premise, you will need to use a 51Degrees data file.
