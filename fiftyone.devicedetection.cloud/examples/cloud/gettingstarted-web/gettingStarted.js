@@ -240,9 +240,9 @@ const server = http.createServer((req, res) => {
 if (process.env.JEST_WORKER_ID === undefined) {
   const args = process.argv.slice(2);
   // Use the supplied resource key or try to obtain one
-  // from the environment variable.
+  // from the environment variables.
   const resourceKey =
-    args.length > 0 ? args[0] : process.env[ExampleUtils.RESOURCE_KEY_ENV_VAR];
+    args.length > 0 ? args[0] : ExampleUtils.getResourceKeyFromEnv();
 
   // Load the configuration options from
   const options = JSON.parse(fs.readFileSync(path.join(__dirname, '/51d.json')));

@@ -102,6 +102,8 @@ const core = require51('fiftyone.pipeline.core');
 
 const DeviceDetectionCloudPipelineBuilder = require51('fiftyone.devicedetection.cloud').DeviceDetectionCloudPipelineBuilder;
 
+const ExampleUtils = require(path.join(__dirname, '/../exampleUtils'));
+
 // Helper function to read property values from flowData
 const getValueHelper = (flowData, propertyKey) => {
   const device = flowData.device;
@@ -117,7 +119,9 @@ const getValueHelper = (flowData, propertyKey) => {
   }
 };
 
-const myResourceKey = process.env.RESOURCE_KEY || '!!YOUR_RESOURCE_KEY!!';
+// The aligned '51DEGREES_RESOURCE_KEY' environment variable is checked
+// first, followed by the legacy 'RESOURCE_KEY' variable.
+const myResourceKey = ExampleUtils.getResourceKeyFromEnv() || '!!YOUR_RESOURCE_KEY!!';
 
 // We need 'server' to be defined here so that, when this example
 // is executed as part of a unit test, the server can be closed

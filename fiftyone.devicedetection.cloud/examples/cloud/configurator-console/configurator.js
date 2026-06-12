@@ -93,8 +93,8 @@ const run = async function (resourceKey, output) {
 // Don't run the server if under TEST
 if (process.env.JEST_WORKER_ID === undefined) {
   const args = process.argv.slice(2);
-  // Use the supplied resource key or try to obtain one from the environment variable.
-  const resourceKey = args.length > 0 ? args[0] : process.env[ExampleUtils.RESOURCE_KEY_ENV_VAR];
+  // Use the supplied resource key or try to obtain one from the environment variables.
+  const resourceKey = args.length > 0 ? args[0] : ExampleUtils.getResourceKeyFromEnv();
 
   // If we don't have a resource key then log an error
   if (!resourceKey) {

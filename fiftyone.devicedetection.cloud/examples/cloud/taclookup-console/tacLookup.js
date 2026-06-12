@@ -135,8 +135,8 @@ const run = async function (options, output) {
 if (process.env.JEST_WORKER_ID === undefined) {
   const args = process.argv.slice(2);
   // Use the supplied resource key or try to obtain one
-  // from the environment variable.
-  const resourceKey = args.length > 0 ? args[0] : process.env[ExampleUtils.RESOURCE_KEY_ENV_VAR];
+  // from the environment variables.
+  const resourceKey = args.length > 0 ? args[0] : ExampleUtils.getResourceKeyFromEnv();
 
   // Load the configuration from a config file to a JSON object.
   const options = JSON.parse(fs.readFileSync('51d.json'), 'utf8');

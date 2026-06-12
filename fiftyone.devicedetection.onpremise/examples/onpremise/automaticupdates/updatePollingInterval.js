@@ -53,9 +53,10 @@ const LITE_V_4_1_HASH = '51Degrees-LiteV4.1.hash';
 
 // Load in a datafile
 const args = process.argv.slice(2);
-// Use the supplied path for the data file or find the lite
-// file that is included in the repository.
-const datafile = args.length > 0 ? args[0] : ExampleUtils.findFile(LITE_V_4_1_HASH);
+// Use the supplied path for the data file, the '51DEGREES_DD_PATH'
+// environment variable, or find the lite file that is included
+// in the repository.
+const datafile = args.length > 0 ? args[0] : ExampleUtils.findDataFile(LITE_V_4_1_HASH);
 
 // Set your license key, if you don't have a license key already you can
 // obtain one by subscribing to a 51Degrees bundle: https://51degrees.com/pricing?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.onpremise-examples-onpremise-automaticupdates-updatepollinginterval.js&utm_term=top

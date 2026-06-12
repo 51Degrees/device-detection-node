@@ -87,7 +87,7 @@ const LITE_V_4_1_HASH = '51Degrees-LiteV4.1.hash';
 const UA_CSV = '20000 User Agents.csv';
 
 const args = parser.parse_args();
-const datafile = args.datafile !== undefined ? args.datafile : ExampleUtils.findFile(LITE_V_4_1_HASH);
+const datafile = args.datafile !== undefined ? args.datafile : ExampleUtils.findDataFile(LITE_V_4_1_HASH);
 const uafile = args.evidence !== undefined ? args.evidence : ExampleUtils.findFile(UA_CSV);
 const jsonoutput = args.jsonoutput;
 
