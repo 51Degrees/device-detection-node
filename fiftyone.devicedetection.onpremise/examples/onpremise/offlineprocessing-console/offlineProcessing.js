@@ -74,7 +74,7 @@ const DataExtension = require51('fiftyone.devicedetection.shared').dataExtension
 //
 // Note that the Lite data file is only used for illustration, and has limited accuracy
 // and capabilities. Find out about the Enterprise data file on our pricing page:
-// https://51degrees.com/pricing
+// https://51degrees.com/pricing?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.onpremise-examples-onpremise-offlineprocessing-console-offlineprocessing.js&utm_term=lite_v_4_1_hash
 const LITE_V_4_1_HASH = '51Degrees-LiteV4.1.hash';
 // This file contains the 20,000 most commonly seen combinations of header values
 // that are relevant to device detection. For example, User-Agent and UA-CH headers.
@@ -136,15 +136,15 @@ const run = async function (dataFile, evidenceFile, outputFile, outputFunc) {
   // In this example, we use the DeviceDetectionOnPremisePipelineBuilder
   // and configure it in code. For more information about
   // pipelines in general see the documentation at
-  // https://51degrees.com/documentation/_concepts__configuration__builders__index.html
+  // https://51degrees.com/documentation/_concepts__configuration__builders__index.html?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.onpremise-examples-onpremise-offlineprocessing-console-offlineprocessing.js&utm_term=pipeline
   const pipeline = new DeviceDetectionOnPremisePipelineBuilder({
     dataFile,
     // We use the low memory profile as its performance is
     // sufficient for this example. See the documentation for
     // more detail on this and other configuration options:
-    // https://51degrees.com/documentation/_device_detection__features__performance_options.html
-    // https://51degrees.com/documentation/_features__automatic_datafile_updates.html
-    // https://51degrees.com/documentation/_features__usage_sharing.html
+    // https://51degrees.com/documentation/_device_detection__features__performance_options.html?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.onpremise-examples-onpremise-offlineprocessing-console-offlineprocessing.js&utm_term=performanceprofile
+    // https://51degrees.com/documentation/_features__automatic_datafile_updates.html?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.onpremise-examples-onpremise-offlineprocessing-console-offlineprocessing.js&utm_term=performanceprofile
+    // https://51degrees.com/documentation/_features__usage_sharing.html?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.onpremise-examples-onpremise-offlineprocessing-console-offlineprocessing.js&utm_term=performanceprofile
     performanceProfile: 'LowMemory',
     //  Inhibit sharing usage for this example.
     // In general, off line processing usage should NOT be shared back to 51Degrees.
@@ -154,7 +154,7 @@ const run = async function (dataFile, evidenceFile, outputFile, outputFunc) {
     // in order to help us improve detection of new devices/browsers/etc, then
     // this additional data will need to be collected and included as evidence
     // to the Pipeline. See
-    // https://51degrees.com/documentation/_features__usage_sharing.html#Low_Level_Usage_Sharing
+    // https://51degrees.com/documentation/_features__usage_sharing.html?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.onpremise-examples-onpremise-offlineprocessing-console-offlineprocessing.js&utm_term=shareusage#Low_Level_Usage_Sharing
     // for more details on this.
     shareUsage: false,
     // inhibit auto-update of the data file for this test
