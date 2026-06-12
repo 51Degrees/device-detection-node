@@ -109,6 +109,6 @@ public
 fiftyone.devicedetection/test_results.xml
 
 #docs
-4.1/*
+4.5/*
 package-lock.json
 fiftyone.devicedetection.onpremise/build/
