@@ -1,6 +1,6 @@
-![51Degrees](https://51degrees.com/img/logo.png?utm_source=github&utm_medium=repository&utm_content=readme_main&utm_campaign=node-open-source "Data rewards the curious") **Node Device Detection On-Premise**
+![51Degrees](https://51degrees.com/img/logo.png?utm_source=github&utm_medium=readme&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.onpremise-readme.md&utm_term=top "Data rewards the curious") **Node Device Detection On-Premise**
 
-[Developer Documentation](https://51degrees.com/device-detection-node/index.html?utm_source=github&utm_medium=repository&utm_content=documentation&utm_campaign=node-open-source "developer documentation")
+[Developer Documentation](https://51degrees.com/device-detection-node/index.html?utm_source=github&utm_medium=readme&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.onpremise-readme.md&utm_term=top "developer documentation")
 
 ## Introduction
 This project contains 51Degrees Device Detection engines that can be used with the [Pipeline API](https://github.com/51Degrees/pipeline-node).
@@ -26,9 +26,9 @@ npm install fiftyone.devicedetection.onpremise
 ### On-Premise
 When running on-premise, a local Hash V4.1 data file is required.
 
-[**Hash**](https://51degrees.com/documentation/_device_detection__hash.html): A large binary file populated with User-Agent signatures allowing very fast detection speeds.
+[**Hash**](https://51degrees.com/documentation/_device_detection__hash.html?utm_source=github&utm_medium=readme&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.onpremise-readme.md&utm_term=on-premise): A large binary file populated with User-Agent signatures allowing very fast detection speeds.
 
-51Degrees provides [multiple options](https://51degrees.com/Licencing-Pricing/On-Premise), some of which support automatic updates through the Pipeline API.
+51Degrees provides [multiple options](https://51degrees.com/Licencing-Pricing/On-Premise?utm_source=github&utm_medium=readme&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.onpremise-readme.md&utm_term=on-premise), some of which support automatic updates through the Pipeline API.
 
 If the module is installed directly from Git then the binaries are also required. These binaries are native module which contains the core engine of device detection. Below are the steps to build these binaries:
 #### Pre-requisites
@@ -71,7 +71,7 @@ If the module is installed directly from Git then the binaries are also required
   - MacOS:
     - FiftyOneDeviceDetectionHashV4-darwin-[ Node version ].node
       - e.g. FiftyOneDeviceDetectionHashV4-darwin-10.node for Node 10.
-  - Please see the [tested versions page](https://51degrees.com/documentation/_info__tested_versions.html) for Node versions that we currently test against. The software may run fine against other versions, but extra caution should be applied.
+  - Please see the [tested versions page](https://51degrees.com/documentation/_info__tested_versions.html?utm_source=github&utm_medium=readme&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.onpremise-readme.md&utm_term=build-steps) for Node versions that we currently test against. The software may run fine against other versions, but extra caution should be applied.
   - You can optionally clear up by removing all the build files and folders except for the *.node file that's been created.
   - `WARNING`: `npm install` removes this copied file, so you will need to do the above steps again after running `npm install`
 

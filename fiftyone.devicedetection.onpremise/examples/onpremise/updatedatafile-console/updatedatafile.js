@@ -53,10 +53,10 @@ const KeyUtils = require51('fiftyone.devicedetection.shared').keyUtils;
  *
  * ## License Key
  * In order to test this example you will need a 51Degrees Enterprise license which can be
- * purchased from our [pricing page](//51degrees.com/pricing/annual). Look for our "Bigger" or
+ * purchased from our [pricing page](https://51degrees.com/pricing/annual?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.onpremise-examples-onpremise-updatedatafile-console-updatedatafile.js&utm_term=header). Look for our "Bigger" or
  * "Biggest" options.
  * # Data Files
- * You can find out more about data files, licenses etc. at our (FAQ page)[//51degrees.com/resources/faqs]
+ * You can find out more about data files, licenses etc. at our (FAQ page)[https://51degrees.com/resources/faqs?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.onpremise-examples-onpremise-updatedatafile-console-updatedatafile.js&utm_term=header]
  * ## Enterprise Data File
  * Enterprise (fully-featured) data files are typically released by 51Degrees four days a week
  * (Mon-Thu) and on-premise deployments can fetch and download those files automatically. Equally,
@@ -182,7 +182,7 @@ const run = async function (dataFilePath, licenseKey, interactive, output) {
   if (!licenseKey || KeyUtils.isInvalidKey(licenseKey)) {
     console.error('In order to test this example you will need a 51Degrees Enterprise ' +
       'license which can be obtained on a trial basis or purchased from our\n' +
-      'pricing page http://51degrees.com/pricing. You must supply the license ' +
+      'pricing page https://51degrees.com/pricing?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.onpremise-examples-onpremise-updatedatafile-console-updatedatafile.js&utm_term=enterprise-license-required. You must supply the license ' +
       'key as an argument to this program, or as an environment or system variable ' +
       `named '${UPDATE_EXAMPLE_LICENSE_KEY_NAME}'`);
     throw new Error('No license key available');
@@ -315,7 +315,7 @@ const run = async function (dataFilePath, licenseKey, interactive, output) {
     // Enable automatic updates once the pipeline has started
     autoUpdate: true,
     // For automatic updates to work you will need to provide a license key.
-    // A license key can be obtained with a subscription from https://51degrees.com/pricing
+    // A license key can be obtained with a subscription from https://51degrees.com/pricing?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.onpremise-examples-onpremise-updatedatafile-console-updatedatafile.js&utm_term=licencekeys
     licenceKeys: licenseKey,
     // Enable update on startup, the auto update system
     // will be used to check for an update before the

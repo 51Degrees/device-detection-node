@@ -37,11 +37,11 @@ module.exports = {
     'included with this distribution. Try changing to a platform and Node ' +
     'version from the list of available modules: %s. If the platform/version ' +
     'you want is not listed then please contact us directly for assistance: ' +
-    'https://51degrees.com/contact-us. Original error: \'%s\'',
+    'https://51degrees.com/contact-us?utm_source=code&utm_medium=comment&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.shared-errormessages.js&utm_term=nativemodulenotfound. Original error: \'%s\'',
   invalidFileExtension: 'dataFilePath must point to a file with a ".hash" ' +
     'extension',
   licenseKeyRequired: 'license key is required. A key can be obtained from ' +
-    'the 51Degrees website: https://51degrees.com/pricing. If you do not ' +
+    'the 51Degrees website: https://51degrees.com/pricing?utm_source=code&utm_medium=comment&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.shared-errormessages.js&utm_term=licensekeyrequired. If you do not ' +
     'wish to use a key then you can specify an empty string, but this will ' +
     'cause automatic updates to be disabled.',
   invalidPerformanceProfile: 'The performance profile \'%s\' is not valid',

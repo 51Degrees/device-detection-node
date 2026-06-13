@@ -100,9 +100,9 @@ const setPipeline = (options) => {
     `'${ExampleUtils.RESOURCE_KEY_ENV_VAR}'. The 51Degrees cloud ` +
     'service is accessed using a \'ResourceKey\'. For more information ' +
     'see ' +
-    'https://51degrees.com/documentation/_info__resource_keys.html. ' +
+    'https://51degrees.com/documentation/_info__resource_keys.html?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.cloud-examples-cloud-gettingstarted-web-gettingstarted.js&utm_term=resource-key-required. ' +
     'A resource key with the properties required by this example can be ' +
-    'created for free at https://configure.51degrees.com/1QWJwHxl. ' +
+    'created for free at https://configure.51degrees.com/1QWJwHxl?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.cloud-examples-cloud-gettingstarted-web-gettingstarted.js&utm_term=resource-key-required. ' +
     'Once complete, populate the config file or environment variable ' +
     'mentioned at the start of this message with the key.';
   }
@@ -151,7 +151,7 @@ const server = http.createServer((req, res) => {
       // requested. So set whatever headers are required by the browser in
       // order to return the evidence needed by the pipeline.
       // More info on this can be found at
-      // https://51degrees.com/blog/user-agent-client-hints
+      // https://51degrees.com/blog/user-agent-client-hints?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.cloud-examples-cloud-gettingstarted-web-gettingstarted.js&utm_term=server
       core.Helpers.setResponseHeaders(res, flowData);
 
       // Obtain all used evidence
