@@ -122,6 +122,15 @@ html
           | Apple devices the server cannot tell the exact model, so the callback shows
           | a smaller set of possible models than the first request.
 
+      .c-eg-message
+        p.c-eg-message__text
+          | Want to try on-premise?
+          |
+          a(href='https://51degrees.com/contact-us') Contact us
+          |
+          | to discuss requirements.
+        a.b-btn.c-eg-message__cta(href='https://51degrees.com/contact-us') Contact us
+
     //- The JavaScriptBuilder injects 51Degrees.core.js. That script sends client-side
     //- evidence back to the server and raises the 'complete' event with the refined
     //- flow data. The shared examples.js helper subscribes to it and appends a results

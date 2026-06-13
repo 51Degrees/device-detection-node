@@ -143,6 +143,16 @@ html
             | #[a(href='https://51degrees.com/pricing?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.onpremise-examples-onpremise-gettingstarted-web-index.pug&utm_term=client-side-evidence-and-apple-models') pricing page]
             | .
 
+      if (dataSourceTier === 'Lite')
+        .c-eg-message
+          p.c-eg-message__text
+            | Need more on-premise properties and features?
+            |
+            a(href='https://51degrees.com/contact-us') Contact us
+            |
+            | to explore the options.
+          a.b-btn.c-eg-message__cta(href='https://51degrees.com/contact-us') Contact us
+
     //- The JavaScriptBuilder injects 51Degrees.core.js. That script sends client-side
     //- evidence back to the server and raises the 'complete' event with the refined
     //- flow data. The shared examples.js helper subscribes to it and appends a results
