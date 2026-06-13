@@ -1,0 +1,122 @@
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    meta(name='viewport' content='width=device-width, initial-scale=1.0')
+    title User Agent Client Hints Example
+    link(rel='stylesheet' href='/css/examples-main.min.css')
+  body
+    .c-eg-page
+      h2.c-eg-page__title User Agent Client Hints example
+      p.c-eg-page__lead
+        | By default, the user-agent, sec-ch-ua and sec-ch-ua-mobile HTTP headers
+        | are sent. This means that on the first request, the server can determine
+        | the browser from sec-ch-ua while other details must be derived from the
+        | user-agent. If the server determines that the browser supports client
+        | hints, then it may request additional client hints headers by setting the
+        | Accept-CH header in the response. Select the
+        |
+        strong Make second request
+        |
+        | button below to send another request to the server. This time, any
+        | additional client hints headers that have been requested will be included.
+
+      .c-eg-page__actions
+        button.b-btn(type='button' onclick='redirect()') Make second request
+
+      h3.c-eg-page__heading Evidence values used
+      p.c-eg-legend
+        | Evidence was
+        |
+        span.c-eg-legend__swatch.c-eg-legend__swatch--used used
+        |
+        | /
+        |
+        span.c-eg-legend__swatch.c-eg-legend__swatch--present present
+        |
+        | for detection
+      table.c-eg-table
+        thead.c-eg-table__head
+          tr.c-eg-table__row
+            th.c-eg-table__cell Key
+            th.c-eg-table__cell Value
+        tbody
+          each value, key in evidenceUsed
+            tr.c-eg-table__row.c-eg-table__row--used
+              td.c-eg-table__cell.c-eg-table__cell--key #{key}
+              td.c-eg-table__cell #{value}
+
+      #description.c-eg-page__lead
+
+      h3.c-eg-page__heading Detection results
+      table.c-eg-table
+        thead.c-eg-table__head
+          tr.c-eg-table__row
+            th.c-eg-table__cell Key
+            th.c-eg-table__cell Value
+        tbody
+          tr.c-eg-table__row.c-eg-table__row--alt
+            td.c-eg-table__cell.c-eg-table__cell--key Hardware Vendor:
+            td.c-eg-table__cell #{hardwareVendor}
+          tr.c-eg-table__row
+            td.c-eg-table__cell.c-eg-table__cell--key Hardware Name:
+            td.c-eg-table__cell #{hardwareName}
+          tr.c-eg-table__row.c-eg-table__row--alt
+            td.c-eg-table__cell.c-eg-table__cell--key Device Type:
+            td.c-eg-table__cell #{deviceType}
+          tr.c-eg-table__row
+            td.c-eg-table__cell.c-eg-table__cell--key Platform Vendor:
+            td.c-eg-table__cell #{platformVendor}
+          tr.c-eg-table__row.c-eg-table__row--alt
+            td.c-eg-table__cell.c-eg-table__cell--key Platform Name:
+            td.c-eg-table__cell #{platformName}
+          tr.c-eg-table__row
+            td.c-eg-table__cell.c-eg-table__cell--key Platform Version:
+            td.c-eg-table__cell #{platformVersion}
+          tr.c-eg-table__row.c-eg-table__row--alt
+            td.c-eg-table__cell.c-eg-table__cell--key Browser Vendor:
+            td.c-eg-table__cell #{browserVendor}
+          tr.c-eg-table__row
+            td.c-eg-table__cell.c-eg-table__cell--key Browser Name:
+            td.c-eg-table__cell #{browserName}
+          tr.c-eg-table__row.c-eg-table__row--alt
+            td.c-eg-table__cell.c-eg-table__cell--key Browser Version:
+            td.c-eg-table__cell #{browserVersion}
+
+      if (dataSourceTier === 'Lite')
+        .c-eg-message
+          p.c-eg-message__text
+            | Need more on-premise properties and features?
+            |
+            a(href='https://51degrees.com/contact-us') Contact us
+            |
+            | to explore the options.
+          a.b-btn.c-eg-message__cta(href='https://51degrees.com/contact-us') Contact us
+
+    script.
+      // When the button is clicked the detection request is sent again to the
+      // server with all the additional client hints that were requested in the
+      // previous response. The sequence is:
+      //   1. The browser sends the first request to the web server for detection.
+      //   2. The server returns the properties based on the headers sent in the
+      //      request. Along with the properties it also sets an Accept-CH header
+      //      indicating the additional evidence it needs, built from the
+      //      SetHeader[Component name]Accept-CH properties.
+      //   3. When "Make second request" is clicked the request is sent again with
+      //      the additional client hints that were requested.
+      //   4. The server returns the properties based on the new User Agent Client
+      //      Hint headers being used as evidence.
+      function redirect () {
+        sessionStorage.reloadAfterPageLoad = true;
+        window.location.reload(true);
+      }
+
+      window.onload = function () {
+        var description = document.getElementById('description');
+        if (sessionStorage.reloadAfterPageLoad) {
+          description.innerHTML = 'The information shown below is determined using <strong>User Agent Client Hints</strong> that were sent in the request to obtain additional evidence. If no additional information appears then it may indicate an external problem such as <strong>User Agent Client Hints</strong> being disabled in your browser.';
+          sessionStorage.reloadAfterPageLoad = false;
+        } else {
+          description.innerHTML = 'The following values are determined by server-side device detection on the first request.';
+        }
+      };
