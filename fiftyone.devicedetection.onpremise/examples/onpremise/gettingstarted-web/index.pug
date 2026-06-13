@@ -7,6 +7,18 @@ html
     link(rel='stylesheet' href='/css/examples-main.min.css')
   body
     .c-eg-page
+      if (new Date().getTime() > dataFilePublishedTime + dataFileAgeWarning)
+        .c-eg-alert
+          | WARNING: This example is using a data file that is more than
+          | #{dataFileAgeWarning} days old. A more recent data file may be needed
+          | to correctly detect the latest devices, browsers, etc. The latest lite
+          | data file is available from the
+          | #[a(href='https://github.com/51Degrees/device-detection-data') device-detection-data]
+          | repository on GitHub. Find out about the Enterprise data file, which
+          | includes automatic daily updates, on our
+          | #[a(href='https://51degrees.com/pricing?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.onpremise-examples-onpremise-gettingstarted-web-index.pug&utm_term=client-hints') pricing page]
+          | .
+
       h2.c-eg-page__title Web integration example
       p.c-eg-page__lead
         | This example demonstrates the use of the Pipeline API to perform device
@@ -20,18 +32,6 @@ html
           | WARNING: JavaScript is disabled in your browser. This means that the
           | callback discussed further down this page will not fire and UACH
           | headers will not be sent.
-
-      if (new Date().getTime() > dataFilePublishedTime + dataFileAgeWarning)
-        .c-eg-alert
-          | WARNING: This example is using a data file that is more than
-          | #{dataFileAgeWarning} days old. A more recent data file may be needed
-          | to correctly detect the latest devices, browsers, etc. The latest lite
-          | data file is available from the
-          | #[a(href='https://github.com/51Degrees/device-detection-data') device-detection-data]
-          | repository on GitHub. Find out about the Enterprise data file, which
-          | includes automatic daily updates, on our
-          | #[a(href='https://51degrees.com/pricing?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.onpremise-examples-onpremise-gettingstarted-web-index.pug&utm_term=client-hints') pricing page]
-          | .
 
       #content
         h3.c-eg-page__heading Detection results
