@@ -73,8 +73,8 @@ Write-Output "Package configuration file created successfully."
 
 Pop-Location
 
-$env:RESOURCE_KEY = $Options.Keys.TestResourceKey
-$env:TEST_SUPER_RESOURCE_KEY = $Options.Keys.TestSuperResourceKey
+$env:_51DEGREES_RESOURCE_KEY = $Options.Keys.TestResourceKey
+$env:TEST_SUPER_RESOURCE_KEY = $Options.Keys.TestSuperResourceKey # currently the same as the key above
 $env:TEST_PLATFORM_RESOURCE_KEY = $Options.Keys.TestPlatformResourceKey
 $env:TEST_HARDWARE_RESOURCE_KEY = $Options.Keys.TestHardwareResourceKey
 $env:TEST_BROWSER_RESOURCE_KEY = $Options.Keys.TestBrowserResourceKey

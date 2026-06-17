@@ -93,8 +93,8 @@ const run = async function (resourceKey, output) {
 // Don't run the server if under TEST
 if (process.env.JEST_WORKER_ID === undefined) {
   const args = process.argv.slice(2);
-  // Use the supplied resource key or try to obtain one from the environment variable.
-  const resourceKey = args.length > 0 ? args[0] : process.env[ExampleUtils.RESOURCE_KEY_ENV_VAR];
+  // Use the supplied resource key or try to obtain one from the environment variables.
+  const resourceKey = args.length > 0 ? args[0] : ExampleUtils.getResourceKeyFromEnv();
 
   // If we don't have a resource key then log an error
   if (!resourceKey) {
@@ -102,9 +102,9 @@ if (process.env.JEST_WORKER_ID === undefined) {
       'No resource key specified on the command line or in the environment variable ' +
       `'${ExampleUtils.RESOURCE_KEY_ENV_VAR}'. The 51Degrees cloud service is accessed ` +
       'using a \'ResourceKey\'. For more information see ' +
-      'https://51degrees.com/documentation/_info__resource_keys.html?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.cloud-examples-cloud-configurator-console-configurator.js&utm_term=resource-key-required. A resource key with the ' +
-      'properties required by this example can be created for free at ' +
-      'https://configure.51degrees.com/g3gMZdPY?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.cloud-examples-cloud-configurator-console-configurator.js&utm_term=resource-key-required. Once complete, populate the config file or ' +
+      'https://51degrees.com/documentation/_info__resource_keys.html?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.cloud-examples-cloud-configurator-console-configurator.js&utm_term=resource-key-required. A free resource key ' +
+      'selecting the free properties used by this example can be created at ' +
+      'https://configure.51degrees.com/Wkqxf3Bs?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.cloud-examples-cloud-configurator-console-configurator.js&utm_term=resource-key-required. Once complete, populate the config file or ' +
       'environment variable mentioned at the start of this message with the key.');
   } else {
     run(resourceKey, process.stdout);

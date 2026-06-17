@@ -5,7 +5,7 @@
 ## Introduction
 This project contains 51Degrees Device Detection engines that can be used with the [Pipeline API](https://github.com/51Degrees/pipeline-node).
 
-The Pipeline is a generic web request intelligence and data processing solution with the ability to add a range of 51Degrees and/or custom plug ins (Engines) 
+The Pipeline is a generic web request intelligence and data processing solution with the ability to add a range of 51Degrees and/or custom plug ins (Engines)
 
 ## This package - fiftyone.devicedetection.cloud
 
@@ -41,7 +41,7 @@ The tables below describe the examples that are available.
 
 ## Tests
 
-In this repository, there are tests for the examples. 
+In this repository, there are tests for the examples.
 You will need to install jest to run them:
 
 ```
@@ -50,7 +50,7 @@ npm install jest --global
 
 You will also need to install any required packages for the examples in the **Examples** section.
 
-Add a 51Degrees cloud resource key in the fiftyone.devicedetection/package.json file for cloud tests. You can obtain a resource key from the [51Degrees Cloud Configurator](https://configure.51degrees.com/?utm_source=github&utm_medium=readme&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.cloud-readme.md&utm_term=tests) and assign it to the environment variable `RESOURCE_KEY` in your test environment.
+Add a 51Degrees cloud resource key in the fiftyone.devicedetection/package.json file for cloud tests. You can obtain a resource key from the [51Degrees Cloud Configurator](https://configure.51degrees.com/?utm_source=github&utm_medium=readme&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.cloud-readme.md&utm_term=tests) and assign it to the environment variable `_51DEGREES_RESOURCE_KEY` in your test environment. The legacy environment variable name `RESOURCE_KEY` is still supported and is checked second, after `_51DEGREES_RESOURCE_KEY`.
 
 There are other environment variables that you will also need to set in your test environment before running all tests:
 - `TEST_SUPER_RESOURCE_KEY`: This key contains all `SetHeader*` properties.

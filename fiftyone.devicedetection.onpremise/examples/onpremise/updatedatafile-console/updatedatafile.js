@@ -36,7 +36,8 @@ const AutoUpdateStatus = require('fiftyone.pipeline.engines').AutoUpdateStatus;
 const DeviceDetectionOnPremisePipelineBuilder =
   require51('fiftyone.devicedetection.onpremise').DeviceDetectionOnPremisePipelineBuilder;
 
-const ExampleUtils = require(path.join(__dirname, '/../exampleUtils')).ExampleUtils;
+const { ExampleUtils, DATA_FILE_PATH_ENV_VAR } =
+  require(path.join(__dirname, '/../exampleUtils'));
 const ExampleConstants = require51('fiftyone.devicedetection.shared').exampleConstants;
 const KeyUtils = require51('fiftyone.devicedetection.shared').keyUtils;
 
@@ -202,7 +203,11 @@ const run = async function (dataFilePath, licenseKey, interactive, output) {
         'start-up');
     }
   }
-  // no filename specified use the default
+  // no filename specified, check the environment variable for an
+  // explicit path before falling back to the default
+  if (!dataFilePath) {
+    dataFilePath = process.env[DATA_FILE_PATH_ENV_VAR];
+  }
   if (!dataFilePath) {
     dataFilePath = DEFAULT_DATA_FILENAME;
     console.warn(`No filename specified. Using default '${dataFilePath}' which will be downloaded to ` +
