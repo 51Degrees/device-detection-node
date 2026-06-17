@@ -73,7 +73,7 @@ const ExampleUtils = require(path.join(__dirname, '/../exampleUtils')).ExampleUt
 // Note that the Lite data file is only used for illustration, and has
 // limited accuracy and capabilities.
 // Find out about the Enterprise data file on our pricing page:
-// https://51degrees.com/pricing
+// https://51degrees.com/pricing?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.onpremise-examples-onpremise-metadata-console-metadata.js&utm_term=lite_v_4_1_hash
 const LITE_V_4_1_HASH = '51Degrees-LiteV4.1.hash';
 
 const truncateToNl = function (string) {
@@ -170,15 +170,15 @@ const run = async function (dataFile, output) {
   // In this example, we use the DeviceDetectionOnPremisePipelineBuilder
   // and configure it in code. For more information about
   // pipelines in general see the documentation at
-  // https://51degrees.com/documentation/_concepts__configuration__builders__index.html
+  // https://51degrees.com/documentation/_concepts__configuration__builders__index.html?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.onpremise-examples-onpremise-metadata-console-metadata.js&utm_term=pipeline
   const pipeline = new DeviceDetectionOnPremisePipelineBuilder({
     dataFile,
     // We use the low memory profile as its performance is
     // sufficient for this example. See the documentation for
     // more detail on this and other configuration options:
-    // https://51degrees.com/documentation/_device_detection__features__performance_options.html
-    // https://51degrees.com/documentation/_features__automatic_datafile_updates.html
-    // https://51degrees.com/documentation/_features__usage_sharing.html
+    // https://51degrees.com/documentation/_device_detection__features__performance_options.html?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.onpremise-examples-onpremise-metadata-console-metadata.js&utm_term=performanceprofile
+    // https://51degrees.com/documentation/_features__automatic_datafile_updates.html?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.onpremise-examples-onpremise-metadata-console-metadata.js&utm_term=performanceprofile
+    // https://51degrees.com/documentation/_features__usage_sharing.html?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.onpremise-examples-onpremise-metadata-console-metadata.js&utm_term=performanceprofile
     performanceProfile: 'LowMemory',
     // inhibit sharing usage for this test, usually this
     // should be set 'true'

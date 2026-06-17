@@ -1,6 +1,6 @@
-![51Degrees](https://51degrees.com/img/logo.png?utm_source=github&utm_medium=repository&utm_content=readme_main&utm_campaign=node-open-source "Data rewards the curious") **Node Device Detection**
+![51Degrees](https://51degrees.com/img/logo.png?utm_source=github&utm_medium=readme&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection-readme.md&utm_term=top "Data rewards the curious") **Node Device Detection**
 
-[Developer Documentation](https://51degrees.com/device-detection-node/index.html?utm_source=github&utm_medium=repository&utm_content=documentation&utm_campaign=node-open-source "developer documentation")
+[Developer Documentation](https://51degrees.com/device-detection-node/index.html?utm_source=github&utm_medium=readme&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection-readme.md&utm_term=top "developer documentation")
 
 ## Introduction
 This project contains 51Degrees Device Detection engines that can be used with the [Pipeline API](https://github.com/51Degrees/pipeline-node).
@@ -45,7 +45,7 @@ npm install jest --global
 
 You will also need to install any required packages for the examples in the **Examples** section.
 
-You need to obtain a 51Degrees cloud resource key from the [51Degrees Cloud Configurator](https://configure.51degrees.com/) and assign it to the environment variable `RESOURCE_KEY` in your test environment.
+You need to obtain a 51Degrees cloud resource key from the [51Degrees Cloud Configurator](https://configure.51degrees.com/?utm_source=github&utm_medium=readme&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection-readme.md&utm_term=tests) and assign it to the environment variable `RESOURCE_KEY` in your test environment.
 
 To run the tests, navigate to the module directory and execute:
 

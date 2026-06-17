@@ -114,12 +114,12 @@ if (process.env.JEST_WORKER_ID === undefined) {
     `the environment variable '${ExampleUtils.RESOURCE_KEY_ENV_VAR}'. ` +
     'The 51Degrees cloud service is accessed using a \'ResourceKey\'. ' +
     'For more information ' +
-    'see https://51degrees.com/documentation/_info__resource_keys.html. ' +
+    'see https://51degrees.com/documentation/_info__resource_keys.html?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.cloud-examples-cloud-metadata-console-metadata.js&utm_term=resource-key-required. ' +
     'Native model lookup is not available as a free service. This means that ' +
     'you will first need a license key, which can be purchased from our ' +
-    'pricing page: https://51degrees.com/pricing. Once this is done, a resource ' +
+    'pricing page: https://51degrees.com/pricing?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.cloud-examples-cloud-metadata-console-metadata.js&utm_term=resource-key-required. Once this is done, a resource ' +
     'key with the properties required by this example can be created at ' +
-    'https://configure.51degrees.com/1QWJwHxl. You can now populate the ' +
+    'https://configure.51degrees.com/1QWJwHxl?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.cloud-examples-cloud-metadata-console-metadata.js&utm_term=resource-key-required. You can now populate the ' +
     'environment variable mentioned at the start of this message with the ' +
     'resource key or pass it as the first argument on the command line.');
   }

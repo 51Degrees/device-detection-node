@@ -114,14 +114,14 @@ class ExampleUtils {
         'https://github.com/51Degrees/device-detection-data. ' +
         'Find out about the Enterprise data file, which ' +
         'includes automatic daily updates, on our pricing ' +
-        'page: https://51degrees.com/pricing');
+        'page: https://51degrees.com/pricing?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.onpremise-examples-onpremise-exampleutils.js&utm_term=data-file-age-warning');
     }
     if (dataTier === 'Lite') {
       console.warn('This example is using the \'Lite\' ' +
         'data file. This is used for illustration, and ' +
         'has limited accuracy and capabilities. Find ' +
         'out about the Enterprise data file on our ' +
-        'pricing page: https://51degrees.com/pricing');
+        'pricing page: https://51degrees.com/pricing?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.onpremise-examples-onpremise-exampleutils.js&utm_term=lite-data-file');
     }
   }
 

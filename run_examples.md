@@ -1,6 +1,6 @@
-![51Degrees](https://51degrees.com/img/logo.png?utm_source=github&utm_medium=repository&utm_content=readme_main&utm_campaign=node-open-source "Data rewards the curious") **Node Device Detection**
+![51Degrees](https://51degrees.com/img/logo.png?utm_source=github&utm_medium=docs&utm_campaign=device-detection-node&utm_content=run_examples.md&utm_term=top "Data rewards the curious") **Node Device Detection**
 
-[Developer Documentation](https://51degrees.com/device-detection-node/index.html?utm_source=github&utm_medium=repository&utm_content=documentation&utm_campaign=node-open-source "developer documentation")
+[Developer Documentation](https://51degrees.com/device-detection-node/index.html?utm_source=github&utm_medium=docs&utm_campaign=device-detection-node&utm_content=run_examples.md&utm_term=top "developer documentation")
 
 # Running examples
 

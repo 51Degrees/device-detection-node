@@ -78,6 +78,50 @@ const pug = require('pug');
 
 const compiledFunction = pug.compileFile(path.join(__dirname, '/index.pug'));
 
+// Directory holding the shared pattern-library web-example assets
+// (examples-main.min.css and examples.min.js). These are served as static
+// files so the page can reference them with /css and /js URLs, in the same way
+// express.static or an ASP.NET wwwroot folder would expose them.
+const publicDir = path.join(__dirname, '/public');
+
+// Map of file extensions to the content types used when serving static assets.
+const staticContentTypes = {
+  '.css': 'text/css',
+  '.js': 'text/javascript'
+};
+
+// Serve a file from the public directory. Returns true if the request was a
+// static asset request (whether or not the file was found) so the caller can
+// stop processing it as a detection request.
+const tryServeStatic = (req, res) => {
+  const urlPath = req.url.split('?')[0];
+  if (!urlPath.startsWith('/css/') && !urlPath.startsWith('/js/')) {
+    return false;
+  }
+
+  // Resolve the requested path within the public directory and make sure it
+  // cannot escape it.
+  const filePath = path.join(publicDir, urlPath);
+  if (!filePath.startsWith(publicDir)) {
+    res.statusCode = 403;
+    res.end();
+    return true;
+  }
+
+  fs.readFile(filePath, function (err, content) {
+    if (err) {
+      res.statusCode = 404;
+      res.end();
+      return;
+    }
+    res.statusCode = 200;
+    res.setHeader('Content-Type',
+      staticContentTypes[path.extname(filePath)] || 'application/octet-stream');
+    res.end(content);
+  });
+  return true;
+};
+
 const core = require51('fiftyone.pipeline.core');
 
 const OptionsExtension =
@@ -100,9 +144,9 @@ const setPipeline = (options) => {
     `'${ExampleUtils.RESOURCE_KEY_ENV_VAR}'. The 51Degrees cloud ` +
     'service is accessed using a \'ResourceKey\'. For more information ' +
     'see ' +
-    'https://51degrees.com/documentation/_info__resource_keys.html. ' +
+    'https://51degrees.com/documentation/_info__resource_keys.html?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.cloud-examples-cloud-gettingstarted-web-gettingstarted.js&utm_term=resource-key-required. ' +
     'A resource key with the properties required by this example can be ' +
-    'created for free at https://configure.51degrees.com/1QWJwHxl. ' +
+    'created for free at https://configure.51degrees.com/1QWJwHxl?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.cloud-examples-cloud-gettingstarted-web-gettingstarted.js&utm_term=resource-key-required. ' +
     'Once complete, populate the config file or environment variable ' +
     'mentioned at the start of this message with the key.';
   }
@@ -123,6 +167,12 @@ const setPipeline = (options) => {
 };
 
 const server = http.createServer((req, res) => {
+  // Serve the shared CSS/JS assets from the public directory. If this was a
+  // static asset request then there is nothing more to do.
+  if (tryServeStatic(req, res)) {
+    return;
+  }
+
   // FlowData is a data structure that is used to convey
   // information required for detection and the results of the
   // detection through the pipeline.
@@ -151,7 +201,7 @@ const server = http.createServer((req, res) => {
       // requested. So set whatever headers are required by the browser in
       // order to return the evidence needed by the pipeline.
       // More info on this can be found at
-      // https://51degrees.com/blog/user-agent-client-hints
+      // https://51degrees.com/blog/user-agent-client-hints?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.cloud-examples-cloud-gettingstarted-web-gettingstarted.js&utm_term=server
       core.Helpers.setResponseHeaders(res, flowData);
 
       // Obtain all used evidence
