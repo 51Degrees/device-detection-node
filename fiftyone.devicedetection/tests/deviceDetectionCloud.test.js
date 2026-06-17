@@ -29,9 +29,9 @@ const require51 = (requestedPackage) => {
 };
 
 const DeviceDetectionPipelineBuilder = require51('fiftyone.devicedetection').DeviceDetectionPipelineBuilder;
-// The aligned '51DEGREES_RESOURCE_KEY' environment variable is checked
+// The aligned '_51DEGREES_RESOURCE_KEY' environment variable is checked
 // first, followed by the legacy 'RESOURCE_KEY' variable.
-const myResourceKey = process.env['51DEGREES_RESOURCE_KEY'] ||
+const myResourceKey = process.env['_51DEGREES_RESOURCE_KEY'] ||
   process.env.RESOURCE_KEY;
 const errorMessages = require51('fiftyone.devicedetection.shared').errorMessages;
 

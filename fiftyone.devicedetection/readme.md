@@ -45,7 +45,7 @@ npm install jest --global
 
 You will also need to install any required packages for the examples in the **Examples** section.
 
-You need to obtain a 51Degrees cloud resource key from the [51Degrees Cloud Configurator](https://configure.51degrees.com/?utm_source=github&utm_medium=readme&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection-readme.md&utm_term=tests) and assign it to the environment variable `51DEGREES_RESOURCE_KEY` in your test environment. The legacy environment variable name `RESOURCE_KEY` is still supported and is checked second, after `51DEGREES_RESOURCE_KEY`.
+You need to obtain a 51Degrees cloud resource key from the [51Degrees Cloud Configurator](https://configure.51degrees.com/?utm_source=github&utm_medium=readme&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection-readme.md&utm_term=tests) and assign it to the environment variable `_51DEGREES_RESOURCE_KEY` in your test environment. The legacy environment variable name `RESOURCE_KEY` is still supported and is checked second, after `_51DEGREES_RESOURCE_KEY`.
 
 To run the tests, navigate to the module directory and execute:
 

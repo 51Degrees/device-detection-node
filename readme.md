@@ -45,15 +45,15 @@ the following device properties used by the examples: IsMobile, DeviceType,
 ScreenPixelsWidth, ScreenPixelsHeight, ScreenPixelsHeightJavaScript, the three
 `SetHeader*Accept-CH` properties, JavascriptGetHighEntropyValues, IsCrawler,
 DeviceId and UserAgents. A resource key that selects these free properties can be
-created at [https://configure.51degrees.com/Wkqxf3Bs](https://configure.51degrees.com/Wkqxf3Bs).
+created [here](https://configure.51degrees.com/Wkqxf3Bs?utm_source=github&utm_medium=readme&utm_campaign=device-detection-node&utm_content=readme.md&utm_term=cloud).
 
 The paid device properties used by the examples are: HardwareVendor, HardwareName,
 HardwareModel, PlatformVendor, PlatformName, PlatformVersion, BrowserVendor,
 BrowserName, BrowserVersion, ScreenPixelsWidthJavaScript and
 JavascriptHardwareProfile, plus the TAC and native model hardware profiles. A
 resource key that selects the free properties plus these paid properties can be
-created at [https://configure.51degrees.com/hYzn3TV3](https://configure.51degrees.com/hYzn3TV3).
-See https://51degrees.com/pricing to get a paid subscription with more properties.
+created [here](https://configure.51degrees.com/hYzn3TV3?utm_source=github&utm_medium=readme&utm_campaign=device-detection-node&utm_content=readme.md&utm_term=cloud).
+See [pricing](https://51degrees.com/pricing?utm_source=github&utm_medium=readme&utm_campaign=device-detection-node&utm_content=readme.md&utm_term=cloud) to get a paid subscription with more properties.
 
 #### On-Premise
 
@@ -64,7 +64,7 @@ properties see the [51Degrees website](https://51degrees.com/pricing?utm_source=
 
 The on-premise examples locate the data file in the following order:
 
-1. The `51DEGREES_DD_PATH` environment variable, which can be set to an explicit path to the
+1. The `_51DEGREES_DD_PATH` environment variable, which can be set to an explicit path to the
    data file.
 2. A search of the folder hierarchy, walking up from the working directory, for the expected
    file name.
@@ -200,7 +200,7 @@ npm install jest --global
 
 You will also need to install any required packages for the examples in the **Examples** section.
 
-Add a 51Degrees cloud resource key in the fiftyone.devicedetection/package.json file for cloud tests. You can obtain a resource key from the [51Degrees Cloud Configurator](https://configure.51degrees.com/?utm_source=github&utm_medium=readme&utm_campaign=device-detection-node&utm_content=readme.md&utm_term=tests) and assign it to the environment variable `51DEGREES_RESOURCE_KEY` in your test environment. The legacy environment variable name `RESOURCE_KEY` is still supported and is checked second, after `51DEGREES_RESOURCE_KEY`.
+Add a 51Degrees cloud resource key in the fiftyone.devicedetection/package.json file for cloud tests. You can obtain a resource key from the [51Degrees Cloud Configurator](https://configure.51degrees.com/?utm_source=github&utm_medium=readme&utm_campaign=device-detection-node&utm_content=readme.md&utm_term=tests) and assign it to the environment variable `_51DEGREES_RESOURCE_KEY` in your test environment. The legacy environment variable name `RESOURCE_KEY` is still supported and is checked second, after `_51DEGREES_RESOURCE_KEY`.
 
 There are other environment variables that you will also need to set in your test environment before running all tests:
 - `TEST_SUPER_RESOURCE_KEY`: This key contains all `SetHeader*` properties.

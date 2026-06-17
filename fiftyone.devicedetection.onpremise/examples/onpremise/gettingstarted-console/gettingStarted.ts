@@ -146,7 +146,7 @@ const run = async function (dataFile: string) {
 
 
 const args = process.argv.slice(2);
-// Use the supplied path for the data file, the '51DEGREES_DD_PATH'
+// Use the supplied path for the data file, the '_51DEGREES_DD_PATH'
 // environment variable, or find the lite file that is included
 // in the repository.
 const dataFile = args.length > 0 ? args[0] : ExampleUtils.findDataFile(LITE_V_4_1_HASH);

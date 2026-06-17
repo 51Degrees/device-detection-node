@@ -140,7 +140,7 @@ const { DATA_FILE_AGE_WARNING, DATA_FILE_PATH_ENV_VAR, ExampleUtils } =
 let pipeline;
 
 const setPipeline = (options) => {
-  // An explicit data file path supplied in the '51DEGREES_DD_PATH'
+  // An explicit data file path supplied in the '_51DEGREES_DD_PATH'
   // environment variable takes precedence over the value in the
   // configuration file.
   const envDataFilePath = process.env[DATA_FILE_PATH_ENV_VAR];

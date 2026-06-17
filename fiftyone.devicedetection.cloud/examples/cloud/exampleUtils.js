@@ -23,7 +23,7 @@
 // The default environment variable used to get the resource key
 // to use when running examples. This aligned name is checked first,
 // before the legacy variable name.
-const RESOURCE_KEY_ENV_VAR = '51DEGREES_RESOURCE_KEY';
+const RESOURCE_KEY_ENV_VAR = '_51DEGREES_RESOURCE_KEY';
 
 // The legacy environment variable used to get the resource key
 // to use when running examples. Retained for backwards compatibility
@@ -31,7 +31,7 @@ const RESOURCE_KEY_ENV_VAR = '51DEGREES_RESOURCE_KEY';
 const LEGACY_RESOURCE_KEY_ENV_VAR = 'RESOURCE_KEY';
 
 // Get the resource key from the environment. The aligned
-// '51DEGREES_RESOURCE_KEY' variable is checked first, followed by
+// '_51DEGREES_RESOURCE_KEY' variable is checked first, followed by
 // the legacy 'RESOURCE_KEY' variable.
 const getResourceKeyFromEnv = function () {
   return process.env[RESOURCE_KEY_ENV_VAR] ||
@@ -41,7 +41,7 @@ const getResourceKeyFromEnv = function () {
 // The common message shown when a resource key leaves one or more of
 // the properties used by an example without values.
 const PRICING_MESSAGE = 'Some properties used by this example are not ' +
-  'available with a free resource key. See https://51degrees.com/pricing ' +
+  'available with a free resource key. See https://51degrees.com/pricing?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.cloud-examples-cloud-exampleutils.js&utm_term=resource-key-required ' +
   'to get a paid subscription with more properties.';
 
 module.exports = {

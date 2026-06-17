@@ -73,12 +73,8 @@ Write-Output "Package configuration file created successfully."
 
 Pop-Location
 
-$env:RESOURCE_KEY = $Options.Keys.TestResourceKey
-# Aligned environment variable name. This is checked first by the examples
-# and tests. The legacy RESOURCE_KEY name above is retained for backwards
-# compatibility.
-${env:51DEGREES_RESOURCE_KEY} = $Options.Keys.TestResourceKey
-$env:TEST_SUPER_RESOURCE_KEY = $Options.Keys.TestSuperResourceKey
+$env:_51DEGREES_RESOURCE_KEY = $Options.Keys.TestResourceKey
+$env:TEST_SUPER_RESOURCE_KEY = $Options.Keys.TestSuperResourceKey # currently the same as the key above
 $env:TEST_PLATFORM_RESOURCE_KEY = $Options.Keys.TestPlatformResourceKey
 $env:TEST_HARDWARE_RESOURCE_KEY = $Options.Keys.TestHardwareResourceKey
 $env:TEST_BROWSER_RESOURCE_KEY = $Options.Keys.TestBrowserResourceKey

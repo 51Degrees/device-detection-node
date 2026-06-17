@@ -36,7 +36,7 @@ const DATA_FILE_AGE_WARNING = 30;
 // The environment variable that can be used to supply an explicit
 // path to the device detection data file. This is checked before
 // searching the folder hierarchy for the file.
-const DATA_FILE_PATH_ENV_VAR = '51DEGREES_DD_PATH';
+const DATA_FILE_PATH_ENV_VAR = '_51DEGREES_DD_PATH';
 
 class ExampleUtils {
   // Find the specified filename within the default lookup directory.
