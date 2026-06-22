@@ -9,10 +9,13 @@
         'win_warning_level': 4,
         'win_exception_handling': 1,
         'win_warn_as_error': 'true',
-        'win_warning_ignore_list': [4100, 4127, 4244, 4302, 4311, 4459, 4996], # Only used for SWIG generated files
+        'win_warning_ignore_list': [4018, 4100, 4127, 4244, 4302, 4311, 4324, 4459, 4996], # Only used for SWIG generated files. 4018 and 4324 come from Node 24 V8 headers.
         'win_debug_additional_ignore_list': [4701, 4702], # Only used for SWIG generated files
         'linux_mac_c_std': '-std=gnu11',
         'linux_mac_cpp_std': '-std=gnu++17',
+        # Node 23+ (V8 12.9+) headers require C++20, older versions build with C++17
+        'wrapper_win_cpp_std': "<!(node -p \"parseInt(process.versions.node) >= 23 ? '-std:c++20' : '-std:c++17'\")",
+        'wrapper_linux_mac_cpp_std': "<!(node -p \"parseInt(process.versions.node) >= 23 ? '-std=gnu++20' : '-std=gnu++17'\")",
         'linux_mac_c_common_flags': [
             "<!(node -e \"\
             var v8Version = process.versions.v8;\
@@ -150,7 +153,7 @@
                         'Debug': {
                             'msvs_settings': {
                                 'VCCLCompilerTool': {
-                                    'AdditionalOptions': [ '-std:c++17', ],
+                                    'AdditionalOptions': [ '<(wrapper_win_cpp_std)', ],
                                     'WarningLevel': '<(win_warning_level)',
                                     'ExceptionHandling': '<(win_exception_handling)',
                                     'DisableSpecificWarnings': [
@@ -172,7 +175,7 @@
                         'Release': {
                             'msvs_settings': {
                                 'VCCLCompilerTool': {
-                                    'AdditionalOptions': [ '-std:c++17', ],
+                                    'AdditionalOptions': [ '<(wrapper_win_cpp_std)', ],
                                     'WarningLevel': '<(win_warning_level)',
                                     'ExceptionHandling': '<(win_exception_handling)',
                                     'WarnAsError': '<(win_warn_as_error)',
@@ -207,7 +210,7 @@
                             '<@(linux_mac_c_common_flags)',
                             '<@(linux_mac_c_wrapper_additional_flags)',
                             '<@(mac_specific_flags)',
-                            '<(linux_mac_cpp_std)'
+                            '<(wrapper_linux_mac_cpp_std)'
                         ],
                         "OTHER_LDFLAGS": [
                             '<@(mac_specific_flags)'
@@ -216,7 +219,7 @@
                 }],
                 ['OS=="linux"', {
                     'cflags_cc!': ['-fno-exceptions'],
-                    'cflags_cc': ['<(linux_mac_cpp_std)'],
+                    'cflags_cc': ['<(wrapper_linux_mac_cpp_std)'],
                     'cflags_c': ['<(linux_mac_c_std)'],
                     'cflags': [
                         '<@(linux_mac_c_common_flags)',

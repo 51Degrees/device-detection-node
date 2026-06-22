@@ -133,16 +133,24 @@ const optionsExtension =
 const dataExtension =
   require51('fiftyone.devicedetection.shared').dataExtension;
 
-const { DATA_FILE_AGE_WARNING, ExampleUtils } =
+const { DATA_FILE_AGE_WARNING, DATA_FILE_PATH_ENV_VAR, ExampleUtils } =
   require(path.join(__dirname, '/../exampleUtils'));
 
 // Pipeline variable to be used
 let pipeline;
 
 const setPipeline = (options) => {
+  // An explicit data file path supplied in the '_51DEGREES_DD_PATH'
+  // environment variable takes precedence over the value in the
+  // configuration file.
+  const envDataFilePath = process.env[DATA_FILE_PATH_ENV_VAR];
+  if (envDataFilePath) {
+    optionsExtension.setDataFilePath(options, envDataFilePath);
+  }
   const dataFilePath = optionsExtension.getDataFilePath(options);
   if (!dataFilePath) {
-    throw 'A data file must be specified in the 51d.json file.';
+    throw 'A data file must be specified in the 51d.json file or the ' +
+      `'${DATA_FILE_PATH_ENV_VAR}' environment variable.`;
   }
 
   if (!fs.existsSync(dataFilePath)) {

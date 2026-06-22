@@ -54,7 +54,8 @@ const fs = require('fs');
 const DeviceDetectionOnPremisePipelineBuilder =
   require51('fiftyone.devicedetection.onpremise').DeviceDetectionOnPremisePipelineBuilder;
 
-const ExampleUtils = require(path.join(__dirname, '/../exampleUtils')).ExampleUtils;
+const { ExampleUtils, DATA_FILE_PATH_ENV_VAR } =
+  require(path.join(__dirname, '/../exampleUtils'));
 const exampleConstants = require51('fiftyone.devicedetection.shared').exampleConstants;
 
 // In this example, by default, the 51degrees "Lite" file needs to be in the
@@ -156,14 +157,15 @@ const groupBy = function (list, keyGetter) {
 };
 
 const findDataFile = function (dataFile, output) {
-  // No filename specified use the default
+  // No filename specified. Check the environment variable for an explicit
+  // path, then search the folder hierarchy for the default file name.
   if (dataFile === null) {
-    dataFile = LITE_V_4_1_HASH;
-    output.write(`No filename specified. Using default '${dataFile}'\n`);
-  }
-
-  // Work out where the data file is if we don't have an absolute path.
-  if (path.isAbsolute(dataFile) === false) {
+    output.write('No filename specified. Checking the ' +
+      `'${DATA_FILE_PATH_ENV_VAR}' environment variable, then searching ` +
+      `for the default '${LITE_V_4_1_HASH}'\n`);
+    dataFile = ExampleUtils.findDataFile(LITE_V_4_1_HASH);
+  } else if (path.isAbsolute(dataFile) === false) {
+    // Work out where the data file is if we don't have an absolute path.
     dataFile = ExampleUtils.findFile(dataFile);
   }
 

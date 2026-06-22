@@ -148,9 +148,10 @@ const run = async function (dataFile, output) {
 // Don't run the server if under TEST
 if (process.env.JEST_WORKER_ID === undefined) {
   const args = process.argv.slice(2);
-  // Use the supplied path for the data file or find the lite
-  // file that is included in the repository.
-  const dataFile = args.length > 0 ? args[0] : ExampleUtils.findFile(LITE_V_4_1_HASH);
+  // Use the supplied path for the data file, the '_51DEGREES_DD_PATH'
+  // environment variable, or find the lite file that is included
+  // in the repository.
+  const dataFile = args.length > 0 ? args[0] : ExampleUtils.findDataFile(LITE_V_4_1_HASH);
 
   if (dataFile !== undefined) {
     run(dataFile, process.stdout);
