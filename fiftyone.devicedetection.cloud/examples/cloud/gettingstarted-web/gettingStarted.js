@@ -151,6 +151,10 @@ const setPipeline = (options) => {
     'mentioned at the start of this message with the key.';
   }
 
+  // 'suppressProcessExceptions' is set to true in 51d.json
+  // (PipelineOptions.BuildParameters) so that if the underlying cloud service fails
+  // during request processing the device-detection pipeline degrades gracefully
+  // instead of returning a 500. Use false while developing to surface mistakes loudly.
   pipeline = new core.PipelineBuilder({
     // Enable custom javascript builder
     addJavaScriptBuilder: true,

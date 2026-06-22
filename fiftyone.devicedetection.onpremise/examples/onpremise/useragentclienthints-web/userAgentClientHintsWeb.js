@@ -136,7 +136,11 @@ const setPipeline = (properties) => {
     performanceProfile: 'MaxPerformance',
     dataFile: datafile,
     autoUpdate: false,
-    restrictedProperties: properties
+    restrictedProperties: properties,
+    // Set to `true` so a device-detection failure degrades gracefully instead
+    // of failing the request. Use `false` while developing to surface mistakes
+    // loudly. Errors are still logged via the pipeline 'error' handler below.
+    suppressProcessExceptions: true
   }).build();
 
   // Logging of errors and other messages.
