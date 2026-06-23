@@ -21,6 +21,9 @@
           "headerBlacklist": []
         }
       }
-    ]
+    ],
+    "BuildParameters": {
+      "suppressProcessExceptions": true
+    }
   }
 }

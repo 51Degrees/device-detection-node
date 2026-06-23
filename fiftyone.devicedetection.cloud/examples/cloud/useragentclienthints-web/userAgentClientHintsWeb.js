@@ -137,7 +137,12 @@ const setPipeline = (resourceKey) => {
   // and paste it into the code. This example displays paid properties, so a
   // paid subscription is needed to populate them all.
   pipeline = new DeviceDetectionCloudPipelineBuilder({
-    resourceKey
+    resourceKey,
+    // Set to `true` so that if the underlying cloud service fails during request
+    // processing the device-detection pipeline degrades gracefully instead of
+    // returning a 500. Use `false` while developing to surface mistakes loudly.
+    // Errors are still logged via the pipeline 'error' handler below.
+    suppressProcessExceptions: true
   }).build();
 
   // Logging of errors and other messages.

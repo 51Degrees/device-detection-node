@@ -169,6 +169,10 @@ const setPipeline = (options) => {
     }
   }
 
+  // 'suppressProcessExceptions' is set to true in 51d.json
+  // (PipelineOptions.BuildParameters) so a device-detection failure degrades
+  // gracefully instead of failing the request. Use false while developing to
+  // surface mistakes loudly. Errors are still logged via the 'error' handler.
   pipeline = new core.PipelineBuilder({
     // Enable custom javascript builder
     addJavaScriptBuilder: true,
