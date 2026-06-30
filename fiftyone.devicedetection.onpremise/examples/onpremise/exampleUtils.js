@@ -33,6 +33,11 @@ const FIND_FILE_TIMEOUT_MS = 10000;
 // be displayed.
 const DATA_FILE_AGE_WARNING = 30;
 
+// The environment variable that can be used to supply an explicit
+// path to the device detection data file. This is checked before
+// searching the folder hierarchy for the file.
+const DATA_FILE_PATH_ENV_VAR = '_51DEGREES_DD_PATH';
+
 class ExampleUtils {
   // Find the specified filename within the default lookup directory.
   static findFile (fileName) {
@@ -40,6 +45,14 @@ class ExampleUtils {
       fileName,
       new Date().getTime() + FIND_FILE_TIMEOUT_MS,
       path.normalize(process.cwd()));
+  }
+
+  // Get the path to a device detection data file. The environment
+  // variable named by DATA_FILE_PATH_ENV_VAR is checked first for an
+  // explicit path. If it is not set then the folder hierarchy is
+  // searched for the supplied file name.
+  static findDataFile (fileName) {
+    return process.env[DATA_FILE_PATH_ENV_VAR] || this.findFile(fileName);
   }
 
   static isTimedOut (timeout) {
@@ -114,14 +127,14 @@ class ExampleUtils {
         'https://github.com/51Degrees/device-detection-data. ' +
         'Find out about the Enterprise data file, which ' +
         'includes automatic daily updates, on our pricing ' +
-        'page: https://51degrees.com/pricing');
+        'page: https://51degrees.com/pricing?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.onpremise-examples-onpremise-exampleutils.js&utm_term=data-file-age-warning');
     }
     if (dataTier === 'Lite') {
       console.warn('This example is using the \'Lite\' ' +
         'data file. This is used for illustration, and ' +
         'has limited accuracy and capabilities. Find ' +
         'out about the Enterprise data file on our ' +
-        'pricing page: https://51degrees.com/pricing');
+        'pricing page: https://51degrees.com/pricing?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.onpremise-examples-onpremise-exampleutils.js&utm_term=lite-data-file');
     }
   }
 
@@ -135,5 +148,6 @@ class ExampleUtils {
 
 module.exports = {
   ExampleUtils,
-  DATA_FILE_AGE_WARNING
+  DATA_FILE_AGE_WARNING,
+  DATA_FILE_PATH_ENV_VAR
 };

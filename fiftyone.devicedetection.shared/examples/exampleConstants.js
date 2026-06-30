@@ -58,7 +58,7 @@ module.exports = {
 
     // Links:
     // - [getHighEntropyValues()](https://developer.mozilla.org/en-US/docs/Web/API/NavigatorUAData/getHighEntropyValues)
-    // - [device.sua](https://51degrees.com/blog/openrtb-structured-user-agent-and-user-agent-client-hints)
+    // - [device.sua](https://51degrees.com/blog/openrtb-structured-user-agent-and-user-agent-client-hints?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.shared-examples-exampleconstants.js&utm_term=defaultevidencevalues)
     // - [OpenRTB 2.6 spec](https://github.com/InteractiveAdvertisingBureau/openrtb2.x/blob/main/2.6.md#objectuseragent)
 
     // 51Degrees historically used HTTP header map to represent User-Agent Client Hints and expected the evidence to

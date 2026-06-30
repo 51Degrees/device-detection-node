@@ -54,7 +54,8 @@ const fs = require('fs');
 const DeviceDetectionOnPremisePipelineBuilder =
   require51('fiftyone.devicedetection.onpremise').DeviceDetectionOnPremisePipelineBuilder;
 
-const ExampleUtils = require(path.join(__dirname, '/../exampleUtils')).ExampleUtils;
+const { ExampleUtils, DATA_FILE_PATH_ENV_VAR } =
+  require(path.join(__dirname, '/../exampleUtils'));
 const exampleConstants = require51('fiftyone.devicedetection.shared').exampleConstants;
 
 // In this example, by default, the 51degrees "Lite" file needs to be in the
@@ -64,7 +65,7 @@ const exampleConstants = require51('fiftyone.devicedetection.shared').exampleCon
 // Note that the Lite data file is only used for illustration, and has
 // limited accuracy and capabilities.
 // Find out about the Enterprise data file on our pricing page:
-// https://51degrees.com/pricing
+// https://51degrees.com/pricing?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.onpremise-examples-onpremise-matchmetrics-console-matchmetrics.js&utm_term=lite_v_4_1_hash
 const LITE_V_4_1_HASH = '51Degrees-LiteV4.1.hash';
 
 // Here we make a function that gets a userAgent as evidence and
@@ -156,14 +157,15 @@ const groupBy = function (list, keyGetter) {
 };
 
 const findDataFile = function (dataFile, output) {
-  // No filename specified use the default
+  // No filename specified. Check the environment variable for an explicit
+  // path, then search the folder hierarchy for the default file name.
   if (dataFile === null) {
-    dataFile = LITE_V_4_1_HASH;
-    output.write(`No filename specified. Using default '${dataFile}'\n`);
-  }
-
-  // Work out where the data file is if we don't have an absolute path.
-  if (path.isAbsolute(dataFile) === false) {
+    output.write('No filename specified. Checking the ' +
+      `'${DATA_FILE_PATH_ENV_VAR}' environment variable, then searching ` +
+      `for the default '${LITE_V_4_1_HASH}'\n`);
+    dataFile = ExampleUtils.findDataFile(LITE_V_4_1_HASH);
+  } else if (path.isAbsolute(dataFile) === false) {
+    // Work out where the data file is if we don't have an absolute path.
     dataFile = ExampleUtils.findFile(dataFile);
   }
 
@@ -183,7 +185,7 @@ const run = async function (dataFile, output, evidenceList) {
   // In this example, we use the DeviceDetectionOnPremisePipelineBuilder
   // and configure it in code. For more information about
   // pipelines in general see the documentation at
-  // https://51degrees.com/documentation/_concepts__configuration__builders__index.html
+  // https://51degrees.com/documentation/_concepts__configuration__builders__index.html?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.onpremise-examples-onpremise-matchmetrics-console-matchmetrics.js&utm_term=pipeline
   const pipeline = new DeviceDetectionOnPremisePipelineBuilder({
     dataFile,
     // Prefer low memory profile where all data streamed from disk on-demand.
@@ -201,7 +203,7 @@ const run = async function (dataFile, output, evidenceList) {
     // in the output.
     //
     // If using the full on-premise data file the hardwarename property will be present in the
-    // data file. See https://51degrees.com/pricing
+    // data file. See https://51degrees.com/pricing?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.onpremise-examples-onpremise-matchmetrics-console-matchmetrics.js&utm_term=restrictedproperties
     //
     // The 'ismobile' and 'hardwarename' properties are both part of the 'hardware' component.
     // The remaining properties are from match metrics.

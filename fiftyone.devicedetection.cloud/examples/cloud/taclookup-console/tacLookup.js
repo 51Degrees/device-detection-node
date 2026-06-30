@@ -94,12 +94,12 @@ const run = async function (options, output) {
       `'${ExampleUtils.RESOURCE_KEY_ENV_VAR}'. The 51Degrees cloud ` +
       'service is accessed using a \'ResourceKey\'. For more information ' +
       'see ' +
-      'https://51degrees.com/documentation/_info__resource_keys.html. ' +
-      'TAC lookup is not available as a free service. This means that ' +
-      'you will first need a license key, which can be purchased from our ' +
-      'pricing page: https://51degrees.com/pricing. Once this is done, a resource ' +
-      'key with the properties required by this example can be created at ' +
-      'https://configure.51degrees.com/QKyYH5XT. You can now populate the ' +
+      'https://51degrees.com/documentation/_info__resource_keys.html?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.cloud-examples-cloud-taclookup-console-taclookup.js&utm_term=resource-key-required. ' +
+      'TAC lookup requires a paid subscription. See ' +
+      'https://51degrees.com/pricing?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.cloud-examples-cloud-taclookup-console-taclookup.js&utm_term=resource-key-required to get a paid subscription with more ' +
+      'properties. Once subscribed, a resource key with the properties ' +
+      'required by this example can be created at ' +
+      'https://configure.51degrees.com/hYzn3TV3?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.cloud-examples-cloud-taclookup-console-taclookup.js&utm_term=resource-key-required. You can now populate the ' +
       'environment variable mentioned at the start of this message with the ' +
       'resource key or pass it as the first argument on the command line.'
     );
@@ -117,7 +117,7 @@ const run = async function (options, output) {
   // For a demonstration of how to do this in code instead, see the
   // NativeModelLookup example.
   // For more information about builders in general see the documentation at
-  // https://51degrees.com/documentation/_concepts__configuration__builders__index.html
+  // https://51degrees.com/documentation/_concepts__configuration__builders__index.html?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.cloud-examples-cloud-taclookup-console-taclookup.js&utm_term=run
   const pipeline = new PipelineBuilder().buildFromConfiguration(options);
 
   // To monitor the pipeline we can put in listeners for various log events.
@@ -135,8 +135,8 @@ const run = async function (options, output) {
 if (process.env.JEST_WORKER_ID === undefined) {
   const args = process.argv.slice(2);
   // Use the supplied resource key or try to obtain one
-  // from the environment variable.
-  const resourceKey = args.length > 0 ? args[0] : process.env[ExampleUtils.RESOURCE_KEY_ENV_VAR];
+  // from the environment variables.
+  const resourceKey = args.length > 0 ? args[0] : ExampleUtils.getResourceKeyFromEnv();
 
   // Load the configuration from a config file to a JSON object.
   const options = JSON.parse(fs.readFileSync('51d.json'), 'utf8');

@@ -1,11 +1,11 @@
-![51Degrees](https://51degrees.com/img/logo.png?utm_source=github&utm_medium=repository&utm_content=readme_main&utm_campaign=node-open-source "Data rewards the curious") **Node Device Detection On-Premise**
+![51Degrees](https://51degrees.com/img/logo.png?utm_source=github&utm_medium=readme&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.onpremise-readme.md&utm_term=top "Data rewards the curious") **Node Device Detection On-Premise**
 
-[Developer Documentation](https://51degrees.com/device-detection-node/index.html?utm_source=github&utm_medium=repository&utm_content=documentation&utm_campaign=node-open-source "developer documentation")
+[Developer Documentation](https://51degrees.com/device-detection-node/index.html?utm_source=github&utm_medium=readme&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.onpremise-readme.md&utm_term=top "developer documentation")
 
 ## Introduction
 This project contains 51Degrees Device Detection engines that can be used with the [Pipeline API](https://github.com/51Degrees/pipeline-node).
 
-The Pipeline is a generic web request intelligence and data processing solution with the ability to add a range of 51Degrees and/or custom plug ins (Engines) 
+The Pipeline is a generic web request intelligence and data processing solution with the ability to add a range of 51Degrees and/or custom plug ins (Engines)
 
 ## This package - fiftyone.devicedetection.onpremise
 
@@ -26,16 +26,16 @@ npm install fiftyone.devicedetection.onpremise
 ### On-Premise
 When running on-premise, a local Hash V4.1 data file is required.
 
-[**Hash**](https://51degrees.com/documentation/_device_detection__hash.html): A large binary file populated with User-Agent signatures allowing very fast detection speeds.
+[**Hash**](https://51degrees.com/documentation/_device_detection__hash.html?utm_source=github&utm_medium=readme&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.onpremise-readme.md&utm_term=on-premise): A large binary file populated with User-Agent signatures allowing very fast detection speeds.
 
-51Degrees provides [multiple options](https://51degrees.com/Licencing-Pricing/On-Premise), some of which support automatic updates through the Pipeline API.
+51Degrees provides [multiple options](https://51degrees.com/Licencing-Pricing/On-Premise?utm_source=github&utm_medium=readme&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.onpremise-readme.md&utm_term=on-premise), some of which support automatic updates through the Pipeline API.
 
 If the module is installed directly from Git then the binaries are also required. These binaries are native module which contains the core engine of device detection. Below are the steps to build these binaries:
 #### Pre-requisites
 
 - Install Node.js.
 - Install node-gyp by running.
-  - `npm install node-gyp --global`  
+  - `npm install node-gyp --global`
 - Install C build tools:
   - Windows:
     - You will need either Visual Studio 2019 or the [C++ Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/) installed.
@@ -46,7 +46,7 @@ If the module is installed directly from Git then the binaries are also required
 - Pull git submodules:
   - `git submodule update --init --recursive`
 
-#### Build Steps 
+#### Build Steps
 
 - Navigate to fiftyone.devicedetection.onpremise
 - Rename the `binding.51d` to `binding.gyp`
@@ -63,15 +63,13 @@ If the module is installed directly from Git then the binaries are also required
 - This will build the `FiftyOneDeviceDetectionHashV4.node` under `build/Release` folder.
 - Copy the `FiftyOneDeviceDetectionHashV4.node` to `build` directory (which is one level up) and rename it using the following convention.
   - Windows:
-    - FiftyOneDeviceDetectionHashV4-win32-[ Node version ].node
-      - e.g. FiftyOneDeviceDetectionHashV4-win32-10.node for Node 10.
+    - FiftyOneDeviceDetectionHashV4-win32-[ arch ]-[ Node major version ].node
   - Linux:
-    - FiftyOneDeviceDetectionHashV4-linux-[ Node version ].node
-      - e.g. FiftyOneDeviceDetectionHashV4-linux-10.node for Node 10.
+    - FiftyOneDeviceDetectionHashV4-linux-[ arch ]-[ Node major version ].node
   - MacOS:
-    - FiftyOneDeviceDetectionHashV4-darwin-[ Node version ].node
-      - e.g. FiftyOneDeviceDetectionHashV4-darwin-10.node for Node 10.
-  - Please see the [tested versions page](https://51degrees.com/documentation/_info__tested_versions.html) for Node versions that we currently test against. The software may run fine against other versions, but extra caution should be applied.
+    - FiftyOneDeviceDetectionHashV4-darwin-[ arch ]-[ Node major version ].node
+  - [ arch ] is the value of `process.arch` (for example x64 or arm64) and [ Node major version ] is the major version of the Node.js runtime the module was built with.
+  - Testing targets the current Node.js LTS versions. There is no concept of 'supported' versions. The software may well run on other versions, but they are not tested. See the [tested versions page](https://51degrees.com/documentation/_info__tested_versions.html?utm_source=github&utm_medium=readme&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.onpremise-readme.md&utm_term=build-steps) for the versions that we currently test against.
   - You can optionally clear up by removing all the build files and folders except for the *.node file that's been created.
   - `WARNING`: `npm install` removes this copied file, so you will need to do the above steps again after running `npm install`
 
@@ -98,7 +96,7 @@ The tables below describe the examples that are available.
 
 ## Tests
 
-In this repository, there are tests for the examples. 
+In this repository, there are tests for the examples.
 You will need to install jest to run them:
 
 ```
@@ -118,11 +116,9 @@ npm test
 Process for rebuilding SWIG interfaces following an update to the device detection cxx code (This is only intended to be run by 51Degrees developers internally):
 
 1. Ensure Swig is installed.
-   1. At the time when this README was updated, the current stable version of Swig did not support new changes in Node 12 and above.
-   2. The Swig version being used is built from the following branch.
-      1. https://github.com/yegorich/swig/tree/pr/new-node-fixes.
-      2. There had been an active Pull Request created to merge the changes to the main Swig master branch.
-      3. Once the Pull Request is completed, the consequent Swig releases should be used.
+   1. Use the 51Degrees fork of Swig, built from source from the `node-24-holder-this` branch of https://github.com/51Degrees/swig.
+   2. The fork is required because Swig releases still emit V8 API calls that were removed in the V8 shipped with recent Node versions, in particular `FunctionCallbackInfo::Holder()`, which the fork replaces with `This()`. The generated code must compile against the Node.js LTS versions targeted for testing, see the [tested versions page](https://51degrees.com/documentation/_info__tested_versions.html?utm_source=github&utm_medium=readme&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.onpremise-readme.md&utm_term=native-code-updates).
+   3. All native modules loaded into one Node process must be generated by the same Swig version. Mixing modules generated by different Swig versions (for example this package and fiftyone.ipintelligence.onpremise) can crash the process, so regenerate and release them together.
 2. Update the device-detection-cxx submodule to reference the relevant commit.
 3. From terminal, navigate to fiftyone.pipeline.devicedetection and run:
     a) swig -c++ -javascript -node hash_node.i

@@ -48,23 +48,24 @@ const ExampleUtils = require(path.join(__dirname, '/../exampleUtils')).ExampleUt
 // Note that the Lite data file is only used for illustration, and has
 // limited accuracy and capabilities.
 // Find out about the Enterprise data file on our pricing page:
-// https://51degrees.com/pricing
+// https://51degrees.com/pricing?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.onpremise-examples-onpremise-automaticupdates-updateonstartup.js&utm_term=lite_v_4_1_hash
 const LITE_V_4_1_HASH = '51Degrees-LiteV4.1.hash';
 
 // Load in a datafile
 const args = process.argv.slice(2);
-// Use the supplied path for the data file or find the lite
-// file that is included in the repository.
-const datafile = args.length > 0 ? args[0] : ExampleUtils.findFile(LITE_V_4_1_HASH);
+// Use the supplied path for the data file, the '_51DEGREES_DD_PATH'
+// environment variable, or find the lite file that is included
+// in the repository.
+const datafile = args.length > 0 ? args[0] : ExampleUtils.findDataFile(LITE_V_4_1_HASH);
 
 // Set your license key, if you don't have a license key already you can
-// obtain one by subscribing to a 51Degrees bundle: https://51degrees.com/pricing
+// obtain one by subscribing to a 51Degrees bundle: https://51degrees.com/pricing?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.onpremise-examples-onpremise-automaticupdates-updateonstartup.js&utm_term=top
 
 const myLicenseKey = process.env.LICENSE_KEY || '!!YOUR_LICENSE_KEY!!';
 
 if (myLicenseKey === '!!YOUR_LICENSE_KEY!!') {
   console.log("You need a license key to run this example, if you don't have one already " +
-  'you can obtain one by subscribing to a 51Degrees bundle: https://51degrees.com/pricing');
+  'you can obtain one by subscribing to a 51Degrees bundle: https://51degrees.com/pricing?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.onpremise-examples-onpremise-automaticupdates-updateonstartup.js&utm_term=license-key-required');
 } else {
 // Check if datafile exists
 
@@ -87,7 +88,7 @@ if (myLicenseKey === '!!YOUR_LICENSE_KEY!!') {
     // Path to your data file
     dataFile: datafile,
     // For automatic updates to work you will need to provide a license key.
-    // A license key can be obtained with a subscription from https://51degrees.com/pricing
+    // A license key can be obtained with a subscription from https://51degrees.com/pricing?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.onpremise-examples-onpremise-automaticupdates-updateonstartup.js&utm_term=licencekeys
     licenceKeys: myLicenseKey,
     // Enable automatic updates.
     autoUpdate: true,

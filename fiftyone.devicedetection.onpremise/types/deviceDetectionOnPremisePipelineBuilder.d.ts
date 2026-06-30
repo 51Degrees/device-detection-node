@@ -72,6 +72,12 @@ declare class DeviceDetectionOnPremisePipelineBuilder extends DeviceDetectionOnP
      * @param {DataFileUpdateService} [options.dataFileUpdateService] Set
      * DataFileUpdateService so the datafiles can receive
      * automatic updates
+     * @param {boolean} [options.suppressProcessExceptions] If false (the
+     * default) the first error thrown while processing is re-thrown from
+     * flowData.process(); if true, errors are stored on flowData.errors and
+     * emitted via the pipeline 'error' event instead, and process() resolves
+     * normally. Recommended true for web apps so a device-detection failure
+     * degrades gracefully instead of failing the request.
      */
     constructor({ dataFileUpdateService, licenceKeys, dataFile, dataUpdateVerifyMd5, dataUpdateUseUrlFormatter, autoUpdate, dataUpdateUrl, pollingInterval, updateTimeMaximumRandomisation, shareUsage, fileSystemWatcher, updateOnStart, cacheSize, restrictedProperties, performanceProfile, concurrency, updateMatchedUserAgent, maxMatchedUserAgentLength, drift, difference, allowUnmatched, createTempDataCopy, tempDataDir }: {
         licenceKeys?: string;
@@ -97,6 +103,7 @@ declare class DeviceDetectionOnPremisePipelineBuilder extends DeviceDetectionOnP
         createTempDataCopy?: boolean;
         tempDataDir?: string;
         dataFileUpdateService?: DataFileUpdateService;
+        suppressProcessExceptions?: boolean;
     }, ...args: any[]);
 }
 declare namespace DeviceDetectionOnPremisePipelineBuilder {

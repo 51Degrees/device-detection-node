@@ -91,6 +91,10 @@ typings/
 # gatsby files
 .cache/
 public
+# The web examples commit their shared pattern-library assets under a public/
+# directory, so allow those back in despite the generic gatsby rule above.
+!**/examples/**/public/
+!**/examples/**/public/**
 
 # vuepress build output
 .vuepress/dist
@@ -109,6 +113,6 @@ public
 fiftyone.devicedetection/test_results.xml
 
 #docs
-4.1/*
+4.5/*
 package-lock.json
 fiftyone.devicedetection.onpremise/build/

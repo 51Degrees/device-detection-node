@@ -1,15 +1,15 @@
-![51Degrees](https://51degrees.com/img/logo.png?utm_source=github&utm_medium=repository&utm_content=readme_main&utm_campaign=node-open-source "Data rewards the curious") **Node Device Detection**
+![51Degrees](https://51degrees.com/img/logo.png?utm_source=github&utm_medium=readme&utm_campaign=device-detection-node&utm_content=readme.md&utm_term=top "Data rewards the curious") **Node Device Detection**
 
-[Developer Documentation](https://51degrees.com/device-detection-node/index.html?utm_source=github&utm_medium=repository&utm_content=documentation&utm_campaign=node-open-source "developer documentation")
+[Developer Documentation](https://51degrees.com/device-detection-node/index.html?utm_source=github&utm_medium=readme&utm_campaign=device-detection-node&utm_content=readme.md&utm_term=top "developer documentation")
 
 ## Introduction
 This project contains 51Degrees Device Detection engines that can be used with the [Pipeline API](https://github.com/51Degrees/pipeline-node).
 
-The Pipeline is a generic web request intelligence and data processing solution with the ability to add a range of 51Degrees and/or custom plug ins (Engines) 
+The Pipeline is a generic web request intelligence and data processing solution with the ability to add a range of 51Degrees and/or custom plug ins (Engines)
 
 ## Device detection
 
-Device detection can be performed 'on-premise' using a local data file or via the 51Degrees cloud service. 
+Device detection can be performed 'on-premise' using a local data file or via the 51Degrees cloud service.
 On-premise provides better performance, while cloud is easier to deploy.
 
 Both options use the same evidence values and expose (almost all) the same properties, so can be swapped out if needed at a later date.
@@ -23,10 +23,11 @@ Both options use the same evidence values and expose (almost all) the same prope
 
 ### Dependencies
 
-For runtime dependencies, see our [dependencies](https://51degrees.com/documentation/_info__dependencies.html) page.
-The [tested versions](https://51degrees.com/documentation/_info__tested_versions.html) page shows 
-the Node versions that we currently test against. The software may run fine against other 
-versions, but additional caution should be applied.
+For runtime dependencies, see our [dependencies](https://51degrees.com/documentation/_info__dependencies.html?utm_source=github&utm_medium=readme&utm_campaign=device-detection-node&utm_content=readme.md&utm_term=dependencies) page.
+Testing targets the current Node.js LTS versions. There is no concept of 'supported' versions.
+The software may well run on other versions, but they are not tested. The
+[tested versions](https://51degrees.com/documentation/_info__tested_versions.html?utm_source=github&utm_medium=readme&utm_campaign=device-detection-node&utm_content=readme.md&utm_term=dependencies) page lists
+the versions that we currently test against.
 
 ### Data
 
@@ -34,17 +35,45 @@ The API can either use our cloud service to get its data or it can use a local (
 
 #### Cloud
 
-You will require a [resource key](https://51degrees.com/documentation/_info__resource_keys.html)
-to use the Cloud API. You can create resource keys using our 
-[configurator](https://configure.51degrees.com/), see our 
-[documentation](https://51degrees.com/documentation/_concepts__configurator.html) on how to use this.
+You will require a [resource key](https://51degrees.com/documentation/_info__resource_keys.html?utm_source=github&utm_medium=readme&utm_campaign=device-detection-node&utm_content=readme.md&utm_term=cloud)
+to use the Cloud API. You can create resource keys using our
+[configurator](https://configure.51degrees.com/?utm_source=github&utm_medium=readme&utm_campaign=device-detection-node&utm_content=readme.md&utm_term=cloud), see our
+[documentation](https://51degrees.com/documentation/_concepts__configurator.html?utm_source=github&utm_medium=readme&utm_campaign=device-detection-node&utm_content=readme.md&utm_term=cloud) on how to use this.
+
+The cloud property tiers changed in May 2026. The examples and this documentation
+now reflect what is free and what needs a paid subscription. The free tier includes
+the following device properties used by the examples: IsMobile, DeviceType,
+ScreenPixelsWidth, ScreenPixelsHeight, ScreenPixelsHeightJavaScript, the three
+`SetHeader*Accept-CH` properties, JavascriptGetHighEntropyValues, IsCrawler,
+DeviceId and UserAgents. A resource key that selects these free properties can be
+created [here](https://configure.51degrees.com/Wkqxf3Bs?utm_source=github&utm_medium=readme&utm_campaign=device-detection-node&utm_content=readme.md&utm_term=cloud).
+
+The paid device properties used by the examples are: HardwareVendor, HardwareName,
+HardwareModel, PlatformVendor, PlatformName, PlatformVersion, BrowserVendor,
+BrowserName, BrowserVersion, ScreenPixelsWidthJavaScript and
+JavascriptHardwareProfile, plus the TAC and native model hardware profiles. A
+resource key that selects the free properties plus these paid properties can be
+created [here](https://configure.51degrees.com/hYzn3TV3?utm_source=github&utm_medium=readme&utm_campaign=device-detection-node&utm_content=readme.md&utm_term=cloud).
+See [pricing](https://51degrees.com/pricing?utm_source=github&utm_medium=readme&utm_campaign=device-detection-node&utm_content=readme.md&utm_term=cloud) to get a paid subscription with more properties.
 
 #### On-Premise
 
-In order to perform device detection on-premise, you will need to use a 51Degrees data file. 
-This repository includes a free, 'lite' file in the 'device-detection-data' sub-module that has a 
-significantly reduced set of properties. To obtain a file with a more complete set of device 
-properties see the [51Degrees website](https://51degrees.com/pricing). If you want to use the lite 
+In order to perform device detection on-premise, you will need to use a 51Degrees data file.
+This repository includes a free, 'lite' file in the 'device-detection-data' sub-module that has a
+significantly reduced set of properties. To obtain a file with a more complete set of device
+properties see the [51Degrees website](https://51degrees.com/pricing?utm_source=github&utm_medium=readme&utm_campaign=device-detection-node&utm_content=readme.md&utm_term=on-premise).
+
+The on-premise examples locate the data file in the following order:
+
+1. The `_51DEGREES_DD_PATH` environment variable, which can be set to an explicit path to the
+   data file.
+2. A search of the folder hierarchy, walking up from the working directory, for the expected
+   file name.
+3. The free 'Lite' data file in its expected location, which is the
+   'fiftyone.devicedetection.onpremise/device-detection-cxx/device-detection-data' sub-module
+   of this repository.
+
+If you want to use the lite
 file, you will need to install [GitLFS](https://git-lfs.github.com/):
 
 ```
@@ -72,8 +101,8 @@ npm install fiftyone.devicedetection.onpremise
 
 ### Build from Source On-Premise
 
-Device detection on-premise uses a native binary. (i.e. compiled from C code to target a specific 
-platform/architecture) The NPM package contains several binaries for common platforms. However, 
+Device detection on-premise uses a native binary. (i.e. compiled from C code to target a specific
+platform/architecture) The NPM package contains several binaries for common platforms. However,
 in some cases, you'll need to build the native binaries yourself for your target platform. This
 section explains how to do this.
 
@@ -81,7 +110,7 @@ section explains how to do this.
 
 - Install Node.js.
 - Install node-gyp by running.
-  - `npm install node-gyp --global`  
+  - `npm install node-gyp --global`
 - Install C build tools:
   - Windows:
     - You will need either Visual Studio 2019 or the [C++ Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/) installed.
@@ -92,7 +121,7 @@ section explains how to do this.
 - Pull git submodules:
   - `git submodule update --init --recursive`
 
-#### Build Steps 
+#### Build Steps
 
 - Navigate to fiftyone.devicedetection.onpremise
 - Rename the `binding.51d` to `binding.gyp`
@@ -109,15 +138,13 @@ section explains how to do this.
 - This will build the `FiftyOneDeviceDetectionHashV4.node` under `build/Release` folder.
 - Copy the `FiftyOneDeviceDetectionHashV4.node` to `build` directory (which is one level up) and rename it using the following convention.
   - Windows:
-    - FiftyOneDeviceDetectionHashV4-win32-[ Node version ].node
-      - e.g. FiftyOneDeviceDetectionHashV4-win32-10.node for Node 10.
+    - FiftyOneDeviceDetectionHashV4-win32-[ arch ]-[ Node major version ].node
   - Linux:
-    - FiftyOneDeviceDetectionHashV4-linux-[ Node version ].node
-      - e.g. FiftyOneDeviceDetectionHashV4-linux-10.node for Node 10.
+    - FiftyOneDeviceDetectionHashV4-linux-[ arch ]-[ Node major version ].node
   - MacOS:
-    - FiftyOneDeviceDetectionHashV4-darwin-[ Node version ].node
-      - e.g. FiftyOneDeviceDetectionHashV4-darwin-10.node for Node 10.
-  - Please see the [tested versions page](https://51degrees.com/documentation/_info__tested_versions.html) for Node versions that we currently test against. The software may run fine against other versions, but extra caution should be applied.
+    - FiftyOneDeviceDetectionHashV4-darwin-[ arch ]-[ Node major version ].node
+  - [ arch ] is the value of `process.arch` (for example x64 or arm64) and [ Node major version ] is the major version of the Node.js runtime the module was built with.
+  - Testing targets the current Node.js LTS versions. There is no concept of 'supported' versions. The software may well run on other versions, but they are not tested. See the [tested versions page](https://51degrees.com/documentation/_info__tested_versions.html?utm_source=github&utm_medium=readme&utm_campaign=device-detection-node&utm_content=readme.md&utm_term=build-steps) for the versions that we currently test against.
   - You can optionally clear up by removing all the build files and folders except for the *.node file that's been created.
   - `WARNING`: `npm install` removes this copied file, so you will need to do the above steps again after running `npm install`
 
@@ -163,7 +190,7 @@ The tables below describe the examples that are available.
 
 ## Tests
 
-In this repository, there are tests for the examples. 
+In this repository, there are tests for the examples.
 You will need to install jest to run them:
 
 ```
@@ -172,7 +199,7 @@ npm install jest --global
 
 You will also need to install any required packages for the examples in the **Examples** section.
 
-Add a 51Degrees cloud resource key in the fiftyone.devicedetection/package.json file for cloud tests. You can obtain a resource key from the [51Degrees Cloud Configurator](https://configure.51degrees.com/) and assign it to the environment variable `RESOURCE_KEY` in your test environment.
+Add a 51Degrees cloud resource key in the fiftyone.devicedetection/package.json file for cloud tests. You can obtain a resource key from the [51Degrees Cloud Configurator](https://configure.51degrees.com/?utm_source=github&utm_medium=readme&utm_campaign=device-detection-node&utm_content=readme.md&utm_term=tests) and assign it to the environment variable `_51DEGREES_RESOURCE_KEY` in your test environment. The legacy environment variable name `RESOURCE_KEY` is still supported and is checked second, after `_51DEGREES_RESOURCE_KEY`.
 
 There are other environment variables that you will also need to set in your test environment before running all tests:
 - `TEST_SUPER_RESOURCE_KEY`: This key contains all `SetHeader*` properties.
@@ -189,15 +216,13 @@ npm test
 
 ## Native code updates
 
-Process for rebuilding SWIG interfaces following an update to the device detection cxx code 
+Process for rebuilding SWIG interfaces following an update to the device detection cxx code
 (This is only intended to be run by 51Degrees developers internally):
 
 1. Ensure Swig is installed.
-   1. At the time when this README was updated, the current stable version of Swig did not support new changes in Node 12 and above.
-   2. The Swig version being used is built from the following branch.
-      1. https://github.com/yegorich/swig/tree/pr/new-node-fixes.
-      2. There had been an active Pull Request created to merge the changes to the main Swig master branch.
-      3. Once the Pull Request is completed, the consequent Swig releases should be used.
+   1. Use the 51Degrees fork of Swig, built from source from the `node-24-holder-this` branch of https://github.com/51Degrees/swig.
+   2. The fork is required because Swig releases still emit V8 API calls that were removed in the V8 shipped with recent Node versions, in particular `FunctionCallbackInfo::Holder()`, which the fork replaces with `This()`. The generated code must compile against the Node.js LTS versions targeted for testing, see the [tested versions page](https://51degrees.com/documentation/_info__tested_versions.html?utm_source=github&utm_medium=readme&utm_campaign=device-detection-node&utm_content=readme.md&utm_term=native-code-updates).
+   3. All native modules loaded into one Node process must be generated by the same Swig version. Mixing modules generated by different Swig versions (for example this package and fiftyone.ipintelligence.onpremise) can crash the process, so regenerate and release them together.
 2. Update the device-detection-cxx submodule to reference the relevant commit.
 3. From terminal, navigate to fiftyone.pipeline.devicedetection and run:
     a) swig -c++ -javascript -node hash_node.i
@@ -210,9 +235,9 @@ Process for rebuilding SWIG interfaces following an update to the device detecti
 
 Types are generated and exported automatically from JSDoc comments using [this script](https://github.com/51Degrees/common-ci/blob/main/node/generate-types.ps1#L10). Upon generation types are committed into the repository into the package's `types` directory. Calling the generation step is manual for now, but later will be added as part of CI/CD pipeline.
 
-The TypeScript example with typechecking enabled is available under `onpremise/gettingstarted-console/gettingStarted.ts`. 
+The TypeScript example with typechecking enabled is available under `onpremise/gettingstarted-console/gettingStarted.ts`.
 
-The example can be run as: 
+The example can be run as:
 
 ```
 npx ts-node gettingStarted.ts

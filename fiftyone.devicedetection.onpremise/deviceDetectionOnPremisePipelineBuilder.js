@@ -42,7 +42,7 @@ class DeviceDetectionOnPremisePipelineBuilder extends PipelineBuilder {
    * @param {object} options the options for the pipeline builder
    * @param {string} [options.licenceKeys] license key(s) used by the
    * data file update service. A key can be obtained from the
-   * 51Degrees website: https://51degrees.com/pricing.
+   * 51Degrees website: https://51degrees.com/pricing?utm_source=code&utm_medium=comment&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.onpremise-devicedetectiononpremisepipelinebuilder.js&utm_term=constructor.
    * This parameter MUST be set when using a data file.
    * If you do not wish to use a key then you can specify
    * an empty string, but this will cause automatic updates
@@ -101,6 +101,12 @@ class DeviceDetectionOnPremisePipelineBuilder extends PipelineBuilder {
    * @param {DataFileUpdateService} [options.dataFileUpdateService] Set
    * DataFileUpdateService so the datafiles can receive
    * automatic updates
+   * @param {boolean} [options.suppressProcessExceptions] If false (the
+   * default) the first error thrown while processing is re-thrown from
+   * flowData.process(); if true, errors are stored on flowData.errors and
+   * emitted via the pipeline 'error' event instead, and process() resolves
+   * normally. Recommended true for web apps so a device-detection failure
+   * degrades gracefully instead of failing the request.
    */
   constructor (
     {
