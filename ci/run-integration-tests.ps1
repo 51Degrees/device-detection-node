@@ -7,6 +7,11 @@ $PSNativeCommandUseErrorActionPreference = $true
 
 ./node/run-integration-tests.ps1 -RepoName $RepoName
 
+if ($IsLinux -and [System.Runtime.InteropServices.RuntimeInformation]::ProcessArchitecture -eq [System.Runtime.InteropServices.Architecture]::Arm64) {
+    Write-Host "::warning title=Selenium skipped::Selenium contract skipped on linux-arm64 (no selenium-manager aarch64 build); covered on x64 and macOS-arm."
+    exit
+}
+
 if (-not $TestResourceKey) {
     Write-Host "::warning title=No Resource Key::No resource key; skipping the Selenium contract."
     exit
