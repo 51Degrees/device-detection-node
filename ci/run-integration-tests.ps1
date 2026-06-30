@@ -33,7 +33,7 @@ try {
         git clone --depth 1 https://github.com/51Degrees/selenium-api-tests.git
     }
     # Wait for the example to come up.
-    curl -sS -o /dev/null --retry 5 --retry-connrefused "http://localhost:$env:PORT"
+    curl -sS -o $(if ($IsWindows) { 'NUL' } else { '/dev/null' }) --retry 5 --retry-connrefused "http://localhost:$env:PORT"
 
     $env:CLOUD_ROOT_URL = "https://cloud.51degrees.com/"
     $env:PAID_RESOURCE_KEY = $TestResourceKey
