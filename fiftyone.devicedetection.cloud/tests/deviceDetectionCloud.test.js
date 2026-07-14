@@ -258,7 +258,7 @@ describe('Origin Header', () => {
   ]).test('origin header set to "%s"', async (origin, expectError) => {
     let error = false;
     let message = '';
-    const expectErrorMessage = `This Resource Key is not authorized for use with this domain: '${origin}'`;
+    const expectErrorMessage = `This resource key is not authorised for the domain '${origin}'`;
 
     const pipeline = new DeviceDetectionCloudPipelineBuilder({
       // Resource key configured with '51degrees.com' as allowed domains.
