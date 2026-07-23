@@ -215,7 +215,12 @@ describe('deviceDetectionOnPremise', () => {
     expect(userAgents.value).not.toBeNull();
     expect(userAgents.value).toBeDefined();
 
-    expect(userAgents.value.length).toBe(1);
+    // Since the detection result shape was unified in device-detection-cxx
+    // (issue #362), a single User-Agent produces one result - and so one
+    // matched User-Agent - per component the engine populates, rather than
+    // exactly one overall. The number depends on the data file, so assert that
+    // at least one is returned and validate each of them below.
+    expect(userAgents.value.length).toBeGreaterThanOrEqual(1);
 
     userAgents.value.forEach(matchedUa => {
       matchedUa.split(/[_{}]/g).forEach(substring => {
