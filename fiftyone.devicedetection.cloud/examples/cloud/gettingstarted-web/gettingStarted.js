@@ -256,7 +256,10 @@ const server = http.createServer((req, res) => {
           browserName: DataExtension.getValueHelper(device, 'browsername'),
           browserVersion: DataExtension.getValueHelper(device, 'browserversion'),
           screenWidth: DataExtension.getValueHelper(device, 'screenpixelswidth'),
-          screenHeight: DataExtension.getValueHelper(device, 'screenpixelsheight')
+          screenHeight: DataExtension.getValueHelper(device, 'screenpixelsheight'),
+          // The device id combines the profile ids of the hardware, platform,
+          // browser and crawler components that were matched.
+          deviceId: DataExtension.getValueHelper(device, 'deviceid')
         })
       );
     });

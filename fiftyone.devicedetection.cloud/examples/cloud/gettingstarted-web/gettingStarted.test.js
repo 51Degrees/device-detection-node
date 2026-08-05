@@ -66,5 +66,18 @@ describe('Examples', () => {
     expect(script.statusCode).toBe(200);
     expect(script.headers['content-type']).toContain('javascript');
     expect(script.text).toContain('fiftyoneDegreesManager');
+
+    // A recognised User-Agent must produce a device id in the rendered page.
+    // A device id of all zeros means nothing was matched.
+    const detected = await request(example.server)
+      .get('/')
+      .set('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) ' +
+        'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
+    expect(detected.statusCode).toBe(200);
+    const deviceId = /Device Id:.*?c-eg-table__cell">([\d-]+)</s
+      .exec(detected.text);
+    expect(deviceId).not.toBeNull();
+    expect(deviceId[1]).toMatch(/^\d+-\d+-\d+-\d+$/);
+    expect(deviceId[1]).not.toBe('0-0-0-0');
   });
 });
