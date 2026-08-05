@@ -56,5 +56,15 @@ describe('Examples', () => {
       .get('/')
       .set('User-Agent', 'abc');
     expect(response.statusCode).toBe(200);
+    expect(response.text).toContain('src="/51Degrees.core.js"');
+
+    // The script referenced by the page must be served as JavaScript rather
+    // than falling through to the page itself.
+    const script = await request(example.server)
+      .get('/51Degrees.core.js')
+      .set('User-Agent', 'abc');
+    expect(script.statusCode).toBe(200);
+    expect(script.headers['content-type']).toContain('javascript');
+    expect(script.text).toContain('fiftyoneDegreesManager');
   });
 });
