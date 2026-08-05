@@ -215,7 +215,7 @@ const server = http.createServer((req, res) => {
     // the flow data via addFromRequest.
     flowData.process().then(function () {
       res.statusCode = 200;
-      res.setHeader('Content-Type', 'application/javascript');
+      res.setHeader('Content-Type', 'application/x-javascript');
 
       res.end(flowData.javascriptbuilder.javascript);
     });
