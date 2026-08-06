@@ -84,6 +84,10 @@ const compiledFunction = pug.compileFile(path.join(__dirname, '/index.pug'));
 // express.static or an ASP.NET wwwroot folder would expose them.
 const publicDir = path.join(__dirname, '/public');
 
+// Path that the 51Degrees client-side script is served from. The same name is
+// used by the .NET, Java and Rust web integrations.
+const coreJsPath = '/51Degrees.core.js';
+
 // Map of file extensions to the content types used when serving static assets.
 const staticContentTypes = {
   '.css': 'text/css',
@@ -201,6 +205,20 @@ const server = http.createServer((req, res) => {
 
       res.end(JSON.stringify(flowData.jsonbundler.json));
     });
+  } else if (req.url.split('?')[0] === coreJsPath) {
+    // Serve the client-side script built by the JavaScriptBuilder as a separate
+    // resource, so that the page can reference it with a <script src> tag. The
+    // web integrations of the other Pipeline APIs expose it at this path, and
+    // serving it per request rather than caching it is what allows it to carry
+    // the results of this request's detection. Query parameters, such as
+    // 'fod-js-enable-cookies', are evidence like any other and are already in
+    // the flow data via addFromRequest.
+    flowData.process().then(function () {
+      res.statusCode = 200;
+      res.setHeader('Content-Type', 'application/x-javascript');
+
+      res.end(flowData.javascriptbuilder.javascript);
+    });
   } else {
     flowData.process().then(function () {
       res.statusCode = 200;
@@ -227,7 +245,7 @@ const server = http.createServer((req, res) => {
           responseHeaders: res.getHeaders(),
           evidenceUsed: evidences,
           allEvidence,
-          fiftyOneJs: flowData.javascriptbuilder.javascript,
+          coreJsPath,
           hardwareVendor: DataExtension.getValueHelper(device, 'hardwarevendor'),
           hardwareName: DataExtension.getValueHelper(device, 'hardwarename'),
           deviceType: DataExtension.getValueHelper(device, 'devicetype'),
@@ -238,7 +256,10 @@ const server = http.createServer((req, res) => {
           browserName: DataExtension.getValueHelper(device, 'browsername'),
           browserVersion: DataExtension.getValueHelper(device, 'browserversion'),
           screenWidth: DataExtension.getValueHelper(device, 'screenpixelswidth'),
-          screenHeight: DataExtension.getValueHelper(device, 'screenpixelsheight')
+          screenHeight: DataExtension.getValueHelper(device, 'screenpixelsheight'),
+          // The device id combines the profile ids of the hardware, platform,
+          // browser and crawler components that were matched.
+          deviceId: DataExtension.getValueHelper(device, 'deviceid')
         })
       );
     });
