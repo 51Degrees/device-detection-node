@@ -1,5 +1,37 @@
 [
   {
+    "Name": "Ubuntu_Node_26",
+    "Image": "ubuntu-22.04",
+    "Language": "node",
+    "LanguageVersion": "26",
+    "RunPerformance": true,
+    "PackageRequirement": true
+  },
+  {
+    "Name": "Ubuntu_ARM_Node_26",
+    "Image": "ubuntu-22.04-arm",
+    "Language": "node",
+    "LanguageVersion": "26",
+    "RunPerformance": true,
+    "PackageRequirement": true
+  },
+  {
+    "Name": "Windows_Node_26",
+    "Image": "windows-latest",
+    "Language": "node",
+    "LanguageVersion": "26",
+    "RunPerformance": true,
+    "PackageRequirement": true
+  },
+  {
+    "Name": "macOS_Node_26",
+    "Image": "macos-latest",
+    "Language": "node",
+    "LanguageVersion": "26",
+    "RunPerformance": true,
+    "PackageRequirement": true
+  },
+  {
     "Name": "Ubuntu_Node_24",
     "Image": "ubuntu-22.04",
     "Language": "node",
