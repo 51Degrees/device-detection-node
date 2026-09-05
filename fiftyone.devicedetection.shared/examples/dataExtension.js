@@ -22,27 +22,87 @@
 
 class DataExtension {
   /**
-   * Helper function to read property values from flowData
+   * Format a property value for display.
+   *
+   * A property can be unavailable for three reasons, and each one reads
+   * differently so the person running the example can tell them apart.
+   * The property may have a value, it may have no value with the cloud
+   * service giving a reason (most often that the resource key is not
+   * entitled to it), or it may not be in the results at all.
    *
    * @param {object} elementData Element data
    * @param {string} propertyName Property name
-   * @returns {string} result string, either property value or error
+   * @returns {string} The value, or a line saying why there is none
    * */
   static getValueHelper (elementData, propertyName) {
+    let property;
+
     try {
-      const property = elementData[propertyName];
-      if (property && property.hasValue) {
-        if (Array.isArray(property.value)) {
-          return property.value.join(', ');
-        } else {
-          return property.value;
-        }
-      } else {
-        return `Unknown (${property.noValueMessage})`;
-      }
+      property = elementData === undefined || elementData === null
+        ? undefined
+        : elementData[propertyName];
     } catch (e) {
-      return `Unknown (${e})`;
+      property = undefined;
     }
+
+    if (property === undefined || property === null) {
+      return `Unknown (the property '${propertyName}' is not in the ` +
+        'results, so the current resource key does not include it)';
+    }
+
+    if (property.hasValue) {
+      try {
+        return Array.isArray(property.value)
+          ? property.value.join(', ')
+          : property.value;
+      } catch (e) {
+        return `Unknown (${e})`;
+      }
+    }
+
+    const reason = property.noValueMessage;
+
+    if (reason === undefined || reason === null || reason === '') {
+      return 'Unknown (the cloud service returned no value for ' +
+        `'${propertyName}' and gave no reason)`;
+    }
+
+    return `Unknown (${reason})`;
+  };
+
+  /**
+   * Read the list of hardware profiles from the 'hardware' element data.
+   *
+   * An empty list is returned when the resource key has no access to the
+   * hardware aspect at all, because reading a property that is not there
+   * can raise rather than return an empty list.
+   *
+   * @param {object} hardware The 'hardware' element data
+   * @returns {Array} The profiles, or an empty array
+   * */
+  static getProfilesHelper (hardware) {
+    let profiles;
+
+    try {
+      profiles = hardware === undefined || hardware === null
+        ? undefined
+        : hardware.profiles;
+    } catch (e) {
+      return [];
+    }
+
+    return Array.isArray(profiles) ? profiles : [];
+  };
+
+  /**
+   * The line printed when a lookup returned no device profiles at all.
+   *
+   * @returns {string} The message to print
+   * */
+  static getNoProfilesMessage () {
+    return '\tNo device profiles were returned. The current resource key ' +
+      'does not include the hardware properties this example needs. See ' +
+      'https://51degrees.com/pricing?utm_source=code&utm_medium=example&utm_campaign=device-detection-node&utm_content=fiftyone.devicedetection.shared-examples-dataextension.js&utm_term=no-profiles\n';
   };
 }
 

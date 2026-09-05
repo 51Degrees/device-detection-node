@@ -29,6 +29,40 @@ const CloudEngine = require('fiftyone.pipeline.cloudrequestengine').CloudEngine;
 const AspectPropertyValue = require('fiftyone.pipeline.core').AspectPropertyValue;
 const AspectDataDictionary = require('fiftyone.pipeline.engines').AspectDataDictionary;
 
+// The suffix the cloud service adds to a property name to carry the reason
+// that property has no value, for example 'hardwarevendornullreason'.
+const NULL_REASON_SUFFIX = 'nullreason';
+
+/**
+ * Build the aspect level property values from the 'hardware' section of a
+ * cloud response, pairing each null value with the reason the service gave
+ * for it.
+ *
+ * @param {object} hardware The 'hardware' section of the cloud response
+ * @returns {object} Property name to AspectPropertyValue
+ */
+const buildAspectValues = function (hardware) {
+  const values = {};
+
+  Object.entries(hardware).forEach(function ([key, value]) {
+    if (key === 'profiles' || key.endsWith(NULL_REASON_SUFFIX)) {
+      return;
+    }
+
+    if (value === null || value === undefined) {
+      const reason = hardware[key + NULL_REASON_SUFFIX];
+
+      values[key] = (typeof reason === 'string' && reason.length > 0)
+        ? new AspectPropertyValue(reason)
+        : new AspectPropertyValue();
+    } else {
+      values[key] = new AspectPropertyValue(null, value);
+    }
+  });
+
+  return values;
+};
+
 /**
  * This Cloud Aspect Engine enables the parsing of 'hardware profile'
  * responses from the 51Degrees cloud service.
@@ -55,11 +89,18 @@ class HardwareProfileCloudEngine extends CloudEngine {
 
     cloudData = JSON.parse(cloudData);
 
-    // Loop over cloudData.devices properties to check if they have a value
+    const hardware = (cloudData && cloudData.hardware) || {};
+
+    // Properties the resource key is not entitled to are returned by the
+    // cloud service at the aspect level rather than inside each profile,
+    // with a companion '<name>nullreason' saying why there is no value.
+    // Collect those so the reason can travel with every profile instead of
+    // being thrown away.
+    const aspectValues = buildAspectValues(hardware);
 
     const devices = [];
 
-    Object.entries(cloudData.hardware.profiles).forEach(function ([i, deviceValues]) {
+    Object.entries(hardware.profiles || {}).forEach(function ([i, deviceValues]) {
       const device = {};
 
       Object.entries(deviceValues).forEach(function ([propertyKey, propertyValue]) {
@@ -68,10 +109,21 @@ class HardwareProfileCloudEngine extends CloudEngine {
         device[propertyKey].value = propertyValue;
       });
 
+      // Add the properties the service could not supply, carrying the
+      // reason it gave, so a caller reading a profile gets an explanation
+      // rather than nothing at all.
+      Object.entries(aspectValues).forEach(function ([propertyKey, value]) {
+        if (device[propertyKey] === undefined) {
+          device[propertyKey] = value;
+        }
+      });
+
       devices.push(device);
     });
 
-    const result = { profiles: devices };
+    // The aspect level values are exposed alongside the profiles so a
+    // caller with no matching profiles can still read the reason.
+    const result = Object.assign({}, aspectValues, { profiles: devices });
 
     const data = new AspectDataDictionary(
       {

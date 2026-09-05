@@ -80,7 +80,14 @@ const analyseNativeModel = async function (nativemodel, pipeline, output) {
   // the specified native model name.
   // The code in this example iterates through this array, outputting the
   // vendor and model of each matching device.
-  flowData.hardware.profiles.forEach(profile => {
+  const profiles = DataExtension.getProfilesHelper(flowData.hardware);
+
+  if (profiles.length === 0) {
+    output.write(DataExtension.getNoProfilesMessage());
+    return;
+  }
+
+  profiles.forEach(profile => {
     const hardwareVendor = DataExtension.getValueHelper(profile, 'hardwarevendor');
     const hardwareName = DataExtension.getValueHelper(profile, 'hardwarename');
     const hardwareModel = DataExtension.getValueHelper(profile, 'hardwaremodel');

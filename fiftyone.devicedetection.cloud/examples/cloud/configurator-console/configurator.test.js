@@ -31,12 +31,31 @@ const require51 = (requestedPackage) => {
 
 const example = require(path.join(__dirname, '/configurator.js'));
 
-// Test constants
-const tc = require51('fiftyone.devicedetection.shared').testConstants;
+const shared = require51('fiftyone.devicedetection.shared');
+const tc = shared.testConstants;
+const keyUtils = shared.keyUtils;
+const ExampleOutput = shared.exampleOutput.ExampleOutput;
 
 describe('Examples', () => {
   test('cloud configurator', async () => {
-    await example.run(process.env[tc.envVars.superResourceKeyEnvVar], process.stdout);
-    expect(true);
+    const resourceKey = keyUtils.getResourceKey(
+      tc.envVars.superResourceKeyEnvVar);
+
+    if (!resourceKey) {
+      // The message names the variable that was wanted, so whoever reads
+      // the run knows what to set.
+      throw new Error(keyUtils.missingResourceKeyMessage(
+        tc.envVars.superResourceKeyEnvVar));
+    }
+
+    const output = new ExampleOutput();
+
+    await example.run(resourceKey, output);
+
+    // The example prints one line, which either carries the value or says
+    // why the resource key does not include it.
+    expect(output.text()).toContain('device.ismobile: ');
+    expect(output.faults()).toEqual([]);
+    expect(output.text().trim()).not.toBe('device.ismobile:');
   });
 });

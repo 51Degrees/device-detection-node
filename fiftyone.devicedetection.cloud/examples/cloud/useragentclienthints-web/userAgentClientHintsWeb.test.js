@@ -33,6 +33,8 @@ const request = require('supertest');
 // Test constants
 const tc = require51('fiftyone.devicedetection.shared').testConstants;
 
+const keyUtils = require51('fiftyone.devicedetection.shared').keyUtils;
+
 // Load the example module
 const example = require(path.join(__dirname, '/userAgentClientHintsWeb.js'));
 
@@ -123,9 +125,14 @@ describe('Examples', () => {
   ])('hash user agent client hints web - %s', async (name, testData, expectedResponses) => {
     // Loop through the test user agents
     for (const ua of testData.userAgents) {
-      // Make sure required resource key is defined.
-      const resourceKey = process.env[testData.resourceKeyEnvVar];
-      expect(resourceKey).toBeDefined();
+      // Make sure required resource key is defined. The message names the
+      // variable that was wanted, so whoever reads the run knows what to
+      // set.
+      const resourceKey = keyUtils.getResourceKey(testData.resourceKeyEnvVar);
+      if (!resourceKey) {
+        throw new Error(
+          keyUtils.missingResourceKeyMessage(testData.resourceKeyEnvVar));
+      }
 
       // Set pipeline with required resource key
       example.setPipeline(resourceKey);

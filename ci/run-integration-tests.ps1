@@ -23,7 +23,7 @@ try {
     Push-Location "$PSScriptRoot/../fiftyone.devicedetection.cloud/examples/cloud/gettingstarted-web"
     try {
         $env:PORT = 8096
-        $env:RESOURCE_KEY = $TestResourceKey
+        $env:_51DEGREES_RESOURCE_KEY = $TestResourceKey
         $env:FOD_CLOUD_API_URL = "https://cloud.51degrees.com/api/v4/"
         $example = node gettingStarted.js 2>&1 &
     } finally { Pop-Location }

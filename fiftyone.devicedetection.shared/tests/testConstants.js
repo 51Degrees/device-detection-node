@@ -21,14 +21,30 @@
  * ********************************************************************* */
 
 module.exports = {
-  // Environment variables name for testing
+  // Resource key environment variables follow the 51Degrees convention,
+  // which is that every one of them starts with '_51DEGREES_RESOURCE_KEY'.
+  // That prefix is what common-ci's central steps/set-resource-keys.ps1
+  // exports, so a key added as an organisation secret under that
+  // convention reaches these tests with no change here.
   envVars: {
-    superResourceKeyEnvVar: 'TEST_SUPER_RESOURCE_KEY',
-    platformResourceKeyEnvVar: 'TEST_PLATFORM_RESOURCE_KEY',
-    hardwareResourceKeyEnvVar: 'TEST_HARDWARE_RESOURCE_KEY',
-    browserResourceKeyEnvVar: 'TEST_BROWSER_RESOURCE_KEY',
-    noSetHeaderResourceKeyEnvVar: 'TEST_NO_SETHEADER_RESOURCE_KEY',
+    resourceKeyEnvVar: '_51DEGREES_RESOURCE_KEY',
+    superResourceKeyEnvVar: '_51DEGREES_RESOURCE_KEY_SUPER',
+    platformResourceKeyEnvVar: '_51DEGREES_RESOURCE_KEY_PLATFORM',
+    hardwareResourceKeyEnvVar: '_51DEGREES_RESOURCE_KEY_HARDWARE',
+    browserResourceKeyEnvVar: '_51DEGREES_RESOURCE_KEY_BROWSER',
+    noSetHeaderResourceKeyEnvVar: '_51DEGREES_RESOURCE_KEY_NO_SETHEADER',
     licenseKeyEnvVar: 'TEST_LICENSE_KEY'
+  },
+  // The names used before the convention above was adopted. They are still
+  // read as a fallback, so an existing setup keeps working until the
+  // secrets behind them are renamed.
+  legacyEnvVars: {
+    _51DEGREES_RESOURCE_KEY: 'RESOURCE_KEY',
+    _51DEGREES_RESOURCE_KEY_SUPER: 'TEST_SUPER_RESOURCE_KEY',
+    _51DEGREES_RESOURCE_KEY_PLATFORM: 'TEST_PLATFORM_RESOURCE_KEY',
+    _51DEGREES_RESOURCE_KEY_HARDWARE: 'TEST_HARDWARE_RESOURCE_KEY',
+    _51DEGREES_RESOURCE_KEY_BROWSER: 'TEST_BROWSER_RESOURCE_KEY',
+    _51DEGREES_RESOURCE_KEY_NO_SETHEADER: 'TEST_NO_SETHEADER_RESOURCE_KEY'
   },
   // User-Agent string for testing
   userAgents: {

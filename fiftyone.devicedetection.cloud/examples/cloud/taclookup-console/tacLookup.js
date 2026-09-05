@@ -75,7 +75,14 @@ const analyseTac = async function (tac, pipeline, output) {
   // the specified TAC.
   // The code in this example iterates through this array, outputting the
   // vendor and model name of each matching device.
-  flowData.hardware.profiles.forEach(profile => {
+  const profiles = DataExtension.getProfilesHelper(flowData.hardware);
+
+  if (profiles.length === 0) {
+    output.write(DataExtension.getNoProfilesMessage());
+    return;
+  }
+
+  profiles.forEach(profile => {
     const hardwareVendor = DataExtension.getValueHelper(profile, 'hardwarevendor');
     const hardwareName = DataExtension.getValueHelper(profile, 'hardwarename');
     const hardwareModel = DataExtension.getValueHelper(profile, 'hardwaremodel');
@@ -127,8 +134,11 @@ const run = async function (options, output) {
   const tac1 = '35925406';
   const tac2 = '86386802';
 
-  analyseTac(tac1, pipeline, output);
-  analyseTac(tac2, pipeline, output);
+  // These are awaited so that run() does not resolve before the lookups
+  // have finished. Without the await a failure inside a lookup becomes an
+  // unhandled rejection that the caller never sees.
+  await analyseTac(tac1, pipeline, output);
+  await analyseTac(tac2, pipeline, output);
 };
 
 // Don't run the server if under TEST

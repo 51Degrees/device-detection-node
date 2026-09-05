@@ -33,20 +33,47 @@ const fs = require('fs');
 
 const example = require(path.join(__dirname, '/tacLookup.js'));
 
-// Test constants
-const tc = require51('fiftyone.devicedetection.shared').testConstants;
+const shared = require51('fiftyone.devicedetection.shared');
+const tc = shared.testConstants;
+const keyUtils = shared.keyUtils;
+const ExampleOutput = shared.exampleOutput.ExampleOutput;
 
-const OptionsExtension =
-  require51('fiftyone.devicedetection.shared').optionsExtension;
+const OptionsExtension = shared.optionsExtension;
 
 describe('Examples', () => {
   test('cloud tac lookup', async () => {
+    const resourceKey = keyUtils.getResourceKey(
+      tc.envVars.superResourceKeyEnvVar);
+
+    if (!resourceKey) {
+      // The message names the variable that was wanted, so whoever reads
+      // the run knows what to set.
+      throw new Error(keyUtils.missingResourceKeyMessage(
+        tc.envVars.superResourceKeyEnvVar));
+    }
+
     // Load the configuration from a config file to a JSON object.
     const options = JSON.parse(fs.readFileSync(path.join(__dirname, '/51d.json')), 'utf8');
     OptionsExtension.updateElementPath(options, __dirname);
-    OptionsExtension.setResourceKey(
-      options, process.env[tc.envVars.superResourceKeyEnvVar]);
-    await example.run(options, process.stdout);
-    expect(true);
+    OptionsExtension.setResourceKey(options, resourceKey);
+
+    const output = new ExampleOutput();
+
+    await example.run(options, output);
+
+    // The example must reach both lookups.
+    expect(output.text()).toContain(
+      "Which devices are associated with the TAC '35925406'?");
+    expect(output.text()).toContain(
+      "Which devices are associated with the TAC '86386802'?");
+
+    // Nothing it printed may read as a programming fault, however little
+    // of the data this resource key is entitled to.
+    expect(output.faults()).toEqual([]);
+
+    // Every lookup has to say something about the devices it found, either
+    // naming them or saying why it could not.
+    const deviceLines = output.lines().filter(line => line.startsWith('\t'));
+    expect(deviceLines.length).toBeGreaterThan(0);
   });
 });

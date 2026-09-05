@@ -39,6 +39,8 @@ const OptionsExtension =
 // Test constants
 const tc = require51('fiftyone.devicedetection.shared').testConstants;
 
+const keyUtils = require51('fiftyone.devicedetection.shared').keyUtils;
+
 // Load the example module
 const example = require(path.join(__dirname, '/gettingStarted.js'));
 
@@ -48,8 +50,17 @@ describe('Examples', () => {
     const options = JSON.parse(fs.readFileSync(path.join(__dirname, '/51d.json')));
     // Update element path with a full path
     OptionsExtension.updateElementPath(options, __dirname);
-    OptionsExtension.setResourceKey(
-      options, process.env[tc.envVars.superResourceKeyEnvVar]);
+    const resourceKey = keyUtils.getResourceKey(
+      tc.envVars.superResourceKeyEnvVar);
+
+    if (!resourceKey) {
+      // The message names the variable that was wanted, so whoever reads
+      // the run knows what to set.
+      throw new Error(keyUtils.missingResourceKeyMessage(
+        tc.envVars.superResourceKeyEnvVar));
+    }
+
+    OptionsExtension.setResourceKey(options, resourceKey);
 
     example.setPipeline(options);
     const response = await request(example.server)
