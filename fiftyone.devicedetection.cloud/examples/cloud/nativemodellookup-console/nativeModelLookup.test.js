@@ -31,12 +31,40 @@ const require51 = (requestedPackage) => {
 
 const example = require(path.join(__dirname, '/nativeModelLookup.js'));
 
-// Test constants
-const tc = require51('fiftyone.devicedetection.shared').testConstants;
+const shared = require51('fiftyone.devicedetection.shared');
+const tc = shared.testConstants;
+const keyUtils = shared.keyUtils;
+const ExampleOutput = shared.exampleOutput.ExampleOutput;
 
 describe('Examples', () => {
   test('cloud native model lookup', async () => {
-    await example.run(process.env[tc.envVars.superResourceKeyEnvVar], process.stdout);
-    expect(true);
+    const resourceKey = keyUtils.getResourceKey(
+      tc.envVars.superResourceKeyEnvVar);
+
+    if (!resourceKey) {
+      // The message names the variable that was wanted, so whoever reads
+      // the run knows what to set.
+      throw new Error(keyUtils.missingResourceKeyMessage(
+        tc.envVars.superResourceKeyEnvVar));
+    }
+
+    const output = new ExampleOutput();
+
+    await example.run(resourceKey, output);
+
+    // The example must reach both lookups.
+    expect(output.text()).toContain(
+      "Which devices are associated with the native model name 'SC-03L'?");
+    expect(output.text()).toContain(
+      "Which devices are associated with the native model name 'iPhone11,8'?");
+
+    // Nothing it printed may read as a programming fault, however little
+    // of the data this resource key is entitled to.
+    expect(output.faults()).toEqual([]);
+
+    // Every lookup has to say something about the devices it found, either
+    // naming them or saying why it could not.
+    const deviceLines = output.lines().filter(line => line.startsWith('\t'));
+    expect(deviceLines.length).toBeGreaterThan(0);
   });
 });

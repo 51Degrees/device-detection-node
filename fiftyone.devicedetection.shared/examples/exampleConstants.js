@@ -103,7 +103,7 @@ module.exports = {
         ':["99","0","0","0"]}],"platform":{"brand":"Windows","version":["14","0","0"]},' +
         '"mobile":0,"architecture":"x86","source":2}'
       ]
-    ]),
+    ])
   ],
   fileNames: {
     enterpriseDataFileName: 'Enterprise-HashV41.hash',

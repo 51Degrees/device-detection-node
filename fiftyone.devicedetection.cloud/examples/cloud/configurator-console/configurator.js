@@ -45,6 +45,9 @@ const require51 = (requestedPackage) => {
 const DeviceDetectionCloudPipelineBuilder = require51('fiftyone.devicedetection.cloud').DeviceDetectionCloudPipelineBuilder;
 const ExampleUtils = require(path.join(__dirname, '/../exampleUtils'));
 
+const DataExtension =
+  require51('fiftyone.devicedetection.shared').dataExtension;
+
 const run = async function (resourceKey, output) {
   // The pipeline should be managed as a singleton. Creating a pipeline instance for every request
   // will cause extreme resource problems.
@@ -87,7 +90,11 @@ const run = async function (resourceKey, output) {
   // Get the results.
   const device = data.device;
 
-  output.write(`device.ismobile: ${device.ismobile.value}\n`);
+  // Read through the helper so that a resource key without access to
+  // 'ismobile' reports the reason the cloud service gave, rather than
+  // throwing part way through the example.
+  output.write(
+    `device.ismobile: ${DataExtension.getValueHelper(device, 'ismobile')}\n`);
 };
 
 // Don't run the server if under TEST

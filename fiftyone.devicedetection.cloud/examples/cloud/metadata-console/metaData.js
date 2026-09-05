@@ -85,7 +85,10 @@ const run = async function (resourceKey, output) {
   }).build();
 
   const device = pipeline.getElement('device');
-  device.ready().then(function () {
+  // The promise is returned so that run() does not resolve before the
+  // properties have been written. Without the return, a failure here
+  // becomes an unhandled rejection that the caller never sees.
+  return device.ready().then(function () {
     outputProperties(device, output);
     // We use the CloudRequestEngine to get evidence key details, rather than the
     // DeviceDetectionCloud.
