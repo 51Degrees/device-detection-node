@@ -29,8 +29,10 @@ function Invoke-ContractTests {
         # The background job is a new process, which inherits this process's
         # environment and current location when it starts.
         $env:PORT = $Port
-        foreach ($name in $Environment.Keys) {
-            [Environment]::SetEnvironmentVariable($name, $Environment[$name])
+        # PowerShell names ignore case, so the loop variable must not be $name,
+        # which is the same variable as the $Name parameter.
+        foreach ($variable in $Environment.Keys) {
+            [Environment]::SetEnvironmentVariable($variable, $Environment[$variable])
         }
         Push-Location $ExampleDir
         try {
@@ -53,8 +55,8 @@ function Invoke-ContractTests {
         throw
     } finally {
         if ($example) { Remove-Job -Force $example }
-        foreach ($name in $Environment.Keys) {
-            [Environment]::SetEnvironmentVariable($name, $null)
+        foreach ($variable in $Environment.Keys) {
+            [Environment]::SetEnvironmentVariable($variable, $null)
         }
     }
 }
