@@ -35,8 +35,13 @@ const DATA_FILE_AGE_WARNING = 30;
 
 // The environment variable that can be used to supply an explicit
 // path to the device detection data file. This is checked before
-// searching the folder hierarchy for the file.
-const DATA_FILE_PATH_ENV_VAR = '_51DEGREES_DD_PATH';
+// searching the folder hierarchy for the file. The name is the one
+// the 51Degrees APIs share.
+const DATA_FILE_PATH_ENV_VAR = '51DEGREES_DD_PATH';
+
+// The name these examples used before the one above was agreed. It is
+// still read, after the agreed name, so existing set ups keep working.
+const LEGACY_DATA_FILE_PATH_ENV_VAR = '_51DEGREES_DD_PATH';
 
 class ExampleUtils {
   // Find the specified filename within the default lookup directory.
@@ -47,12 +52,21 @@ class ExampleUtils {
       path.normalize(process.cwd()));
   }
 
-  // Get the path to a device detection data file. The environment
-  // variable named by DATA_FILE_PATH_ENV_VAR is checked first for an
-  // explicit path. If it is not set then the folder hierarchy is
-  // searched for the supplied file name.
+  // Get the explicit data file path from the environment. The variable
+  // named by DATA_FILE_PATH_ENV_VAR is read first, then the one named by
+  // LEGACY_DATA_FILE_PATH_ENV_VAR. Returns undefined if neither is set.
+  static getDataFilePathFromEnv () {
+    return process.env[DATA_FILE_PATH_ENV_VAR] ||
+      process.env[LEGACY_DATA_FILE_PATH_ENV_VAR] ||
+      undefined;
+  }
+
+  // Get the path to a device detection data file. The environment is
+  // checked first for an explicit path (see getDataFilePathFromEnv). If
+  // no path is set there then the folder hierarchy is searched for the
+  // supplied file name.
   static findDataFile (fileName) {
-    return process.env[DATA_FILE_PATH_ENV_VAR] || this.findFile(fileName);
+    return this.getDataFilePathFromEnv() || this.findFile(fileName);
   }
 
   static isTimedOut (timeout) {
@@ -149,5 +163,6 @@ class ExampleUtils {
 module.exports = {
   ExampleUtils,
   DATA_FILE_AGE_WARNING,
-  DATA_FILE_PATH_ENV_VAR
+  DATA_FILE_PATH_ENV_VAR,
+  LEGACY_DATA_FILE_PATH_ENV_VAR
 };

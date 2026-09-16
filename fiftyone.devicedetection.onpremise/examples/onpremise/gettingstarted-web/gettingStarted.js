@@ -87,6 +87,11 @@ const compiledFunction =
 // express.static or an ASP.NET wwwroot folder would expose them.
 const publicDir = path.join(__dirname, '/public');
 
+// Path that the 51Degrees client-side script is served from. The same name is
+// used by the cloud example in this repository and by the .NET, Java and Rust
+// web integrations.
+const coreJsPath = '/51Degrees.core.js';
+
 // Map of file extensions to the content types used when serving static assets.
 const staticContentTypes = {
   '.css': 'text/css',
@@ -133,24 +138,29 @@ const optionsExtension =
 const dataExtension =
   require51('fiftyone.devicedetection.shared').dataExtension;
 
-const { DATA_FILE_AGE_WARNING, DATA_FILE_PATH_ENV_VAR, ExampleUtils } =
-  require(path.join(__dirname, '/../exampleUtils'));
+const {
+  DATA_FILE_AGE_WARNING,
+  DATA_FILE_PATH_ENV_VAR,
+  LEGACY_DATA_FILE_PATH_ENV_VAR,
+  ExampleUtils
+} = require(path.join(__dirname, '/../exampleUtils'));
 
 // Pipeline variable to be used
 let pipeline;
 
 const setPipeline = (options) => {
-  // An explicit data file path supplied in the '_51DEGREES_DD_PATH'
-  // environment variable takes precedence over the value in the
-  // configuration file.
-  const envDataFilePath = process.env[DATA_FILE_PATH_ENV_VAR];
+  // An explicit data file path supplied in the '51DEGREES_DD_PATH'
+  // environment variable (or the older '_51DEGREES_DD_PATH') takes
+  // precedence over the value in the configuration file.
+  const envDataFilePath = ExampleUtils.getDataFilePathFromEnv();
   if (envDataFilePath) {
     optionsExtension.setDataFilePath(options, envDataFilePath);
   }
   const dataFilePath = optionsExtension.getDataFilePath(options);
   if (!dataFilePath) {
     throw 'A data file must be specified in the 51d.json file or the ' +
-      `'${DATA_FILE_PATH_ENV_VAR}' environment variable.`;
+      `'${DATA_FILE_PATH_ENV_VAR}' environment variable (the older ` +
+      `'${LEGACY_DATA_FILE_PATH_ENV_VAR}' is also read).`;
   }
 
   if (!fs.existsSync(dataFilePath)) {
@@ -215,6 +225,20 @@ const server = http.createServer((req, res) => {
 
       res.end(JSON.stringify(flowData.jsonbundler.json));
     });
+  } else if (req.url.split('?')[0] === coreJsPath) {
+    // Serve the client-side script built by the JavaScriptBuilder as a separate
+    // resource, so that the page can reference it with a <script src> tag, in
+    // the same way as the cloud example. Serving it per request rather than
+    // caching it is what allows it to carry the results of this request's
+    // detection. Query parameters, such as 'fod-js-enable-cookies', are
+    // evidence like any other and are already in the flow data via
+    // addFromRequest.
+    flowData.process().then(function () {
+      res.statusCode = 200;
+      res.setHeader('Content-Type', 'application/x-javascript');
+
+      res.end(flowData.javascriptbuilder.javascript);
+    });
   } else {
     flowData.process().then(function () {
       res.statusCode = 200;
@@ -242,7 +266,7 @@ const server = http.createServer((req, res) => {
           evidenceUsed: evidences,
           allEvidence,
           dataSourceTier: ExampleUtils.getDataTier(pipeline),
-          fiftyOneJs: flowData.javascriptbuilder.javascript,
+          coreJsPath,
           hardwareVendor: dataExtension.getValueHelper(flowData.device, 'hardwarevendor'),
           hardwareName: dataExtension.getValueHelper(flowData.device, 'hardwarename'),
           deviceType: dataExtension.getValueHelper(flowData.device, 'devicetype'),
@@ -253,7 +277,10 @@ const server = http.createServer((req, res) => {
           browserName: dataExtension.getValueHelper(flowData.device, 'browsername'),
           browserVersion: dataExtension.getValueHelper(flowData.device, 'browserversion'),
           screenWidth: dataExtension.getValueHelper(flowData.device, 'screenpixelswidth'),
-          screenHeight: dataExtension.getValueHelper(flowData.device, 'screenpixelsheight')
+          screenHeight: dataExtension.getValueHelper(flowData.device, 'screenpixelsheight'),
+          // The device id combines the profile ids of the hardware, platform,
+          // browser and crawler components that were matched.
+          deviceId: dataExtension.getValueHelper(flowData.device, 'deviceid')
         })
       );
     });
@@ -266,7 +293,9 @@ if (process.env.JEST_WORKER_ID === undefined) {
   const options = JSON.parse(fs.readFileSync(path.join(__dirname, '/51d.json')));
 
   setPipeline(options);
-  const port = 3001;
+  // The port can be set with the 'PORT' environment variable, as in the
+  // cloud example, so that the example can be run alongside others.
+  const port = process.env.PORT || 3001;
   const hostname = 'localhost';
   server.listen(port, hostname);
   console.log(`Server listening on: http://${hostname}:${port}`);
