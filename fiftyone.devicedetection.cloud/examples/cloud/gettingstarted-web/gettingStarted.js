@@ -33,12 +33,14 @@
  *
  * ## Overview
  *
- * The `flowData.evidence.addFromRequest(request)` is used to extract required
- * evidence from a Http request. The `Helpers.setResponseHeaders(response, flowData)`
+ * The `flowData.evidence.addFromRequestAsync(request)` is used to extract
+ * required evidence from a Http request, including the values the 51Degrees
+ * client script sends as a posted form body, which are only reached by
+ * reading the body. The `Helpers.setResponseHeaders(response, flowData)`
  * from fiftyone.pipeline.core package is used to add extra headers to a Http
  * response to request further evidence from the client.
  * ```
- * flowData.evidence.addFromRequest(request);
+ * await flowData.evidence.addFromRequestAsync(request);
  *
  * core.Helpers.setResponseHeaders(response, flowData);
  * ```
@@ -179,7 +181,7 @@ const setPipeline = (options) => {
   pipeline.on('error', console.error);
 };
 
-const server = http.createServer((req, res) => {
+const server = http.createServer(async (req, res) => {
   // Serve the shared CSS/JS assets from the public directory. If this was a
   // static asset request then there is nothing more to do.
   if (tryServeStatic(req, res)) {
@@ -195,8 +197,10 @@ const server = http.createServer((req, res) => {
   // Object of header name/value entries.
   const flowData = pipeline.createFlowData();
 
-  // Extract required evidence from the Http request.
-  flowData.evidence.addFromRequest(req);
+  // Extract required evidence from the Http request. The client script
+  // sends the results of its snippets, the session id and the sequence as
+  // a posted form body, so the body is read before the evidence is taken.
+  await flowData.evidence.addFromRequestAsync(req);
 
   if (req.url.startsWith('/json')) {
     flowData.process().then(function () {
