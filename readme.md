@@ -65,8 +65,8 @@ properties see the [51Degrees website](https://51degrees.com/pricing?utm_source=
 
 The on-premise examples locate the data file in the following order:
 
-1. The `_51DEGREES_DD_PATH` environment variable, which can be set to an explicit path to the
-   data file.
+1. The `51DEGREES_DD_PATH` environment variable, which can be set to an explicit path to the
+   data file. The older name, `_51DEGREES_DD_PATH`, is still read if the first is not set.
 2. A search of the folder hierarchy, walking up from the working directory, for the expected
    file name.
 3. The free 'Lite' data file in its expected location, which is the
