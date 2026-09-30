@@ -90,5 +90,19 @@ describe('Examples', () => {
     expect(deviceId).not.toBeNull();
     expect(deviceId[1]).toMatch(/^\d+-\d+-\d+-\d+$/);
     expect(deviceId[1]).not.toBe('0-0-0-0');
+
+    // The client script sends the results of its snippets as a posted form
+    // body, so a value posted that way must reach the pipeline exactly as
+    // the same value in the query string does. Screen width is used because
+    // the answer repeats the number the caller sent, so a value that never
+    // arrived reads as zero.
+    const posted = await request(example.server)
+      .post('/json')
+      .set('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) ' +
+        'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36')
+      .type('form')
+      .send({ '51D_ScreenPixelsWidth': '1920' });
+    expect(posted.statusCode).toBe(200);
+    expect(JSON.parse(posted.text).device.screenpixelswidth).toBe(1920);
   });
 });

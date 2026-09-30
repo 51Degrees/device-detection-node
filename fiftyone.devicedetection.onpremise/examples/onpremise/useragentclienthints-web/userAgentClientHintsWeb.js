@@ -150,7 +150,7 @@ const setPipeline = (properties) => {
 
 const http = require('http');
 
-const server = http.createServer((req, res) => {
+const server = http.createServer(async (req, res) => {
   // Serve the shared CSS/JS assets from the public directory. If this was a
   // static asset request then there is nothing more to do.
   if (tryServeStatic(req, res)) {
@@ -160,8 +160,9 @@ const server = http.createServer((req, res) => {
   const flowData = pipeline.createFlowData();
 
   // Add any information from the request
-  // (headers, cookies and additional client side provided information)
-  flowData.evidence.addFromRequest(req);
+  // (headers, cookies and additional client side provided information,
+  // which the client script sends as a posted form body).
+  await flowData.evidence.addFromRequestAsync(req);
 
   flowData.process().then(function () {
     res.statusCode = 200;
