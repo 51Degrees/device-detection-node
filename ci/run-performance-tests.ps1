@@ -16,7 +16,7 @@ try
 
     # Pass the TAC data file explicitly, so the graph is measured with the full
     # data file rather than whichever file the example's folder search finds
-    # first. Without a licence key the TAC file isn't downloaded, and the
+    # first. Without a license key the TAC file isn't downloaded, and the
     # example falls back to its default Lite data file.
     $dataFile = 'fiftyone.devicedetection.onpremise/device-detection-cxx/device-detection-data/Enterprise-HashV41.hash'
     $dataFileArgs = @()
