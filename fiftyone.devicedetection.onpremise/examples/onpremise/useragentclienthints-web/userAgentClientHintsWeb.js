@@ -162,7 +162,14 @@ const server = http.createServer(async (req, res) => {
   // Add any information from the request
   // (headers, cookies and additional client side provided information,
   // which the client script sends as a posted form body).
-  await flowData.evidence.addFromRequestAsync(req);
+  try {
+    await flowData.evidence.addFromRequestAsync(req);
+  } catch (e) {
+    // The client went away while posting, which must not stop the server.
+    res.statusCode = 400;
+    res.end();
+    return;
+  }
 
   flowData.process().then(function () {
     res.statusCode = 200;
