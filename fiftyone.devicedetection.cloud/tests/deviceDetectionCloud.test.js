@@ -262,7 +262,7 @@ describe('Origin Header', () => {
 
     const pipeline = new DeviceDetectionCloudPipelineBuilder({
       // Resource key configured with '51degrees.com' as allowed domains.
-      resourceKey: 'AQS5HKcyVj6B8wNG2Ug',
+      resourceKey: 'AQRVdgJ-AT9Z6gsc30g',
       cloudRequestOrigin: origin
     }).build();
 
