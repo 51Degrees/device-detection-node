@@ -1,3 +1,6 @@
+> [!IMPORTANT]
+> This repo has been merged into the monorepo https://github.com/51Degrees/51degrees-node, under `device-detection/`. Please refer to the new monorepository for issues and PRs. The npm packages keep their names and are published from there, from version 4.5.98.
+
 ![51Degrees](https://51degrees.com/img/logo.png?utm_source=github&utm_medium=readme&utm_campaign=device-detection-node&utm_content=readme.md&utm_term=top "Data rewards the curious") **Node Device Detection**
 
 [Developer Documentation](https://51degrees.com/device-detection-node/index.html?utm_source=github&utm_medium=readme&utm_campaign=device-detection-node&utm_content=readme.md&utm_term=top "developer documentation")
